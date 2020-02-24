@@ -51,16 +51,14 @@ The source code for this application can be [found here]()
 The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](). 
 
 This workshop covers the following steps:
-- Running our Monolith in Kubernetes / CI/CD for our Monolith
-- Splitting our Monolith into a set of Microservices
-    - Introducing an API Gateway
-    - Adding the new User Interface
-    - Adding more services
-    - Dealing with Single Sign-On
-    - Dealing with Keys
-    - Dealing with infrastructure
-- Testing & Versioning a Cloud-Native Application
-- Exposing business metrics and insights
+- Running our Monolith in Kubernetes / [CI/CD for our Monolith](#ci-cd-for-our-monolith)
+- [Splitting our Monolith into a set of Microservices](#splitting-our-monolith-into-a-set-of-microservices)
+    - [Introducing an API Gateway](#introducing-an-api-gateway)
+    - [Adding a new User Interface](#adding-a-new-user-interface)
+    - [Adding more services](#adding-more-services)
+    - [Dealing with infrastructure](#dealing-with-infrastructure)
+- [Testing and Versioning a Cloud-Native Application](#testing-and-versioning-a-cloud-native-application)
+- [Exposing business metrics and insights](#exposing-business-metrics-and-insights)
 
 
 # CI/CD for our Monolith
@@ -146,7 +144,7 @@ jx get applications
 Try to access the Gateway URL with your browser and see if you can still access the Monolith application.
 
 
-## Adding new User Interface
+## Adding a new User Interface
 
 The new user interface will be in charge of consuming REST endpoints which are located now in different services to provide the User the available data. 
 
@@ -162,24 +160,18 @@ We will also decorate each section with the version of the backend service that 
 In the real life, we start by splitting some periferial services into microservices to make sure that the core of our application still works. 
 Depending on the conference stage, we can start by refactoring out of the Monolith the C4P (Call for Proposals) service, which is in charge of accepting new presentation proposals when the conference is still being organized, while leaving the Agenda un touched and still serving users requests. 
 
-### Call for Proposals Service (C4P)
+### Call for Proposals Service (c4p)
 
 You can find the source code for [this service here]()
 
 This service is in charge of handling the logic and the flow for recieving, reviewing and accepting or denying proposals for the conference. 
 
 
+## Dealing with infrastructure
 
-## Dealing with Single Sign On
-(TBD)
-## Dealing with Keys
 (TBD)
 
 
-## Dealing with infrastructure(#dealing-with-infrastructure)
-(TBD)
+# Testing and Versioning a Cloud Native Application 
 
-
-# Testing and Versioning a Cloud Native Application (#testing-and-versioning-a-cloud-native -application)
-
-# Exposing business metrics and insights (#exposing-business-metrics-and-insights)
+# Exposing business metrics and insights
