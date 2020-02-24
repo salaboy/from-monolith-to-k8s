@@ -45,10 +45,12 @@ You can follow a detailed set of instructions from the Jenkins X Docs page.
 During this workshop we will be helping a company that is in charge of helping conference organizers to setup their conference sites and back-office tools to setup awesome conferences. 
 
 Their current application is a Monolith and it looks like this: 
+![Monolith Main Site](/imgs/conference-site-main.png)
+![Monolith Main Backoffice](/imgs/conference-site-backoffice.png)
 
-The source code for this application can be [found here]()
+The source code for this application can be [found here](https://github.com/salaboy/fmtok8s-monolith)
 
-The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](). 
+The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](https://www.amazon.co.uk/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339/ref=asc_df_1942788339/?tag=googshopuk-21&linkCode=df0&hvadid=311000051962&hvpos=&hvnetw=g&hvrand=13136118265667582563&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9072501&hvtargid=pla-446149606248&psc=1&th=1&psc=1). 
 
 This workshop covers the following steps:
 - Running our Monolith in Kubernetes / [CI/CD for our Monolith](#ci-cd-for-our-monolith)
@@ -175,3 +177,8 @@ This service is in charge of handling the logic and the flow for recieving, revi
 # Testing and Versioning a Cloud Native Application 
 
 # Exposing business metrics and insights
+
+
+# References / Links / Next Steps
+
+- [Monolith Application](https://github.com/salaboy/fmtok8s-monolith)
