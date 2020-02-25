@@ -106,7 +106,9 @@ Once the pipeline finishes running you can access your application by running:
 In the real world, applications are not that simple. These are some challenges that you might face while doing shift and lift for your Monolith applications:
 - Infrastructure: if you application has a lot of infrastructure dependencies, such as databases, message brokers, other services, you will need to move them all or find a way to route traffic from your Kubernetes Cluster to this existing infrastructure. If your Kubernetes Cluster is remote, you will introduce latency and security risks which can be mitigated by creating a tunnel (VPN) back to your services. This experience might vary or might be impossible if the latency between the cluster and the services is to high. 
 - More than one process: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
-- (TBD)
+
+
+
 
 # Splitting our Monolith into a set of Microservices
 
@@ -176,7 +178,7 @@ Depending on the conference stage, we can start by refactoring out of the Monoli
 
 ### Call for Proposals Service (c4p)
 
-You can find the source code for [this service here]()
+You can find the source code for [this service here](https://github.com/salaboy/fmtok8s-c4p)
 
 This service is in charge of handling the logic and the flow for recieving, reviewing and accepting or denying proposals for the conference. 
 
