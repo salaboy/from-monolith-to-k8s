@@ -121,8 +121,7 @@ In order, to achieve all these benefits we need to start simple. The first thing
 If we are going to have a set of services instead of a Monolith application, we will need to deal with directing traffic to each of these new components. In most situations, exposing each of these services outside of our cluster will not be a wise decision. Most of the times, we have a component that is used to aggregate how people access our services from outside the cluster.  
 
 This new component will act as a router between the outside world and our services and you can choose from a set of popular options such as: 
-- 
-- 
+(TBD)
 
 For this workshop, we wanted to use our home-grown component built with Spring Cloud Gateway, as it gives us the power to tune the routes to our services by coding or just configurations. 
 
@@ -182,3 +181,4 @@ This service is in charge of handling the logic and the flow for recieving, revi
 # References / Links / Next Steps
 
 - [Monolith Application](https://github.com/salaboy/fmtok8s-monolith)
+- [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
