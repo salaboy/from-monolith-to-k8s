@@ -70,7 +70,7 @@ This workshop covers the following steps:
 
 When moving to Kubernetes it is quite common to **lift and shift** our monolith applications that are already running outside Kubernertes. This will require to containarize your application and then provide all Kubernetes Manifests to deploy your application into an existing cluster. 
 
-![Monolith](monolith-architecture.png)
+![Monolith](/imgs/monolith-architecture.png)
 
 This exercise pushes us to learn Kubernetes basics concepts such as Deployments, Services, and Ingresses, as well as Docker basics such as how to build and publish a Docker Image and which base Docker Image should we use for our applications. While this is needed for deploying our applications into a running cluster, once we have done these steps for a couple of services/applications, we don't want to do them for 100 services. This is where Jenkins X comes to help us. 
 
@@ -117,7 +117,7 @@ Now that we have our Monolith application running in Kubernetes it is time to st
 - Independently scale services as needed
 - Build resiliency into your application, if one service fails not all the application goes down
 
-![Microservices Split](microservices-architecture.png)
+![Microservices Split](/imgs/microservices-architecture.png)
 
 In order, to achieve all these benefits we need to start simple. The first thing that we will do is add a reverse-proxy which will serve as the main entry point for all our new services, including the monolith. 
 
@@ -144,8 +144,8 @@ jx get applications
 ```
 
 Try to access the API Gateway URL with your browser and see if you can see the new User Interface hosted in this application:
-![New User Interface Site](conference-microservices-main.png)
-![New User Interface Back Office](conference-microservices-backoffice.png)
+![New User Interface Site](/imgs/conference-microservices-main.png)
+![New User Interface Back Office](/imgs/conference-microservices-backoffice.png)
 
 
 ### Adding a new User Interface
