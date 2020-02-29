@@ -15,11 +15,11 @@ This workshop is divided into three main sections:
 # Installation and Getting Started
 
 This section covers:
- - [Prerequisites]
- - [Tools that we are using during the workshop]
- - [Installing Jenkins X]
- - [Scenario]
- - [CI/CD for our Monolith]
+ - [Prerequisites](#prerequisites)
+ - [Tools](#tools)
+ - [Installing Jenkins X](#installing-jenkins-x)
+ - [Scenario](#scenario)
+ - [CI/CD for our Monolith](#cicd-for-our-monolith)
 
 ## Prerequisites
 
@@ -28,13 +28,17 @@ This section covers:
   - Do you want to test in a different cloud provider and add it to the list? Help is appreciated
 - `kubectl` configured. 
 
-## Tools that we are using
+## Tools
+We are using the following projects/tools during this workshop:
+
 - [Kubernetes](http://kubernetes.io)
 - [Jenkins X](https://jenkins-x.io)
 - [Zeebe](https://helm.zeebe.io)
 - Optional (if you want to change code examples and run them locally)
   - [JDK 11+]()
   - [Maven]()
+  - [Spring Boot]()
+  - [Spring Cloud]()
 
 ## Installing Jenkins X
 
@@ -51,23 +55,26 @@ Once we have `jx` installed we can run `jx boot` to install the server-side comp
 
 Follow the steps proposed by `jx boot`, for reference these are the options that I've selected in a GKE cluster.  
 
+```
+@TODO
+```
+
 You can follow a detailed set of instructions from the [Jenkins X Docs page](https://jenkins-x.io/docs/getting-started/). 
 
 > Notice that Jenkins X and this workshop can be executed in any Cloud Provider. 
-
 
 ## Scenario
 
 During this workshop, we will be helping a company that is in charge of providing conference organizers their conference sites and back-office tools for their awesome events. 
 
 Their current application is a Monolith and it looks like this: 
+@TODO: redo screenshots and app
 ![Monolith Main Site](/imgs/conference-site-main.png)
 ![Monolith Main Backoffice](/imgs/conference-site-backoffice.png)
 
 The source code for this application can be [found here](https://github.com/salaboy/fmtok8s-monolith)
 
 The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](https://www.amazon.co.uk/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339/ref=asc_df_1942788339/?tag=googshopuk-21&linkCode=df0&hvadid=311000051962&hvpos=&hvnetw=g&hvrand=13136118265667582563&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9072501&hvtargid=pla-446149606248&psc=1&th=1&psc=1). 
-
 
 
 ## CI/CD for our Monolith
@@ -85,7 +92,6 @@ If you are running this workshop in your cluster, you can fork the [monolith app
 ```
 jx import 
 ```
-
 
 When we import an application to Jenkins X the following things will happen:
 - Our application is decorated with a `Dockerfile` if it doesn't have one, a `jenkins-x.yml` pipeline definition, a `chart` directory containing a [Helm Chart](https://github.com/helm/helm) which contains all the Kubernetes manifests required to deploy our application. 
@@ -111,14 +117,14 @@ In the real world, applications are not that simple. These are some challenges t
 This section covers the following topics: 
 
 - [Splitting our Monolith into a set of Microservices](#splitting-our-monolith-into-a-set-of-microservices)
-    - [Introducing an API Gateway](#introducing-an-api-gateway)
-    - [Adding a new User Interface](#adding-a-new-user-interface)
-    - [Adding more services](#adding-more-services)
-      - [Call for Proposals Service](#call-for-proposals-service)
-      - [Agenda Service](#agenda-service)
-      - [Email Service](#email-service)
-    - [Development Flow](#development-flow)
-    - [Dealing with infrastructure](#dealing-with-infrastructure)
+  - [Introducing an API Gateway](#introducing-an-api-gateway)
+  - [Adding a new User Interface](#adding-a-new-user-interface)
+  - [Adding more services](#adding-more-services)
+    - [Call for Proposals Service](#call-for-proposals-service)
+    - [Agenda Service](#agenda-service)
+    - [Email Service](#email-service)
+  - [Development Flow](#development-flow)
+  - [Dealing with infrastructure](#dealing-with-infrastructure)
 
 
 ## Splitting our Monolith into a set of Microservices
@@ -217,10 +223,10 @@ The happy path, or expected flow for this service will be as depictec in the fol
 4) An email with the result is sent back to the Potential Speaker, informing the decision (approval or rejection)
 
 This service expose the following REST endpoints: 
-- GET /info : provide the name and version of the service
-- POST / : submit a Proposal
-- GET /{id} : get a Proposal by Id
-- POST /{id}/decision : decide (approve/reject) a Pending Proposal
+- **GET /info**: provide the name and version of the service
+- **POST /**: submit a Proposal
+- **GET /{id}**: get a Proposal by Id
+- **POST /{id}/decision**: decide (approve/reject) a Pending Proposal
 
 
 ### Challenges
@@ -232,10 +238,12 @@ This service expose the following REST endpoints:
 
 The Agenda Service is in charge of hosting the accepted taks for our conference, this service is heavily used by the conference attendees while the conference is on going to check rooms and times for each talk. This service present an interesting usage pattern, as it not going to recieve too many writes (adding new agenda items) as the amount of reads (attendees checking for talks, times and rooms).  
 
+> You should **fork** and **jx import** this service as we did with the API Gateway project. 
+
 This service expose the following REST endpoints: 
-- GET /info : provide the name and version of the service
-- POST / : Submit an Agenda Item
-- GET / : get all agenda items
+- **GET /info**: provide the name and version of the service
+- **POST /**: Submit an Agenda Item
+- **GET /**: get all agenda items
 
 ### Challenges
 - In real-life, a service like this one might justify a separate data store optmized for search and reads. 
@@ -247,13 +255,21 @@ This service expose the following REST endpoints:
 ## Email Service
 The Email Service is an abstraction of a legacy system that you cannot change. Instead of sending emails from the previous services, we encapulated in this case an Email Server behind a REST API. Because we are defining a new API, we can add some domain specific methods to it, such as sending a Conference Notification Email. 
 
+> You should **fork** and **jx import** this service as we did with the API Gateway project. 
+
 This service expose the following REST endpoints: 
-- GET /info : provide the name and version of the service
-- POST /notification: send a conference notification email (for Proposals rejections or approvals)
-- POST / : send a regular email to an email with Title and Body
+- **GET /info**: provide the name and version of the service
+- **POST /notification**: send a conference notification email (for Proposals rejections or approvals)
+- **POST /**: send a regular email to an email with Title and Body
 
 
-## Dealing with infrastructure
+## Development Flow
+
+If you access the application via the API Gateway service you should see the User Interface connecting to all the backend services and displaying each service version number. If you click on the version numbers, you will be taken to github site for the release that was used to build this service. In other words, you have tracebility from source to the actual service that is running in your cluster. Using the version number you can fetch the docker image which was tagged with that version and also the Helm Chart that was created for deploying this application into the staging environment. 
+
+![Release Streams](/imgs/release-streams.png)
+
+## Dealing with infrastructure
 
 When dealing with infrastructural components such as databases, message brokers, identity management, etc, several considerations will influence your decisions:
 - Are you running in a Cloud Provider? If so, they probably already offer some managed solutions that you can just use. 
