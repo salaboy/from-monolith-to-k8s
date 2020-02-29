@@ -108,8 +108,8 @@ Once the pipeline finishes running you can access your application by running:
 
 ### Challenges 
 In the real world, applications are not that simple. These are some challenges that you might face while doing shift and lift for your Monolith applications:
-- Infrastructure: if your application has a lot of infrastructure dependencies, such as databases, message brokers, other services, you will need to move them all or find a way to route traffic from your Kubernetes Cluster to this existing infrastructure. If your Kubernetes Cluster is remote, you will introduce latency and security risks which can be mitigated by creating a tunnel (VPN) back to your services. This experience might vary or might be impossible if the latency between the cluster and the services is to high. 
-- More than one process: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
+- **Infrastructure**: if your application has a lot of infrastructure dependencies, such as databases, message brokers, other services, you will need to move them all or find a way to route traffic from your Kubernetes Cluster to this existing infrastructure. If your Kubernetes Cluster is remote, you will introduce latency and security risks which can be mitigated by creating a tunnel (VPN) back to your services. This experience might vary or might be impossible if the latency between the cluster and the services is to high. 
+- **More than one process**: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
 
 
 # Running a Cloud Native Conference Application
@@ -191,9 +191,9 @@ You can find the logic for the User Interface and the static files inside the [A
 - Default Dockerfile with CMD instead use ENTRYPOINT
 
 ### Challenges
-- Choose the best tool for your team: in this example using the Spring Cloud Gateway made sense as the team already had some Java Knowledge in house, but other reverse proxies provide the same functionality. 
-- Running behind a reverse proxy: depending on how flexible your applications, running web applications behind web proxies might require more advanced configurations such as Headers forwarding, tokens forwarding and sometimes path rewrites.
-- When we start talking about user interfaces we need to think about authorization and authentication and probably identity management or social logins. This topic is on purpose left out of the workshop as solutions might vary depending on the actual requirements and integrations required by your Cloud Native applications. For OpenID connect with OAuth 2.0 support [Dex is becoming quite popular, you can check it out here](https://github.com/dexidp/dex). 
+- **Choose the best tool for your team**: in this example using the Spring Cloud Gateway made sense as the team already had some Java Knowledge in house, but other reverse proxies provide the same functionality. 
+- **Running behind a reverse proxy**: depending on how flexible your applications, running web applications behind web proxies might require more advanced configurations such as Headers forwarding, tokens forwarding and sometimes path rewrites.
+- **Securty (Authentication & Authorization)**: When we start talking about user interfaces we need to think about authorization and authentication and probably identity management or social logins. This topic is on purpose left out of the workshop as solutions might vary depending on the actual requirements and integrations required by your Cloud Native applications. For OpenID connect with OAuth 2.0 support [Dex is becoming quite popular, you can check it out here](https://github.com/dexidp/dex). 
 
 
 
@@ -230,8 +230,8 @@ This service expose the following REST endpoints:
 
 
 ### Challenges
-- This service is core for the use case that we are trying to cover, as the Call for Papers flow is critical to make sure that we receive, review and make decisions on the proposals sent by potential speakers. This service must work correctly to avoid potential frustration by people submitting valuable proposals. 
-- For this example, our services are interacting via REST and our services need to take into considerations that these calls might fail eventually. Retry mechanisms and making sure that our services are idempotent might help to solve these problems. We need to consider also, that if the service interactions fail (due network or services being down) we might end up in an inconsistent state, such as a Potential speaker being approved but not notified. More about this in [Refactoring and improving our applications](#refactoring-and-improving-our-application)
+- **Core/Critical Services For the Domain**:This service is core for the use case that we are trying to cover, as the Call for Papers flow is critical to make sure that we receive, review and make decisions on the proposals sent by potential speakers. This service must work correctly to avoid potential frustration by people submitting valuable proposals. 
+- **Build with Failure in mind**: For this example, our services are interacting via REST and our services need to take into considerations that these calls might fail eventually. Retry mechanisms and making sure that our services are idempotent might help to solve these problems. We need to consider also, that if the service interactions fail (due network or services being down) we might end up in an inconsistent state, such as a Potential speaker being approved but not notified. More about this in [Refactoring and improving our applications](#refactoring-and-improving-our-application)
 
 
 ## Agenda Service
@@ -246,9 +246,9 @@ This service expose the following REST endpoints:
 - **GET /**: get all agenda items
 
 ### Challenges
-- In real-life, a service like this one might justify a separate data store optmized for search and reads. 
-- During conference time, we might want to provision more instances (replicas) for this service to serve more traffic
-- We might want to consider restricting the POST endpoint when the conference start
+- **Different Data Storage**:In real-life, a service like this one might justify a separate data store optmized for search and reads. 
+- **Consider different requirements for different phases of your application**: During conference time, we might want to provision more instances (replicas) for this service to serve more traffic
+- **Use Flags to limit functionality**:We might want to consider restricting the POST endpoint when the conference start
 
 
 
