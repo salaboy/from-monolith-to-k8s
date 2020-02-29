@@ -117,6 +117,7 @@ This section covers the following topics:
       - [Call for Proposals Service](#call-for-proposals-service)
       - [Agenda Service](#agenda-service)
       - [Email Service](#email-service)
+    - [Development Flow](#development-flow)
     - [Dealing with infrastructure](#dealing-with-infrastructure)
 
 
@@ -192,7 +193,6 @@ You can find the logic for the User Interface and the static files inside the [A
 
 ## Adding more services
 
-
 In real-life, we start by splitting some peripheral services into microservices to make sure that the core of our application still works. In general, the User Interface can be left untouched when most of the refactorings might happen in the backend. 
 
 Depending on the conference stage, we can start by refactoring out of the Monolith the C4P (Call for Proposals) service, which is in charge of accepting new presentation proposals when the conference is still being organized, while leaving the Agenda untouched still serving users requests. 
@@ -203,6 +203,8 @@ It is always recommended to analyze which features and use cases can be used to 
 ## Call for Proposals Service (c4p)
 
 You can find the source code for [this service here](https://github.com/salaboy/fmtok8s-c4p)
+
+> You should **fork** and **jx import** this service as we did with the API Gateway project. 
 
 This service is in charge of handling the logic and the flow for recieving, reviewing and accepting or denying proposals for the conference. Due its responsability it will be in charge of interacting with the Agenda and Email service.
 The happy path, or expected flow for this service will be as depictec in the following diagram: 
@@ -221,18 +223,43 @@ This service expose the following REST endpoints:
 - POST /{id}/decision : decide (approve/reject) a Pending Proposal
 
 
+### Challenges
+- This service is core for the use case that we are trying to cover, as the Call for Papers flow is critical to make sure that we receive, review and make decisions on the proposals sent by potential speakers. This service must work correctly to avoid potential frustration by people submitting valuable proposals. 
+- For this example, our services are interacting via REST and our services need to take into considerations that these calls might fail eventually. Retry mechanisms and making sure that our services are idempotent might help to solve these problems. We need to consider also, that if the service interactions fail (due network or services being down) we might end up in an inconsistent state, such as a Potential speaker being approved but not notified. More about this in [Refactoring and improving our applications](#refactoring-and-improving-our-application)
+
 
 ## Agenda Service
 
+The Agenda Service is in charge of hosting the accepted taks for our conference, this service is heavily used by the conference attendees while the conference is on going to check rooms and times for each talk. This service present an interesting usage pattern, as it not going to recieve too many writes (adding new agenda items) as the amount of reads (attendees checking for talks, times and rooms).  
+
+This service expose the following REST endpoints: 
+- GET /info : provide the name and version of the service
+- POST / : Submit an Agenda Item
+- GET / : get all agenda items
+
+### Challenges
+- In real-life, a service like this one might justify a separate data store optmized for search and reads. 
+- During conference time, we might want to provision more instances (replicas) for this service to serve more traffic
+- We might want to consider restricting the POST endpoint when the conference start
+
+
 
 ## Email Service
-(TBD)
+The Email Service is an abstraction of a legacy system that you cannot change. Instead of sending emails from the previous services, we encapulated in this case an Email Server behind a REST API. Because we are defining a new API, we can add some domain specific methods to it, such as sending a Conference Notification Email. 
+
+This service expose the following REST endpoints: 
+- GET /info : provide the name and version of the service
+- POST /notification: send a conference notification email (for Proposals rejections or approvals)
+- POST / : send a regular email to an email with Title and Body
+
 
 ## Dealing with infrastructure
 
 When dealing with infrastructural components such as databases, message brokers, identity management, etc, several considerations will influence your decisions:
 - Are you running in a Cloud Provider? If so, they probably already offer some managed solutions that you can just use. 
 - Do you want to run your own Database instance or Message Broker? If so, look for Helm packages or Kubernetes Operators that help you with managing these components. Scaling a database or a message broker is hard and when you decide to run it yourself (instead of using a managed solution) you add that complexity to managing your applications. 
+
+
 
 # Refactoring and improving our applications 
 
