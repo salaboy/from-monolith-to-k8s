@@ -4,12 +4,13 @@ Workshop-style guide for moving from a monolith application to a cloud-native ar
 
 This guide will take you through an example scenario to move from a Monolith application to a set of Cloud Native microservices running in a Kubernetes Cluster. This workshop highlights the use of certain tools to solve some particular challenges that you will face while going to the cloud. These tools are just suggestions and you should evaluate what fits better to your teams and practices. 
 
-All the projects here are Open Source under the ASL 2.0 License and we welcome Pull Requests and [Issues](http://github.com/salaboy/from-monolith-to-k8s/issues) with more tools additions and suggestions to improve the workshop. 
-We encourage people to follow the workshop in their clusters to experience the usage of these tools, their issues and their strengths. 
+All the projects here are Open Source under the ASL 2.0 License and I welcome Pull Requests and [Issues](http://github.com/salaboy/from-monolith-to-k8s/issues) with more tools additions and suggestions to improve the workshop. 
+I encourage people to follow the workshop in their own clusters to experience the usage of these tools, their issues and their strengths. 
 
-This workshop is divided into three main sections: 
+This workshop is divided into the following sections: 
 - Installation and Getting Started
-- Running a Cloud Native Conference Application
+- Scenario
+- Running a Cloud-Native Conference Application
 - Refactoring and improving our applications 
 
 # Installation and Getting Started
@@ -25,7 +26,7 @@ This section covers:
 
 - Kubernetes Cluster
   - Tested in GKE Cluster (4 nodes - n1-standard-2)
-  - Do you want to test in a different cloud provider and add it to the list? Help is appreciated
+  - Do you want to test in a different cloud provider and add it to the list? Help is appreciated, please report issues if you found them while tyring to run the workshop in other Cloud Providers. 
 - `kubectl` configured. 
 
 ## Tools
@@ -83,7 +84,13 @@ When moving to Kubernetes it is quite common to **lift and shift** our monolith 
 
 ![Monolith](/imgs/monolith-architecture.png)
 
-This exercise pushes us to learn Kubernetes basics concepts such as Deployments, Services, and Ingresses, as well as Docker basics such as how to build and publish a Docker Image and which base Docker Image should we use for our applications. While this is needed for deploying our applications into a running cluster, once we have done these steps for a couple of services/applications, we don't want to do them for 100 services. This is where Jenkins X comes to help us. 
+This exercise pushes us to learn Kubernetes basics concepts such as Deployments, Services, and Ingresses, as well as Docker basics such as how to build and publish a Docker Image and which base Docker Image should we use for our applications. The following steps are usually required to just run our Monolith in Kubernetes:
+
+![Pipeline](/imgs/pipeline.png)
+
+> Notice that Helm Charts can be avoided, but it is becoming a standard way to package and distribute Kubernetes YAML manifest, providing also dependency management. For Java folks, this is Maven for Kubernetes applications.  
+
+While this steps are needed for deploying our applications into a running cluster, once you have done these steps for a couple of services/applications, you don't want to do them for 100 services. This is where [Jenkins X](http://jenkins-x.io) comes to help us. 
 
 You can find our [monolith application here](http://github.com/salaboy/fmtok8s-monolith). This application is a very basic Spring Boot application which can be started in your local environment (if you have the Java JDK and Maven) installed by running: `mvn spring-boot:run`
 
@@ -108,11 +115,15 @@ Once the pipeline finishes running you can access your application by running:
 
 ### Challenges 
 In the real world, applications are not that simple. These are some challenges that you might face while doing shift and lift for your Monolith applications:
+
 - **Infrastructure**: if your application has a lot of infrastructure dependencies, such as databases, message brokers, other services, you will need to move them all or find a way to route traffic from your Kubernetes Cluster to this existing infrastructure. If your Kubernetes Cluster is remote, you will introduce latency and security risks which can be mitigated by creating a tunnel (VPN) back to your services. This experience might vary or might be impossible if the latency between the cluster and the services is to high. 
+
 - **More than one process**: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
 
+- **Scaling the application is hard**: if the application hold any kind of state, having multiple replicas becomes complicated and it might require big refactorings to make it work with multiple replicas of the same running at the same time. 
 
-# Running a Cloud Native Conference Application
+
+# Running a Cloud-Native Conference Application
 
 This section covers the following topics: 
 
@@ -145,9 +156,13 @@ In order, to achieve all these benefits we need to start simple. The first thing
 If we are going to have a set of services instead of a Monolith application, we will need to deal with routing traffic to each of these new components. In most situations, exposing each of these services outside of our cluster will not be a wise decision. Most of the time, we have a component that is used to aggregate how people access our services from outside the cluster.  
 
 This new component will act as a router between the outside world and our services and you can choose from a set of popular options such as: 
-(TBD)
+- Solo.io Gloo
+- 3Scale
+- Apigee
+- Kong
+- Cloud Provider Specific
 
-For this workshop, we wanted to use our home-grown component built with [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway), as it gives us the power to tune the routes to our services by coding them in Java or writing these routes in configuration files. 
+For this workshop, I've chosen to use [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway), as it gives us the power to tune the routes to our services by coding them in Java or writing these routes in configuration files. 
 
 The source code for our API Gateway can be [found here](http://github.com/salaboy/fmtok8s-api-gateway/)
 
@@ -160,16 +175,18 @@ cd fmtok8s-api-gateway/
 jx import
 ```
 
-Once again, monitor the pipelines and when the pipeline is finished you should be able to see the new application URL by running:
+You can monitor the pipelines,  when the pipeline finish you should be able to see the new application URL by running:
 ```
 jx get applications
 ```
-and then selecting the pipeline that you want to monitor. 
+
 Wait for the application and environment pipeline to finish to access the application. 
 
 Try to access the API Gateway URL with your browser and see if you can see the new User Interface hosted in this application:
-![New User Interface Site](/imgs/conference-microservices-main.png)
-![New User Interface Back Office](/imgs/conference-microservices-backoffice.png)
+![Agenda](/imgs/Conference-Agenda.png | width=100) 
+![New Proposal](/imgs/Conference-New-Proposal.png | width=100)
+![Back Office](/imgs/Conference-BackOffice.png | width=100)
+![Back Office](/imgs/Conference-Send-Email.png | width=100)
 
 Because we are in the edge, close to our users and outside traffic, the API Gateway serves as the perfect point to host HTML and CSS files that will compose our User Interface.
 
@@ -179,7 +196,7 @@ The new user interface will be in charge of consuming REST endpoints which are l
 
 We are going to host the new User Interface at the Gateway level as most of these files will reference the API Gateway URL when downloaded to the Client Browser and API Gateways usually provide caching for static files, so the closer these static files are to the user the better. 
 
-The new User Interface look exactly the same as the old one, but in this case to make it more interesting, we will use different colors to the application section to highlight which backend service is in charge of providing data for that section. The User Interface is divided into two main screens, the public **main site** and the **backoffice** which is used by the conference organizers to aprobe/reject proposals and also to send email reminders to people involved in the conference. 
+The new User Interface look exactly the same as the old one, but in this case to make it more interesting, we will use different colors to the application section to highlight which backend service is in charge of providing data for that section. The User Interface is divided into two main screens, the public **main site** and the **backoffice** which is used by the conference organizers to approve/reject proposals and also to send email reminders to people involved in the conference. 
 
 We will also decorate each section with the **version** of the backend service that is serving the requests. 
 
@@ -191,9 +208,9 @@ You can find the logic for the User Interface and the static files inside the [A
 - Default Dockerfile with CMD instead use ENTRYPOINT
 
 ### Challenges
-- **Choose the best tool for your team**: in this example using the Spring Cloud Gateway made sense as the team already had some Java Knowledge in house, but other reverse proxies provide the same functionality. 
+- **Choose the best tool for your team**: in this example using the Spring Cloud Gateway made sense as the team already had some Java Knowledge in house, but other reverse proxies provide the same functionality. There are also more advanced API management tools that will help you with more enterprise-grade requirements, such as easy integration with Security Mechanisms and cross-cutting concerns. 
 - **Running behind a reverse proxy**: depending on how flexible your applications, running web applications behind web proxies might require more advanced configurations such as Headers forwarding, tokens forwarding and sometimes path rewrites.
-- **Securty (Authentication & Authorization)**: When we start talking about user interfaces we need to think about authorization and authentication and probably identity management or social logins. This topic is on purpose left out of the workshop as solutions might vary depending on the actual requirements and integrations required by your Cloud Native applications. For OpenID connect with OAuth 2.0 support [Dex is becoming quite popular, you can check it out here](https://github.com/dexidp/dex). 
+- **Security (Authentication & Authorization)**: When we start talking about user interfaces we need to think about authorization and authentication and probably identity management or social logins. This topic is on purpose left out of the workshop as solutions might vary depending on the actual requirements and integrations required by your Cloud Native applications. For OpenID connect with OAuth 2.0 support [Dex is becoming quite popular, you can check it out here](https://github.com/dexidp/dex). 
 
 
 
@@ -203,7 +220,8 @@ In real-life, we start by splitting some peripheral services into microservices 
 
 Depending on the conference stage, we can start by refactoring out of the Monolith the C4P (Call for Proposals) service, which is in charge of accepting new presentation proposals when the conference is still being organized, while leaving the Agenda untouched still serving users requests. 
 
-It is always recommended to analyze which features and use cases can be used to experiement while thinking about splitting a big Monolith. For the purpose of this workshop we will focus on the **Call for Proposals** flow, hence starting with the Call for Proposals Service. 
+It is always recommended to analyze which features and use cases can be used to experiment while thinking about splitting a big Monolith. For the purpose of this workshop we will focus on the **Call for Proposals** flow, hence starting with the Call for Proposals Service. 
+
 
 
 ## Call for Proposals Service (c4p)
@@ -212,7 +230,7 @@ You can find the source code for [this service here](https://github.com/salaboy/
 
 > You should **fork** and **jx import** this service as we did with the API Gateway project. 
 
-This service is in charge of handling the logic and the flow for recieving, reviewing and accepting or denying proposals for the conference. Due its responsability it will be in charge of interacting with the Agenda and Email service.
+This service is in charge of handling the logic and the flow for receiving, reviewing and accepting or denying proposals for the conference. Due its responsability it will be in charge of interacting with the Agenda and Email service.
 The happy path, or expected flow for this service will be as depictec in the following diagram: 
 
 ![C4P Flow](/imgs/c4p-flow.png)
