@@ -153,7 +153,7 @@ In order, to achieve all these benefits we need to start simple. The first thing
 
 ## Introducing an API Gateway
 
-If we are going to have a set of services instead of a Monolith application, we will need to deal with routing traffic to each of these new components. In most situations, exposing each of these services outside of our cluster will not be a wise decision. Most of the time, we have a component that is used to aggregate how people access our services from outside the cluster.  
+If we are going to have a set of services instead of a Monolith application, we will need to deal with routing traffic to each of these new components. In most situations, exposing each of these services outside of our cluster will not be a wise decision. Most of the time, you have a component that is used to provide a single point of entry for people to access our services from outside the cluster.  
 
 This new component will act as a router between the outside world and our services and you can choose from a set of popular options such as: 
 - Solo.io Gloo
@@ -166,8 +166,46 @@ For this workshop, I've chosen to use [Spring Cloud Gateway](https://spring.io/p
 
 The source code for our API Gateway can be [found here](http://github.com/salaboy/fmtok8s-api-gateway/)
 
-Once again, you can **fork** and clone this repository and import it to Jenkins X as we did before for the Monolith application.
 
+### Routing HTTP request to other services
+
+With [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) we can finetune how the traffic is going to be routed to other services. The API Gateway doesn't do any advanced routing for this example, but it opens the door for experimentation of more advanced features such as throttling and filtering. 
+
+For this project the following routes are defined inside the [application.yaml](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/src/main/resources/application.yaml) file:
+```
+spring:
+  cloud:
+    gateway:
+      routes:
+      - id: c4p
+        uri: ${C4P_SERVICE:http://fmtok8s-c4p}
+        predicates:
+        - Path=/c4p/**
+        filters:
+          - RewritePath=/c4p/(?<id>.*), /$\{id}
+      - id: email
+        uri: ${EMAIL_SERVICE:http://fmtok8s-email}
+        predicates:
+        - Path=/email/**
+        filters:
+          - RewritePath=/email/(?<id>.*), /$\{id}
+      - id: speakers
+        uri: ${SPEAKERS_SERVICE:http://fmtok8s-speakers}
+        predicates:
+          - Path=/speakers/**
+        filters:
+          - RewritePath=/speakers/(?<id>.*), /$\{id}
+```
+
+These routes define where traffic is going to be routed based on different paths. If your request hits any path under `/c4p/` it will be automatically redirected to a service called `fmtok8s-c4p`. This means that the request will be rewritten and forwarded to that service. 
+
+Notice that `URI` for the target services are defined with a default value, for example `http://fmtok8s-c4p` and an environment variable that can override that default value if it is set (`C4P_SERVICE`). This allows you to point to different services if for some reason your services have different names in your environment. 
+
+For developers that are used to work in Kubernetes, it is quite normal to refer to other services using the service name, such as `fmtok8s-c4p`. Outside Kubernetes you will be using the service IP and Port. This is Kubernetes Service Discovery in action. In the following sections you learn how these services are configured. 
+
+### Importing the API Gateway / User Interface to Jenkins X
+
+You can **fork** and clone this repository and import it to Jenkins X as we did before for the Monolith application.
 
 ```
 git clone http://github.com/<YOUR USER>/fmtok8s-api-gateway/
@@ -175,7 +213,7 @@ cd fmtok8s-api-gateway/
 jx import
 ```
 
-You can monitor the pipelines,  when the pipeline finish you should be able to see the new application URL by running:
+You can monitor the pipelines, when the pipeline finish you should be able to see the new application URL by running:
 ```
 jx get applications
 ```
@@ -183,12 +221,26 @@ jx get applications
 Wait for the application and environment pipeline to finish to access the application. 
 
 Try to access the API Gateway URL with your browser and see if you can see the new User Interface hosted in this application:
-![Agenda](/imgs/Conference-Agenda.png | width=100) 
-![New Proposal](/imgs/Conference-New-Proposal.png | width=100)
-![Back Office](/imgs/Conference-BackOffice.png | width=100)
-![Back Office](/imgs/Conference-Send-Email.png | width=100)
+
+Conference Main Page: 
+
+<img src="imgs/Conference-Agenda.png" width="500"/>
+
+New Proposal Modal: 
+
+<img src="imgs/Conference-New-Proposal.png" width="300"/>
+
+Back Office Page:
+
+<img src="imgs/Conference-BackOffice.png" width="500"/>
+
+Send Email Modal:
+
+<img src="imgs/Conference-Send-Email.png" width="300"/>
+
 
 Because we are in the edge, close to our users and outside traffic, the API Gateway serves as the perfect point to host HTML and CSS files that will compose our User Interface.
+
 
 ### Adding a new User Interface
 
@@ -200,12 +252,14 @@ The new User Interface look exactly the same as the old one, but in this case to
 
 We will also decorate each section with the **version** of the backend service that is serving the requests. 
 
-You can find the logic for the User Interface and the static files inside the [API Gateway source code](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/src/main/java/com/salaboy/conferences/site/DemoApplication.java). 
+You can find the logic for the User Interface and the static files inside the [API Gateway source code](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/src/main/java/com/salaboy/conferences/site/ApiGatewayService.java). 
+
 
 ### Changes from default import
 - Memory and CPU allowances: 
 - Version Environment Variable: 
 - Default Dockerfile with CMD instead use ENTRYPOINT
+
 
 ### Challenges
 - **Choose the best tool for your team**: in this example using the Spring Cloud Gateway made sense as the team already had some Java Knowledge in house, but other reverse proxies provide the same functionality. There are also more advanced API management tools that will help you with more enterprise-grade requirements, such as easy integration with Security Mechanisms and cross-cutting concerns. 
@@ -228,10 +282,8 @@ It is always recommended to analyze which features and use cases can be used to 
 
 You can find the source code for [this service here](https://github.com/salaboy/fmtok8s-c4p)
 
-> You should **fork** and **jx import** this service as we did with the API Gateway project. 
-
-This service is in charge of handling the logic and the flow for receiving, reviewing and accepting or denying proposals for the conference. Due its responsability it will be in charge of interacting with the Agenda and Email service.
-The happy path, or expected flow for this service will be as depictec in the following diagram: 
+This service is in charge of handling the logic and the flow for receiving, reviewing and accepting or denying proposals for the conference. Due its responsibility it will be in charge of interacting with the Agenda and Email service.
+The happy path, or expected flow for this service will be as depicted in the following diagram: 
 
 ![C4P Flow](/imgs/c4p-flow.png)
 
@@ -240,16 +292,40 @@ The happy path, or expected flow for this service will be as depictec in the fol
 3) If the proposal is accepted it gets published to the Agenda
 4) An email with the result is sent back to the Potential Speaker, informing the decision (approval or rejection)
 
+
 This service expose the following REST endpoints: 
 - **GET /info**: provide the name and version of the service
 - **POST /**: submit a Proposal
+- **GET /**: get all proposals
+- **DELETE /**: delete all proposals for testing purposes
 - **GET /{id}**: get a Proposal by Id
+- **DELETE /{id}**: delete proposal by Id
 - **POST /{id}/decision**: decide (approve/reject) a Pending Proposal
+
+You can find the Open API documentation by pointing your browser to: http://fmtok8s-c4p-jx-staging.X.X.X.X.nip.io/swagger-ui.html if you are running in Jenkins X or just start the service locally and point your browser to http://localhost:8080/swagger-ui.html
+
+<img src="imgs/open-api-ui-c4p.png" width="500"/>
+
+
+### Importing C4P project to Jenkins X
+
+There are two branches for this project
+1) `no-workflow` branch which contains all the service interactions via REST
+2) `master` which contains integration with Zeebe for Service Orchestration
+
+Depending on which version you want to use, you can merge the `no-workflow` branch to master if you prefer REST service communications instead of Pub/Sub mechanism and Service Orchestration with Zeebe. 
+
+You should **fork**, clone and **jx import** this service as we did with the API Gateway project.
+
 
 
 ### Challenges
-- **Core/Critical Services For the Domain**:This service is core for the use case that we are trying to cover, as the Call for Papers flow is critical to make sure that we receive, review and make decisions on the proposals sent by potential speakers. This service must work correctly to avoid potential frustration by people submitting valuable proposals. 
+
+- **Core/Critical Services For the Domain**: This service is core for the use case that we are trying to cover, as the Call for Papers flow is critical to make sure that we receive, review and make decisions on the proposals sent by potential speakers. This service must work correctly to avoid potential frustration by people submitting valuable proposals. 
+
 - **Build with Failure in mind**: For this example, our services are interacting via REST and our services need to take into considerations that these calls might fail eventually. Retry mechanisms and making sure that our services are idempotent might help to solve these problems. We need to consider also, that if the service interactions fail (due network or services being down) we might end up in an inconsistent state, such as a Potential speaker being approved but not notified. More about this in [Refactoring and improving our applications](#refactoring-and-improving-our-application)
+
+
 
 
 ## Agenda Service
@@ -287,12 +363,20 @@ If you access the application via the API Gateway service you should see the Use
 
 ![Release Streams](/imgs/release-streams.png)
 
+If you were using Jenkins X, these services are running in the Staging Environment, where you can manually promote these services to the Production Environment when you feel that your application is working smoothly. 
+
+![Environments](/imgs/jenkins-x-release-pipeline.png)
+
+
+
+
 ## Dealing with infrastructure
 
 When dealing with infrastructural components such as databases, message brokers, identity management, etc, several considerations will influence your decisions:
 - Are you running in a Cloud Provider? If so, they probably already offer some managed solutions that you can just use. 
 - Do you want to run your own Database instance or Message Broker? If so, look for Helm packages or Kubernetes Operators that help you with managing these components. Scaling a database or a message broker is hard and when you decide to run it yourself (instead of using a managed solution) you add that complexity to managing your applications. 
 
+![Infrastructure](/imgs/infrastructure.png)
 
 
 # Refactoring and improving our applications 
@@ -302,10 +386,97 @@ When dealing with infrastructural components such as databases, message brokers,
 
 # Testing and Versioning a Cloud Native Application 
 
-# Exposing business metrics and insights
+# Business Monitoring and Cloud-Native Orchestration
+
+No matter how our services are communicating between each other, (REST, Messaging, Using a Service Mesh), it is always hard to make our applications understood by non-technical people. In other words, using tracing (such as open tracing) to understand the sequence of interaction and the data that is exchanged between services can give us an idea about what is going on, but it is usually low-level information that non-technical people cannot use to understand what is going on. 
+
+In this section, we cover some tools that help you to tackle some of the challenges of exposing valuable and real-time data to the business. Having this data at the right time can be a real differentiator between your company and the competition. As this data can be use to influence critical decision about how resources are being used and where bottlenecks can be avoided. 
+
+The following sections cover different challenges that you will find when working with distributed architectures. All these challenges affect the business in some way or another, but it is important to recognize that at the end of the day fixing the problem technically is not enough. 
+
+
+## Avoiding inconsistent states
+
+If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you will have an inconsistent state. 
+
+In our example, this might happen if the `Email Service` is down. You might accept or reject a proposal but if the service is down, fail to notify the potential speaker about the outcome. That is quite a terrible situation to end up with and there are a few solutions to this challenge. 
+
+1) Making sure that request happens, using retries with exponential back-off and circuit breakers. This can be done with a libraries like Ribbon and Hystrix from the client side. In our example this require the `Call For Proposal Service` to include these libraries and configurations
+2) Using Pub/Sub mechanisms (usually using messaging) such as JMS, RabbitMQ, Kafka, etc. This is quite a popular solution when you want to build robust distributed system. As these transports provide some form  delivery guarantees and Dead Letter Queues. 
+3) Using a Service Mesh, such as Istio or LinkerD, that use a proxy to decorate our services with monitoring and retry functionalities in case of request failures. This requires our Kubernetes Cluster to be extended with Istio or LinkerD, which means that is one more thing that we need to learn, understand and mantain. Service Meshes are young and quite complicated beast to fully understand if you are starting with Kubernetes, but are a viable option to analize if your scenario requires advanced features such as Mutual TLS between services. 
+
+While `1` helps you to get the request actually executed, it doesn't solve the problem if the request keeps failing. You need more tools to actually solve the problems that are being reported, probably in your logs. 
+
+Option `2` gives you an industry standard way of communicating large systems in a robust way. These frameworks provide tools to look and inspect into messages that are failing and enable administrators with retries. 
+
+Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem.
+
+Neither of these options provide a view for non-technical people to understand what is going on. All the tools are aiming to low level administrators that needs to understand the full scope of the domain in order to fix problems. Solving such problems usually involve releasing new version of services or changing data into different databases, which again might push us into inconsistent states. 
+
+
+## Make it easy to update the flow (visibile.. understandable)
+
+The whole point of having a distributed system were services are owned by different teams is to enable each team to move fast. Depending on your business context, requirements to change the flow of action can come often and the sooner that these changes are applied the sooner the company can start leveraging these changes. 
+
+Identifying where these changes needs to happen is a tricky exersice as it might involve multiple teams and coordination between them. Let's use a basic but concrete example from our scenario. 
+
+Let's say that you want to add some extra steps in the flow for accepted speakers to confirm their interest in speaking at your conference. Currently the flow is owned and handled by the `Call for Proposal Service` and it can be found here: 
+
+As you can see, the code is readable and it can be easily understood by a Software Developer. Once again, not enough to share with non-technical people how things are working and how are they going to change if we want to include new steps in the flow. From the company perspective, you don't know how things were working yesterday and how things are working today.
+
+A possible solution is to build high-level reporting tools that expose how our `Services` are working. Usually when working with Event-Driven Architectures you can capture domain events and expose them in some kind of dashboard for people to understand where things are at a given time. The big drawback is that you need to make it and it is a lot of work. 
+
+
+## Deal with edge case explicitily and time based constrains
+
+In the previous section, you saw how the flow is being handled by the `Call for Proposal Service`. You can clearly read the code because it is a very simple use case with limited functionality, but most importantly it is only covering what is usually called a "happy path". When complexty grows by adding more code for edge cases, libraries, checks and error handling code, even a software developer will struggle to understand what is going on by just reading the code. 
+
+There is not much that you can do about this besides making sure that you follow clean code practices and keep refactoring your code. Depending on the use case, you can consider splitting some of that logic into separate microservices or at least into separate modules inside the same service. 
+
+Edge cases are extremely important from the business side. For this use case, this might mean that you want to send reminders to the committee if they haven't reviewed a proposal after 3 days of receiving it, only if they haven't approved or rejected the proposal yet. 
+
+From a technical perspective, this is a complicated requirement, as it requires to deal with timers (also known as Cron Jobs). Because we are in a distributed system, this cannot be done as part of the service itself, as we don't want to loose these timers if our services goes down. This requirement push is to think about a distributed Scheduler that you will need to configure to be highly available. 
+
+When you have that Scheduler, you need to make your service, in the scenario, the `Call for Proposal Service` to create and cancel reminders when needed. 
+
+Once again, providing Business Visibility for such timers and reminders is key for the company to understand how often they are not meeting certain requirements or service agreements (in the scenario, not reviewing proposals in the first 3 days after they arrive) and in some way mitigating and reducing these situations. 
+
+
+## Aggregated data for easy quering and reporting
+
+In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. These data models are usually aligned with a Relational Database mindset and most of the time, this data models are designed for runtime, this means for write and read in a CRUD fashion. 
+
+In distributed systems, querying and aggregating data from different Services is a common requirement, and a challenging one. 
+
+It might be a bad idea to add such querying capabilities to one of these services, as it will increase the serivce complexity and it will blur the responsabilities between the teams.
+
+A common pattern that can be applied for such situations is CQRS (Command / Query Responsability Segregation) which suggest to separate the operations that write information from the ones who intensively read and query information. 
+
+In our use case it makes a lot of sense to have a separated service, with a different data model (from Agenda and Call for Proposals Services) to aggregate information about these two other services. Data aggregation might be needed because you have different services with different data models and you want to align them to be consumed together, or because you have loads of data that needs to be condensed to gain insight or generate high level reports. 
+
+
+
+## Using Zeebe for Service Orchestration
+
+Zeebe is a Cloud Native Service Orchestrator that provides business visibility about how your services are actually doing the work. 
+
+how Zeebe provides a solution for these topics: 
+
+- Avoiding inconsistent states
+- Make it easy and understandable to update the flow
+- Edge cases and time based constraints
+- Querying and reporting valuable business data
+
+
+
+
+
 
 
 # References / Links / Next Steps
 
 - [Monolith Application](https://github.com/salaboy/fmtok8s-monolith)
 - [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
+- [C4P Service](https://github.com/salaboy/fmtok8s-c4p)
+- [Agenda Service](https://github.com/salaboy/fmtok8s-c4p)
+- [Email Service](https://github.com/salaboy/fmtok8s-email)
