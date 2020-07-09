@@ -399,7 +399,9 @@ The following sections cover different challenges that you will find when workin
 
 If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you will have an inconsistent state. 
 
-In our example, this might happen if the `Email Service` is down. You might accept or reject a proposal but if the service is down, fail to notify the potential speaker about the outcome. That is quite a terrible situation to end up with and there are a few solutions to this challenge. 
+In our example, this might happen if the `Email Service` is down. You might accept or reject a proposal but if the service is down, fail to notify the potential speaker about the outcome. That is quite a terrible situation to end up with and there are a few solutions to this challenge.
+
+![Inconsistent State](/imgs/c4p-flow-inconsistent-state.png)
 
 1) Making sure that request happens, using retries with exponential back-off and circuit breakers. This can be done with a libraries like Ribbon and Hystrix from the client side. In our example this require the `Call For Proposal Service` to include these libraries and configurations
 2) Using Pub/Sub mechanisms (usually using messaging) such as JMS, RabbitMQ, Kafka, etc. This is quite a popular solution when you want to build robust distributed system. As these transports provide some form  delivery guarantees and Dead Letter Queues. 
@@ -411,6 +413,8 @@ Option `2` gives you an industry standard way of communicating large systems in 
 
 Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem.
 
+You need to ask yourself, are retries enough? 
+
 Neither of these options provide a view for non-technical people to understand what is going on. All the tools are aiming to low level administrators that needs to understand the full scope of the domain in order to fix problems. Solving such problems usually involve releasing new version of services or changing data into different databases, which again might push us into inconsistent states. 
 
 
@@ -420,7 +424,12 @@ The whole point of having a distributed system were services are owned by differ
 
 Identifying where these changes needs to happen is a tricky exersice as it might involve multiple teams and coordination between them. Let's use a basic but concrete example from our scenario. 
 
-Let's say that you want to add some extra steps in the flow for accepted speakers to confirm their interest in speaking at your conference. Currently the flow is owned and handled by the `Call for Proposal Service` and it can be found here: 
+Let's say that you want to add some extra steps in the flow for accepted speakers to confirm their interest in speaking at your conference. 
+
+![New Steps](/imgs/c4p-flow-new-steps.png)
+
+
+Currently the flow is owned and handled by the `Call for Proposal Service` and it can be found here: 
 
 As you can see, the code is readable and it can be easily understood by a Software Developer. Once again, not enough to share with non-technical people how things are working and how are they going to change if we want to include new steps in the flow. From the company perspective, you don't know how things were working yesterday and how things are working today.
 
@@ -434,6 +443,8 @@ In the previous section, you saw how the flow is being handled by the `Call for 
 There is not much that you can do about this besides making sure that you follow clean code practices and keep refactoring your code. Depending on the use case, you can consider splitting some of that logic into separate microservices or at least into separate modules inside the same service. 
 
 Edge cases are extremely important from the business side. For this use case, this might mean that you want to send reminders to the committee if they haven't reviewed a proposal after 3 days of receiving it, only if they haven't approved or rejected the proposal yet. 
+
+![Time Based](/imgs/c4p-flow-timebased.png)
 
 From a technical perspective, this is a complicated requirement, as it requires to deal with timers (also known as Cron Jobs). Because we are in a distributed system, this cannot be done as part of the service itself, as we don't want to loose these timers if our services goes down. This requirement push is to think about a distributed Scheduler that you will need to configure to be highly available. 
 
@@ -453,6 +464,7 @@ It might be a bad idea to add such querying capabilities to one of these service
 A common pattern that can be applied for such situations is CQRS (Command / Query Responsability Segregation) which suggest to separate the operations that write information from the ones who intensively read and query information. 
 
 In our use case it makes a lot of sense to have a separated service, with a different data model (from Agenda and Call for Proposals Services) to aggregate information about these two other services. Data aggregation might be needed because you have different services with different data models and you want to align them to be consumed together, or because you have loads of data that needs to be condensed to gain insight or generate high level reports. 
+
 
 
 
