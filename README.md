@@ -397,7 +397,7 @@ The following sections cover different challenges that you will find when workin
 
 ## Avoiding inconsistent states
 
-If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you will have an inconsistent state. 
+If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you have an inconsistent state. 
 
 In our example, this might happen if the `Email Service` is down. You might accept or reject a proposal but if the service is down, fail to notify the potential speaker about the outcome. That is quite a terrible situation to end up with and there are a few solutions to this challenge.
 
@@ -424,27 +424,85 @@ The whole point of having a distributed system were services are owned by differ
 
 Identifying where these changes needs to happen is a tricky exersice as it might involve multiple teams and coordination between them. Let's use a basic but concrete example from our scenario. 
 
+
+Currently the flow is owned and handled by the `Call for Proposal Service` and it [can be found here](https://github.com/salaboy/fmtok8s-c4p/blob/no-workflow/src/main/java/com/salaboy/conferences/c4p/C4PController.java#L60):
+```java
+@PostMapping(value = "/{id}/decision")
+public void decide(@PathVariable("id") String id, @RequestBody ProposalDecision decision) {
+    emitEvent("> Proposal Approved Event ( " + ((decision.isApproved()) ? "Approved" : "Rejected") + ")");
+    Optional<Proposal> proposalOptional = proposalStorageService.getProposalById(id);
+    if (proposalOptional.isPresent()) {
+        Proposal proposal = proposalOptional.get();
+
+        // Apply Decision to Proposal
+        proposal.setApproved(decision.isApproved());
+        proposal.setStatus(ProposalStatus.DECIDED);
+        proposalStorageService.add(proposal);
+
+        // Only if it is Approved create a new Agenda Item into the Agenda Service
+        if (decision.isApproved()) {
+            agendaService.createAgendaItem(proposal);
+        }
+
+        // Notify Potential Speaker By Email
+        emailService.notifySpeakerByEmail(decision, proposal);
+    } else {
+      emitEvent(" Proposal Not Found Event (" + id + ")");
+    }
+
+}
+``` 
+
+
+As you can see, the code is readable and it can be easily understood by a Software Developer. Once again, it is not enough to share with non-technical people how things are working and how are they going to change if we want to include new steps in the flow. 
+
 Let's say that you want to add some extra steps in the flow for accepted speakers to confirm their interest in speaking at your conference. 
 
 ![New Steps](/imgs/c4p-flow-new-steps.png)
 
+For this example, the steps can go like this:
+- `1`: The potential speaker submits a new proposal
+- `2`: The Commitee review the proposal and approve or reject it
+- `3`: If approved an email is sent for the speaker to confirm his/her interest in participating of the event
+- `4`: The potential speaker confirms his/her praticipation by clicking in a link provided in the previous email
+- `5`: The proposal is added to the confernece agenda
 
-Currently the flow is owned and handled by the `Call for Proposal Service` and it can be found here: 
+When changes like this are made in code, from the business perspective, you don't know how things were working yesterday and how things are working today.
 
-As you can see, the code is readable and it can be easily understood by a Software Developer. Once again, not enough to share with non-technical people how things are working and how are they going to change if we want to include new steps in the flow. From the company perspective, you don't know how things were working yesterday and how things are working today.
+A possible solution is to build high-level reporting tools that expose how our `Services` are working. Usually when working with **Event-Driven Architectures** you can capture domain events and expose them in some kind of dashboard for people to understand where things are at a given time. The big drawback is that you need to make a custome solution for it and usually it is a lot of work. Check [Understanding Process State](#understanding-process-state) for more about this subject.
 
-A possible solution is to build high-level reporting tools that expose how our `Services` are working. Usually when working with Event-Driven Architectures you can capture domain events and expose them in some kind of dashboard for people to understand where things are at a given time. The big drawback is that you need to make it and it is a lot of work. 
+## Deal with edge case explicitily 
 
-
-## Deal with edge case explicitily and time based constrains
-
-In the previous section, you saw how the flow is being handled by the `Call for Proposal Service`. You can clearly read the code because it is a very simple use case with limited functionality, but most importantly it is only covering what is usually called a "happy path". When complexty grows by adding more code for edge cases, libraries, checks and error handling code, even a software developer will struggle to understand what is going on by just reading the code. 
+In the previous section, you saw how the flow is being handled by the `Call for Proposal Service`. You can clearly read the code because it is a very simple use case with limited functionality, but most importantly it is only covering what is usually called a **"happy path"**. When complexty grows by adding more code for edge cases, libraries, checks and error handling code, even a software developer will struggle to understand what is going on by just reading the code. 
 
 There is not much that you can do about this besides making sure that you follow clean code practices and keep refactoring your code. Depending on the use case, you can consider splitting some of that logic into separate microservices or at least into separate modules inside the same service. 
 
-Edge cases are extremely important from the business side. For this use case, this might mean that you want to send reminders to the committee if they haven't reviewed a proposal after 3 days of receiving it, only if they haven't approved or rejected the proposal yet. 
+Edge cases are extremely important from the business side. As there should be clear guidelines on how to deal with these exceptional situations.
+
+For this use case, a perfect example might be what to do when a spekaer that was accepted to the conference cannot be longer contected and is not answering emails. This is very valid situation and it needs to have clear ways to resolve it to make sure that if a spekaer cannot longer participate and cannot be contacted is removed from the conference agenda. 
+
+This can be a separate flow to deal with specific situation, but it is usually triggered as a follow up of the Call for Proposals normal flow. 
+
+![New Steps](/imgs/c4p-flow-speaker-missing.png)
+
+For this example, the steps can go like this:
+- `1`: The Committee identifies that a speaker is not answering emails for the conference deadlines
+- `2`: A final email is sent notifying the speaker that his/her presentation will be removed from the agenda
+- `3`: The proposal is removed from the agenda if the board doesn't heard back from the speaker
+
+## Time based constrains
+
+In my experience, 99% of real use cases require in some way or another keeping track of time and scheduling actions in the future. For developer this is tedious and when you enter into the realm of distributed applications it becomes an architectural challenge. 
+
+ For this use case, this might mean that you want to send reminders to the committee if they haven't reviewed a proposal after 3 days of receiving it, only if they haven't approved or rejected the proposal yet. 
 
 ![Time Based](/imgs/c4p-flow-timebased.png)
+
+For this example, the steps can go like this:
+- `1`: The potential speaker submits a new proposal
+- `2`: The Commitee receives the proposal
+  - `2a`: If the proposal hasn't been reviewed in the next 3 days, the system should send an email reminder to the Commitee.
+
 
 From a technical perspective, this is a complicated requirement, as it requires to deal with timers (also known as Cron Jobs). Because we are in a distributed system, this cannot be done as part of the service itself, as we don't want to loose these timers if our services goes down. This requirement push is to think about a distributed Scheduler that you will need to configure to be highly available. 
 
@@ -453,31 +511,44 @@ When you have that Scheduler, you need to make your service, in the scenario, th
 Once again, providing Business Visibility for such timers and reminders is key for the company to understand how often they are not meeting certain requirements or service agreements (in the scenario, not reviewing proposals in the first 3 days after they arrive) and in some way mitigating and reducing these situations. 
 
 
-## Aggregated data for easy quering and reporting
-
-In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. These data models are usually aligned with a Relational Database mindset and most of the time, this data models are designed for runtime, this means for write and read in a CRUD fashion. 
+## Search and Reporting
 
 In distributed systems, querying and aggregating data from different Services is a common requirement, and a challenging one. 
 
-It might be a bad idea to add such querying capabilities to one of these services, as it will increase the serivce complexity and it will blur the responsabilities between the teams.
+In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. These data models are usually aligned with a Relational Database mindset and most of the time, this data models are designed for runtime, this means for write and read in a CRUD fashion.
 
-A common pattern that can be applied for such situations is CQRS (Command / Query Responsability Segregation) which suggest to separate the operations that write information from the ones who intensively read and query information. 
+Let's imagine that you want to provide a search capability across data of both services, for such scenarios it might be a bad idea to add such querying capabilities to one of these services, as it will increase the serivce complexity and it will blur the responsabilities between the teams.
 
-In our use case it makes a lot of sense to have a separated service, with a different data model (from Agenda and Call for Proposals Services) to aggregate information about these two other services. Data aggregation might be needed because you have different services with different data models and you want to align them to be consumed together, or because you have loads of data that needs to be condensed to gain insight or generate high level reports. 
+One option is to emit events everytime that a meaningful change happens in each of these two service. These events should include enough information for a third component to listen to these events and aggregates them into a searchable way. 
 
 
+## Understanding Process State
+
+In a similar way that we did for [Search](#search) you can aggregate emitted events to understand the state of your processes. This helps you to answer questions such as:
+- In which stage is this proposal right now? 
+- How many proposals have we received this week so far?
+- How many proposals were accepted?
+
+From a business perspective this is very valuable, as it provides real time information and visibility about how our flows are being executed, that can help us to identify bottlenecks or resourcing problems. 
+
+And this is a perfect segway to jump to the next section: Using Zeebe for Service Orchestration.
 
 
 ## Using Zeebe for Service Orchestration
 
-Zeebe is a Cloud Native Service Orchestrator that provides business visibility about how your services are actually doing the work. 
+Zeebe is a Cloud Native Service Orchestrator (Workflow Engine) that provides business visibility about how your services are actually doing the work. 
 
-how Zeebe provides a solution for these topics: 
+Zeebe is provided as a hosted solution that you can try for free in [Camunda Cloud].
 
-- Avoiding inconsistent states
-- Make it easy and understandable to update the flow
-- Edge cases and time based constraints
-- Querying and reporting valuable business data
+This section covers how Zeebe help us to tackle the previous challenges:
+
+- **Understanding Process State**: Zeebe, as a workflow engine, helps you to track and drive your flows. It does it by executing a model of your flow that can be shared with non-technical users and without pushing your developers to build a custom solution for each flow. Zeebe can also tap into events that your services are emitting to move flow forward. A model for this use case looks pretty much like the diagrams shared in this document so far, but using a standard notation defined by the Object Management Group (OMG). IMAGE OF THE MODEL
+- **Make it easy to update the flow when needed**: because now we have a model, you can update and version the model everytime that your business change. For our scenario, the `Call for Proposals Team` will still own this flow and it will be their responsability to maintain it. IMAGE OF THE MODEL WITH SPEAKER STEP
+- **Avoiding inconsistent states**: A Pub/Sub mechanism will be used behind the covers to coordinate the service interactions, allowing Zeebe to report high level incidents when things go wrong, providing visibility and tools to fix problems when they appear. IMAGE OF INCIDENTS
+- **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in HA fashion. IMAGE of Model with Timer
+- **Dealing Edge cases**
+- **Search and Reporting**
+
 
 
 
