@@ -395,6 +395,7 @@ In this section, we cover some tools that help you to tackle some of the challen
 The following sections cover different challenges that you will find when working with distributed architectures. All these challenges affect the business in some way or another, but it is important to recognize that at the end of the day fixing the problem technically is not enough. 
 
 
+
 ## Avoiding inconsistent states
 
 If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you have an inconsistent state. 
@@ -479,7 +480,7 @@ There is not much that you can do about this besides making sure that you follow
 
 Edge cases are extremely important from the business side. As there should be clear guidelines on how to deal with these exceptional situations.
 
-For this use case, a perfect example might be what to do when a spekaer that was accepted to the conference cannot be longer contected and is not answering emails. This is very valid situation and it needs to have clear ways to resolve it to make sure that if a spekaer cannot longer participate and cannot be contacted is removed from the conference agenda. 
+For this use case, a perfect example might be what to do when a speaker that was accepted to the conference cannot be longer contected and is not answering emails. This is very valid situation and it needs to have clear ways to resolve it to make sure that if a spekaer cannot longer participate and cannot be contacted is removed from the conference agenda. 
 
 This can be a separate flow to deal with specific situation, but it is usually triggered as a follow up of the Call for Proposals normal flow. 
 
@@ -536,18 +537,35 @@ And this is a perfect segway to jump to the next section: Using Zeebe for Servic
 
 ## Using Zeebe for Service Orchestration
 
-Zeebe is a Cloud Native Service Orchestrator (Workflow Engine) that provides business visibility about how your services are actually doing the work. 
+Zeebe is a Cloud Native Service Orchestrator (Workflow Engine) that provides business visibility and service orchestration about how your services are actually doing the work. 
 
-Zeebe is provided as a hosted solution that you can try for free in [Camunda Cloud].
+Zeebe is provided as a hosted managed solution that you can try for free: [Camunda Cloud](https://camunda.com/products/cloud/).
+
+
+Zeebe, as shown before can be part of your infrastructural components or consumed as a service. By default it keeps and audit trail and provide tools such as Camunda Operate to gain real time visibility about how your workflows are running. Architecturally speaking, it is comparable to add Kafka to your infrastructure (in your kubernetes cluster), as you deploy a Zeebe Cluster which deals with all the workflows executions. Your application architecture now looks like this:
+
+ADD ARCHITECTURE DIAGRAM HERE.. it needs to go in the slides. 
 
 This section covers how Zeebe help us to tackle the previous challenges:
 
-- **Understanding Process State**: Zeebe, as a workflow engine, helps you to track and drive your flows. It does it by executing a model of your flow that can be shared with non-technical users and without pushing your developers to build a custom solution for each flow. Zeebe can also tap into events that your services are emitting to move flow forward. A model for this use case looks pretty much like the diagrams shared in this document so far, but using a standard notation defined by the Object Management Group (OMG). IMAGE OF THE MODEL
-- **Make it easy to update the flow when needed**: because now we have a model, you can update and version the model everytime that your business change. For our scenario, the `Call for Proposals Team` will still own this flow and it will be their responsability to maintain it. IMAGE OF THE MODEL WITH SPEAKER STEP
-- **Avoiding inconsistent states**: A Pub/Sub mechanism will be used behind the covers to coordinate the service interactions, allowing Zeebe to report high level incidents when things go wrong, providing visibility and tools to fix problems when they appear. IMAGE OF INCIDENTS
-- **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in HA fashion. IMAGE of Model with Timer
-- **Dealing Edge cases**
+- **Understanding Process State**: Zeebe, as a workflow engine, helps you to track and drive your flows. It does it by executing a model of your flow that can be shared with non-technical users and without pushing your developers to build a custom solution for each flow. Zeebe can also tap into events that your services are emitting to move workflows forward. A model for this use case looks pretty much like the diagrams shared in this document so far, but using a standard notation defined by the Object Management Group (OMG). ![Call For Proposals Flow](/imgs/call-for-proposals-workflow.png)
+
+- **Make it easy to update the flow when needed**: Because now we have a model, you can update and version the model everytime that your business change. For our scenario, the `Call for Proposals Team` will still own this flow and it will be their responsability to maintain it. 
+![Call For Proposals Flow With Speaker Validation](/imgs/call-for-proposals-workflow-speaker-validation.png)
+
+
+- **Dealing Edge cases**: Dealing with edge case explicitily in a well documented way is key to make sure that when something out of the ordinary happens, you are covered. Using a workflow engine helps you with that by having these edge cases as workflows themselves. When an edge case is detected the workflow to deal with that situation can be triggered. Because workflows can be linked together the relationship can be explicit and the workflow can be triggered automatically. 
+![Call For Proposals Flow Edge Case](/imgs/call-for-proposals-workflow-edge-case.png) 
+
+
+- **Avoiding inconsistent states**: A Pub/Sub mechanism will be used behind the covers to coordinate the service interactions, allowing Zeebe to report high level incidents when things go wrong, providing visibility and tools to fix problems when they appear. (what would be a good example for this??? )
+
+- **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in High Availability setups. You can define these timers declaratively in your workflow models. These timers will be automatically cancelled if they are not needed anymore, for example, if the decision is made in time. 
+
+![Call For Proposals Flow With Timers](/imgs/call-for-proposals-workflow-time.png)
+
 - **Search and Reporting**
+TBD
 
 
 
