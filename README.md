@@ -544,7 +544,7 @@ Zeebe is provided as a hosted managed solution that you can try for free: [Camun
 
 Zeebe, as shown before can be part of your infrastructural components or consumed as a service. By default it keeps and audit trail and provide tools such as Camunda Operate to gain real time visibility about how your workflows are running. Architecturally speaking, it is comparable to add Kafka to your infrastructure (in your kubernetes cluster), as you deploy a Zeebe Cluster which deals with all the workflows executions. Your application architecture now looks like this:
 
-ADD ARCHITECTURE DIAGRAM HERE.. it needs to go in the slides. 
+![Call For Proposals Flow With Zeebe](/imgs/call-for-proposals-with-zeebe.png)
 
 This section covers how Zeebe help us to tackle the previous challenges:
 
@@ -558,7 +558,12 @@ This section covers how Zeebe help us to tackle the previous challenges:
 ![Call For Proposals Flow Edge Case](/imgs/call-for-proposals-workflow-edge-case.png) 
 
 
-- **Avoiding inconsistent states**: A Pub/Sub mechanism will be used behind the covers to coordinate the service interactions, allowing Zeebe to report high level incidents when things go wrong, providing visibility and tools to fix problems when they appear. (what would be a good example for this??? )
+- **Avoiding inconsistent states**: A Pub/Sub mechanism will be used behind the covers to coordinate the service interactions, allowing Zeebe to report incendents when things go wrong, providing visibility and tools to fix problems when they appear. Here we can see a flow reporting two incidents in one of the steps.
+![Call For Proposals Flow Incidents](/imgs/call-for-proposals-workflow-incidents.png)
+And a deeper look at these incidents highlight the problem:
+![Incident Report](/imgs/incident-report.png)
+
+Which allows you understand, fix the problem and retry the operations right from Camunda Operate. 
 
 - **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in High Availability setups. You can define these timers declaratively in your workflow models. These timers will be automatically cancelled if they are not needed anymore, for example, if the decision is made in time. 
 
