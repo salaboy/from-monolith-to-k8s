@@ -398,21 +398,29 @@ The following sections cover different challenges that you will find when workin
 
 ## Avoiding inconsistent states
 
-If we have an architecture like the one described for this example, where multiple services hold the state for different domain objects, we might end up having inconsistent states between services. If communications are done via REST, you will need to take care of making sure that for every call works, as there are no transaction boundaries between the services, if something fails, you have an inconsistent state. 
+If you have an architecture like the one described for this example, where multiple services hold the state for different domain objects, you might end up having inconsistent states. If communications are done via REST, you will need to take care of making sure that every call works, as there are no transaction boundaries between the services, if something fails, you have an inconsistent state. 
 
-In our example, this might happen if the `Email Service` is down. You might accept or reject a proposal but if the service is down, fail to notify the potential speaker about the outcome. That is quite a terrible situation to end up with and there are a few solutions to this challenge.
+In our example, this might happen if the `Agenda Service` is down. You might accept or reject a proposal but if the service is down, publish the proposal in the agenda will fail. Depending on the sequence that you define, it might be the case that you already notified the speaker about his/her being accepted, but their proposal will never reach the conference agenda. 
 
-![Inconsistent State](/imgs/c4p-flow-inconsistent-state.png)
+![Inconsistent State](/imgs/c4p-flow-inconsistent-state.png) 
+
+1) Potential Speaker submits a proposal
+2) Board review the proposal and approves it
+3) Publish to Agenda fail, if we don't deal with the failure
+4) Send an email notifying the speaker that his/her proposal was accepted
+
+That is quite a terrible situation to end up with and there are a few solutions to this challenge.
+
 
 1) Making sure that request happens, using retries with exponential back-off and circuit breakers. This can be done with a libraries like Ribbon and Hystrix from the client side. In our example this require the `Call For Proposal Service` to include these libraries and configurations
 2) Using Pub/Sub mechanisms (usually using messaging) such as JMS, RabbitMQ, Kafka, etc. This is quite a popular solution when you want to build robust distributed system. As these transports provide some form  delivery guarantees and Dead Letter Queues. 
-3) Using a Service Mesh, such as Istio or LinkerD, that use a proxy to decorate our services with monitoring and retry functionalities in case of request failures. This requires our Kubernetes Cluster to be extended with Istio or LinkerD, which means that is one more thing that we need to learn, understand and mantain. Service Meshes are young and quite complicated beast to fully understand if you are starting with Kubernetes, but are a viable option to analize if your scenario requires advanced features such as Mutual TLS between services. 
+3) Using a Service Mesh, such as Istio or LinkerD, that use a proxy to decorate our services with monitoring and retry functionalities in case of request failures. This requires our Kubernetes Cluster to be extended with Istio or LinkerD. 
 
 While `1` helps you to get the request actually executed, it doesn't solve the problem if the request keeps failing. You need more tools to actually solve the problems that are being reported, probably in your logs. 
 
-Option `2` gives you an industry standard way of communicating large systems in a robust way. These frameworks provide tools to look and inspect into messages that are failing and enable administrators with retries. 
+Option `2` gives you an industry standard way of communicating large systems in a robust way. These frameworks are supposed to provide tools to look and inspect into messages that are failing and enable administrators with retries. But in reality you might need to end up building your own domain specific tools to deal issues when they happen. 
 
-Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem.
+Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem. Service Meshes are young and quite complicated beast to fully understand if you are starting with Kubernetes, but are a viable option to analize if your scenario requires advanced features such as Mutual TLS between services. 
 
 You need to ask yourself, are retries enough? 
 
@@ -463,14 +471,13 @@ Let's say that you want to add some extra steps in the flow for accepted speaker
 
 For this example, the steps can go like this:
 - `1`: The potential speaker submits a new proposal
-- `2`: The Commitee review the proposal and approve or reject it
-- `3`: If approved an email is sent for the speaker to confirm his/her interest in participating of the event
-- `4`: The potential speaker confirms his/her praticipation by clicking in a link provided in the previous email
-- `5`: The proposal is added to the confernece agenda
+- `2`: The Committee review the proposal and approve or reject it
+- `3` **(different order)**: If approved an email is sent for the speaker to confirm his/her interest in participating of the event
+- `4` **(new)**: The potential speaker confirms his/her praticipation by clicking in a link provided in the previous email
+- `5` **(different order)**: The proposal is added to the confernece agenda
 
 When changes like this are made in code, from the business perspective, you don't know how things were working yesterday and how things are working today.
 
-A possible solution is to build high-level reporting tools that expose how our `Services` are working. Usually when working with **Event-Driven Architectures** you can capture domain events and expose them in some kind of dashboard for people to understand where things are at a given time. The big drawback is that you need to make a custome solution for it and usually it is a lot of work. Check [Understanding Process State](#understanding-process-state) for more about this subject.
 
 ## Deal with edge case explicitily 
 
@@ -501,8 +508,8 @@ In my experience, 99% of real use cases require in some way or another keeping t
 
 For this example, the steps can go like this:
 - `1`: The potential speaker submits a new proposal
-- `2`: The Commitee receives the proposal
-  - `2a`: If the proposal hasn't been reviewed in the next 3 days, the system should send an email reminder to the Commitee.
+- `2`: The Committee receives the proposal
+  - `2a`: If the proposal hasn't been reviewed in the next 3 days, the system should send an email reminder to the Committee.
 
 
 From a technical perspective, this is a complicated requirement, as it requires to deal with timers (also known as Cron Jobs). Because we are in a distributed system, this cannot be done as part of the service itself, as we don't want to loose these timers if our services goes down. This requirement push is to think about a distributed Scheduler that you will need to configure to be highly available. 
@@ -511,28 +518,32 @@ When you have that Scheduler, you need to make your service, in the scenario, th
 
 Once again, providing Business Visibility for such timers and reminders is key for the company to understand how often they are not meeting certain requirements or service agreements (in the scenario, not reviewing proposals in the first 3 days after they arrive) and in some way mitigating and reducing these situations. 
 
+Building and providing visibility around scheduling logic is complicated and involve big architectural decisions which needs to be done in advance before each service start implementing their own solution. 
+
 
 ## Search and Reporting
 
 In distributed systems, querying and aggregating data from different Services is a common requirement, and a challenging one. 
 
-In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. These data models are usually aligned with a Relational Database mindset and most of the time, this data models are designed for runtime, this means for write and read in a CRUD fashion.
+In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. T
 
 Let's imagine that you want to provide a search capability across data of both services, for such scenarios it might be a bad idea to add such querying capabilities to one of these services, as it will increase the serivce complexity and it will blur the responsabilities between the teams.
-
-One option is to emit events everytime that a meaningful change happens in each of these two service. These events should include enough information for a third component to listen to these events and aggregates them into a searchable way. 
 
 
 ## Understanding Process State
 
-In a similar way that we did for [Search](#search) you can aggregate emitted events to understand the state of your processes. This helps you to answer questions such as:
+When working with distributed applications, finding what is the current state for our flows becomes an interesting challenge to solve.
+
+Finding the answers to questions like the following:
 - In which stage is this proposal right now? 
 - How many proposals have we received this week so far?
 - How many proposals were accepted?
+- How many proposals have you rejected so far? 
+Becomes a full time job, as you might need to pull information from different services to give presice answers. 
 
 From a business perspective this is very valuable, as it provides real time information and visibility about how our flows are being executed, that can help us to identify bottlenecks or resourcing problems. 
 
-And this is a perfect segway to jump to the next section: Using Zeebe for Service Orchestration.
+And this is a perfect segway to jump to the next section: [Using Zeebe for Service Orchestration](#using-zeebe-for-aervice-orchestration).
 
 
 ## Using Zeebe for Service Orchestration
@@ -568,9 +579,6 @@ Which allows you understand, fix the problem and retry the operations right from
 - **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in High Availability setups. You can define these timers declaratively in your workflow models. These timers will be automatically cancelled if they are not needed anymore, for example, if the decision is made in time. 
 
 ![Call For Proposals Flow With Timers](/imgs/call-for-proposals-workflow-time.png)
-
-- **Search and Reporting**
-TBD
 
 
 
