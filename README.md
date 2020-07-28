@@ -9,7 +9,7 @@ I encourage people to follow the workshop in their own clusters to experience th
 
 This workshop is divided into the following sections: 
 - [Installation and Getting Started](#installation-and-getting-started)
-- [Running a Cloud-Native Conference Application](#running-a-cloud-native conference-application)
+- [Running a Cloud-Native Conference Application](#running-a-cloud-native-conference-application)
 - [Business Monitoring and Cloud-Native Orchestration](#business-monitoring-and-cloud-native-orchestration)
 
 # Installation and Getting Started
