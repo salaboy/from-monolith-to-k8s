@@ -25,8 +25,8 @@ This section covers:
 ## Prerequisites
 
 - Kubernetes Cluster
-  - Tested in GKE Cluster (4 nodes - n1-standard-2)
-  - Do you want to test in a different cloud provider and add it to the list? Help is appreciated, please report issues if you found them while tyring to run the workshop in other Cloud Providers. 
+  - Tested in GKE Cluster (3 nodes - n1-standard-2)
+  - Do you want to test in a different cloud provider and add it to the list? Help is appreciated, please report issues if you found them while trying to run the workshop in other Cloud Providers. 
 - `kubectl` configured. 
 
 ## Tools
@@ -62,7 +62,7 @@ Follow the steps proposed by `jx boot`, for reference these are the options that
 
 You can follow a detailed set of instructions from the [Jenkins X Docs page](https://jenkins-x.io/docs/getting-started/). 
 
-> Notice that Jenkins X and this workshop can be executed in any Cloud Provider. 
+> Notice that Jenkins X and this workshop can be executed in any Cloud Provider. Please report issues to this repository or to the specific projects if you find them.
 
 ## Scenario
 
@@ -80,7 +80,7 @@ The workshop aims to provide the tools, steps, and practices that can facilitate
 
 ## CI/CD for our Monolith
 
-When moving to Kubernetes it is quite common to **lift and shift** our monolith applications that are already running outside Kubernertes. This will require to containarize your application and then provide all Kubernetes Manifests to deploy your application into an existing cluster. 
+When moving to Kubernetes it is quite common to **lift and shift** our monolith applications that are already running outside Kubernetes. This will require to containarize your application and then provide all Kubernetes Manifests to deploy your application into an existing cluster. 
 
 ![Monolith](/imgs/monolith-architecture.png)
 
@@ -90,7 +90,7 @@ This exercise pushes us to learn Kubernetes basics concepts such as Deployments,
 
 > Notice that Helm Charts can be avoided, but it is becoming a standard way to package and distribute Kubernetes YAML manifest, providing also dependency management. For Java folks, this is Maven for Kubernetes applications.  
 
-While this steps are needed for deploying our applications into a running cluster, once you have done these steps for a couple of services/applications, you don't want to do them for 100 services. This is where [Jenkins X](http://jenkins-x.io) comes to help us. 
+While these steps are needed for deploying our applications into a running cluster, once you have done these steps for a couple of services/applications, you don't want to do them for 100 services. This is where [Jenkins X](http://jenkins-x.io) comes to help us. 
 
 You can find our [monolith application here](http://github.com/salaboy/fmtok8s-monolith). This application is a very basic Spring Boot application which can be started in your local environment (if you have the Java JDK and Maven) installed by running: `mvn spring-boot:run`
 
@@ -120,7 +120,7 @@ In the real world, applications are not that simple. These are some challenges t
 
 - **More than one process**: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
 
-- **Scaling the application is hard**: if the application hold any kind of state, having multiple replicas becomes complicated and it might require big refactorings to make it work with multiple replicas of the same running at the same time. 
+- **Scaling the application is hard**: if the application hold any kind of state, having multiple replicas becomes complicated and it might require a big refactorings to make it work with multiple replicas of the same running at the same time. 
 
 
 # Running a Cloud-Native Conference Application
@@ -256,9 +256,9 @@ You can find the logic for the User Interface and the static files inside the [A
 
 
 ### Changes from default import
-- Memory and CPU allowances: 
-- Version Environment Variable: 
-- Default Dockerfile with CMD instead use ENTRYPOINT
+- [Memory and CPU resource limits and requests](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/charts/fmtok8s-api-gateway/values.yaml#L55)  
+- Version Environment Variable, [to link a release (github, docker image, helm chart) to the application runtime](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/charts/fmtok8s-api-gateway/templates/deployment.yaml#L33)
+
 
 
 ### Challenges
@@ -330,7 +330,7 @@ You should **fork**, clone and **jx import** this service as we did with the API
 
 ## Agenda Service
 
-The Agenda Service is in charge of hosting the accepted taks for our conference, this service is heavily used by the conference attendees while the conference is on going to check rooms and times for each talk. This service present an interesting usage pattern, as it not going to recieve too many writes (adding new agenda items) as the amount of reads (attendees checking for talks, times and rooms).  
+The Agenda Service is in charge of hosting the accepted talks for our conference, this service is heavily used by the conference attendees while the conference is on going to check rooms and times for each talk. This service present an interesting usage pattern, as it not going to receive too many writes (adding new agenda items) as the amount of reads (attendees checking for talks, times and rooms).  
 
 > You should **fork** and **jx import** this service as we did with the API Gateway project. 
 
@@ -340,14 +340,14 @@ This service expose the following REST endpoints:
 - **GET /**: get all agenda items
 
 ### Challenges
-- **Different Data Storage**:In real-life, a service like this one might justify a separate data store optmized for search and reads. 
+- **Different Data Storage**:In real-life, a service like this one might justify a separate data store optimized for search and reads. 
 - **Consider different requirements for different phases of your application**: During conference time, we might want to provision more instances (replicas) for this service to serve more traffic
 - **Use Flags to limit functionality**:We might want to consider restricting the POST endpoint when the conference start
 
 
 
 ## Email Service
-The Email Service is an abstraction of a legacy system that you cannot change. Instead of sending emails from the previous services, we encapulated in this case an Email Server behind a REST API. Because we are defining a new API, we can add some domain specific methods to it, such as sending a Conference Notification Email. 
+The Email Service is an abstraction of a legacy system that you cannot change. Instead of sending emails from the previous services, we encapsulated in this case an Email Server behind a REST API. Because we are defining a new API, we can add some domain-specific methods to it, such as sending a Conference Notification Email. 
 
 > You should **fork** and **jx import** this service as we did with the API Gateway project. 
 
@@ -359,7 +359,7 @@ This service expose the following REST endpoints:
 
 ## Development Flow
 
-If you access the application via the API Gateway service you should see the User Interface connecting to all the backend services and displaying each service version number. If you click on the version numbers, you will be taken to github site for the release that was used to build this service. In other words, you have tracebility from source to the actual service that is running in your cluster. Using the version number you can fetch the docker image which was tagged with that version and also the Helm Chart that was created for deploying this application into the staging environment. 
+If you access the application via the API Gateway service you should see the User Interface connecting to all the backend services and displaying each service version number. If you click on the version numbers, you will be taken to Github site for the release that was used to build this service. In other words, you have tracebility from source to the actual service that is running in your cluster. Using the version number you can fetch the docker image which was tagged with that version and also the Helm Chart that was created for deploying this application into the staging environment. 
 
 ![Release Streams](/imgs/release-streams.png)
 
@@ -379,18 +379,12 @@ When dealing with infrastructural components such as databases, message brokers,
 ![Infrastructure](/imgs/infrastructure.png)
 
 
-# Refactoring and improving our applications 
-
-- [Testing and Versioning a Cloud-Native Application](#testing-and-versioning-a-cloud-native-application)
-- [Exposing business metrics and insights](#exposing-business-metrics-and-insights)
-
-# Testing and Versioning a Cloud Native Application 
 
 # Business Monitoring and Cloud-Native Orchestration
 
 No matter how our services are communicating between each other, (REST, Messaging, Using a Service Mesh), it is always hard to make our applications understood by non-technical people. In other words, using tracing (such as open tracing) to understand the sequence of interaction and the data that is exchanged between services can give us an idea about what is going on, but it is usually low-level information that non-technical people cannot use to understand what is going on. 
 
-In this section, we cover some tools that help you to tackle some of the challenges of exposing valuable and real-time data to the business. Having this data at the right time can be a real differentiator between your company and the competition. As this data can be use to influence critical decision about how resources are being used and where bottlenecks can be avoided. 
+In this section, we cover some tools that help you to tackle some of the challenges of exposing valuable and real-time data to the business. Having this data at the right time can be a real differentiator between your company and the competition. As this data can be use to influence critical-decision about how resources are being used and where bottlenecks can be avoided. 
 
 The following sections cover different challenges that you will find when working with distributed architectures. All these challenges affect the business in some way or another, but it is important to recognize that at the end of the day fixing the problem technically is not enough. 
 
@@ -412,15 +406,15 @@ In our example, this might happen if the `Agenda Service` is down. You might acc
 That is quite a terrible situation to end up with and there are a few solutions to this challenge.
 
 
-1) Making sure that request happens, using retries with exponential back-off and circuit breakers. This can be done with a libraries like Ribbon and Hystrix from the client side. In our example this require the `Call For Proposal Service` to include these libraries and configurations
-2) Using Pub/Sub mechanisms (usually using messaging) such as JMS, RabbitMQ, Kafka, etc. This is quite a popular solution when you want to build robust distributed system. As these transports provide some form  delivery guarantees and Dead Letter Queues. 
+1) Making sure that request happens, using retries with exponential back-off and circuit breakers. This can be done with a libraries like Ribbon and Hystrix from the client-side. In our example this require the `Call For Proposal Service` to include these libraries and configurations
+2) Using Pub/Sub mechanisms (usually using messaging) such as JMS, RabbitMQ, Kafka, etc. This is quite a popular solution when you want to build robust and distributed system. As these transports provide some form  delivery guarantees and Dead Letter Queues. 
 3) Using a Service Mesh, such as Istio or LinkerD, that use a proxy to decorate our services with monitoring and retry functionalities in case of request failures. This requires our Kubernetes Cluster to be extended with Istio or LinkerD. 
 
 While `1` helps you to get the request actually executed, it doesn't solve the problem if the request keeps failing. You need more tools to actually solve the problems that are being reported, probably in your logs. 
 
-Option `2` gives you an industry standard way of communicating large systems in a robust way. These frameworks are supposed to provide tools to look and inspect into messages that are failing and enable administrators with retries. But in reality you might need to end up building your own domain specific tools to deal issues when they happen. 
+Option `2` gives you an industry-standard way of communicating large systems in a robust way. These frameworks are supposed to provide tools to look and inspect into messages that are failing and enable administrators with retries. But in reality you might need to end up building your own domain-specific tools to deal issues when they happen. 
 
-Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem. Service Meshes are young and quite complicated beast to fully understand if you are starting with Kubernetes, but are a viable option to analize if your scenario requires advanced features such as Mutual TLS between services. 
+Option `3` gives you more tools to understand where the problem is, centralized logging and reporting tools that helps you to clearly pin point where the problem is and give you hints about the solution, but once again, you are in charge of actually fixing the problem. Service Meshes are young and quite complicated beasts to fully understand if you are starting with Kubernetes, but are a viable option to analyze if your scenario requires advanced features such as Mutual TLS between services. 
 
 You need to ask yourself, are retries enough? 
 
@@ -473,15 +467,15 @@ For this example, the steps can go like this:
 - `1`: The potential speaker submits a new proposal
 - `2`: The Committee review the proposal and approve or reject it
 - `3` **(different order)**: If approved an email is sent for the speaker to confirm his/her interest in participating of the event
-- `4` **(new)**: The potential speaker confirms his/her praticipation by clicking in a link provided in the previous email
-- `5` **(different order)**: The proposal is added to the confernece agenda
+- `4` **(new)**: The potential speaker confirms his/her participation by clicking in a link provided in the previous email
+- `5` **(different order)**: The proposal is added to the confernce agenda
 
 When changes like this are made in code, from the business perspective, you don't know how things were working yesterday and how things are working today.
 
 
-## Deal with edge case explicitily 
+## Deal with edge case explicitly 
 
-In the previous section, you saw how the flow is being handled by the `Call for Proposal Service`. You can clearly read the code because it is a very simple use case with limited functionality, but most importantly it is only covering what is usually called a **"happy path"**. When complexty grows by adding more code for edge cases, libraries, checks and error handling code, even a software developer will struggle to understand what is going on by just reading the code. 
+In the previous section, you saw how the flow is being handled by the `Call for Proposal Service`. You can clearly read the code because it is a very simple use case with limited functionality, but most importantly it is only covering what is usually called a **"happy path"**. When complexity grows by adding more code for edge cases, libraries, checks and error-handling code, even a software developer will struggle to understand what is going on by just reading the code. 
 
 There is not much that you can do about this besides making sure that you follow clean code practices and keep refactoring your code. Depending on the use case, you can consider splitting some of that logic into separate microservices or at least into separate modules inside the same service. 
 
@@ -527,7 +521,7 @@ In distributed systems, querying and aggregating data from different Services is
 
 In the proposed scenario, the `Agenda Service` and the `Call for Proposals Service` store data. These services can choose their own storage depending the data that they need to operate. T
 
-Let's imagine that you want to provide a search capability across data of both services, for such scenarios it might be a bad idea to add such querying capabilities to one of these services, as it will increase the serivce complexity and it will blur the responsabilities between the teams.
+Let's imagine that you want to provide a search capability across data of both services, for such scenarios it might be a bad idea to add such querying capabilities to one of these services, as it will increase the service complexity and it will blur the responsibilities between the teams.
 
 
 ## Understanding Process State
@@ -579,12 +573,6 @@ Which allows you understand, fix the problem and retry the operations right from
 - **Time based constraints**: Zeebe provides out of the box support for scheduling timers to trigger actions in High Availability setups. You can define these timers declaratively in your workflow models. These timers will be automatically cancelled if they are not needed anymore, for example, if the decision is made in time. 
 
 ![Call For Proposals Flow With Timers](/imgs/call-for-proposals-workflow-time.png)
-
-
-
-
-
-
 
 
 # References / Links / Next Steps
