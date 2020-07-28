@@ -11,6 +11,7 @@ This workshop is divided into the following sections:
 - [Installation and Getting Started](#installation-and-getting-started)
 - [Running a Cloud-Native Conference Application](#running-a-cloud-native-conference-application)
 - [Business Monitoring and Cloud-Native Orchestration](#business-monitoring-and-cloud-native-orchestration)
+- [Sum up and links](#sum-up-and-links)
 
 # Installation and Getting Started
 
@@ -26,7 +27,7 @@ This section covers:
 - Kubernetes Cluster
   - Tested in GKE Cluster (3 nodes - n1-standard-2)
   - Do you want to test in a different cloud provider and add it to the list? Help is appreciated, please report issues if you found them while trying to run the workshop in other Cloud Providers. 
-- `kubectl` configured. 
+- `kubectl` configured to work against the cluster. 
 
 ## Tools
 We are using the following projects/tools during this workshop:
@@ -35,10 +36,8 @@ We are using the following projects/tools during this workshop:
 - [Jenkins X](https://jenkins-x.io)
 - [Zeebe](https://helm.zeebe.io)
 - Optional (if you want to change code examples and run them locally)
-  - [JDK 11+]()
-  - [Maven]()
-  - [Spring Boot]()
-  - [Spring Cloud]()
+  - [JDK 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+  - [Maven](https://maven.apache.org/install.html)
 
 ## Installing Jenkins X
 
@@ -75,6 +74,8 @@ Their current application is a Monolith and it looks like this:
 The source code for this application can be [found here](https://github.com/salaboy/fmtok8s-monolith)
 
 The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](https://www.amazon.co.uk/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339/ref=asc_df_1942788339/?tag=googshopuk-21&linkCode=df0&hvadid=311000051962&hvpos=&hvnetw=g&hvrand=13136118265667582563&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9072501&hvtargid=pla-446149606248&psc=1&th=1&psc=1). 
+
+![Accelerate](/imgs/accelerate.png)
 
 
 ## CI/CD for our Monolith
@@ -574,7 +575,7 @@ Which allows you understand, fix the problem and retry the operations right from
 ![Call For Proposals Flow With Timers](/imgs/call-for-proposals-workflow-time.png)
 
 
-# References / Links / Next Steps
+# Sum up and links
 
 - [Monolith Application](https://github.com/salaboy/fmtok8s-monolith)
 - [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
