@@ -67,7 +67,6 @@ You can follow a detailed set of instructions from the [Jenkins X Docs page](htt
 During this workshop, we will be helping a company that is in charge of providing conference organizers their conference sites and back-office tools for their awesome events. 
 
 Their current application is a Monolith and it looks like this: 
-@TODO: redo screenshots and app
 ![Monolith Main Site](/imgs/monolith-mainsite.png)
 ![Monolith Main Backoffice](/imgs/monolith-backoffice.png)
 
