@@ -54,10 +54,6 @@ Once we have `jx` installed we can run `jx boot` to install the server-side comp
 
 Follow the steps proposed by `jx boot`, for reference these are the options that I've selected in a GKE cluster.  
 
-```
-@TODO
-```
-
 You can follow a detailed set of instructions from the [Jenkins X Docs page](https://jenkins-x.io/docs/getting-started/). 
 
 > Notice that Jenkins X and this workshop can be executed in any Cloud Provider. Please report issues to this repository or to the specific projects if you find them.
@@ -111,6 +107,8 @@ Some useful commands to track progress are:
 
 Once the pipeline finishes running you can access your application by running:
 `jx get applications` and accessing the URL associated with your application. 
+
+I recommend [watching at my webinar for @Linode here](https://salaboy.com/2020/08/17/jenkins-x-on-linode-lke-webinar/), where I go into the details of what happens when you import an application using Jenkins X.
 
 ### Challenges 
 In the real world, applications are not that simple. These are some challenges that you might face while doing shift and lift for your Monolith applications:
