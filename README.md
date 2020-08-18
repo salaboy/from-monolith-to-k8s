@@ -4,6 +4,8 @@ Workshop-style guide for moving from a monolith application to a cloud-native ar
 
 This guide will take you through an example scenario to move from a Monolith application to a set of Cloud Native microservices running in a Kubernetes Cluster. This workshop highlights the use of certain tools to solve some particular challenges that you will face while going to the cloud. These tools are just suggestions and you should evaluate what fits better to your teams and practices. 
 
+The application and the application flow can be used to test other projects and it was intended for educational and testing purposes. If you want to suggest other projects to be added, such as service meshes, severless platforms, etc. feel free to drop me a message.  
+
 All the projects here are Open Source under the ASL 2.0 License and I welcome Pull Requests and [Issues](http://github.com/salaboy/from-monolith-to-k8s/issues) with more tools additions and suggestions to improve the workshop. 
 I encourage people to follow the workshop in their own clusters to experience the usage of these tools, their issues and their strengths. 
 
@@ -574,8 +576,18 @@ Which allows you understand, fix the problem and retry the operations right from
 
 # Sum up and links
 
+The tools used in this workshop are all Open Source and can be used for real life projects. 
+Here are some useful links to the source code of the different services and to the conferences where I've presented this demo. 
+
+
+
 - [Monolith Application](https://github.com/salaboy/fmtok8s-monolith)
 - [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
 - [C4P Service](https://github.com/salaboy/fmtok8s-c4p)
 - [Agenda Service](https://github.com/salaboy/fmtok8s-c4p)
 - [Email Service](https://github.com/salaboy/fmtok8s-email)
+
+Conferences:
+- [JNation 2020](https://salaboy.com/2020/06/02/jnation-2020-from-monolith-to-k8s/)
+- [KubeCon EU Virtual 2020](https://kccnceu20.sched.com/event/Zen3/how-we-migrated-our-monolith-to-k8s-and-became-a-high-performing-team-mauricio-salatino-camundalearnk8s-tracy-miranda-cloudbees)
+- [SouJava Meetup 2019](https://salaboy.com/2019/11/07/from-monolith-to-k8s-soujava/)
