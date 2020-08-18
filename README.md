@@ -68,8 +68,8 @@ During this workshop, we will be helping a company that is in charge of providin
 
 Their current application is a Monolith and it looks like this: 
 @TODO: redo screenshots and app
-![Monolith Main Site](/imgs/conference-site-main.png)
-![Monolith Main Backoffice](/imgs/conference-site-backoffice.png)
+![Monolith Main Site](/imgs/monolith-mainsite.png)
+![Monolith Main Backoffice](/imgs/monolith-backoffice.png)
 
 The source code for this application can be [found here](https://github.com/salaboy/fmtok8s-monolith)
 
