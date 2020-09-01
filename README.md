@@ -168,7 +168,7 @@ The source code for our API Gateway can be [found here](http://github.com/salabo
 
 ### Routing HTTP request to other services
 
-With [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) we can finetune how the traffic is going to be routed to other services. The API Gateway doesn't do any advanced routing for this example, but it opens the door for experimentation of more advanced features such as throttling and filtering. 
+With [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway) we can finetune how the traffic is going to be routed to other services. The API Gateway doesn't do any advanced routing for this example, but it opens the door for experimentation of more advanced features such as throttling and filtering.
 
 For this project the following routes are defined inside the [application.yaml](https://github.com/salaboy/fmtok8s-api-gateway/blob/master/src/main/resources/application.yaml) file:
 ```
@@ -201,6 +201,36 @@ These routes define where traffic is going to be routed based on different paths
 Notice that `URI` for the target services are defined with a default value, for example `http://fmtok8s-c4p` and an environment variable that can override that default value if it is set (`C4P_SERVICE`). This allows you to point to different services if for some reason your services have different names in your environment. 
 
 For developers that are used to work in Kubernetes, it is quite normal to refer to other services using the service name, such as `fmtok8s-c4p`. Outside Kubernetes you will be using the service IP and Port. This is Kubernetes Service Discovery in action. In the following sections you learn how these services are configured. 
+
+Notice that the latest version of this service now includes Circuit Breakers, which allows us to deal with failures in other services:
+
+![Spring Cloud Gateway with Circuit Breakers](/imgs/spring-cloud-gateway-with-circuit-breakers.png)
+
+If you want to add the Circuit Breakers to your routes you just need to add an extra filter and the following maven dependency to your project: 
+```
+ <dependency>
+   <groupId>org.springframework.cloud</groupId>
+   <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+ </dependency>
+```
+
+The Circuit Breakers will react if the downstream service returns something different from 2xx HTTP code. 
+
+```
+routes:
+- id: agenda
+  uri: ${AGENDA_SERVICE:http://fmtok8s-agenda}
+  predicates:
+  - Path=/agenda/**
+  filters:
+  - RewritePath=/agenda/(?<id>.*), /$\{id}
+  - name: CircuitBreaker
+    args:
+     name: agendaCircuitBreaker
+     fallbackUri: forward:/api/agendaNotAvailable
+```
+
+For this example, this means that if the `AGENDA_SERVICE` is failing for any reason, the request will be forwarded to `/api/agendaNotAvailable` allowing you to define how the application will react in such situations. 
 
 ### Importing the API Gateway / User Interface to Jenkins X
 
