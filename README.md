@@ -30,16 +30,57 @@ This section covers:
   - Tested in GKE Cluster (3 nodes - n1-standard-2)
   - Do you want to test in a different cloud provider and add it to the list? Help is appreciated, please report issues if you found them while trying to run the workshop in other Cloud Providers. 
 - `kubectl` configured to work against the cluster. 
+- `helm` installed
 
 ## Tools
 We are using the following projects/tools during this workshop:
 
 - [Kubernetes](http://kubernetes.io)
 - [Jenkins X](https://jenkins-x.io)
+- [Helm](http://helm.sh)
 - [Zeebe](https://helm.zeebe.io)
 - Optional (if you want to change code examples and run them locally)
   - [JDK 11+](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
   - [Maven](https://maven.apache.org/install.html)
+
+## Installing the application - no Pipelines
+
+If you want to install the application without using [Jenkins X](http://jenkinsx.io) (covered in the next section), you can just use the following [helm](http://helm.sh) charts.
+
+First you need to add the following helm repository:
+```
+$ helm repo add fmtok8s http://chartmuseum-jx.35.222.17.41.nip.io
+$ helm repo update
+```
+The application is using External Secrets in order to connect with a secrent manager (Cloud Provider specific or Hashicorp Vault). Here is how you install it:
+```
+$ helm repo add external-secrets https://godaddy.github.io/kubernetes-external-secrets/
+$ helm install external-secrets/kubernetes-external-secrets
+```
+
+This requires you to create the following secrets in your secrets manager:
+- zeebe-address
+- zeebe-client-id
+- zeebe-client-secret
+
+(if you are running outside of a Cloud Provider you can install Vault using Helm as well -> [https://www.vaultproject.io/docs/platform/k8s/helm](https://www.vaultproject.io/docs/platform/k8s/helm))
+
+
+Then you can install all the application services:
+```
+$ helm install frontend fmtok8s/fmtok8s-api-gateway
+$ helm install agenda fmtok8s/fmtok8s-agenda
+$ helm install c4p fmtok8s/fmtok8s-c4p
+$ helm install email fmtok8s/fmtok8s-email
+```
+
+Once all the services are installed you can use `kubectl port-forward` to access the website:
+```
+$ kubectl port-forward svc/fmtok8s-api-gateway 8080:80
+```
+
+And then access the application pointing your browser to: http://localhost:8080
+
 
 ## Installing Jenkins X
 
