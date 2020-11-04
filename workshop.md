@@ -52,3 +52,10 @@ Now you are ready to install the application by just running the following comma
 ```
 
 # Understanding our application
+
+# Workflow Orchestration with Camunda Cloud
+
+```
+k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=<ZEEBE_ADDRESS HERE> --from-literal=ZEEBE_CLIENT_ID=<ZEEBE_CLIENT_ID HERE> --from-literal=ZEEBE_CLIENT_SECRET=<ZEEBE_CLIENT_SECRET HERE> --fr
+om-literal=ZEEBE_AUTHORIZATION_SERVER_URL=<ZEEBE_AUTHORIZATION_SERVER_URL HERE>
+```
