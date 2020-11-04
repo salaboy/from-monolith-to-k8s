@@ -62,6 +62,9 @@ Now you are ready to install the application by just running the following comma
 # Understanding our application
 
 # Workflow Orchestration with Camunda Cloud
+Sign up for [Camunda Cloud](https://accounts.cloud.ultrawombat.com/signup?campaign=workshop)
+
+
 
 ```
 k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=<ZEEBE_ADDRESS HERE> --from-literal=ZEEBE_CLIENT_ID=<ZEEBE_CLIENT_ID HERE> --from-literal=ZEEBE_CLIENT_SECRET=<ZEEBE_CLIENT_SECRET HERE> --fr
