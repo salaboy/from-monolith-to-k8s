@@ -24,15 +24,23 @@ Now instead of typing `kubectl` or `helm` you can just type `k` and `h` respecti
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"ingress.class":"kourier.ingress.networking.knative.dev"}}'
-> k apply --filename https://storage.googleapis.com/knative-nightly/serving/latest/serving-default-domain.yaml  
+> k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-default-domain.yaml
 ```
 
 - Knative Eventing
 
 ```
-> k apply --filename https://storage.googleapis.com/knative-nightly/eventing/latest/eventing-crds.yaml
-> k apply --filename https://storage.googleapis.com/knative-nightly/eventing/latest/eventing-core.yaml
-> k apply --filename https://storage.googleapis.com/knative-nightly/eventing/latest/in-memory-channel.yaml
+> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
+> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-core.yaml
+> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/in-memory-channel.yaml
+> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/mt-channel-broker.yaml
+> k create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+ name: default
+ namespace: default
+EOF
 ```
 
 
