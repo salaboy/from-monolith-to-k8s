@@ -68,6 +68,8 @@ Now you are ready to install the application by just running the following comma
 
 ## Deploying Version 2
 
+Sign Up using this Link: https://accounts.cloud.camunda.io/signup?campaign=workshop
+
 Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
 ```
 k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=<ZEEBE_ADDRESS HERE> --from-literal=ZEEBE_CLIENT_ID=<ZEEBE_CLIENT_ID HERE> --from-literal=ZEEBE_CLIENT_SECRET=<ZEEBE_CLIENT_SECRET HERE> --fr
