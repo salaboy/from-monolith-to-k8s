@@ -29,19 +29,19 @@ Once the cluster is created, you will connect and iteract with it using Cloud Sh
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
-```
+``` bash
 alias k=kubectl
 alias h=helm
 ```
 Now instead of typing `kubectl` or `helm` you can just type `k` and `h` respectivily. 
 
 You can now type inside Cloud Shell: 
-```
+``` bash
 k get nodes
 ```
 
 You should see something like this: 
-```
+``` bash
 NAME                                           STATUS   ROLES    AGE   VERSION
 gke-workshop-test-default-pool-90a86d57-cl4k   Ready    <none>   18m   v1.16.13-gke.401
 gke-workshop-test-default-pool-90a86d57-g98v   Ready    <none>   18m   v1.16.13-gke.401
@@ -52,7 +52,7 @@ gke-workshop-test-default-pool-90a86d57-k0nx   Ready    <none>   18m   v1.16.13-
 
 - Knative Service
 
-```
+``` bash
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
 k apply --filename https://github.com/knative/net-kourier/releases/download/v0.18.0/kourier.yaml
@@ -65,7 +65,7 @@ k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/
 
 - Knative Eventing
 
-```
+``` bash
 k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
 k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-core.yaml
 k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/in-memory-channel.yaml
@@ -86,14 +86,14 @@ EOF
 Once you have the aliases, Knative and a Camunda Cloud account  you can proceed to add a new Helm Repository where the Helm packages for the application are stored. 
 You can do this by runnig the following command: 
 
-```
-> h repo add workshop http://chartmuseum-jx.35.222.17.41.nip.io
-> h repo update
+``` bash
+h repo add workshop http://chartmuseum-jx.35.222.17.41.nip.io
+h repo update
 ```
 
 Now you are ready to install the application by just running the following command:
-```
-> h install fmtok8s workshop/fmtok8s-app
+``` bash
+h install fmtok8s workshop/fmtok8s-app
 ```
 
 # Understanding our application
@@ -104,22 +104,21 @@ Now you are ready to install the application by just running the following comma
 
 
 Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
-```
-k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=<ZEEBE_ADDRESS HERE> --from-literal=ZEEBE_CLIENT_ID=<ZEEBE_CLIENT_ID HERE> --from-literal=ZEEBE_CLIENT_SECRET=<ZEEBE_CLIENT_SECRET HERE> --fr
-om-literal=ZEEBE_AUTHORIZATION_SERVER_URL=<ZEEBE_AUTHORIZATION_SERVER_URL HERE>
+``` bash
+k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=...
 ```
 
 @TODO: explain that V2 of the application is emitting events using Knative, you can observe these to understand what is happening in your application.
 @TODO: explain Zeebe Cloud Events Router
 
-```
-> h install fmtok8s workshop/fmtok8s-app-v2
+``` bash 
+h install fmtok8s-v2 workshop/fmtok8s-app-v2
 ```
 
 # Workflow Orchestration with Camunda Cloud
 
-```
-> h install fmtok8s workshop/fmtok8s-app-v3
+``` bash
+h install fmtok8s-v3 workshop/fmtok8s-app-v3
 ```
 
 
