@@ -1,42 +1,76 @@
 # Workshop 
 
 During this workshop you will deploy a Cloud Native application, inspect it, change its configuration to use different services and 
-play around with it to get familiar with Kubernetes and Cloud Native tools that can help you to be more efficient. 
+play around with it to get familiar with Kubernetes and Cloud-Native tools that can help you to be more effective in your cloud journey. 
 
-During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. 
+During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-@TODO: Add GKE instructions here
 
-In order to do this you will be using `kubectl` and `helm` to deploy the application. Because you will be using the Google Cloud Console, you can save some time by creating some aliases for these two commands:
+
+
+# Pre Requisites
+Here are some prerequisites to run this workshop: 
+
+1) Google Cloud Account (if you are a QCon Plus attendee, we will provide you with one)
+  @TODO: add steps to login and set up the right project
+2) Camunda Cloud Account, you need to sign for a new account here: https://accounts.cloud.camunda.io/signup?campaign=workshop
+
+
+
+# Getting Started
+
+Once you are logged in inside your Google Cloud account, you will need to create a Kubernetes Cluster with the following characteristics:
+- 3 Nodes (n2-standard-4)
+- Kubernetes API 1.16+
+
+
+Once the cluster is created, you will connect and iteract with it using Cloud Shell, a terminal that runs inside a Debian machine which comes with pre-installed tools like: 'kubectl' and 'helm'. Once you see your cluster ready in the cluster list, you can click the "Connect" button and then find the Run in Cloud Shell button, which will provision a new instance of Cloud Shell for you to use. 
+
+
+Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
 ```
-> alias k=kubectl
-> alias h=helm
+alias k=kubectl
+alias h=helm
 ```
 Now instead of typing `kubectl` or `helm` you can just type `k` and `h` respectivily. 
 
-# Pre Requisites
+You can now type inside Cloud Shell: 
+```
+k get nodes
+```
+
+You should see something like this: 
+```
+NAME                                           STATUS   ROLES    AGE   VERSION
+gke-workshop-test-default-pool-90a86d57-cl4k   Ready    <none>   18m   v1.16.13-gke.401
+gke-workshop-test-default-pool-90a86d57-g98v   Ready    <none>   18m   v1.16.13-gke.401
+gke-workshop-test-default-pool-90a86d57-k0nx   Ready    <none>   18m   v1.16.13-gke.401
+```
+
+
+
 - Knative Service
 
 ```
-> k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
-> k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
-> k apply --filename https://github.com/knative/net-kourier/releases/download/v0.18.0/kourier.yaml
-> k patch configmap/config-network \
+k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
+k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-core.yaml
+k apply --filename https://github.com/knative/net-kourier/releases/download/v0.18.0/kourier.yaml
+k patch configmap/config-network \
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"ingress.class":"kourier.ingress.networking.knative.dev"}}'
-> k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-default-domain.yaml
+k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-default-domain.yaml
 ```
 
 - Knative Eventing
 
 ```
-> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
-> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-core.yaml
-> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/in-memory-channel.yaml
-> k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/mt-channel-broker.yaml
-> k create -f - <<EOF
+k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
+k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-core.yaml
+k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/in-memory-channel.yaml
+k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/mt-channel-broker.yaml
+k create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Broker
 metadata:
@@ -45,7 +79,7 @@ metadata:
 EOF
 ```
 
-- Create a Camunda Cloud account, you will need it for version 2 and version 3 of the applications. Sign up for [Camunda Cloud](https://accounts.cloud.ultrawombat.com/signup?campaign=workshop)
+
 
 # Installing our Cloud Native Application
 
@@ -68,7 +102,6 @@ Now you are ready to install the application by just running the following comma
 
 ## Deploying Version 2
 
-Sign Up using this Link: https://accounts.cloud.camunda.io/signup?campaign=workshop
 
 Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
 ```
