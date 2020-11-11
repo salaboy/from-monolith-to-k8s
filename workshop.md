@@ -13,9 +13,7 @@ Here are some prerequisites to run this workshop:
 
 1) Google Cloud Account (if you are a QCon Plus attendee, we will provide you with one)
   @TODO: add steps to login and set up the right project
-2) Camunda Cloud Account, you need to sign for a new account here: https://accounts.cloud.camunda.io/signup?campaign=workshop
-
-
+2) Camunda Cloud Account, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). Once you signed into your account, create a new cluster called `my-cluster`, you will use this in the second half of the workshop, but it is better to boot it up early on. 
 
 # Getting Started
 
@@ -111,11 +109,14 @@ mt-broker-filter-6bbcc67bc5-n2hpn       1/1     Running   0          2m9s
 mt-broker-ingress-64987f6f4-4l9n6       1/1     Running   0          2m9s
 ```
 
+Now you have everything ready to deploy your Cloud-Native applications to Kubernetes. 
 
+# Deploying a Cloud Native Application
 
-# Installing our Cloud Native Application
+In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
-Once you have the aliases, Knative and a Camunda Cloud account  you can proceed to add a new Helm Repository where the Helm packages for the application are stored. 
+Once you have the aliases, Knative installed and a Camunda Cloud account you can proceed to add a new Helm Repository where the Helm packages for the application are stored. 
+
 You can do this by runnig the following command: 
 
 ``` bash
@@ -127,6 +128,93 @@ Now you are ready to install the application by just running the following comma
 ``` bash
 h install fmtok8s workshop/fmtok8s-app
 ```
+
+You can check that the application running with the following two commands:
+- Check the pods of the running services with: 
+``` bash
+k get pods
+```
+You should see that pods are being created or they are running:
+``` bash
+NAME                                                   READY   STATUS              RESTARTS   AGE
+fmtok8s-agenda-h2kp8-deployment-54b8dcd9d-7c4mz        0/2     ContainerCreating   0          6s
+fmtok8s-api-gateway-s5lr5-deployment-6447fc94f-4smj4   0/2     ContainerCreating   0          5s
+fmtok8s-c4p-tgjvw-deployment-6796d99bd7-xh6cm          0/2     ContainerCreating   0          5s
+fmtok8s-email-hdfvf-deployment-848b9bcc78-mnfkd        0/2     ContainerCreating   0          5s
+```
+
+- You can also check the Knative Services with: 
+```
+k get ksvc
+```
+
+You should see something like this:
+``` bash
+NAME                  URL                                                       LATESTCREATED               LATESTREADY                 READY   REASON
+fmtok8s-agenda        http://fmtok8s-agenda.default.XXX.xip.io        fmtok8s-agenda-h2kp8        fmtok8s-agenda-h2kp8        True
+fmtok8s-api-gateway   http://fmtok8s-api-gateway.default.XXX.xip.io   fmtok8s-api-gateway-s5lr5   fmtok8s-api-gateway-s5lr5   True
+fmtok8s-c4p           http://fmtok8s-c4p.default.XXX.xip.io           fmtok8s-c4p-tgjvw           fmtok8s-c4p-tgjvw           True
+fmtok8s-email         http://fmtok8s-email.default.XXX.xip.io         fmtok8s-email-hdfvf         fmtok8s-email-hdfvf         True
+```
+
+As soon all the pods are running and the services are ready you can copy and paste the `fmtok8s-api-gateway` URL into a different tab in your browser to access the application `http://fmtok8s-api-gateway.default.XXX.xip.io`
+
+Now you can go ahead and:
+1) Submit a proposal by clicking the Submit Proposal button in the main page
+@TODO: add screenshot
+2) Go to the back office (top right link) and Approve or Reject the proposal
+@TODO: add screenshot
+3) Check the email service to see the notification email sent to the potential speaker, this can be done with 
+``` bash
+k get pods
+```
+Where you should see the Email Service pod:
+``` bash
+NAME                                                   READY   STATUS    RESTARTS   AGE
+fmtok8s-agenda-h2kp8-deployment-54b8dcd9d-7c4mz        2/2     Running   0          30m
+fmtok8s-api-gateway-s5lr5-deployment-6447fc94f-4smj4   2/2     Running   0          30m
+fmtok8s-c4p-tgjvw-deployment-6796d99bd7-xh6cm          2/2     Running   0          30m
+fmtok8s-email-hdfvf-deployment-xxxxxxxxxx-mnfkd        2/2     Running   0          30m <<< this one!!
+```
+And then you can tail the logs by running:
+``` bash
+k logs -f fmtok8s-email-<YOUR POD ID> user-container
+```
+
+You should see the service logs being tailed, you can exit/stop taling the logs with `CTRL+C`.
+
+``` bash
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.3.3.RELEASE)
+Starting EmailService v0.0.3 on fmtok8s-email-hdfvf-deployment-848b9bcc78-mnfkd with PID 1 (/opt/app.jar started by root in /opt)
+No active profile set, falling back to default profiles: default
+Exposing 2 endpoint(s) beneath base path '/actuator'
+Netty started on port(s): 8080
+Started EmailService in 9.394 seconds (JVM running for 10.967)
+```
+
+And if you approved the submitted proposal you should also see something like this: 
+``` bash 
++-------------------------------------------------------------------+
+         Email Sent to: test@gmail.com
+         Email Title: Conference Committee Communication
+         Email Body: Dear test,
+                 We are happy to inform you that:
+                         `test` -> `test`,
+                 was approved for this conference.
++-------------------------------------------------------------------+
+```
+
+4) If you approved the proposal, the proposal should pop up in the Agenda (main page) of the conference. 
+@TODO: add screenshot
+
+
 
 # Understanding our application
 @TODO: explain from a high level what the first version of the application is doing and some of the challenges. 
