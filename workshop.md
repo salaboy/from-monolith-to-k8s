@@ -48,9 +48,9 @@ gke-workshop-test-default-pool-90a86d57-g98v   Ready    <none>   18m   v1.16.13-
 gke-workshop-test-default-pool-90a86d57-k0nx   Ready    <none>   18m   v1.16.13-gke.401
 ```
 
+Next step you will install Knative Serving and Knative Eventing
 
-
-- Knative Service
+- Knative Serving
 
 ``` bash
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
@@ -61,6 +61,21 @@ k patch configmap/config-network \
   --type merge \
   --patch '{"data":{"ingress.class":"kourier.ingress.networking.knative.dev"}}'
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-default-domain.yaml
+```
+
+You can check that the installation worked out correctly by checking that all the Knative Serving pods are running:
+```bash
+k get pods -n knative-serving
+```
+
+You should see something like this:
+```
+3scale-kourier-control-74459454f5-lhczq   1/1     Running     0          3m42s
+activator-56cf848f9d-x46jq                1/1     Running     0          3m50s
+autoscaler-67c75d8566-c6xrs               1/1     Running     0          3m49s
+controller-6568f84b8b-sksxz               1/1     Running     0          3m49s
+default-domain-x676x                      0/1     Completed   0          3m34s
+webhook-785c5879fb-r9kqp                  1/1     Running     0          3m48s
 ```
 
 - Knative Eventing
@@ -77,6 +92,23 @@ metadata:
  name: default
  namespace: default
 EOF
+```
+
+You can check that the installation worked out correctly by checking that all the Knative Eventing pods are running:
+``` bash
+k get pods -n knative-eventing
+```
+
+You should see something like this: 
+``` bash
+NAME                                    READY   STATUS    RESTARTS   AGE
+eventing-controller-6fc9c6cfc4-s4b78    1/1     Running   2          2m55s
+eventing-webhook-667c8f6dc4-wnmjr       1/1     Running   4          2m53s
+imc-controller-6c4f87765c-wcxm9         1/1     Running   0          2m14s
+imc-dispatcher-74dcf4647f-4kdpz         1/1     Running   0          2m13s
+mt-broker-controller-6d789b944d-hk2fc   1/1     Running   0          2m8s
+mt-broker-filter-6bbcc67bc5-n2hpn       1/1     Running   0          2m9s
+mt-broker-ingress-64987f6f4-4l9n6       1/1     Running   0          2m9s
 ```
 
 
