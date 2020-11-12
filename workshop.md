@@ -5,24 +5,41 @@ play around with it to get familiar with Kubernetes and Cloud-Native tools that 
 
 During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-
-
+The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. 
 
 # Pre Requisites
 Here are some prerequisites to run this workshop: 
 
 1) Google Cloud Account (if you are a QCon Plus attendee, we will provide you with one)
-  @TODO: add steps to login and set up the right project
-2) Camunda Cloud Account, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). Once you signed into your account, create a new cluster called `my-cluster`, you will use this in the second half of the workshop, but it is better to boot it up early on. 
-
-# Getting Started
+<details>
+  <summary>Select the correct project and create a Kubernetes Cluster (Click to Expand)</summary>
 
 Once you are logged in inside your Google Cloud account, you will need to create a Kubernetes Cluster with the following characteristics:
 - 3 Nodes (n2-standard-4)
 - Kubernetes API 1.16+
 
-Once the cluster is created, you will connect and iteract with it using Cloud Shell, a terminal that runs inside a Debian machine which comes with pre-installed tools like: 'kubectl' and 'helm'. Once you see your cluster ready in the cluster list, you can click the "Connect" button and then find the Run in Cloud Shell button, which will provision a new instance of Cloud Shell for you to use. 
+This will take some minutes, so you can move forward to the next step while the Kubernetes Cluster is being created.
+  
+</details>  
+  
+2) Camunda Cloud Account and Cluster, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). 
+<details>
+  <summary>Login into your account and create a Cluster (Click to Expand)</summary>
 
+Once you signed into your account, create a new cluster called `my-cluster`, you will use this in the second half of the workshop, but it is better to boot it up early on. 
+
+</details>  
+
+
+
+# Getting Started
+
+On this section you will be setting up the following:
+- Testing Cloud Shell and setting up aliases
+- Installing Knative Serving and Eventing
+
+
+Once the cluster is created, you will connect and iteract with it using Cloud Shell, a terminal that runs inside a Debian machine which comes with pre-installed tools like: 'kubectl' and 'helm'. Once you see your cluster ready in the cluster list, you can click the "Connect" button and then find the Run in Cloud Shell button, which will provision a new instance of Cloud Shell for you to use. 
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
@@ -114,7 +131,7 @@ Now you have everything ready to deploy your Cloud-Native applications to Kubern
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
-Once you have the aliases, Knative installed and a Camunda Cloud account you can proceed to add a new Helm Repository where the Helm packages for the application are stored. 
+Once you have the aliases, Knative installed and a Camunda Cloud account you can proceed to add a new `Helm Repository` where the Helm packages for the application are stored. 
 
 You can do this by runnig the following command: 
 
@@ -127,6 +144,8 @@ Now you are ready to install the application by just running the following comma
 ``` bash
 h install fmtok8s workshop/fmtok8s-app
 ```
+
+The application [Helm Chart source code can be found here](https://github.com/salaboy/fmtok8s-app/).
 
 You can check that the application running with the following two commands:
 - Check the pods of the running services with: 
@@ -158,13 +177,15 @@ fmtok8s-email         http://fmtok8s-email.default.XXX.xip.io         fmtok8s-em
 
 As soon all the pods are running and the services are ready you can copy and paste the `fmtok8s-api-gateway` URL into a different tab in your browser to access the application `http://fmtok8s-api-gateway.default.XXX.xip.io`
 
-![Application Main Page]()
+<img src="workshop-imgs/agenda-screen.png" alt="Conference Agenda" width="500px">
 
 Now you can go ahead and:
 1) Submit a proposal by clicking the Submit Proposal button in the main page
-@TODO: add screenshot
+
 2) Go to the back office (top right link) and Approve or Reject the proposal
-@TODO: add screenshot
+
+<img src="workshop-imgs/backoffice-screen.png" alt="Conference BackOffice" width="500px">
+
 3) Check the email service to see the notification email sent to the potential speaker, this can be done with 
 ``` bash
 k get pods
@@ -181,7 +202,6 @@ And then you can tail the logs by running:
 ``` bash
 k logs -f fmtok8s-email-<YOUR POD ID> user-container
 ```
-
 You should see the service logs being tailed, you can exit/stop taling the logs with `CTRL+C`.
 
 ``` bash
@@ -200,7 +220,7 @@ Netty started on port(s): 8080
 Started EmailService in 9.394 seconds (JVM running for 10.967)
 ```
 
-And if you approved the submitted proposal you should also see something like this: 
+And if you **approved** the submitted proposal you should also see something like this: 
 ``` bash 
 +-------------------------------------------------------------------+
          Email Sent to: test@gmail.com
@@ -213,12 +233,40 @@ And if you approved the submitted proposal you should also see something like th
 ```
 
 4) If you approved the proposal, the proposal should pop up in the Agenda (main page) of the conference. 
-@TODO: add screenshot
+
+Let's take a deeper look on what you just did in this section. 
+
+# Understanding your application
+
+In the previous section you installed an application using `Helm` which provides package management for Kubernetes application. 
+
+For this example, there is a parent chart that contains the configuration for each of the services that is required by the application. 
+You can find each of the services that are going to be deployed inside the `requirements.yaml` file defined [inside the chart here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/requirements.yaml).
+
+This can be extended to add more components if needed, like for example adding a MongoDB and MySQL charts. 
+
+The configuration for all these services can be found in the [`value.yaml` file here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml). This `values.yaml` file can be overriden as well as any of the settings from each specific service when installing the chart, allowing the chart to be flexible enough to be installed with different setups. 
+
+There are a couple of configurations to highlight for this version which are:
+- [Knative Deployments are enabled](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L6), each service Helm Chart enable us to define if we want to use a Knative Service or a Deployment + Service + Ingress type of deployment. Because we have Knative installed, and you want to leverage Knative 
+- Both the [`C4P` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L16) and the [`API Gateway` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L7) need to know where the other services are to be able to send requests. 
+
+In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls.
+
+You can open different tabs in Cloud Shell to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). 
 
 
+## Chalenges
+This section covers some of the challenges that you might face when working with these kind of applications inside Kubernetes. This section is not needed to continue with the workshop, but it highlight the need for some other tools to be used in conjuction with the application. 
+ 
+<details>
+  <summary>To see more details about the challenges Click to Expand</summary>
 
-# Understanding our application
-@TODO: explain from a high level what the first version of the application is doing and some of the challenges. 
+Among some of the challenges that you might face are the following big topics:
+- Flow buried in code: for this scenario the `C4P` service is hosting the core business logic on how to handle new proposals. If you need to explain to non-technical people how the flow goes, you will need to dig in the code to be 100% sure about what the application is doing
+- Dealing with changes: 
+
+</details> 
 
 
 ## Deploying Version 2
