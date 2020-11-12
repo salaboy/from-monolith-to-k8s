@@ -21,7 +21,6 @@ Once you are logged in inside your Google Cloud account, you will need to create
 - 3 Nodes (n2-standard-4)
 - Kubernetes API 1.16+
 
-
 Once the cluster is created, you will connect and iteract with it using Cloud Shell, a terminal that runs inside a Debian machine which comes with pre-installed tools like: 'kubectl' and 'helm'. Once you see your cluster ready in the cluster list, you can click the "Connect" button and then find the Run in Cloud Shell button, which will provision a new instance of Cloud Shell for you to use. 
 
 
@@ -158,6 +157,8 @@ fmtok8s-email         http://fmtok8s-email.default.XXX.xip.io         fmtok8s-em
 ```
 
 As soon all the pods are running and the services are ready you can copy and paste the `fmtok8s-api-gateway` URL into a different tab in your browser to access the application `http://fmtok8s-api-gateway.default.XXX.xip.io`
+
+![Application Main Page]()
 
 Now you can go ahead and:
 1) Submit a proposal by clicking the Submit Proposal button in the main page
