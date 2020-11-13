@@ -7,8 +7,8 @@ During this workshop you will be using GKE (Managed Kubernetes Engine inside Goo
 
 The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. 
 
-# Pre Requisites
-Here are some prerequisites to run this workshop: 
+# Creating accounts and Clusters
+During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
 
 1) [Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
 <details>
@@ -56,7 +56,7 @@ This will take some minutes, so you can move forward to **Camunda Cloud Account 
   
 </details>  
   
-2) Create a Camunda Cloud Account and Cluster, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). 
+2) [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) 
 <details>
   <summary>Login into your account and create a Cluster (Click to Expand)</summary>
 
@@ -71,7 +71,6 @@ Check your inbox to **Activate your account** and follow the links to login, aft
 
 <img src="workshop-imgs/15-create-a-new-zeebe-cluster.png" alt="Create Cluster" width="500px">
 
-
 **Create a new cluster** called `my-cluster`:
 
 <img src="workshop-imgs/16-call-it-my-cluster.png" alt="My Cluster" width="500px">
@@ -81,14 +80,16 @@ Disregard, creating a model if you are asked to and just close the popup:
 <img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="500px">
 
 **Your cluster is now being created:**
+
 <img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="500px">
 
 
 </details>  
 
-
+Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying our Cloud-Native Applications!
 
 # Getting Started
+
 
 On this section you will be setting up the following:
 - Testing Cloud Shell and setting up aliases
