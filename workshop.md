@@ -336,19 +336,44 @@ Version 2 of the application is configured to emit [Cloud Events](http://cloudev
 Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a Knative Broker that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create Triggers (which are like subscriptions with filters) for this events and specify where these events should be sent. 
 
 For Version 2, you will use the **Zeebe Workflow Engine** provisioned in your **Camunda Cloud** account to capture and visualize these meaninful events.
-In order to route these **Cloud Events** from the
+In order to route these **Cloud Events** from the Knative Broker to **Camunda Cloud** a new component is introduced along your Application services. This new component is called **Zeebe Cloud Events Router** and serves as the bridge between Knative and Camunda Cloud, using Cloud Events as the standardize communication protocol. 
 
-Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
+As you can imagine, in order for the **Zeebe Cloud Events Router** to connect with your **Camunda Cloud Zeebe Cluster** you need to create a new **Client**, a set of credentials which allows these components to connect and communicate. 
+
+Go to the **Camunda Cloud** console, click on your cluster to see your cluster details:
+
+<img src="workshop-imgs/19-cluster-details.png" alt="Cluster Details" width="500px">
+
+Go to the **Clients** tab and then **Create a New Client**:
+
+<img src="workshop-imgs/21-create-cluster-client.png" alt="Cluster Details" width="500px">
+
+Call it `my-client` and click **Add**:
+
+<img src="workshop-imgs/22-call-it-my-client.png" alt="Cluster Details" width="500px">
+
+The new client called `my-client` will be created: 
+
+<img src="workshop-imgs/23-client-created.png" alt="Cluster Details" width="500px">
+
+Now you can access the **Connection Information**:
+
+<img src="workshop-imgs/24-client-information-kube-secret.png" alt="Cluster Details" width="500px">
+
+By clicking the button **Copy Kubernetes Secret** the command will be copied into your clipboard and you can paste it inside **Cloud Shell** inside Google Cloud.
+
 ``` bash
 k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=...
 ```
 
-@TODO: explain that V2 of the application is emitting events using Knative, you can observe these to understand what is happening in your application.
-@TODO: explain Zeebe Cloud Events Router
+By running the previous command, you have created a new Kubernetes Secret that host the credentials for our applications to talk to Camunda Cloud. 
+Now you are ready to install version 2 of the application by running: 
 
 ``` bash 
 h install fmtok8s-v2 workshop/fmtok8s-app-v2
 ```
+
+
 
 # Workflow Orchestration with Camunda Cloud
 
