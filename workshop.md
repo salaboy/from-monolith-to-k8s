@@ -107,7 +107,7 @@ Then find the **Run in Cloud Shell** button, which will provision a new instance
 
 Once **Cloud Shell** is provisioned, notice that you will need to hit **Enter** to actually connect with the **workshop** cluster:
 
-<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="500px">
+<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="700px">
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
@@ -123,11 +123,11 @@ k get nodes
 ```
 
 You should see something like this: 
-<img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="500px">
+
+<img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="700px">
 
 
-Next step you will install Knative Serving and Knative Eventing.
-
+Next step you will install Knative Serving and Knative Eventing. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
 
 - Knative Serving
 
