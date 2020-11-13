@@ -88,10 +88,10 @@ Disregard, creating a model if you are asked to and just close the popup:
 
 Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying our Cloud-Native Applications!
 
-# Getting Started
+# Connecting to our Kubernetes Cluster and installing Knative
 
+During this workshop, you will be using Cloud Shell to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
 
-On this section you will be setting up the following:
 - Testing Cloud Shell and setting up aliases
 - Installing Knative Serving and Eventing
 
