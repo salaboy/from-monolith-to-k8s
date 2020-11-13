@@ -177,51 +177,41 @@ k get pods -n knative-eventing
 ```
 
 You should see something like this: 
-``` bash
-NAME                                    READY   STATUS    RESTARTS   AGE
-eventing-controller-6fc9c6cfc4-s4b78    1/1     Running   2          2m55s
-eventing-webhook-667c8f6dc4-wnmjr       1/1     Running   4          2m53s
-imc-controller-6c4f87765c-wcxm9         1/1     Running   0          2m14s
-imc-dispatcher-74dcf4647f-4kdpz         1/1     Running   0          2m13s
-mt-broker-controller-6d789b944d-hk2fc   1/1     Running   0          2m8s
-mt-broker-filter-6bbcc67bc5-n2hpn       1/1     Running   0          2m9s
-mt-broker-ingress-64987f6f4-4l9n6       1/1     Running   0          2m9s
-```
 
-Now you have everything ready to deploy your Cloud-Native applications to Kubernetes. 
+<img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="700px">
 
-# Deploying a Cloud Native Application
+Now, you have everything ready to deploy your Cloud-Native applications to Kubernetes. 
+
+# Deploying a Cloud-Native Application
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
-Once you have the aliases, Knative installed and a Camunda Cloud account you can proceed to add a new `Helm Repository` where the Helm packages for the application are stored. 
+With Knative installed you can proceed to install the first version of the application. You will do this by using [**Helm**](http://helm.sh) a Kuberenetes Package Manager. As with every package manager you need to add a new `Helm Repository` where the **Helm packages/charts** for the workshop are stored. 
 
-You can do this by runnig the following command: 
+You can do this by runnig the following commands: 
 
 ``` bash
 h repo add workshop http://chartmuseum-jx.35.222.17.41.nip.io
 h repo update
+
 ```
 
 Now you are ready to install the application by just running the following command:
 ``` bash
 h install fmtok8s workshop/fmtok8s-app
+
 ```
+You should see something like this:
+
+<img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="700px">
 
 The application [Helm Chart source code can be found here](https://github.com/salaboy/fmtok8s-app/).
 
 You can check that the application running with the following two commands:
+
 - Check the pods of the running services with: 
 ``` bash
 k get pods
-```
-You should see that pods are being created or they are running:
-``` bash
-NAME                                                   READY   STATUS              RESTARTS   AGE
-fmtok8s-agenda-h2kp8-deployment-54b8dcd9d-7c4mz        0/2     ContainerCreating   0          6s
-fmtok8s-api-gateway-s5lr5-deployment-6447fc94f-4smj4   0/2     ContainerCreating   0          5s
-fmtok8s-c4p-tgjvw-deployment-6796d99bd7-xh6cm          0/2     ContainerCreating   0          5s
-fmtok8s-email-hdfvf-deployment-848b9bcc78-mnfkd        0/2     ContainerCreating   0          5s
 ```
 
 - You can also check the Knative Services with: 
@@ -229,14 +219,9 @@ fmtok8s-email-hdfvf-deployment-848b9bcc78-mnfkd        0/2     ContainerCreating
 k get ksvc
 ```
 
-You should see something like this:
-``` bash
-NAME                  URL                                                       LATESTCREATED               LATESTREADY                 READY   REASON
-fmtok8s-agenda        http://fmtok8s-agenda.default.XXX.xip.io        fmtok8s-agenda-h2kp8        fmtok8s-agenda-h2kp8        True
-fmtok8s-api-gateway   http://fmtok8s-api-gateway.default.XXX.xip.io   fmtok8s-api-gateway-s5lr5   fmtok8s-api-gateway-s5lr5   True
-fmtok8s-c4p           http://fmtok8s-c4p.default.XXX.xip.io           fmtok8s-c4p-tgjvw           fmtok8s-c4p-tgjvw           True
-fmtok8s-email         http://fmtok8s-email.default.XXX.xip.io         fmtok8s-email-hdfvf         fmtok8s-email-hdfvf         True
-```
+You should see that pods are being created or they are running and that the Knative Services were created, ready and have an URL:
+
+<img src="workshop-imgs/28-k-getpods-kgetksvc.png" alt="kubectl get pods and ksvcs" width="700px">
 
 As soon all the pods are running and the services are ready you can copy and paste the `fmtok8s-api-gateway` URL into a different tab in your browser to access the application `http://fmtok8s-api-gateway.default.XXX.xip.io`
 
