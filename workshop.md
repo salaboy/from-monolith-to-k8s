@@ -286,12 +286,12 @@ Let's take a deeper look on what you just did in this section.
 
 # Understanding your application
 
-In the previous section you installed an application using `Helm` which provides package management for Kubernetes application. 
+In the previous section you installed an application using `Helm`. 
 
-For this example, there is a parent chart that contains the configuration for each of the services that is required by the application. 
-You can find each of the services that are going to be deployed inside the `requirements.yaml` file defined [inside the chart here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/requirements.yaml).
+For this example, there is a parent **Helm Chart** that contains the configuration for each of the services that compose the application. 
+You can find each service that is going to be deployed inside the `requirements.yaml` file defined [inside the chart here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/requirements.yaml).
 
-This can be extended to add more components if needed, like for example adding a MongoDB and MySQL charts. 
+This can be extended to add more components if needed, like for example adding application infrastructure components such as Databases, Message Brokers, ElasticSearch, etc. (Example: ElasticSearchm, MongoDB and MySQL charts). 
 
 The configuration for all these services can be found in the [`value.yaml` file here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml). This `values.yaml` file can be overriden as well as any of the settings from each specific service when installing the chart, allowing the chart to be flexible enough to be installed with different setups. 
 
@@ -299,12 +299,12 @@ There are a couple of configurations to highlight for this version which are:
 - [Knative Deployments are enabled](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L6), each service Helm Chart enable us to define if we want to use a Knative Service or a Deployment + Service + Ingress type of deployment. Because we have Knative installed, and you want to leverage Knative 
 - Both the [`C4P` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L16) and the [`API Gateway` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L7) need to know where the other services are to be able to send requests. 
 
-In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls.
+In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller 
 
 You can open different tabs in Cloud Shell to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). 
 
 
-## Chalenges
+## Challenges
 This section covers some of the challenges that you might face when working with these kind of applications inside Kubernetes. This section is not needed to continue with the workshop, but it highlight the need for some other tools to be used in conjuction with the application. 
  
 <details>
@@ -312,16 +312,31 @@ This section covers some of the challenges that you might face when working with
 
 Among some of the challenges that you might face are the following big topics:
 - Flow buried in code: for this scenario the `C4P` service is hosting the core business logic on how to handle new proposals. If you need to explain to non-technical people how the flow goes, you will need to dig in the code to be 100% sure about what the application is doing
+- Edge Cases and Errors: 
 - Dealing with changes: 
+- ....
 
 </details> 
 
 You will now undeploy version 1 of the application to deploy version 2. You only need to undeploy version 1 to save resources.
-In order to undeploy version 1 of the application 
+In order to undeploy version 1 of the application you can run:
+``` bash
+h delete fmtok8s --no-hooks
+```
 
 
 ## Knative, Cloud Events and Camunda Cloud - Version 2
 
+Version 2 of the application is configured to emit [Cloud Events](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
+- `Proposal Received`
+- `Proposal Decision Made`
+- `Email Sent`
+- In the case of the proposal being approved `Agenda Item Created` 
+
+Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a Knative Broker that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create Triggers (which are like subscriptions with filters) for this events and specify where these events should be sent. 
+
+For Version 2, you will use the **Zeebe Workflow Engine** provisioned in your **Camunda Cloud** account to capture and visualize these meaninful events.
+In order to route these **Cloud Events** from the
 
 Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
 ``` bash
