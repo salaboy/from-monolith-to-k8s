@@ -61,12 +61,28 @@ This will take some minutes, so you can move forward to **Camunda Cloud Account 
   <summary>Login into your account and create a Cluster (Click to Expand)</summary>
 
 **Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
-<img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Waiting" width="500px">
+<img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="500px">
 
-Check your inbox to confirm the account and follow the links to login, after confirmation:
+Check your inbox to **Activate your account** and follow the links to login, after confirmation:
+
+<img src="workshop-imgs/14-activate-your-account.png" alt="Activate" width="500px">
+
+**Once activated, Login with your credentials** and let's create a new **Zeebe Cluster**, you will be using this cluster later on in the workshop, but it is better to set it up early on. 
+
+<img src="workshop-imgs/15-create-a-new-zeebe-cluster.png" alt="Create Cluster" width="500px">
 
 
-Once you signed into your account, create a new cluster called `my-cluster`, you will use this in the second half of the workshop, but it is better to boot it up early on. 
+**Create a new cluster** called `my-cluster`:
+
+<img src="workshop-imgs/16-call-it-my-cluster.png" alt="My Cluster" width="500px">
+
+Disregard, creating a model if you are asked to and just close the popup:
+
+<img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="500px">
+
+**Your cluster is now being created:**
+<img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="500px">
+
 
 </details>  
 
