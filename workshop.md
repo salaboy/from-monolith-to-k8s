@@ -142,6 +142,7 @@ k patch configmap/config-network \
   --type merge \
   --patch '{"data":{"ingress.class":"kourier.ingress.networking.knative.dev"}}'
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-default-domain.yaml
+
 ```
 
 You can check that the installation worked out correctly by checking that all the Knative Serving pods are running:
@@ -173,6 +174,7 @@ metadata:
  name: default
  namespace: default
 EOF
+
 ```
 
 You can check that the installation worked out correctly by checking that all the Knative Eventing pods are running:
