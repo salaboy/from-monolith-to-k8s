@@ -10,6 +10,8 @@ The main goal of the workshop is to guide you step by step to work with an appli
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
 
+**Notice: you can click in the images to expand them**
+
 1) [Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
 <details>
   <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
@@ -88,15 +90,24 @@ Disregard, creating a model if you are asked to and just close the popup:
 
 Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying our Cloud-Native Applications!
 
-# Connecting to our Kubernetes Cluster and installing Knative
+# Connecting to your Kubernetes Cluster and installing Knative
 
 During this workshop, you will be using Cloud Shell to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
 
-- Testing Cloud Shell and setting up aliases
-- Installing Knative Serving and Eventing
 
+Once the Kubernetes cluster is created and "green", you will connect and iteract with it using **Cloud Shell**, a terminal that runs inside a Debian machine which comes with pre-installed tools like: `kubectl` and `helm`. 
 
-Once the cluster is created, you will connect and iteract with it using Cloud Shell, a terminal that runs inside a Debian machine which comes with pre-installed tools like: 'kubectl' and 'helm'. Once you see your cluster ready in the cluster list, you can click the "Connect" button and then find the Run in Cloud Shell button, which will provision a new instance of Cloud Shell for you to use. 
+Click the **Connect** button 
+
+<img src="workshop-imgs/09-cluster-green.png" alt="Cluster Green Connect" width="500px">
+
+Then find the **Run in Cloud Shell** button, which will provision a new instance of Cloud Shell for you to use:
+
+<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="Cloud Shell" width="500px">
+
+Once **Cloud Shell** is provisioned, notice that you will need to hit **Enter** to actually connect with the **workshop** cluster:
+
+<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="500px">
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
@@ -112,16 +123,15 @@ k get nodes
 ```
 
 You should see something like this: 
-``` bash
-NAME                                           STATUS   ROLES    AGE   VERSION
-gke-workshop-test-default-pool-90a86d57-cl4k   Ready    <none>   18m   v1.16.13-gke.401
-gke-workshop-test-default-pool-90a86d57-g98v   Ready    <none>   18m   v1.16.13-gke.401
-gke-workshop-test-default-pool-90a86d57-k0nx   Ready    <none>   18m   v1.16.13-gke.401
-```
+<img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="500px">
 
-Next step you will install Knative Serving and Knative Eventing
+
+Next step you will install Knative Serving and Knative Eventing.
+
 
 - Knative Serving
+
+If you have the previous aliases set up, you can copy the entire block and paste it Cloud Shell
 
 ``` bash
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
