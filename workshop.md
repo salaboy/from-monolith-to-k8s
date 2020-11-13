@@ -10,9 +10,21 @@ The main goal of the workshop is to guide you step by step to work with an appli
 # Pre Requisites
 Here are some prerequisites to run this workshop: 
 
-1) Google Cloud Account (if you are a QCon Plus attendee, we will provide you with one)
+1) [Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
 <details>
-  <summary>Select the correct project and create a Kubernetes Cluster (Click to Expand)</summary>
+  <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
+
+Once you are logged in, you will be asked to accept the terms and continue: 
+<img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="500px">
+
+Once the terms are accepted, it is extremely important that you select the correct project to work on. On the top bar, there is a project dropdown that opens the project list. You need to click into the **QCon SF 2020 ...** project to select it.
+
+<img src="workshop-imgs/01-select-qcon-project.png" alt="Select Project" width="500px">
+
+Once the project is selected, you can create new **Kubernetes Clusters* by switching to the **Kubernetes Engine** section from the left hand side menu:
+<img src="workshop-imgs/02-go-to-kube-engine.png" alt="Kubernetes Engine section" width="500px">
+
+
 
 Once you are logged in inside your Google Cloud account, you will need to create a Kubernetes Cluster with the following characteristics:
 - 3 Nodes (n2-standard-4)
@@ -268,8 +280,11 @@ Among some of the challenges that you might face are the following big topics:
 
 </details> 
 
+You will now undeploy version 1 of the application to deploy version 2. You only need to undeploy version 1 to save resources.
+In order to undeploy version 1 of the application 
 
-## Deploying Version 2
+
+## Knative, Cloud Events and Camunda Cloud - Version 2
 
 
 Go to the Camunda Cloud Console, create a cluster and a client. Copy the credentials Kubernetes Secret command from the client popup and paste it into the Google Cloud Console: 
