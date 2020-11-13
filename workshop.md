@@ -17,20 +17,40 @@ Here are some prerequisites to run this workshop:
 Once you are logged in, you will be asked to accept the terms and continue: 
 <img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="500px">
 
-Once the terms are accepted, it is extremely important that you select the correct project to work on. On the top bar, there is a project dropdown that opens the project list. You need to click into the **QCon SF 2020 ...** project to select it.
+Once the terms are accepted, it is **extremely important** that you select the correct project to work on. On the top bar, there is a project dropdown that opens the project list. You need to click into the **QCon SF 2020 ...** project to select it.
 
 <img src="workshop-imgs/01-select-qcon-project.png" alt="Select Project" width="500px">
 
 Once the project is selected, you can create new **Kubernetes Clusters* by switching to the **Kubernetes Engine** section from the left hand side menu:
-<img src="workshop-imgs/02-go-to-kube-engine.png" alt="Kubernetes Engine section" width="500px">
 
+<img src="workshop-imgs/02-go-to-kube-engine.png" alt="Kubernetes Engine section" height="400px">
 
+Once in the **Kubernetes Engine** section you will notice that Google Cloud will initialize the **Kubernetes APIs** for us, you need to wait for this to finish:
 
-Once you are logged in inside your Google Cloud account, you will need to create a Kubernetes Cluster with the following characteristics:
-- 3 Nodes (n2-standard-4)
-- Kubernetes API 1.16+
+<img src="workshop-imgs/03-gcp-enabling-kube-apis.png" alt="GCP Enabling Kube APIS" width="500px">
 
-This will take some minutes, so you can move forward to the next step while the Kubernetes Cluster is being created.
+Once the Kubernetes APIs are enabled, you will be able to create a new Kubernetes Cluster by hitting the create button, that now should be enabled:
+
+<img src="workshop-imgs/04-gcp-create-kube-cluster.png" alt="Create Cluster" width="500px">
+
+You will be creating a **3 Nodes (n2-standard-4)** Cluster. The first step is to name your cluster, use the name **workshop**
+
+<img src="workshop-imgs/05-cluster-basics-name-workshop.png" alt="Name it workshop" width="500px">
+
+In the **Node Pools -> Default pool** section (on the left hand side menu) check that the **Kubernetes Master** version is **1.16+** (which should be the default) and that the number of nodes is **3**:
+
+<img src="workshop-imgs/06-cluster-pool.png" alt="Name it workshop" width="500px">
+
+Finally, you need to define which kind of computers will be provisioned for your cluster, for doing this switch to the **Node** section in the left hand side menu and select **N2** in the **Series** dropdown and **n2-standard-4** in the **Machine Type** dropdown:
+
+<img src="workshop-imgs/07-cluster-nodes.png" alt="Name it workshop" width="500px">
+
+Finally, hit **Create** at the bottom of the screen. This triggers the provisioning of the machines required for your cluster and the setup process required by Kubernetes. 
+
+This creation process takes several minutes, you will see the loading icon right beside your cluster name:
+<img src="workshop-imgs/08-wait-for-cluster.png" alt="Waiting" width="500px">
+
+This will take some minutes, so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
 </details>  
   
