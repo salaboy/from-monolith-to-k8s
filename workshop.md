@@ -14,6 +14,8 @@ Here are some prerequisites to run this workshop:
 <details>
   <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
 
+We recommend to use an **Incognito Window** in **Chrome** (File -> New Incognito Window) to run the following steps, as with that you will avoid having issues with your personal **Google Account**
+
 Once you are logged in, you will be asked to accept the terms and continue: 
 <img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="500px">
 
@@ -54,9 +56,15 @@ This will take some minutes, so you can move forward to **Camunda Cloud Account 
   
 </details>  
   
-2) Camunda Cloud Account and Cluster, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). 
+2) Create a Camunda Cloud Account and Cluster, you need to sign for a [new account here](https://accounts.cloud.camunda.io/signup?campaign=workshop). 
 <details>
   <summary>Login into your account and create a Cluster (Click to Expand)</summary>
+
+**Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
+<img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Waiting" width="500px">
+
+Check your inbox to confirm the account and follow the links to login, after confirmation:
+
 
 Once you signed into your account, create a new cluster called `my-cluster`, you will use this in the second half of the workshop, but it is better to boot it up early on. 
 
