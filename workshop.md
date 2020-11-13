@@ -151,14 +151,8 @@ k get pods -n knative-serving
 ```
 
 You should see something like this:
-```
-3scale-kourier-control-74459454f5-lhczq   1/1     Running     0          3m42s
-activator-56cf848f9d-x46jq                1/1     Running     0          3m50s
-autoscaler-67c75d8566-c6xrs               1/1     Running     0          3m49s
-controller-6568f84b8b-sksxz               1/1     Running     0          3m49s
-default-domain-x676x                      0/1     Completed   0          3m34s
-webhook-785c5879fb-r9kqp                  1/1     Running     0          3m48s
-```
+
+<img src="workshop-imgs/25-knative-serving-test.png" alt="KNative Serving Test" width="700px">
 
 - Knative Eventing
 
