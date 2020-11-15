@@ -469,9 +469,13 @@ If you go ahead to the **Back Office** of the application and **approve** the pr
 
 <img src="workshop-imgs/44-approved-instance.png" alt="Cluster Details" width="700px">
 
+<details>
+  <summary>+ Extras: Understanding different branches (Click to Expand)</summary>
+As you might notice, the previous workflow model will only work if you approve proposals, as the `Agenda Item Created` event is only emitted if the proposal is accepted. In order to cover also the case when you reject a proposal you can deploy version 2 of the workflow model, that describes these two branches for approving and rejecting proposals.
+  
+  
 
-
-
+</details>
 
 # Workflow Orchestration with Camunda Cloud
 
