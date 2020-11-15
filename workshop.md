@@ -388,6 +388,7 @@ k get ksvc
 ```
 
 You should see something like this:
+
 <img src="workshop-imgs/30-k-get-pod-and-ksvc.png" alt="Cluster Details" width="700px">
 
 Notice that now the **Zeebe Cloud Events Router** is running along side the application services, and it is configured to use the Kubernetes Secret that was previously created to connect to **Camunda Cloud**.
@@ -402,6 +403,7 @@ k get triggers
 ```
 
 You should see an output like this: 
+
 <img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="700px">
 
 Finally, even when Cloud Events are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
@@ -423,6 +425,7 @@ With the Diagram editor opened, first enter the name **visualize** into the diag
 <img src="workshop-imgs/34-name-and-import-diagram.png" alt="Cluster Details" width="700px">
 
 Now choose **c4p-visualize.bpmn** from your filesystem: 
+
 <img src="workshop-imgs/35-choose-c4p-visualize-from-filesystem.png" alt="Cluster Details" width="700px">
 
 The diagram shoud look like:
@@ -438,6 +441,33 @@ Next, **close/disregard** the popup suggesting to start a new instance:
 <img src="workshop-imgs/38-close-popup.png" alt="Cluster Details" width="700px">
 
 Well Done! you made it, now everything is setup for routing and fowarding events from our application, to Knative Eventing, to the Zeebe Cloud Events Router to Camunda Cloud. 
+
+
+In order to see how this is actually working you can use **Camunda Operate**, a dashboard included inside **Camunda Cloud** which allows you to understand how these models are being executed, where things are at a giving time and to troubleshoot errors that might arise from your applications daily operations.
+
+You can access **Camunda Operate** from your cluster details, inside the **Overview Tab**, at the bottom, clicking in the **View in Operate** link:
+
+<img src="workshop-imgs/39-cluster-details-operate-link.png" alt="Cluster Details" width="700px">
+
+You should see the **Camunda Operate** main screen, where you can click in the **C4P Visualize** section highlighted in the screenshot below:
+
+<img src="workshop-imgs/40-operate-main-screen.png" alt="Cluster Details" width="700px">
+
+This opens the runtime data associated with our workflow models, now you should see this:
+
+<img src="workshop-imgs/41-visualize-diagram-in-operate.png" alt="Cluster Details" width="700px">
+
+Now go back to the Conference Application, remember, listing all the Knative Services will show the URL for the API Gateway Service that is hosting the User Interface, when you are in the application, submit a new proposal and then refresh **Camunda Operate**:
+
+<img src="workshop-imgs/42-runtime-data-in-operate.png" alt="Cluster Details" width="700px">
+
+If you click into the Instance ID link, highligted above, you can see the details of that specific instance:
+
+<img src="workshop-imgs/43-instance-data.png" alt="Cluster Details" width="700px">
+
+If you go ahead to the **Back Office** of the application and **approve** the proposal that you just submitted, you should see in **Camunda Operate** that the instance is completed:
+
+<img src="workshop-imgs/44-approved-instance.png" alt="Cluster Details" width="700px">
 
 
 
