@@ -1,6 +1,6 @@
 # Workshop 
 
-During this workshop you will deploy a Cloud Native application, inspect it, change its configuration to use different services and 
+During this workshop you will deploy a Cloud-Native application, inspect it, change its configuration to use different services and 
 play around with it to get familiar with Kubernetes and Cloud-Native tools that can help you to be more effective in your cloud journey. 
 
 During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
@@ -201,7 +201,7 @@ Now you are ready to install the application by just running the following comma
 h install fmtok8s workshop/fmtok8s-app
 
 ```
-You should see something like this:
+You should see something like this (ignore the warnings):
 
 <img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="700px">
 
@@ -367,11 +367,13 @@ k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=...
 ```
 
 By running the previous command, you have created a new `Kubernetes Secret` that host the credentials for our applications to talk to Camunda Cloud. 
-Now you are ready to install version 2 of the application by running: 
+Now you are ready to install version 2 of the application by running (again ignore the warnings): 
 
 ``` bash 
 h install fmtok8s-v2 workshop/fmtok8s-app-v2
 ```
+
+<img src="workshop-imgs/29-helm-install-v2.png" alt="Cluster Details" width="700px">
 
 You can check that all the services are up and running with the same two commands as before:
 
@@ -386,7 +388,7 @@ k get ksvc
 ```
 
 You should see something like this:
-
+<img src="workshop-imgs/30-k-get-pod-and-ksvc.png" alt="Cluster Details" width="700px">
 
 Notice that now the **Zeebe Cloud Events Router** is running along side the application services, and it is configured to use the Kubernetes Secret that was previously created to connect to **Camunda Cloud**.
 
@@ -400,12 +402,45 @@ k get triggers
 ```
 
 You should see an output like this: 
-
+<img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="700px">
 
 Finally, even when Cloud Events are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
 
+You can download the models that you will be using in [the next steps from here](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip).
 
-https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip
+Once you downloaded the models, extract the ZIP file a place that you can quickly locate to upload these files in the next steps. 
+
+Now, go back to your **Camunda Cloud Zeebe Cluster** list (you can do this by clicking in the top breadcrum with the name of your Organization):
+
+<img src="workshop-imgs/32-camunda-cloud-cluster-list.png" alt="Cluster Details" width="700px">
+
+Next, click on the **BPMN Diagrams(beta)** Tab, then click **Create New Diagram**:
+
+<img src="workshop-imgs/33-bpmn-diagrams-list.png" alt="Cluster Details" width="700px">
+
+With the Diagram editor opened, first enter the name **visualize** into the diagram name box and then click the **Import Diagram** button:
+
+<img src="workshop-imgs/34-name-and-import-diagram.png" alt="Cluster Details" width="700px">
+
+Now choose **c4p-visualize.bpmn** from your filesystem: 
+<img src="workshop-imgs/35-choose-c4p-visualize-from-filesystem.png" alt="Cluster Details" width="700px">
+
+The diagram shoud look like:
+
+<img src="workshop-imgs/36-diagram-1-should-look-like.png" alt="Cluster Details" width="700px">
+
+With the Diagram ready, you can now hit **Save and Deploy**:
+
+<img src="workshop-imgs/37-save-and-deploy.png" alt="Cluster Details" width="700px">
+
+Next, **close/disregard** the popup suggesting to start a new instance:
+
+<img src="workshop-imgs/38-close-popup.png" alt="Cluster Details" width="700px">
+
+Well Done! you made it, now everything is setup for routing and fowarding events from our application, to Knative Eventing, to the Zeebe Cloud Events Router to Camunda Cloud. 
+
+
+
 
 
 # Workflow Orchestration with Camunda Cloud
