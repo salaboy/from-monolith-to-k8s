@@ -473,7 +473,37 @@ If you go ahead to the **Back Office** of the application and **approve** the pr
   <summary>+ Extras: Understanding different branches (Click to Expand)</summary>
 As you might notice, the previous workflow model will only work if you approve proposals, as the `Agenda Item Created` event is only emitted if the proposal is accepted. In order to cover also the case when you reject a proposal you can deploy version 2 of the workflow model, that describes these two branches for approving and rejecting proposals.
   
+In order to deploy the second version of the workflow model you follow the same steps as before, you   
   
+  <img src="workshop-imgs/45-bpmn-diagrams-list-with-v1.png" alt="Cluster Details" width="700px">
+
+Click into your previously saved diagram called **visualize** and then **Import Diagram** and then select **cp4-visualize-with-branches.bpmn**:
+
+<img src="workshop-imgs/46-c4p-visualize-v2.png" alt="Cluster Details" width="700px">
+
+The new diagram should like this:
+
+<img src="workshop-imgs/47-c4p-vizualize-diagram.png" alt="Cluster Details" width="700px">
+
+Now you are ready to **Save and Deploy** the new version:
+
+<img src="workshop-imgs/48-save-and-deploy-v2.png" alt="Cluster Details" width="700px">
+
+If you switch back to **Camunda Operate** you will now see two versions of the **C4P Visualize** workflow:
+
+<img src="workshop-imgs/49-camunda-operate-two-versions.png" alt="Cluster Details" width="700px">
+
+Click to drill down into the runtime data for the new version of the workflow:
+
+<img src="workshop-imgs/50-new-version-deployed.png" alt="Cluster Details" width="700px">
+
+If you now go back to the application and submit two proposals you can reject one and approve one, you should now see both instances completed:
+
+<img src="workshop-imgs/51-version-2-completed.png" alt="Cluster Details" width="700px">
+
+Remember that you can click in any instance to find more details about the execution, such as the audit logs to understand exactly when things happened:
+
+<img src="workshop-imgs/52-audit-log.png" alt="Cluster Details" width="700px">
 
 </details>
 
