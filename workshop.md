@@ -507,11 +507,21 @@ Remember that you can click in any instance to find more details about the execu
 
 </details>
 
+Let's undeploy version 2 to make some space for version 3. 
+
+```
+h delete fmtok8s-v2 --no-hooks
+```
+
 # Workflow Orchestration with Camunda Cloud
+
+In Version 3, you will orchestrate the interactions using the workflow engine. You can now install version 3 running:
 
 ``` bash
 h install fmtok8s-v3 workshop/fmtok8s-app-v3
 ```
+
+Version 3 doesn't use a REST based communication between services, this version let Zeebe the workflow engine inside **Camunda Cloud** to define and orchestrate the services interactions. Zeebe uses a Pub/Sub mechanism which 
 
 
 
