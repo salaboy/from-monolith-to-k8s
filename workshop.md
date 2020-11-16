@@ -266,6 +266,8 @@ And if you **approved** the submitted proposal you should also see something lik
 
 <img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="500px">
 
+If you made it this far, you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud! :tada: :tada:
+
 Let's take a deeper look on what you just did in this section. 
 
 ## Understanding your application
@@ -307,6 +309,7 @@ In version 2 of the application you will be working to make your application's i
 
 You will now undeploy version 1 of the application to deploy version 2. You only need to undeploy version 1 to save resources.
 In order to undeploy version 1 of the application you can run:
+
 ``` bash
 h delete fmtok8s --no-hooks
 ```
@@ -494,6 +497,8 @@ Remember that you can click in any instance to find more details about the execu
 
 </details>
 
+If you made it this far, you can now observe your Cloud-Native applications by emitting CloudEvents from your services and consuming them from **Camunda Cloud**. :tada: :tada:
+
 Let's undeploy version 2 to make some space for version 3. 
 
 ```
@@ -551,7 +556,7 @@ Based on the data that the workflow engine is collecting from the workflow's exe
 
 Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization needs. 
 
-If you made it this far, Well Done!!!
+If you made it this far, Well Done!!! :tada: :tada:
 
 Here are some extras that you might be interested in to make more sense of what you have done so far:
 - Update the workflow model to use the newly introduced Speakers Service
