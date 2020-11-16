@@ -551,5 +551,32 @@ If you now click into the new workflow model you can see how the new model looks
 If you submit a **new proposal** from the application user interface, this new workflow model is in charge of defining the order in which services are invoked. 
 From the end user point of view, nothing has changed, besides the fact that they can now use **Camunda Operate** to understand in which step each proposal is at a given time. From the code perspective, the business logic required to define the steps is now delegated to the workflow engine, which enables non-technical people to gather valuable data about how the organization is working, where the bottlenecks are and how are your Cloud-Native applications working. 
 
-Having in a single place
+Having in a single place the state of all proposals can help organizers to prioritize other work or just make decisions to move things forward:
+
+<img src="workshop-imgs/57-quick-overview-of-state.png" alt="Cluster Details" width="700px">
+
+In the screenshot above, it is clear that 2 proposals are still waiting for a decision, 2 proposals were approved and 1 rejected. 
+Remember that you can drill down to each individual workflow instance for more details, for example, how much time a proposal has been waiting for a decision:
+
+<img src="workshop-imgs/58-waiting-for-decision.png" alt="Cluster Details" width="700px">
+
+Based on the data that the workflow engine is collecting from the workflow's executions, you can understand better where the bottlenecks are or if there are simple things that can be done to improve how the organization is dealing with proposals. For this example, you can say that this workflow model represent 100% the steps required to accept or reject a proposal, in some way this explains to non-technical people the steps that the application is executing under the covers. 
+
+Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization needs. 
+
+If you made it this far, Well Done!!!
+
+Here are some extras that you might be interested in to make more sense of what you have done so far:
+- Update the workflow model to use the newly introduced Speakers Service
+- Update the workflow model to send notifications if a proposal is waiting for a decision for too long
+- Make the application fail to see how incidents are reported into Camunda Operate
+
+# Next Steps
+
+
+
+# Thanks to all contributors
+- [MCruzDev1]()
+- [Ray Tsang]()
+- 
 
