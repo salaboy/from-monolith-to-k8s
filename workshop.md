@@ -269,7 +269,7 @@ And if you **approved** the submitted proposal you should also see something lik
 
 4) If you approved the proposal, the proposal should pop up in the Agenda (main page) of the conference. 
 
-<img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="1000px">
+<img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="500px">
 
 If you made it this far, **you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud!** :tada: :tada:
 
