@@ -5,7 +5,15 @@ play around with it to get familiar with Kubernetes and Cloud-Native tools that 
 
 During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. 
+The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage.
+
+This workshop is divided into the following stages:
+- [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
+- [Setting up the Clusters and installing Knative](#connecting-to-your-kubernetes-cluster-and-installing-knative)
+- [Deploying Version 1](#version-1-deploying-a-cloud-native-application) of your Cloud-Native application
+- [Deploying Version 2](#version-2-knative-cloudevents-and-camunda-cloud) of your Cloud-Native application, which uses CloudEvents, Knative Eventing and Camunda Cloud for visualization
+- [Deploying Version 3](#version-3-workflow-orchestration-with-camunda-cloud) of your Cloud-Native application, which uses all of the above but with a focus on orchestration
+- Next Steps
 
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
@@ -304,9 +312,9 @@ h delete fmtok8s --no-hooks
 ```
 
 
-## Version 2: Knative, Cloud Events and Camunda Cloud
+## Version 2: Knative, CloudEvents and Camunda Cloud
 
-Version 2 of the application is configured to emit [Cloud Events](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
+Version 2 of the application is configured to emit [CloudEvents](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
 - `Proposal Received`
 - `Proposal Decision Made`
 - `Email Sent`
@@ -315,9 +323,9 @@ Version 2 of the application is configured to emit [Cloud Events](http://cloudev
 Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a **Knative Broker** that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create **Triggers** (which are like subscriptions with filters) for this events and specify where these events should be sent. 
 
 For Version 2, you will use the **Zeebe Workflow Engine** provisioned in your **Camunda Cloud** account to capture and visualize these meaninful events.
-In order to route these **Cloud Events** from the Knative Broker to **Camunda Cloud** a new component is introduced along your Application services. This new component is called **Zeebe Cloud Events Router** and serves as the bridge between Knative and Camunda Cloud, using Cloud Events as the standardize communication protocol. 
+In order to route these **CloudEvents** from the Knative Broker to **Camunda Cloud** a new component is introduced along your Application services. This new component is called **Zeebe CloudEvents Router** and serves as the bridge between Knative and Camunda Cloud, using CloudEvents as the standardize communication protocol. 
 
-As you can imagine, in order for the **Zeebe Cloud Events Router** to connect with your **Camunda Cloud Zeebe Cluster** you need to create a new **Client**, a set of credentials which allows these components to connect and communicate. 
+As you can imagine, in order for the **Zeebe CloudEvents Router** to connect with your **Camunda Cloud Zeebe Cluster** you need to create a new **Client**, a set of credentials which allows these components to connect and communicate. 
 
 Go to the **Camunda Cloud** console, click on your cluster to see your cluster details:
 
@@ -370,9 +378,9 @@ You should see something like this:
 
 <img src="workshop-imgs/30-k-get-pod-and-ksvc.png" alt="Cluster Details" width="700px">
 
-Notice that now the **Zeebe Cloud Events Router** is running along side the application services, and it is configured to use the Kubernetes Secret that was previously created to connect to **Camunda Cloud**.
+Notice that now the **Zeebe CloudEvents Router** is running along side the application services, and it is configured to use the Kubernetes Secret that was previously created to connect to **Camunda Cloud**.
 
-But here is still one missing piece to route the **Cloud Events** generated by your application services to the **Zeebe Cloud Events Router** and those are the Knative Triggers (Subscriptions to route the events from the broker to wherever you want). 
+But here is still one missing piece to route the **CloudEvents** generated by your application services to the **Zeebe CloudEvents Router** and those are the Knative Triggers (Subscriptions to route the events from the broker to wherever you want). 
 
 These Knative Triggers are defined in YAML and can be packaged inside the Application V2 Helm Chart, which means that they are installed as part of the application. 
 
@@ -385,7 +393,7 @@ You should see an output like this:
 
 <img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="700px">
 
-Finally, even when Cloud Events are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
+Finally, even when CloudEvents are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
 
 You can download the models that you will be using in [the next steps from here](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip).
 
@@ -419,7 +427,7 @@ Next, **close/disregard** the popup suggesting to start a new instance:
 
 <img src="workshop-imgs/38-close-popup.png" alt="Cluster Details" width="700px">
 
-Well Done! you made it, now everything is setup for routing and fowarding events from our application, to Knative Eventing, to the Zeebe Cloud Events Router to Camunda Cloud. 
+Well Done! you made it, now everything is setup for routing and fowarding events from our application, to Knative Eventing, to the Zeebe CloudEvents Router to Camunda Cloud. 
 
 
 In order to see how this is actually working you can use **Camunda Operate**, a dashboard included inside **Camunda Cloud** which allows you to understand how these models are being executed, where things are at a giving time and to troubleshoot errors that might arise from your applications daily operations.
@@ -492,7 +500,7 @@ Let's undeploy version 2 to make some space for version 3.
 h delete fmtok8s-v2 --no-hooks
 ```
 
-# Version 3; Workflow Orchestration with Camunda Cloud
+# Version 3: Workflow Orchestration with Camunda Cloud
 
 In Version 3, you will orchestrate the interactions using the workflow engine. You can now install version 3 running:
 
