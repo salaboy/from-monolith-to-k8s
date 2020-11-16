@@ -1,4 +1,4 @@
-# Workshop 
+# From Monolith to K8s - Workshop 
 
 During this workshop you will deploy a Cloud-Native application, inspect it, change its configuration to use different services and 
 play around with it to get familiar with Kubernetes and Cloud-Native tools that can help you to be more effective in your cloud journey. 
