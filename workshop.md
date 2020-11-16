@@ -541,7 +541,7 @@ Links to Workers, and dependencies in projects, plus explain how the workers cod
 </details>
 
 Another important change, is that the **C4P Service** now deploys automatically the workflow model used for the orchestration to happen. 
-This means that when the **fmtok8s-c4p** Knative Serivce is up and ready, you should have a new workflow model already deployed in **Camunda Cloud**:
+This means that when the **fmtok8s-c4p** Knative Service is up and ready, you should have a new workflow model already deployed in **Camunda Cloud**:
 
 <img src="workshop-imgs/55-new-workflow-model-in-v3.png" alt="Cluster Details" width="700px">
 
@@ -565,9 +565,9 @@ Based on the data that the workflow engine is collecting from the workflow's exe
 
 Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization needs. 
 
-If you made it this far, **Well Done!!! you have now orchestrated your microservices interactions using a workflow engine! ** :tada: :tada:
+If you made it this far, **Well Done!!! you have now orchestrated your microservices interactions using a workflow engine!** :tada: :tada:
 
-Here are some extras that you might be interested in, to expand what you have leanrt so far:
+Here are some extras that you might be interested in, to expand what you have learnt so far:
 - Update the workflow model to use the newly introduced Speakers Service
 - Update the workflow model to send notifications if a proposal is waiting for a decision for too long
 - Make the application fail to see how incidents are reported into Camunda Operate
