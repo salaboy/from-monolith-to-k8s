@@ -30,40 +30,40 @@ We recommend to use an **Incognito Window** in **Chrome** (File -> New Incognito
 
 Once you are logged in, you will be asked to accept the terms and continue: 
 
-<img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="500px">
+<img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="700px">
 
 Once the terms are accepted, it is **extremely important** that you select the correct project to work on. On the top bar, there is a project dropdown that opens the project list. You need to click into the **QCon SF 2020 ...** project to select it.
 
-<img src="workshop-imgs/01-select-qcon-project.png" alt="Select Project" width="500px">
+<img src="workshop-imgs/01-select-qcon-project.png" alt="Select Project" width="700px">
 
 Once the project is selected, you can create new **Kubernetes Clusters* by switching to the **Kubernetes Engine** section from the left hand side menu:
 
-<img src="workshop-imgs/02-go-to-kube-engine.png" alt="Kubernetes Engine section" height="400px">
+<img src="workshop-imgs/02-go-to-kube-engine.png" alt="Kubernetes Engine section" height="600px">
 
 Once in the **Kubernetes Engine** section you will notice that Google Cloud will initialize the **Kubernetes APIs** for us, you need to wait for this to finish:
 
-<img src="workshop-imgs/03-gcp-enabling-kube-apis.png" alt="GCP Enabling Kube APIS" width="500px">
+<img src="workshop-imgs/03-gcp-enabling-kube-apis.png" alt="GCP Enabling Kube APIS" width="700px">
 
 Once the Kubernetes APIs are enabled, you will be able to create a new Kubernetes Cluster by hitting the create button, that now should be enabled:
 
-<img src="workshop-imgs/04-gcp-create-kube-cluster.png" alt="Create Cluster" width="500px">
+<img src="workshop-imgs/04-gcp-create-kube-cluster.png" alt="Create Cluster" width="700px">
 
 You will be creating a **3 Nodes (n2-standard-4)** Cluster. The first step is to name your cluster, use the name **workshop**
 
-<img src="workshop-imgs/05-cluster-basics-name-workshop.png" alt="Name it workshop" width="500px">
+<img src="workshop-imgs/05-cluster-basics-name-workshop.png" alt="Name it workshop" width="700px">
 
 In the **Node Pools -> Default pool** section (on the left hand side menu) check that the **Kubernetes Master** version is **1.16+** (which should be the default) and that the number of nodes is **3**:
 
-<img src="workshop-imgs/06-cluster-pool.png" alt="Name it workshop" width="500px">
+<img src="workshop-imgs/06-cluster-pool.png" alt="Name it workshop" width="700px">
 
 Finally, you need to define which kind of computers will be provisioned for your cluster, for doing this switch to the **Node** section in the left hand side menu and select **N2** in the **Series** dropdown and **n2-standard-4** in the **Machine Type** dropdown:
 
-<img src="workshop-imgs/07-cluster-nodes.png" alt="Name it workshop" width="500px">
+<img src="workshop-imgs/07-cluster-nodes.png" alt="Name it workshop" width="700px">
 
 Finally, hit **Create** at the bottom of the screen. This triggers the provisioning of the machines required for your cluster and the setup process required by Kubernetes. 
 
 This creation process takes several minutes, you will see the loading icon right beside your cluster name:
-<img src="workshop-imgs/08-wait-for-cluster.png" alt="Waiting" width="500px">
+<img src="workshop-imgs/08-wait-for-cluster.png" alt="Waiting" width="700px">
 
 This will take some minutes, so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
@@ -80,28 +80,28 @@ This will take some minutes, so you can move forward to **Camunda Cloud Account 
 
 Check your inbox to **Activate your account** and follow the links to login, after confirmation:
 
-<img src="workshop-imgs/14-activate-your-account.png" alt="Activate" width="500px">
+<img src="workshop-imgs/14-activate-your-account.png" alt="Activate" width="700px">
 
 **Once activated, Login with your credentials** and let's create a new **Zeebe Cluster**, you will be using this cluster later on in the workshop, but it is better to set it up early on. 
 
-<img src="workshop-imgs/15-create-a-new-zeebe-cluster.png" alt="Create Cluster" width="500px">
+<img src="workshop-imgs/15-create-a-new-zeebe-cluster.png" alt="Create Cluster" width="700px">
 
 **Create a new cluster** called `my-cluster`:
 
-<img src="workshop-imgs/16-call-it-my-cluster.png" alt="My Cluster" width="500px">
+<img src="workshop-imgs/16-call-it-my-cluster.png" alt="My Cluster" width="700px">
 
 Disregard, creating a model if you are asked to and just close the popup:
 
-<img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="500px">
+<img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="700px">
 
 **Your cluster is now being created:**
 
-<img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="500px">
+<img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="700px">
 
 
 </details>  
 
-Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying our Cloud-Native Applications!
+**Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying your Cloud-Native Applications!** :rocket:
 
 # Connecting to your Kubernetes Cluster and installing Knative
 
@@ -120,7 +120,7 @@ Then find the **Run in Cloud Shell** button, which will provision a new instance
 
 Once **Cloud Shell** is provisioned, notice that you will need to hit **Enter** to actually connect with the **workshop** cluster:
 
-<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="700px">
+<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="1000px">
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
