@@ -13,7 +13,7 @@ This workshop is divided into the following stages:
 - [Deploying Version 1](#version-1-deploying-a-cloud-native-application) of your Cloud-Native application
 - [Deploying Version 2](#version-2-knative-cloudevents-and-camunda-cloud) of your Cloud-Native application, which uses CloudEvents, Knative Eventing and Camunda Cloud for visualization
 - [Deploying Version 3](#version-3-workflow-orchestration-with-camunda-cloud) of your Cloud-Native application, which uses all of the above but with a focus on orchestration
-- Next Steps
+- [Next Steps](#next-steps)
 
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
