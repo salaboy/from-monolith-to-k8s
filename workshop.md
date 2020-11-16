@@ -5,9 +5,9 @@ play around with it to get familiar with Kubernetes and Cloud-Native tools that 
 
 During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage.
+The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. You can find more instructions to try all over the workshop under the sections labelled with **Extra**. For beginers and for people who wants to finish the workshop on time we recommend to leave the extras for later. We highly encourage you to check the [Next Steps](#next-steps) section at the end of this document if you are interested in going deeper into how this application is working, how different tools are being used under the hood and other possible tools that can be integrated with this application.
 
-This workshop is divided into the following stages:
+This workshop is divided into the following sections:
 - [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
 - [Setting up the Clusters and installing Knative](#connecting-to-your-kubernetes-cluster-and-installing-knative)
 - [Deploying Version 1](#version-1-deploying-a-cloud-native-application) of your Cloud-Native application
@@ -18,11 +18,9 @@ This workshop is divided into the following stages:
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
 
-**Notice: you can click in the images to expand them**
-
 ## Setting up your Google Cloud account
 
-[Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
+[Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
 <details>
   <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
 
