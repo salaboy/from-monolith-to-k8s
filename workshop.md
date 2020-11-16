@@ -20,13 +20,16 @@ During this workshop you will be using a **Kubernetes Cluster** and a **Camunda 
 
 **Notice: you can click in the images to expand them**
 
-1) [Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
+## Setting up your Google Cloud account
+
+[Login here to Google Cloud](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one)
 <details>
   <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
 
 We recommend to use an **Incognito Window** in **Chrome** (File -> New Incognito Window) to run the following steps, as with that you will avoid having issues with your personal **Google Account**
 
 Once you are logged in, you will be asked to accept the terms and continue: 
+
 <img src="workshop-imgs/00-accept-terms-and-continue.png" alt="Terms" width="500px">
 
 Once the terms are accepted, it is **extremely important** that you select the correct project to work on. On the top bar, there is a project dropdown that opens the project list. You need to click into the **QCon SF 2020 ...** project to select it.
@@ -65,8 +68,10 @@ This creation process takes several minutes, you will see the loading icon right
 This will take some minutes, so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
 </details>  
-  
-2) [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) 
+
+## Setting up your Camunda Cloud account
+
+ [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) 
 <details>
   <summary>Login into your account and create a Cluster (Click to Expand)</summary>
 
@@ -137,7 +142,7 @@ You should see something like this:
 
 Next step you will install Knative Serving and Knative Eventing. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
 
-- Knative Serving
+### Installing Knative Serving
 
 If you have the previous aliases set up, you can copy the entire block and paste it Cloud Shell
 
@@ -162,7 +167,7 @@ You should see something like this:
 
 <img src="workshop-imgs/25-knative-serving-test.png" alt="KNative Serving Test" width="700px">
 
-- Knative Eventing
+### Installing Knative Eventing
 
 ``` bash
 k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
@@ -188,7 +193,7 @@ You should see something like this:
 
 <img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="700px">
 
-Now, you have everything ready to deploy your Cloud-Native applications to Kubernetes. 
+Now, **you have everything ready to deploy your Cloud-Native applications to Kubernetes**. :tada: :tada:
 
 # Version 1: Deploying a Cloud-Native Application
 
@@ -266,7 +271,7 @@ And if you **approved** the submitted proposal you should also see something lik
 
 <img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="500px">
 
-If you made it this far, you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud! :tada: :tada:
+If you made it this far, **you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud!** :tada: :tada:
 
 Let's take a deeper look on what you just did in this section. 
 
@@ -432,7 +437,6 @@ Next, **close/disregard** the popup suggesting to start a new instance:
 
 Well Done! you made it, now everything is setup for routing and fowarding events from our application, to Knative Eventing, to the Zeebe CloudEvents Router to Camunda Cloud. 
 
-
 In order to see how this is actually working you can use **Camunda Operate**, a dashboard included inside **Camunda Cloud** which allows you to understand how these models are being executed, where things are at a giving time and to troubleshoot errors that might arise from your applications daily operations.
 
 You can access **Camunda Operate** from your cluster details, inside the **Overview Tab**, at the bottom, clicking in the **View in Operate** link:
@@ -497,7 +501,7 @@ Remember that you can click in any instance to find more details about the execu
 
 </details>
 
-If you made it this far, you can now observe your Cloud-Native applications by emitting CloudEvents from your services and consuming them from **Camunda Cloud**. :tada: :tada:
+If you made it this far, **you can now observe your Cloud-Native applications by emitting CloudEvents from your services and consuming them from Camunda Cloud**. :tada: :tada:
 
 Let's undeploy version 2 to make some space for version 3. 
 
@@ -556,9 +560,9 @@ Based on the data that the workflow engine is collecting from the workflow's exe
 
 Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization needs. 
 
-If you made it this far, Well Done!!! :tada: :tada:
+If you made it this far, **Well Done!!! you have now orchestrated your microservices interactions using a workflow engine! ** :tada: :tada:
 
-Here are some extras that you might be interested in to make more sense of what you have done so far:
+Here are some extras that you might be interested in, to expand what you have leanrt so far:
 - Update the workflow model to use the newly introduced Speakers Service
 - Update the workflow model to send notifications if a proposal is waiting for a decision for too long
 - Make the application fail to see how incidents are reported into Camunda Operate
