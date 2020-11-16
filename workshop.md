@@ -199,7 +199,7 @@ Now, **you have everything ready to deploy your Cloud-Native applications to Kub
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
-<img src="workshop-imgs/microservices-architecture.png" alt="Architecture Diagram" width="700px">
+<img src="workshop-imgs/microservice-architecture-for-k8s.png" alt="Architecture Diagram" width="700px">
 
 These services communicate between each other using REST calls.
 
@@ -332,6 +332,8 @@ Version 2 of the application is configured to emit [CloudEvents](http://cloudeve
 - `Proposal Decision Made`
 - `Email Sent`
 - In the case of the proposal being approved `Agenda Item Created` 
+
+<img src="workshop-imgs/microservice-architecture-with-ce-zeebe.png" alt="Conference BackOffice" width="700px">
 
 Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a **Knative Broker** that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create **Triggers** (which are like subscriptions with filters) for this events and specify where these events should be sent. 
 
@@ -516,7 +518,11 @@ h delete fmtok8s-v2 --no-hooks
 
 # Version 3: Workflow Orchestration with Camunda Cloud
 
-In Version 3, you will orchestrate the interactions using the workflow engine. You can now install version 3 running:
+In Version 3, you will orchestrate the services interactions using the workflow engine. 
+
+<img src="workshop-imgs/microservice-architecture-orchestration.png" alt="Architecture Diagram" width="700px">
+
+You can now install version 3 running:
 
 ``` bash
 h install fmtok8s-v3 workshop/fmtok8s-app-v3
