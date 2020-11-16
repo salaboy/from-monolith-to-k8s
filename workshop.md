@@ -76,7 +76,7 @@ This will take some minutes, so you can move forward to **Camunda Cloud Account 
   <summary>Login into your account and create a Cluster (Click to Expand)</summary>
 
 **Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
-<img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="500px">
+<img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="700px">
 
 Check your inbox to **Activate your account** and follow the links to login, after confirmation:
 
@@ -94,12 +94,14 @@ Disregard, creating a model if you are asked to and just close the popup:
 
 <img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="700px">
 
-**Your cluster is now being created:**
+Your cluster is now being created:
 
 <img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="700px">
 
 
-</details>  
+</details>
+
+Make sure that you have followed the steps in [Setting up your Google Cloud account](#setting-up-your-google-cloud-account) and [Setting up your Camunda Cloud account](#setting-up-your-camunda-cloud-account), as both of these accounts needs to be ready to proceed to the next sections.
 
 **Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying your Cloud-Native Applications!** :rocket:
 
