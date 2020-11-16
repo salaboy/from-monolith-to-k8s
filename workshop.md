@@ -520,9 +520,36 @@ In Version 3, you will orchestrate the interactions using the workflow engine. Y
 ``` bash
 h install fmtok8s-v3 workshop/fmtok8s-app-v3
 ```
+The ouput for this command should look familiar at this stage:
 
-Version 3 doesn't use a REST based communication between services, this version let Zeebe the workflow engine inside **Camunda Cloud** to define and orchestrate the services interactions. Zeebe uses a Pub/Sub mechanism which 
+<img src="workshop-imgs/53-installing-v3.png" alt="Cluster Details" width="700px">
 
+Check that the Kubernetes Pods and the Knative Services are ready:
 
+<img src="workshop-imgs/54-checking-pods-ksvc-v3.png" alt="Cluster Details" width="700px">
 
+When all the pods are ready (2/2) you can now access to the application. 
+
+As you might have noticed, there is a new Knative Service and pod called **fmtok8s-speakers**, you will use that service later on.  
+
+An important change in version 3 is that it doesn't use a REST based communication between services, this version let **[Zeebe](http://zeebe.io)**, the workflow engine inside **Camunda Cloud**, to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
+
+<details>
+  <summary>+ Extras: Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
+Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
+</details>
+
+Another important change, is that the **C4P Service** now deploys automatically the workflow model used for the orchestration to happen. 
+This means that when the **fmtok8s-c4p** Knative Serivce is up and ready, you should have a new workflow model already deployed in **Camunda Cloud**:
+
+<img src="workshop-imgs/55-new-workflow-model-in-v3.png" alt="Cluster Details" width="700px">
+
+If you now click into the new workflow model you can see how the new model looks like: 
+
+<img src="workshop-imgs/56-v3-orchestration-workflow-model.png" alt="Cluster Details" width="700px">
+
+If you submit a **new proposal** from the application user interface, this new workflow model is in charge of defining the order in which services are invoked. 
+From the end user point of view, nothing has changed, besides the fact that they can now use **Camunda Operate** to understand in which step each proposal is at a given time. From the code perspective, the business logic required to define the steps is now delegated to the workflow engine, which enables non-technical people to gather valuable data about how the organization is working, where the bottlenecks are and how are your Cloud-Native applications working. 
+
+Having in a single place
 
