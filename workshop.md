@@ -291,7 +291,7 @@ In the previous section you installed an application using `Helm`.
 For this example, there is a parent **Helm Chart** that contains the configuration for each of the services that compose the application. 
 You can find each service that is going to be deployed inside the `requirements.yaml` file defined [inside the chart here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/requirements.yaml).
 
-This can be extended to add more components if needed, like for example adding application infrastructure components such as Databases, Message Brokers, ElasticSearch, etc. (Example: ElasticSearchm, MongoDB and MySQL charts). 
+This can be extended to add more components if needed, like for example adding application infrastructure components such as Databases, Message Brokers, ElasticSearch, etc. (Example: [ElasticSearch](https://github.com/elastic/helm-charts), [MongoDB](https://artifacthub.io/packages/helm/bitnami/mongodb) and [MySQL](https://artifacthub.io/packages/helm/bitnami/mysql), [Kafka](https://artifacthub.io/packages/helm/bitnami/kafka) charts). 
 
 The configuration for all these services can be found in the [`value.yaml` file here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml). This `values.yaml` file can be overriden as well as any of the settings from each specific service when installing the chart, allowing the chart to be flexible enough to be installed with different setups. 
 
@@ -299,7 +299,7 @@ There are a couple of configurations to highlight for this version which are:
 - [Knative Deployments are enabled](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L6), each service Helm Chart enable us to define if we want to use a Knative Service or a Deployment + Service + Ingress type of deployment. Because we have Knative installed, and you want to leverage Knative 
 - Both the [`C4P` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L16) and the [`API Gateway` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L7) need to know where the other services are to be able to send requests. 
 
-In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller 
+In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller to know the other services names. 
 
 You can open different tabs in Cloud Shell to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). 
 
@@ -311,10 +311,13 @@ This section covers some of the challenges that you might face when working with
   <summary>To see more details about the challenges Click to Expand</summary>
 
 Among some of the challenges that you might face are the following big topics:
-- Flow buried in code: for this scenario the `C4P` service is hosting the core business logic on how to handle new proposals. If you need to explain to non-technical people how the flow goes, you will need to dig in the code to be 100% sure about what the application is doing
-- Edge Cases and Errors: 
-- Dealing with changes: 
-- ....
+- **Flow buried in code and visbility for non-technical users**: for this scenario the `C4P` service is hosting the core business logic on how to handle new proposals. If you need to explain to non-technical people how the flow goes, you will need to dig in the code to be 100% sure about what the application is doing. Non-technical users will never sure about how their applications are working, as they can only have limited visibility of what is going on. How would you solve the visibility challenge? 
+- **Edge Cases and Errors**: This simple example, shows what is usually called the **happy path**, where all things goes as expected. In real life implementations, the amount of steps that happens to deal with complex scenarios grows. If you want to cover and have visibility on all possible edge cases and how the organization deals with logical errors that might happen in real life situations, it is key to document and expose this information not only to technical users. How would you document and keep track of every possible edge case and errors that can happen in your distributed applications? How would you do that for a monolith application?
+- **Dealing with changes**: for an organization, being able to understand how their applications are working today, compared on how they were working yesterday is vital for communication, in some cases for compliance and of course to make sure that different deparments are in sync. The faster that you want to go with microservices, the more you need to look outside the development departments to apply changes into the production environments. You will need tools to make sure that everyone is in the same page when changes are introduced. How do you deal with changes today in your applications? How do you expose to non-technical users the differences between the current version of your application that is running in production compared with the new one that you want to promote?
+- **Implementing Time-Based Actions/Notifications**: I dare to say that about 99% of applications require some kind of notification mechanism that needs to deal with scheduled actions at some point in the future or require to be triggered every X amount of time. When working with distributed system, this is painful, as you will need a distributed scheduler to guarantee that things scheduled to trigger are actually triggered when the time is right. How would you implement these time based behaviours? If you are thinking about **Kubernetes Cron Jobs** that is definitely a wrong answer. 
+- **Reporting and Analytics**: if you look at how the services of applications are storing data, you will find out that the structures used are not optimized for reporting or doing analytics. A common approach, is to push the infomration that is relevant to create reports or to do analytics to [ElasticSearch](https://www.elastic.co/elastic-stack) where data can be indexed and structured for efficient querying. Are you using ElasticSearch or a similar solution for building reports or running analytics? 
+
+In version 2 of the application you will be working to make your application's internals more visibile to non-technical users. 
 
 </details> 
 
@@ -333,7 +336,7 @@ Version 2 of the application is configured to emit [Cloud Events](http://cloudev
 - `Email Sent`
 - In the case of the proposal being approved `Agenda Item Created` 
 
-Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a Knative Broker that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create Triggers (which are like subscriptions with filters) for this events and specify where these events should be sent. 
+Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a **Knative Broker** that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create **Triggers** (which are like subscriptions with filters) for this events and specify where these events should be sent. 
 
 For Version 2, you will use the **Zeebe Workflow Engine** provisioned in your **Camunda Cloud** account to capture and visualize these meaninful events.
 In order to route these **Cloud Events** from the Knative Broker to **Camunda Cloud** a new component is introduced along your Application services. This new component is called **Zeebe Cloud Events Router** and serves as the bridge between Knative and Camunda Cloud, using Cloud Events as the standardize communication protocol. 
