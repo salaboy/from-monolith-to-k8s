@@ -199,6 +199,10 @@ Now, **you have everything ready to deploy your Cloud-Native applications to Kub
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
+<img src="workshop-imgs/microservices-architecture.png" alt="Architecture Diagram" width="700px">
+
+These services communicate between each other using REST calls.
+
 With Knative installed you can proceed to install the first version of the application. You will do this by using [**Helm**](http://helm.sh) a Kuberenetes Package Manager. As with every package manager you need to add a new `Helm Repository` where the **Helm packages/charts** for the workshop are stored. 
 
 You can do this by runnig the following commands: 
@@ -293,6 +297,7 @@ There are a couple of configurations to highlight for this version which are:
 In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller to know the other services names. 
 
 You can open different tabs in Cloud Shell to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). 
+
 
 
 ## Challenges
