@@ -112,11 +112,11 @@ Once the Kubernetes cluster is created and "green", you will connect and iteract
 
 Click the **Connect** button 
 
-<img src="workshop-imgs/09-cluster-green.png" alt="Cluster Green Connect" width="500px">
+<img src="workshop-imgs/09-cluster-green.png" alt="Cluster Green Connect" width="700px">
 
 Then find the **Run in Cloud Shell** button, which will provision a new instance of Cloud Shell for you to use:
 
-<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="Cloud Shell" width="500px">
+<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="Cloud Shell" width="700px">
 
 Once **Cloud Shell** is provisioned, notice that you will need to hit **Enter** to actually connect with the **workshop** cluster:
 
@@ -137,7 +137,7 @@ k get nodes
 
 You should see something like this: 
 
-<img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="700px">
+<img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="1000px">
 
 
 Next step you will install Knative Serving and Knative Eventing. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
@@ -165,7 +165,7 @@ k get pods -n knative-serving
 
 You should see something like this:
 
-<img src="workshop-imgs/25-knative-serving-test.png" alt="KNative Serving Test" width="700px">
+<img src="workshop-imgs/25-knative-serving-test.png" alt="KNative Serving Test" width="1000px">
 
 ### Installing Knative Eventing
 
@@ -191,7 +191,7 @@ k get pods -n knative-eventing
 
 You should see something like this: 
 
-<img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="700px">
+<img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="1000px">
 
 Now, **you have everything ready to deploy your Cloud-Native applications to Kubernetes**. :tada: :tada:
 
@@ -216,7 +216,7 @@ h install fmtok8s workshop/fmtok8s-app
 ```
 You should see something like this (ignore the warnings):
 
-<img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="700px">
+<img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="1000px">
 
 The application [Helm Chart source code can be found here](https://github.com/salaboy/fmtok8s-app/).
 
@@ -234,7 +234,7 @@ k get ksvc
 
 You should see that pods are being created or they are running and that the Knative Services were created, ready and have an URL:
 
-<img src="workshop-imgs/28-k-getpods-kgetksvc.png" alt="kubectl get pods and ksvcs" width="700px">
+<img src="workshop-imgs/28-k-getpods-kgetksvc.png" alt="kubectl get pods and ksvcs" width="1000px">
 
 As soon all the pods are running and the services are ready you can copy and paste the `fmtok8s-api-gateway` URL into a different tab in your browser to access the application `http://fmtok8s-api-gateway.default.XXX.xip.io`
 
@@ -253,7 +253,7 @@ k get pods
 ```
 Where you should see the Email Service pod:
 
-<img src="workshop-imgs/59-v1-get-pods-email-highlighted.png" alt="Conference BackOffice" width="500px">
+<img src="workshop-imgs/59-v1-get-pods-email-highlighted.png" alt="Conference BackOffice" width="1000px">
 
 And then you can tail the logs by running:
 ``` bash
@@ -261,15 +261,15 @@ k logs -f fmtok8s-email-<YOUR POD ID> user-container
 ```
 You should see the service logs being tailed, you can exit/stop taling the logs with `CTRL+C`.
 
-<img src="workshop-imgs/60-email-service-spring-boot-started.png" alt="Conference BackOffice" width="500px">
+<img src="workshop-imgs/60-email-service-spring-boot-started.png" alt="Conference BackOffice" width="1000px">
 
 And if you **approved** the submitted proposal you should also see something like this: 
 
-<img src="workshop-imgs/61-email-service-tail-logs-approved.png" alt="Conference BackOffice" width="500px">
+<img src="workshop-imgs/61-email-service-tail-logs-approved.png" alt="Conference BackOffice" width="1000px">
 
 4) If you approved the proposal, the proposal should pop up in the Agenda (main page) of the conference. 
 
-<img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="500px">
+<img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="1000px">
 
 If you made it this far, **you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud!** :tada: :tada:
 
