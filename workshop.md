@@ -182,7 +182,7 @@ You should see something like this:
 
 Now, you have everything ready to deploy your Cloud-Native applications to Kubernetes. 
 
-# Deploying a Cloud-Native Application
+# Version 1: Deploying a Cloud-Native Application
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
@@ -304,7 +304,7 @@ h delete fmtok8s --no-hooks
 ```
 
 
-## Knative, Cloud Events and Camunda Cloud - Version 2
+## Version 2: Knative, Cloud Events and Camunda Cloud
 
 Version 2 of the application is configured to emit [Cloud Events](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
 - `Proposal Received`
@@ -492,7 +492,7 @@ Let's undeploy version 2 to make some space for version 3.
 h delete fmtok8s-v2 --no-hooks
 ```
 
-# Workflow Orchestration with Camunda Cloud
+# Version 3; Workflow Orchestration with Camunda Cloud
 
 In Version 3, you will orchestrate the interactions using the workflow engine. You can now install version 3 running:
 
