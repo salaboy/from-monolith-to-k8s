@@ -268,7 +268,7 @@ And if you **approved** the submitted proposal you should also see something lik
 
 Let's take a deeper look on what you just did in this section. 
 
-# Understanding your application
+## Understanding your application
 
 In the previous section you installed an application using `Helm`. 
 
