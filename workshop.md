@@ -117,24 +117,11 @@ Make sure that you have followed the steps in [Setting up your Google Cloud acco
 
 **Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying your Cloud-Native Applications!** :rocket:
 
-# Connecting to your Kubernetes Cluster and installing Knative
+# Checking your Kubernetes Cluster and installing Knative
 
-During this workshop, you will be using Cloud Shell to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
+During this workshop, you will be using **Cloud Shell** to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
 
-
-Once the Kubernetes cluster is created and "green", you will connect and iteract with it using **Cloud Shell**, a terminal that runs inside a Debian machine which comes with pre-installed tools like: `kubectl` and `helm`. 
-
-Click the **Connect** button 
-
-<img src="workshop-imgs/09-cluster-green.png" alt="Cluster Green Connect" width="700px">
-
-Then find the **Run in Cloud Shell** button, which will provision a new instance of Cloud Shell for you to use:
-
-<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="Cloud Shell" width="700px">
-
-Once **Cloud Shell** is provisioned, notice that you will need to hit **Enter** to actually connect with the **workshop** cluster:
-
-<img src="workshop-imgs/11-connect-from-cloud-shell.png" alt="Cloud Shell" width="1000px">
+**Cloud Shell** comes with pre-installed tools like: `kubectl` and `helm`. 
 
 Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
 
@@ -154,7 +141,7 @@ You should see something like this:
 <img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="1000px">
 
 
-Next step you will install Knative Serving and Knative Eventing. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
+Next step you will install **Knative Serving** and **Knative Eventing**. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
 
 ### Installing Knative Serving
 
@@ -206,6 +193,8 @@ k get pods -n knative-eventing
 You should see something like this: 
 
 <img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="1000px">
+
+**Important**: if you see Error in the `imc-dispatcher***` pod try copy & pasting the previous `k apply..` commands again and check again. 
 
 Now, **you have everything ready to deploy your Cloud-Native applications to Kubernetes**. :tada: :tada:
 
