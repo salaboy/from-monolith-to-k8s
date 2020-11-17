@@ -481,7 +481,7 @@ If you go ahead to the **Back Office** of the application and **approve** the pr
 <img src="workshop-imgs/44-approved-instance.png" alt="Cluster Details" width="700px">
 
 <details>
-  <summary>+ Extras: Understanding different branches (Click to Expand)</summary>
+  <summary>**Extras**: Understanding different branches (Click to Expand)</summary>
 As you might notice, the previous workflow model will only work if you approve proposals, as the `Agenda Item Created` event is only emitted if the proposal is accepted. In order to cover also the case when you reject a proposal you can deploy version 2 of the workflow model, that describes these two branches for approving and rejecting proposals.
   
 In order to deploy the second version of the workflow model you follow the same steps as before, you   
@@ -552,7 +552,7 @@ As you might have noticed, there is a new Knative Service and pod called **fmtok
 An important change in version 3 is that it doesn't use a REST based communication between services, this version let **[Zeebe](http://zeebe.io)**, the workflow engine inside **Camunda Cloud**, to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
 
 <details>
-  <summary>+ Extras: Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
+  <summary>**Extras**: Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
 Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
 </details>
 
