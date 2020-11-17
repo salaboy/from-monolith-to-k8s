@@ -23,6 +23,7 @@ During this workshop you will be using a **Kubernetes Cluster** and a **Camunda 
 **Important requisites**
 - You need  a Gmail account to be able to do the workshop. You will not be using your account for GCP, but you need the account to access a free GCP account for QCon.
 - You need **Google Chrome** installed in your laptop, we recommend Google Chrome, as this workshop has been tested with it, and it also provides Incognito Mode which is needed for the workshop. 
+- [Download this ZIP file with resources](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip) and Unzip somewhere that you can find it again (like your Desktop): 
 
 
 [Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
@@ -294,13 +295,12 @@ This can be extended to add more components if needed, like for example adding a
 The configuration for all these services can be found in the [`value.yaml` file here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml). This `values.yaml` file can be overriden as well as any of the settings from each specific service when installing the chart, allowing the chart to be flexible enough to be installed with different setups. 
 
 There are a couple of configurations to highlight for this version which are:
-- [Knative Deployments are enabled](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L6), each service Helm Chart enable us to define if we want to use a Knative Service or a Deployment + Service + Ingress type of deployment. Because we have Knative installed, and you want to leverage Knative 
-- Both the [`C4P` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L16) and the [`API Gateway` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L7) need to know where the other services are to be able to send requests. 
+- [Knative Deployments are enabled](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L6), each service Helm Chart enable us to define if we want to use a Knative Service or a Deployment + Service + Ingress type of deployment. Because we have Knative installed, and you will be using Knative Eventing later on, we enabled in the chart configuration the Knative Deployment. 
+- Because we are using Knative Services a second container (`queue-proxy`) is boostrapped as a side-car to your main container which is hosting the service. This is the reason why you see `2/2` in the `READY` column when you list your pods. This is also the reason why you need to specify `user-container` when you run `k logs POD`, as the logs command needs to know which container inside the pod you want to tail the logs. 
+- Both the [`C4P` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L16) and the [`API Gateway` service](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/values.yaml#L7) need to know where the other services are to be able to send requests. If you are using **Kubernetes Services** instead of **Knative Services** the namin for the services changes a bit. Notice that here for **Knative** we are using `<Service Name>.default.svc.cluster.local`. In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller to know the other services names. 
 
-In this first version of the application `fmtok8s-app` all the interactions between the services happen via REST calls. This push the caller to know the other services names. 
 
-You can open different tabs in Cloud Shell to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). 
-
+You can open different tabs in **Cloud Shell** to inspect the logs of each service when you are using the application (submitting and approving/rejecting proposals). Remember that you can do that by listing the pods with `k get pods` and then `k logs -f <POD ID> user-container`
 
 
 ## Challenges
@@ -328,7 +328,7 @@ h delete fmtok8s --no-hooks
 ```
 
 
-## Version 2: Knative, CloudEvents and Camunda Cloud
+## Version 2: Visualize 
 
 Version 2 of the application is configured to emit [CloudEvents](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
 - `Proposal Received`
@@ -336,7 +336,10 @@ Version 2 of the application is configured to emit [CloudEvents](http://cloudeve
 - `Email Sent`
 - In the case of the proposal being approved `Agenda Item Created` 
 
-<img src="workshop-imgs/microservice-architecture-with-ce-zeebe.png" alt="Conference BackOffice" width="700px">
+The main goal for Version 2 is to visualize what is happening inside your Cloud-Native appliction from a **Business Perspective**. 
+You will achieve that by emitting relevant **CloudEvents** from the backend services to a Knative Eventing Broker, which you installed before, that can be used as a router to redirect events to **Camunda Cloud** (an external service that you will use to correlated and monitor these events). 
+
+<img src="workshop-imgs/microservice-architecture-with-ce-zeebe.png" alt="Architecture with CE" width="700px">
 
 Version 2 of the application still uses the same version of the services found in Version 1, but these services are configured to emit events to a **Knative Broker** that was created when you installed Knative. This Knative Broker, receive events and routed them to whoever is interested in them. In order to register interest in certain events, Knative allows you to create **Triggers** (which are like subscriptions with filters) for this events and specify where these events should be sent. 
 
@@ -344,6 +347,8 @@ For Version 2, you will use the **Zeebe Workflow Engine** provisioned in your **
 In order to route these **CloudEvents** from the Knative Broker to **Camunda Cloud** a new component is introduced along your Application services. This new component is called **Zeebe CloudEvents Router** and serves as the bridge between Knative and Camunda Cloud, using CloudEvents as the standardize communication protocol. 
 
 As you can imagine, in order for the **Zeebe CloudEvents Router** to connect with your **Camunda Cloud Zeebe Cluster** you need to create a new **Client**, a set of credentials which allows these components to connect and communicate. 
+
+<img src="workshop-imgs/microservice-architecture-with-ce-zeebe-with-router.png" alt="Architecture with CE and Router" width="700px">
 
 Go to the **Camunda Cloud** console, click on your cluster to see your cluster details:
 
@@ -400,7 +405,7 @@ Notice that now the **Zeebe CloudEvents Router** is running along side the appli
 
 But here is still one missing piece to route the **CloudEvents** generated by your application services to the **Zeebe CloudEvents Router** and those are the Knative Triggers (Subscriptions to route the events from the broker to wherever you want). 
 
-These Knative Triggers are defined in YAML and can be packaged inside the Application V2 Helm Chart, which means that they are installed as part of the application. 
+These Knative Triggers are defined in YAML and can be packaged inside the Application V2 Helm Chart, which means that they are installed as part of the application. You can find the [triggers definitions here](https://github.com/salaboy/fmtok8s-app-v2/blob/main/charts/fmtok8s-app-v2/templates/ktriggers.yaml). 
 
 You can list these Knative Triggers by running the following command:
 ``` bash
@@ -411,7 +416,9 @@ You should see an output like this:
 
 <img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="700px">
 
-Finally, even when CloudEvents are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
+Finally, even when **CloudEvents** are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
+
+<img src="workshop-imgs/microservice-architecture-with-ce-zeebe-with-model.png" alt="Cluster Details" width="700px">
 
 You can download the models that you will be using in [the next steps from here](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip).
 
