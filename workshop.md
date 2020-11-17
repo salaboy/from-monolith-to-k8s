@@ -10,9 +10,9 @@ The main goal of the workshop is to guide you step by step to work with an appli
 This workshop is divided into the following sections:
 - [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
 - [Setting up the Clusters and installing Knative](#connecting-to-your-kubernetes-cluster-and-installing-knative)
-- [Deploying Version 1](#version-1-deploying-a-cloud-native-application) of your Cloud-Native application
-- [Deploying Version 2](#version-2-knative-cloudevents-and-camunda-cloud) of your Cloud-Native application, which uses CloudEvents, Knative Eventing and Camunda Cloud for visualization
-- [Deploying Version 3](#version-3-workflow-orchestration-with-camunda-cloud) of your Cloud-Native application, which uses all of the above but with a focus on orchestration
+- [Deploying Version 1](#version-1-cloud-native-app) of your Cloud-Native application
+- [Deploying Version 2](#version-2-visualize) of your Cloud-Native application, which uses CloudEvents, Knative Eventing and Camunda Cloud for visualization
+- [Deploying Version 3](#version-3-workflow-orchestration) of your Cloud-Native application, which uses all of the above but with a focus on orchestration
 - [Next Steps](#next-steps)
 
 # Creating accounts and Clusters
@@ -199,7 +199,7 @@ You should see something like this:
 
 Now, **you have everything ready to deploy your Cloud-Native applications to Kubernetes**. :tada: :tada:
 
-# Version 1: Deploying a Cloud-Native Application
+# Version 1: Cloud-Native App
 
 In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
 
@@ -526,7 +526,7 @@ Let's undeploy version 2 to make some space for version 3.
 h delete fmtok8s-v2 --no-hooks
 ```
 
-# Version 3: Workflow Orchestration with Camunda Cloud
+# Version 3: Workflow Orchestration
 
 In Version 3, you will orchestrate the services interactions using the workflow engine. 
 
