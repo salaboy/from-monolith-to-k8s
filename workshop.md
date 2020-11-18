@@ -161,12 +161,13 @@ The Cloud-Native applications that you will deploy in later steps were built hav
 
 **Extras**<details>
   <summary>What and Why Knative?</summary>
-    [Knative](https://knative.dev/) is a project that provides higher-level abstractions to build robust Cloud-Native applications. Knative is currently split into two main components:
-   - [Knative Serving](https://knative.dev/docs/serving/): it focuses in simplifying and managing the whole lifecycle of your workloads. This includes routing traffic to your services, handling multiple revisions/versions of your services and how traffic will be routed between these revisions and scaling in a serverless fashion 0 to N replicas with a [Knative Pod Autoscaler](https://knative.dev/docs/serving/autoscaling/). 
-   - [Knative Eventing](https://knative.dev/docs/eventing/): it provides the primitives to build systems based on producers and consumers of events, allowing late-binding between your components. This means that the abstractions provided by Knative Eventing help us to build decoupled services that can be wired up together for different use cases or to work on different tech stacks and cloud providers. 
+
+[Knative](https://knative.dev/) is a project that provides higher-level abstractions to build robust Cloud-Native applications. Knative is currently split into two main components:
+- [Knative Serving](https://knative.dev/docs/serving/): it focuses in simplifying and managing the whole lifecycle of your workloads. This includes routing traffic to your services, handling multiple revisions/versions of your services and how traffic will be routed between these revisions and scaling in a serverless fashion 0 to N replicas with a [Knative Pod Autoscaler](https://knative.dev/docs/serving/autoscaling/). 
+- [Knative Eventing](https://knative.dev/docs/eventing/): it provides the primitives to build systems based on producers and consumers of events, allowing late-binding between your components. This means that the abstractions provided by Knative Eventing help us to build decoupled services that can be wired up together for different use cases or to work on different tech stacks and cloud providers. 
     
-   In general, by using Knative abstractions, you will be able to focus more on building your applications and less dealing with Kubernetes primitives. Knative will help you to rely on abstractions instead of implementations or cloud provider details (as these abstractions supports different implementations). 
-    For this workshop, I choose to use Knative because it provides a cloud provider agnostic set of abstractions that can be easily installed in any Kubernetes cluster, allowing us to run the applications described here wherever you have a Kubernetes Cluster.
+In general, by using Knative abstractions, you will be able to focus more on building your applications and less dealing with Kubernetes primitives. Knative will help you to rely on abstractions instead of implementations or cloud provider details (as these abstractions supports different implementations). 
+For this workshop, I choose to use Knative because it provides a cloud provider agnostic set of abstractions that can be easily installed in any Kubernetes cluster, allowing us to run the applications described here wherever you have a Kubernetes Cluster.
     
 </details>
 
@@ -519,9 +520,9 @@ If you go ahead to the **Back Office** of the application and **approve** the pr
   <summary>**Extras**: Understanding different branches (Click to Expand)</summary>
 As you might notice, the previous workflow model will only work if you approve proposals, as the `Agenda Item Created` event is only emitted if the proposal is accepted. In order to cover also the case when you reject a proposal you can deploy version 2 of the workflow model, that describes these two branches for approving and rejecting proposals.
   
-In order to deploy the second version of the workflow model you follow the same steps as before, you   
+In order to deploy the second version of the workflow model you follow the same steps as before  
   
-  <img src="workshop-imgs/45-bpmn-diagrams-list-with-v1.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/45-bpmn-diagrams-list-with-v1.png" alt="Cluster Details" width="700px">
 
 Click into your previously saved diagram called **visualize** and then **Import Diagram** and then select **cp4-visualize-with-branches.bpmn**:
 
