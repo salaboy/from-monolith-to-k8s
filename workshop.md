@@ -9,7 +9,7 @@ The main goal of the workshop is to guide you step by step to work with an appli
 
 This workshop is divided into the following sections:
 - [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
-- [Setting up the Clusters and installing Knative](#connecting-to-your-kubernetes-cluster-and-installing-knative)
+- [Setting up the Clusters and installing Knative](#checking-kubernetes-cluster-and-installing-knative)
 - [Deploying Version 1](#version-1-cloud-native-app) of your Cloud-Native application
 - [Deploying Version 2](#version-2-visualize) of your Cloud-Native application, which uses CloudEvents, Knative Eventing and Camunda Cloud for visualization
 - [Deploying Version 3](#version-3-workflow-orchestration) of your Cloud-Native application, which uses all of the above but with a focus on orchestration
@@ -18,7 +18,7 @@ This workshop is divided into the following sections:
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
 
-## Setting up your Google Cloud account
+## Google Cloud account
 
 **Important requisites**
 - You need  a Gmail account to be able to do the workshop. You will not be using your account for GCP, but you need the account to access a free GCP account for QCon.
@@ -82,7 +82,7 @@ This will take some minutes, leave the Tab open so you can move forward to **Cam
   
 </details>  
 
-## Setting up your Camunda Cloud account
+## Camunda Cloud account
 
  [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) 
 <details>
