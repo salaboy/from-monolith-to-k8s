@@ -326,18 +326,27 @@ In order to undeploy version 1 of the application you can run:
 ``` bash
 h delete fmtok8s --no-hooks
 ```
+## Questions
+This section includes a set of questions for you to experiment and try to answer, we recommend doing this after the live workshop. 
+- What happens if you kill a pod from the following services: `fmtok8s-agenda` and/or `fmtok8s-c4p`? how do you solve this problem? 
+- What are the main two functionalities provided by the component called `API Gateway`? Why is so important? 
+- How and where would you add Single Sign On? 
 
+# Version 2: Visualize 
 
-## Version 2: Visualize 
+Version 2 of the application is configured to emit [CloudEvents](http://cloudevents.io), whenever something relevant happens in any of the services. 
 
-Version 2 of the application is configured to emit [CloudEvents](http://cloudevents.io), whenever something relevant happens in any of the services. For this example, you are interested in the following events: 
+For this example, you are interested in the following events: 
 - `Proposal Received`
 - `Proposal Decision Made`
 - `Email Sent`
 - In the case of the proposal being approved `Agenda Item Created` 
 
+<img src="workshop-imgs/microservice-architecture-with-events.png" alt="Architecture with CE" width="700px">
+
+
 The main goal for Version 2 is to visualize what is happening inside your Cloud-Native appliction from a **Business Perspective**. 
-You will achieve that by emitting relevant **CloudEvents** from the backend services to a Knative Eventing Broker, which you installed before, that can be used as a router to redirect events to **Camunda Cloud** (an external service that you will use to correlated and monitor these events). 
+You will achieve that by emitting relevant **CloudEvents** from the backend services to a **Knative Eventing Broker**, which you installed before, that can be used as a router to redirect events to **Camunda Cloud** (an external service that you will use to correlated and monitor these events). 
 
 <img src="workshop-imgs/microservice-architecture-with-ce-zeebe.png" alt="Architecture with CE" width="700px">
 
