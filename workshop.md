@@ -5,7 +5,7 @@ play around with it to get familiar with Kubernetes and Cloud-Native tools that 
 
 During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. You can find more instructions to try all over the workshop under the sections labelled with **Extra**. For beginers and for people who wants to finish the workshop on time we recommend to leave the extras for later. We highly encourage you to check the [Next Steps](#next-steps) section at the end of this document if you are interested in going deeper into how this application is working, how different tools are being used under the hood and other possible tools that can be integrated with this application.
+The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. You can find more instructions to try all over the workshop under the sections labelled with **Extras**. For beginers and for people who wants to finish the workshop on time we recommend to leave the extras for later. We highly encourage you to check the [Next Steps](#next-steps) section at the end of this document if you are interested in going deeper into how this application is working, how different tools are being used under the hood and other possible tools that can be integrated with this application.
 
 This workshop is divided into the following sections:
 - [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
@@ -81,18 +81,18 @@ gcloud container clusters create workshop \
 This will take some minutes, leave the Tab open so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
 **Extras**<details>
-  <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>  
-  If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
-    
-  <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
-  
-  Then use the **Connect** button in the cluster to open the Cluster Details
-  
-  <img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
-  
-  Then use the **Run in Cloud Shell** button to connect
-  
-  <img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
+  <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>
+If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
+
+<img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
+
+Then use the **Connect** button in the cluster to open the Cluster Details
+
+<img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
+
+Then use the **Run in Cloud Shell** button to connect
+
+<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
   
 </details>  
 
@@ -150,7 +150,6 @@ k get nodes
 You should see something like this: 
 
 <img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="1000px">
-
 
 
 Next step you will install **Knative Serving** and **Knative Eventing**. 
