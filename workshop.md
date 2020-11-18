@@ -80,10 +80,10 @@ gcloud container clusters create workshop \
 
 This will take some minutes, leave the Tab open so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
-<details>
-  <summary>**Extra** Finding your Kubernetes Cluster in GCP</summary>  
+**Extras**<details>
+  <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>  
   If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
-  <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="700px">
+  <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
   
   Then use the **Connect** button in the cluster to open the Cluster Details
   <img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
@@ -312,9 +312,9 @@ You can open different tabs in **Cloud Shell** to inspect the logs of each servi
 
 ## Challenges
 This section covers some of the challenges that you might face when working with these kind of applications inside Kubernetes. This section is not needed to continue with the workshop, but it highlight the need for some other tools to be used in conjuction with the application. 
- 
-<details>
-  <summary>To see more details about the challenges Click to Expand</summary>
+
+**Extras**<details>
+  <summary>To see more details about the challenges (Click to Expand)</summary>
 
 Among some of the challenges that you might face are the following big topics:
 - **Flow buried in code and visibility for non-technical users**: for this scenario the `C4P` service is hosting the core business logic on how to handle new proposals. If you need to explain to non-technical people how the flow goes, you will need to dig in the code to be 100% sure about what the application is doing. Non-technical users will never sure about how their applications are working, as they can only have limited visibility of what is going on. How would you solve the visibility challenge? 
