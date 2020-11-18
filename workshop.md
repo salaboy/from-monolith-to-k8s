@@ -82,7 +82,9 @@ This will take some minutes, leave the Tab open so you can move forward to **Cam
   
 **Extras**<details>
   <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>
+
 If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
+
 
 <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
 
