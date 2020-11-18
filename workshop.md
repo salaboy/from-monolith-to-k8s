@@ -586,9 +586,9 @@ As you might have noticed, there is a new Knative Service and pod called **fmtok
 
 An important change in version 3 is that it doesn't use a REST based communication between services, this version let **[Zeebe](http://zeebe.io)**, the workflow engine inside **Camunda Cloud**, to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
 
-<details>
-  <summary>**Extras**: Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
-Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
+**Extras**<details>
+  <summary>Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
+@TODO: Add Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
 </details>
 
 Another important change, is that the **C4P Service** now deploys automatically the workflow model used for the orchestration to happen. 
@@ -619,9 +619,23 @@ Becuase the workflow model is now in charge of the sequence of interactions, you
 If you made it this far, **Well Done!!! you have now orchestrated your microservices interactions using a workflow engine!** :tada: :tada:
 
 Here are some extras that you might be interested in, to expand what you have learnt so far:
-- Update the workflow model to use the newly introduced Speakers Service
+- Update the workflow model to use the newly introduced `Speakers Service`
+**Extras**<details>
+  <summary>Deploy new version of the workflow model (Click to Expand)</summary>
+
+</details>
 - Update the workflow model to send notifications if a proposal is waiting for a decision for too long
+**Extras**<details>
+  <summary>Deploy new version of the workflow model (Click to Expand)</summary>
+
+</details>
 - Make the application fail to see how incidents are reported into Camunda Operate
+**Extras**<details>
+  <summary>Send Fail payload to make a service fail (Click to Expand)</summary>
+
+</details>
+
+
 
 # Next Steps
 
@@ -638,7 +652,7 @@ There are tons of options and challenges to solve in the Cloud-Native space, you
 
 - **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintaining a Kafka installation if you can leverage the power of Google Pub/Sub. In theory, and in the same way as with Kafka, you should be able to just replace the Channel implementation and your application should work without any changes. 
 
-
+- **Adding Single Sign-On**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
 
 
 
