@@ -77,7 +77,24 @@ gcloud container clusters create workshop \
 
 <img src="workshop-imgs/65-gke-created-in-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
 
+
 This can take a few minutes, so leave the Tab and move forward to **Camunda Cloud Account and Cluster** while the Kubernetes cluster is being created.
+  
+**Extras**<details>
+  <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>
+
+If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
+
+
+<img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
+
+Then use the **Connect** button in the cluster to open the Cluster Details
+
+<img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
+
+Then use the **Run in Cloud Shell** button to connect
+
+<img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
   
 </details>  
 
