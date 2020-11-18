@@ -342,7 +342,7 @@ For this example, you are interested in the following events:
 - `Email Sent`
 - In the case of the proposal being approved `Agenda Item Created` 
 
-<img src="workshop-imgs/microservice-architecture-with-events.png" alt="Architecture with CE" width="700px">
+<img src="workshop-imgs/microservice-architecture-with-events.png" alt="Events" width="400px">
 
 
 The main goal for Version 2 is to visualize what is happening inside your Cloud-Native appliction from a **Business Perspective**. 
