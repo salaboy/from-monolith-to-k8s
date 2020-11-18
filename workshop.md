@@ -620,23 +620,22 @@ If you made it this far, **Well Done!!! you have now orchestrated your microserv
 
 Here are some extras that you might be interested in, to expand what you have learnt so far:
 - Update the workflow model to use the newly introduced `Speakers Service`
-**Extras**<details>
-  <summary>Deploy new version of the workflow model (Click to Expand)</summary>
-TBD
-</details>
-
 - Update the workflow model to send notifications if a proposal is waiting for a decision for too long
+- Make the application fail to see how incidents are reported into Camunda Operate
+
 **Extras**<details>
   <summary>Deploy new version of the workflow model (Click to Expand)</summary>
 TBD
 </details>
 
-- Make the application fail to see how incidents are reported into Camunda Operate
-**Extras**<details>
+<details>
+  <summary>Deploy new version of the workflow model (Click to Expand)</summary>
+TBD
+</details>
+<details>
   <summary>Send Fail payload to make a service fail (Click to Expand)</summary>
 TBD
 </details>
-
 
 
 # Next Steps
