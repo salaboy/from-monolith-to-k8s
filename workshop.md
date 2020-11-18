@@ -83,12 +83,15 @@ This will take some minutes, leave the Tab open so you can move forward to **Cam
 **Extras**<details>
   <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>  
   If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
+    
   <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="400px">
   
   Then use the **Connect** button in the cluster to open the Cluster Details
+  
   <img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
   
   Then use the **Run in Cloud Shell** button to connect
+  
   <img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
   
 </details>  
@@ -96,7 +99,7 @@ This will take some minutes, leave the Tab open so you can move forward to **Cam
 
 ## Camunda Cloud account
 
-[Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) You must to use this link, even if you have another Camunda Cloud Account.
+[Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) <- You must to use this link, even if you have another Camunda Cloud Account.
 
 **Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
 <img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="700px">
@@ -149,7 +152,23 @@ You should see something like this:
 <img src="workshop-imgs/12-tests-kubectl.png" alt="Cloud Shell" width="1000px">
 
 
-Next step you will install **Knative Serving** and **Knative Eventing**. The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
+
+Next step you will install **Knative Serving** and **Knative Eventing**. 
+
+<img src="workshop-imgs/70-knative-logo.png" alt="Knative" width="300px">
+
+The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
+
+**Extras**<details>
+  <summary>What and Why Knative?</summary>
+    [Knative](https://knative.dev/) is a project that provides higher-level abstractions to build robust Cloud-Native applications. Knative is currently split into two main components:
+    - [Knative Serving](https://knative.dev/docs/serving/): it focuses in simplifying and managing the whole lifecycle of your workloads. This includes routing traffic to your services, handling multiple revisions/versions of your services and how traffic will be routed between these revisions and scaling in a serverless fashion 0 to N replicas with a [Knative Pod Autoscaler](https://knative.dev/docs/serving/autoscaling/). 
+    - [Knative Eventing](https://knative.dev/docs/eventing/): it provides the primitives to build systems based on producers and consumers of events, allowing late-binding between your components. This means that the abstractions provided by Knative Eventing help us to build decoupled services that can be wired up together for different use cases or to work on different tech stacks and cloud providers. 
+    
+    In general, by using Knative abstractions, you will be able to focus more on building your applications and less dealing with Kubernetes primitives. Knative will help you to rely on abstractions instead of implementations or cloud provider details (as these abstractions supports different implementations). 
+    For this workshop, I choose to use Knative because it provides a cloud provider agnostic set of abstractions that can be easily installed in any Kubernetes cluster, allowing us to run the applications described here wherever you have a Kubernetes Cluster.
+    
+</details>
 
 ### Installing Knative Serving
 
