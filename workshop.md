@@ -162,10 +162,10 @@ The Cloud-Native applications that you will deploy in later steps were built hav
 **Extras**<details>
   <summary>What and Why Knative?</summary>
     [Knative](https://knative.dev/) is a project that provides higher-level abstractions to build robust Cloud-Native applications. Knative is currently split into two main components:
-    - [Knative Serving](https://knative.dev/docs/serving/): it focuses in simplifying and managing the whole lifecycle of your workloads. This includes routing traffic to your services, handling multiple revisions/versions of your services and how traffic will be routed between these revisions and scaling in a serverless fashion 0 to N replicas with a [Knative Pod Autoscaler](https://knative.dev/docs/serving/autoscaling/). 
-    - [Knative Eventing](https://knative.dev/docs/eventing/): it provides the primitives to build systems based on producers and consumers of events, allowing late-binding between your components. This means that the abstractions provided by Knative Eventing help us to build decoupled services that can be wired up together for different use cases or to work on different tech stacks and cloud providers. 
+   - [Knative Serving](https://knative.dev/docs/serving/): it focuses in simplifying and managing the whole lifecycle of your workloads. This includes routing traffic to your services, handling multiple revisions/versions of your services and how traffic will be routed between these revisions and scaling in a serverless fashion 0 to N replicas with a [Knative Pod Autoscaler](https://knative.dev/docs/serving/autoscaling/). 
+   - [Knative Eventing](https://knative.dev/docs/eventing/): it provides the primitives to build systems based on producers and consumers of events, allowing late-binding between your components. This means that the abstractions provided by Knative Eventing help us to build decoupled services that can be wired up together for different use cases or to work on different tech stacks and cloud providers. 
     
-    In general, by using Knative abstractions, you will be able to focus more on building your applications and less dealing with Kubernetes primitives. Knative will help you to rely on abstractions instead of implementations or cloud provider details (as these abstractions supports different implementations). 
+   In general, by using Knative abstractions, you will be able to focus more on building your applications and less dealing with Kubernetes primitives. Knative will help you to rely on abstractions instead of implementations or cloud provider details (as these abstractions supports different implementations). 
     For this workshop, I choose to use Knative because it provides a cloud provider agnostic set of abstractions that can be easily installed in any Kubernetes cluster, allowing us to run the applications described here wherever you have a Kubernetes Cluster.
     
 </details>
@@ -625,7 +625,21 @@ Here are some extras that you might be interested in, to expand what you have le
 
 # Next Steps
 
-(TBD)
+There are tons of options and challenges to solve in the Cloud-Native space, you can use this workshop and applications as a playground to test new projects before adopting them for your applications. That is exactly the reason why these apps were built in such way. Here are some recommendations for futher exploring, improvements that can lead to contributions to these repositories for future workshops or just to serve as examples for the entire Kubernetes community:
+
+- [Jenkins X](http://jenkins-x.io) &  [Tekton](http://tekton.dev): These applications and services were built using Jenkins X which provides CI/CD for Kubernetes and it uses [Tekton](http://tekton.dev) as the underlying pipeline engine. Both of these projects, Tekton and Jenkins X do and implement their own tools in a Kubernetes Native way (meaning that they follow kubernetes best practices and tap into the Kubernetes ecosystem to design and implement their own components). I strongly recommend you to check both of these projects, if you are planning to build, maintain and deploy multiple services in Kubernetes.
+
+- [External Secrets](https://github.com/external-secrets/kubernetes-external-secrets): External Secrets created by GoDaddy, provides a set of abstractions similarly to Knative to deal with Secrets Management in a Cloud Agnostic way. Configuring the Camunda Cloud Secrets directly in Google Cloud Secrets Manager would be a cleaner and more real solution. You can explore how External Secrets work and how adding External Secrets to this projects would work. 
+
+- [CloudEvents Orchestration](https://github.com/salaboy/orchestrating-cloud-events): an extension to this workshop, using a different application goes further into Orchestrating Cloud Events with the Zeebe Workflow Engine. On this example, you can explore how the Workflow Engine can also produce Cloud Events, avoiding your Services and Applications knowing anything about the fact that they are being orchestrated (no dependencies added to your services, they will just emit and consume CloudEvents). This example also covers the use of WebSockets to forward CloudEvents to the Client Side (browser).
+
+
+- **Kafka as Knative Eventing Channel Provider**: Leveraging the power of the Knative Eventing abstractions, you can swap the Eventing Channel provider by Kafka, for a more realistic and robust tech stack and the application will just work. Notice that the application as it is configured here, uses an InMemory provider which is good only for development purposes. For installing [Kafka you might want to use the Helm Chart located here](https://bitnami.com/stack/kafka/helm) to follow the same approach that we are using for the application itself. 
+
+- **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintaining a Kafka installation if you can leverage the power of Google Pub/Sub. In theory, and in the same way as with Kafka, you should be able to just replace the Channel implementation and your application should work without any changes. 
+
+
+
 
 
 # Thanks to all contributors
