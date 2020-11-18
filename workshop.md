@@ -18,17 +18,17 @@ This workshop is divided into the following sections:
 # Creating accounts and Clusters
 During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
 
+**Important requisites**
+- You need  a Gmail account to be able to do the workshop. You will **not** be using your account for GCP, but you need the account to access a free GCP account for QCon Plus.
+- You need [**Google Chrome**](https://www.google.com/chrome/) installed in your laptop, we recommend Google Chrome, as this workshop has been tested with it, and it also provides Incognito Mode which is needed for the workshop. 
+- [Download this ZIP file with resources](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip) and Unzip somewhere that you can find it again (like your Desktop)
+
+
 ## Google Cloud account
 
-**Important requisites**
-- You need  a Gmail account to be able to do the workshop. You will not be using your account for GCP, but you need the account to access a free GCP account for QCon.
-- You need **Google Chrome** installed in your laptop, we recommend Google Chrome, as this workshop has been tested with it, and it also provides Incognito Mode which is needed for the workshop. 
-- [Download this ZIP file with resources](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip) and Unzip somewhere that you can find it again (like your Desktop): 
+[Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee you should use the account provided, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
 
-
-[Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
-<details>
-  <summary>Creating a Kubernetes Cluster (Click to Expand)</summary>
+### Creating a Kubernetes Cluster
 
 We recommend to use an **Incognito Window** in **Chrome** (File -> New Incognito Window) to run the following steps, as with that you will avoid having issues with your personal **Google Account**
 
@@ -80,13 +80,23 @@ gcloud container clusters create workshop \
 
 This will take some minutes, leave the Tab open so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
   
+<details>
+  <summary>**Extra** Finding your Kubernetes Cluster in GCP</summary>  
+  If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
+  <img src="workshop-imgs/02-go-to-kube-engine.png" alt="GKE created in Cloud Shell" width="700px">
+  
+  Then use the **Connect** button in the cluster to open the Cluster Details
+  <img src="workshop-imgs/09-cluster-green.png" alt="GKE created in Cloud Shell" width="700px">
+  
+  Then use the **Run in Cloud Shell** button to connect
+  <img src="workshop-imgs/10-connect-to-cluster-with-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
+  
 </details>  
+
 
 ## Camunda Cloud account
 
- [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) 
-<details>
-  <summary>Login into your account and create a Cluster (Click to Expand)</summary>
+[Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) You must to use this link, even if you have another Camunda Cloud Account.
 
 **Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
 <img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="700px">
@@ -110,9 +120,6 @@ Disregard, creating a model if you are asked to and just close the popup:
 Your cluster is now being created:
 
 <img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="700px">
-
-
-</details>
 
 Make sure that you have followed the steps in [Setting up your Google Cloud account](#setting-up-your-google-cloud-account) and [Setting up your Camunda Cloud account](#setting-up-your-camunda-cloud-account), as both of these accounts needs to be ready to proceed to the next sections.
 
