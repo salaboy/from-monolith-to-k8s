@@ -362,9 +362,11 @@ h delete fmtok8s --no-hooks
 ```
 ## Questions
 This section includes a set of questions for you to experiment and try to answer, we recommend doing this after the live workshop. 
+
 - What happens if you kill a pod from the following services: `fmtok8s-agenda` and/or `fmtok8s-c4p`? how do you solve this problem? 
 - What are the main two functionalities provided by the component called `API Gateway`? Why is so important? 
 - How and where would you add Single Sign On? 
+- How would you test these services? Have you heard about **Consumer Driven Contract Testing**? 
 
 # Version 2: Visualize 
 
@@ -576,6 +578,11 @@ h delete fmtok8s-v2 --no-hooks
 
 ## Questions
 
+This section includes a set of questions for you to experiment and try to answer, we recommend doing this after the live workshop. 
+
+- Would you rather run the workflow engine On-Prem (meaning, inside your Kubernetes Cluster)? what are the pros and cons of doing that? How would you install it? 
+- What is Knative Eventing using for moving events around? What is the transport used? Can it be swapped? 
+- What changes would be required to Version 1 and Version 2 of these applications to run on Azure AKS, or Amazon EKS? 
 
 
 # Version 3: Workflow Orchestration
@@ -766,6 +773,11 @@ If you made it this far, **you are now aware how important is to report as soon 
 
 ## Questions
 
+This section includes a set of questions for you to experiment and try to answer, we recommend doing this after the live workshop. 
+
+- Would it make sense to produce **CloudEvents** from the workflow models? Why?
+- How and what would you evaluate when looking at orchestration tools? For example AWS Step Functions, Netflix Conductor, etc. 
+- Would it be a good idea to add/represent explicetely User (Human) interactions into the workflow models? Why? What special charastericts and requirements Human interactions usually involve? 
 
 # Next Steps
 
@@ -785,7 +797,7 @@ There are tons of options and challenges to solve in the Cloud-Native space, you
 
 - **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintaining a Kafka installation if you can leverage the power of Google Pub/Sub. In theory, and in the same way as with Kafka, you should be able to just replace the Channel implementation and your application should work without any changes. 
 
-- **Adding Single Sign-On**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
+- **Adding Single Sign-On and Identity Management**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
 
 
 # Sum Up
