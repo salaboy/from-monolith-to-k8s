@@ -242,6 +242,8 @@ These services communicate between each other using REST calls.
 
 With Knative installed, you can proceed to install the first version of the application. Do this by using [**Helm**](http://helm.sh) a Kuberenetes Package Manager. As with every package manager, you need to add a new `Helm Repository` where the **Helm packages/charts** for the workshop are stored.  
 
+<img src="workshop-imgs/90-helm-logo.png" alt="Knative" width="300px">
+
 You can do this by running the following commands: 
 
 ``` bash
