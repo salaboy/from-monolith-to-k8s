@@ -818,3 +818,30 @@ Thank you all, but specially to those people who helped with feedback, code and 
 - [Ray Tsang](http://twitter.com/saturnism) for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
 - [Charley Mann](http://twitter.com/charley_mann) for being awesome and providing loads of corrections and suggestions
 
+# Sources and References
+
+Here you can find the repositories which host the source code for each service and some links to tools and projects that you might find useful:
+
+- **Services Source Code**
+  - [API Gateway]()
+  - REST Services (For Version 1 and Version 2) 
+    - [C4P Service REST]()
+    - [Agenda Service REST]()
+    - [Email Service REST]()
+  - Using Zeebe Pub/Sub
+    - [C4P Service]()
+    - [Agenda Service]()
+    - [Email Service]()
+    - [Speakers Service]()
+- **Helm Charts for Applications**
+  - [Version 1]()
+  - [Version 2]()
+  - [Version 3]()
+- **Frameworks and Tools**
+ - [CloudEvents]()
+ - [Spring Cloud Gateway]()
+ - [Spring Cloud Contracts]()
+ - [Helm]()
+ - [Knative]()
+ - [Jenkins X]()
+
