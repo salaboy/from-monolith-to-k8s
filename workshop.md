@@ -574,6 +574,10 @@ Let's undeploy Version 2 to make some space for Version 3.
 h delete fmtok8s-v2 --no-hooks
 ```
 
+## Questions
+
+
+
 # Version 3: Workflow Orchestration
 
 In Version 3, you will orchestrate the services interactions using the workflow engine. 
@@ -760,10 +764,16 @@ If you made it this far, **you are now aware how important is to report as soon 
 
 </details>
 
+## Questions
+
 
 # Next Steps
 
 There are tons of options and challenges to solve in the Cloud-Native space, you can use this workshop and applications as a playground to test new projects before adopting them for your applications. That is exactly the reason why these apps were built in such way. Here are some recommendations for futher exploring, improvements that can lead to contributions to these repositories for future workshops or just to serve as examples for the entire Kubernetes community:
+
+- **Adding New Services**: how would you go about adding a new service to this applications? what tools would you need in order to be efficient? Try defining the main steps that you will need in order to add a new service. 
+
+- **Adding Tracing and Centralized Logging**: 
 
 - [Jenkins X](http://jenkins-x.io) &  [Tekton](http://tekton.dev): These applications and services were built using Jenkins X which provides CI/CD for Kubernetes and it uses [Tekton](http://tekton.dev) as the underlying pipeline engine. Both of these projects, Tekton and Jenkins X do and implement their own tools in a Kubernetes Native way (meaning that they follow kubernetes best practices and tap into the Kubernetes ecosystem to design and implement their own components). I strongly recommend you to check both of these projects, if you are planning to build, maintain and deploy multiple services in Kubernetes.
 
@@ -771,12 +781,12 @@ There are tons of options and challenges to solve in the Cloud-Native space, you
 
 - [CloudEvents Orchestration](https://github.com/salaboy/orchestrating-cloud-events): an extension to this workshop, using a different application goes further into Orchestrating Cloud Events with the Zeebe Workflow Engine. On this example, you can explore how the Workflow Engine can also produce Cloud Events, avoiding your Services and Applications knowing anything about the fact that they are being orchestrated (no dependencies added to your services, they will just emit and consume CloudEvents). This example also covers the use of WebSockets to forward CloudEvents to the Client Side (browser).
 
-
 - **Kafka as Knative Eventing Channel Provider**: Leveraging the power of the Knative Eventing abstractions, you can swap the Eventing Channel provider by Kafka, for a more realistic and robust tech stack and the application will just work. Notice that the application as it is configured here, uses an InMemory provider which is good only for development purposes. For installing [Kafka you might want to use the Helm Chart located here](https://bitnami.com/stack/kafka/helm) to follow the same approach that we are using for the application itself. 
 
 - **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintaining a Kafka installation if you can leverage the power of Google Pub/Sub. In theory, and in the same way as with Kafka, you should be able to just replace the Channel implementation and your application should work without any changes. 
 
 - **Adding Single Sign-On**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
+
 
 # Sum Up
 
