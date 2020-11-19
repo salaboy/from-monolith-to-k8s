@@ -1,11 +1,10 @@
 # From Monolith to K8s - Workshop 
 
-During this workshop you will deploy a Cloud-Native application, inspect it, change its configuration to use different services and 
-play around with it to get familiar with Kubernetes and Cloud-Native tools that can help you to be more effective in your cloud journey. 
+During this workshop you will deploy a Cloud-Native application, inspect it and change its configuration to use different services. Plus you'll play around with some Kubernetes and Cloud-Native tools that can help you to be more effective on your cloud journey. 
 
-During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed by multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any other Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
+During this workshop you will be using GKE (Managed Kubernetes Engine inside Google Cloud) to deploy a complex application composed of multiple services. But none of the applications or tools used are tied in any way to Google infrastructure, meaning that you can run these steps in any Kubernetes provider, as well as in an On-Prem Kubernetes installation. 
 
-The main goal of the workshop is to guide you step by step to work with an application that you don't know but that will run on a real infrastructure (in contrast to run software in your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, that we encourage. You can find more instructions to try all over the workshop under the sections labelled with **Extras**. For beginers and for people who wants to finish the workshop on time we recommend to leave the extras for later. We highly encourage you to check the [Next Steps](#next-steps) section at the end of this document if you are interested in going deeper into how this application is working, how different tools are being used under the hood and other possible tools that can be integrated with this application.
+The main goal is to guide you, step-by-step, to work with an application that will run on a real infrastructure (in contrast to running software on your own laptops). Due the time constraints, the workshop is focused on getting things up and running, but it opens the door for a lot of extensions and experimentation, which we encourage. You can find more instructions to step through under the sections labelled with **Extras**. For beginers and people who want to finish the workshop on time, we recommend leaving the extras for later. We highly encourage you to check the [Next Steps](#next-steps) section at the end of this document if you are interested in going deeper into how this application works, how different tools are being used under the hood and other possible tools that can be integrated.
 
 This workshop is divided into the following sections:
 - [Creating accounts and Clusters](#creating-accounts-and-clusters) to run our applications
@@ -16,17 +15,17 @@ This workshop is divided into the following sections:
 - [Next Steps](#next-steps)
 
 # Creating accounts and Clusters
-During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for you to work for the reminder of the workshop. 
+During this workshop you will be using a **Kubernetes Cluster** and a **Camunda Cloud Zeebe Cluster** for Microservices orchestration. You need to setup these accounts and create these clusters early on, so they are ready for the remainder of the workshop. 
 
 **Important requisites**
-- You need  a Gmail account to be able to do the workshop. You will **not** be using your account for GCP, but you need the account to access a free GCP account for QCon Plus.
-- You need [**Google Chrome**](https://www.google.com/chrome/) installed in your laptop, we recommend Google Chrome, as this workshop has been tested with it, and it also provides Incognito Mode which is needed for the workshop. 
+- You need  a Gmail account to be able to participate in the workshop. You will not be using your account for the Google Cloud Platform (GCP), but you need the account to access a free GCP account for QCon.
+- You need **Google Chrome** installed on your laptop. We recommend Google Chrome because we've tested this workshop with it and you'll need Incognito Mode too. 
 - [Download this ZIP file with resources](https://github.com/salaboy/from-monolith-to-k8s-assets/archive/1.0.0.zip) and Unzip somewhere that you can find it again (like your Desktop)
 
 
 ## Google Cloud account
 
-[Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee you should use the account provided, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
+[Login to Google Cloud by clicking into this link](http://console.cloud.google.com) (if you are a QCon Plus attendee, we will provide you with one, if not you can find other [Kubernetes providers free credits list](https://github.com/learnk8s/free-kubernetes))
 
 ### Creating a Kubernetes Cluster
 
@@ -40,7 +39,7 @@ Once the terms are accepted, it is **extremely important** that you select the c
 
 <img src="workshop-imgs/01-select-qcon-project.png" alt="Select Project" width="700px">
 
-With the project selected, you can now open **Cloud Sheel**
+With the project selected, you can now open **Cloud Shell**
 
 <img src="workshop-imgs/63-google-cloud-home-cloud-shell.png" alt="Cloud Shell" height="700px">
 
@@ -59,14 +58,14 @@ gcloud services enable compute.googleapis.com \
 
 ```
 
-Set default region and zone for our cluster:
+Set the default region and zone for your cluster:
 
 ``` bash
 gcloud config set compute/zone us-central1-c
 gcloud config set compute/region us-central1
 ```
 
-You can now create a Kubernetes cluster in Google Cloud Platform! Use Kubernetes Engine to create a cluster:
+You can now create a Kubernetes cluster in GCP! Use the Kubernetes Engine to create a cluster:
 
 ```
 gcloud container clusters create workshop \
@@ -78,7 +77,7 @@ gcloud container clusters create workshop \
 
 <img src="workshop-imgs/65-gke-created-in-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
 
-This will take some minutes, leave the Tab open so you can move forward to **Camunda Cloud Account and Cluster** while the Kubernetes Cluster is being created.
+This can take a few minutes, so leave the Tab and move forward to **Camunda Cloud Account and Cluster** while the Kubernetes cluster is being created.
   
 **Extras**<details>
   <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>
