@@ -2,6 +2,8 @@
 
 Workshop-style guide for moving from a monolith application to a cloud-native architecture running in Kubernetes.
 
+[**If you are looking for the updated 2hs workshop, you can find it here**](workshop.md)
+
 This guide will take you through an example scenario to move from a Monolith application to a set of Cloud Native microservices running in a Kubernetes Cluster. This workshop highlights the use of certain tools to solve some particular challenges that you will face while going to the cloud. These tools are just suggestions and you should evaluate what fits better to your teams and practices. 
 
 The application and the application flow can be used to test other projects and it was intended for educational and testing purposes. If you want to suggest other projects to be added, such as service meshes, severless platforms, etc. feel free to drop me a message.  
