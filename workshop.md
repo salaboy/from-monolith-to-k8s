@@ -571,7 +571,7 @@ In Version 3, you will orchestrate the services interactions using the workflow 
 
 <img src="workshop-imgs/microservice-architecture-orchestration.png" alt="Architecture Diagram" width="700px">
 
-You can now install version 3 running:
+You can now install Version 3 running:
 
 ``` bash
 h install fmtok8s-v3 workshop/fmtok8s-app-v3
@@ -586,41 +586,41 @@ Check that the Kubernetes Pods and the Knative Services are ready:
 
 When all the pods are ready (2/2) you can now access to the application. 
 
-As you might have noticed, there is a new Knative Service and pod called **fmtok8s-speakers**, you will use that service later on.  
+As you might have noticed, there is a new Knative Service and pod called **fmtok8s-speakers**. You will use that service later on in one of the **Extras**. 
 
-An important change in version 3 is that it doesn't use a REST based communication between services, this version let **[Zeebe](http://zeebe.io)**, the workflow engine inside **Camunda Cloud**, to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
+An important change in Version 3 is that it doesn't use a REST-based communication between services. This version lets the **[Zeebe](http://zeebe.io)**, workflow engine inside **Camunda Cloud** to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures.  
 
 **Extras**<details>
   <summary>Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
 @TODO: Add Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
 </details>
 
-Another important change, is that the **C4P Service** now deploys automatically the workflow model used for the orchestration to happen. 
+Another important change is that the **C4P Service** now automatically deploys the workflow model used for the orchestration to happen.  
 This means that when the **fmtok8s-c4p** Knative Service is up and ready, you should have a new workflow model already deployed in **Camunda Cloud**:
 
 <img src="workshop-imgs/55-new-workflow-model-in-v3.png" alt="Cluster Details" width="700px">
 
-If you now click into the new workflow model you can see how the new model looks like: 
+If you now click into the new workflow model, you can see what it looks like: 
 
 <img src="workshop-imgs/56-v3-orchestration-workflow-model.png" alt="Cluster Details" width="700px">
 
 If you submit a **new proposal** from the application user interface, this new workflow model is in charge of defining the order in which services are invoked. 
-From the end user point of view, nothing has changed, besides the fact that they can now use **Camunda Operate** to understand in which step each proposal is at a given time. From the code perspective, the business logic required to define the steps is now delegated to the workflow engine, which enables non-technical people to gather valuable data about how the organization is working, where the bottlenecks are and how are your Cloud-Native applications working. 
+From the end user point of view, nothing has changed, besides the fact that they can now use **Camunda Operate** to understand in which step each proposal is at a given time. From the code perspective, the business logic required to define the steps is now delegated to the workflow engine, which enables non-technical people to gather valuable data about how the organization is working, where the bottlenecks are and how your Cloud-Native applications are working.  
 
-Having in a single place the state of all proposals can help organizers to prioritize other work or just make decisions to move things forward:
+Having the state of all proposals in a single place can help organizers to prioritize other work, or just make decisions to move things forward:
 
 <img src="workshop-imgs/57-quick-overview-of-state.png" alt="Cluster Details" width="700px">
 
-In the screenshot above, it is clear that 2 proposals are still waiting for a decision, 2 proposals were approved and 1 rejected. 
-Remember that you can drill down to each individual workflow instance for more details, for example, how much time a proposal has been waiting for a decision:
+In the screenshot above, it is clear that 2 proposals are still waiting for a decision, 2 proposals were approved and 1 was rejected. 
+Remember that you can drill down into each individual workflow instance for more details, for example, how much time a proposal has been waiting for a decision:
 
 <img src="workshop-imgs/58-waiting-for-decision.png" alt="Cluster Details" width="700px">
 
-Based on the data that the workflow engine is collecting from the workflow's executions, you can understand better where the bottlenecks are or if there are simple things that can be done to improve how the organization is dealing with proposals. For this example, you can say that this workflow model represent 100% the steps required to accept or reject a proposal, in some way this explains to non-technical people the steps that the application is executing under the covers. 
+Based on the data that the workflow engine is collecting from the workflow's executions, you can understand better where the bottlenecks are or if there are simple things that can be done to improve how the organization is dealing with proposals. For this example, you can say that this workflow model represents 100% of the steps required to accept or reject a proposal, in some way this explains to non-technical people the steps that the application is executing under the hood. 
 
-Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization needs. 
+Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization's needs.  
 
-If you made it this far, **Well Done!!! you have now orchestrated your microservices interactions using a workflow engine!** :tada: :tada:
+If you made it this far, **Well Done!!! You have now orchestrated your microservices interactions using a workflow engine!** :tada: :tada:
 
 **Extras**
 Here are some extras that you might be interested in, to expand what you have learnt so far:
@@ -660,7 +660,7 @@ There are tons of options and challenges to solve in the Cloud-Native space, you
 
 
 # Thanks to all contributors
-- [MCruzDev1]()
-- [Ray Tsang]()
-- 
+- [MCruzDev1]() for refactoring the services to use databases, adding tests and helping everywhere by testing this workshop steps
+- [Ray Tsang]() for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
+- [Charley Mann]() for being awesome and providing loads of corrections and suggestions
 
