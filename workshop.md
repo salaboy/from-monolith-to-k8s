@@ -623,11 +623,31 @@ Becuase the workflow model is now in charge of the sequence of interactions, you
 If you made it this far, **Well Done!!! You have now orchestrated your microservices interactions using a workflow engine!** :tada: :tada:
 
 **Extras**
+
 Here are some extras that you might be interested in, to expand what you have learnt so far:
 
 <details>
   <summary>Update the workflow model to use the newly introduced `Speakers Service` (Click to Expand)</summary>
-TBD
+Imagine the situation where the organizers of the conference want to change the flow of actions required to approve an incoming proposal. They want to make sure that before publishing any session to the agenda, speakers confirm and commit with the participation in the event, to avoid confusions. This change requires, sending an email to the approved proposals author with a link to confirm that they are committed to participate in the event. Only after receiving this confirmation, the proposal can be published into the live agenda. 
+    
+You can now go ahead and update the workflow model created by the `C4P Service` in Version 3 of the application. This can be done by uploading a new model from the **Camunda Cloud** BPMN Diagrams tab, as you did for Version 2. 
+
+Create a new Diagram and name it `c4p`, then hit **Import Diagram**:
+<img src="workshop-imgs/71-new-diagram-c4p.png" alt="Cluster Details" width="700px">
+
+Select the file called `c4p-orchestration-with-speakers.bpmn` and click **Open**
+The new diagram should look like this: 
+
+<img src="workshop-imgs/72-new-diagram-imported-speaker.png" alt="Cluster Details" width="700px">
+
+Now you can hit **Save and Deploy** to generate a new version in **Camunda Operate**:
+
+<img src="workshop-imgs/73-hit-save-and-deploy.png" alt="Cluster Details" width="700px">
+
+In **Camunda Operate** you can now see Version 2 of the `Call for Proposals` workflow model
+
+<img src="workshop-imgs/74-speakers-confirmation-v2-in-operate.png" alt="Cluster Details" width="700px">
+
 </details>
 
 <details>
