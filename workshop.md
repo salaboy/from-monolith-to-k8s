@@ -670,7 +670,7 @@ You can manually submit the speaker confirmation by copying the `curl` command t
 
 <img src="workshop-imgs/76-submit-speaker-confirmation.png" alt="Cluster Details" width="700px">
 
-You have changed the steps to approve and publish a new proposal to the agenda. :tada: :tada:
+If you made it this far, **you have changed the steps to approve and publish a new proposal to the agenda.** :tada: :tada:
 You applied the change and it is clear, for technical and non-technical users, how the application was working with Version 1 of the workflow model and how it is working now with Version 2. 
 
 More advanced setups, can include choosing between different version of these models. There is no restriction on always using the latest available version. 
@@ -720,6 +720,8 @@ In the next screenshot you can see the workflow model instance audit log, where 
 
 Remember, that because all this data is already stored in ElasticSearch, reporting and analytics on what's the average number of times that these notifications are sent can help stakeholders to better plan, in this case maybe they might need to hire more reviewers if approving/rejecting proposals under 3 days is core for their organization. 
 
+If you made it this far, **you managed to schedule a distributed timer, that is highly available and it will be autmatically garbage collected when it is not needed anymore by just setting it up in your workflow model.** :rocket: 
+
 </details>
 <details>
   <summary>Make the application fail to see how incidents are reported into Camunda Operate (Click to Expand)</summary>
@@ -754,6 +756,8 @@ From here, you can drill-down to see the actual technical problem that is happen
 
 Incedents are a way to bubble up technical errors that are happening inside your workflows to non-technical users, who needs to understand how these issues are affecting the business and the organization. 
 
+If you made it this far, **you are now aware how important is to report as soon as possible low level incidents to other departments and how collaboration can help to quickly remidiate these kind of situations** :dancer: :dancer:
+
 </details>
 
 
@@ -774,6 +778,15 @@ There are tons of options and challenges to solve in the Cloud-Native space, you
 
 - **Adding Single Sign-On**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
 
+# Sum Up
+
+If you made it this far, you are a **Cloud Warrior**! :suspect: :godmode: :feelsgood:
+
+It has been said before, "practice makes perfection" and I hope that you manage to get your hands dirty with **Kubernetes** and `kubectl`, **Helm**, **Knative** and **Camunda Cloud**. I know that there are tons of other things that you can do with these applications, and I hope that with some community collaboration we all can keep evolving this application to serve as a playground to explore new technologies in the Cloud-Native ecosystem. 
+
+Feedback is highly appreciated, feel free to drop me a [DM in Twitter](http://twitter.com/salaboy) or create an issue in this repository if you have comments, suggestions or if you want to contribute to make these examples better for everyone. I encourage people to give this workshop to their teams, if you do so, please leave a comment or send a PR with a link to where you used it. 
+
+Thank you all, but specially to those people who helped with feedback, code and suggestions. :blue_heart: :purple_heart: :heart:
 
 
 # Thanks to all contributors
