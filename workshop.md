@@ -790,7 +790,7 @@ Thank you all, but specially to those people who helped with feedback, code and 
 
 
 # Thanks to all contributors
-- [MCruzDev1]() for refactoring the services to use databases, adding tests and helping everywhere by testing this workshop steps
-- [Ray Tsang]() for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
-- [Charley Mann]() for being awesome and providing loads of corrections and suggestions
+- [Matheus Cruz](http://twitter.com/MCruzDev1) for being awesme and refactoring the services to use databases, add tests and helping everywhere by testing this workshop steps
+- [Ray Tsang](http://twitter.com/saturnism) for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
+- [Charley Mann](http://twitter.com/charley_mann) for being awesome and providing loads of corrections and suggestions
 
