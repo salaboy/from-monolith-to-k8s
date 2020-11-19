@@ -823,25 +823,25 @@ Thank you all, but specially to those people who helped with feedback, code and 
 Here you can find the repositories which host the source code for each service and some links to tools and projects that you might find useful:
 
 - **Services Source Code**
-  - [API Gateway]()
+  - [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
   - REST Services (For Version 1 and Version 2) 
-    - [C4P Service REST]()
-    - [Agenda Service REST]()
-    - [Email Service REST]()
+    - [C4P Service REST](https://github.com/salaboy/fmtok8s-c4p-rest)
+    - [Agenda Service REST](https://github.com/salaboy/fmtok8s-agenda-rest)
+    - [Email Service REST](https://github.com/salaboy/fmtok8s-email-rest)
   - Using Zeebe Pub/Sub
-    - [C4P Service]()
-    - [Agenda Service]()
-    - [Email Service]()
-    - [Speakers Service]()
+    - [C4P Service](https://github.com/salaboy/fmtok8s-c4p)
+    - [Agenda Service](https://github.com/salaboy/fmtok8s-agenda)
+    - [Email Service](https://github.com/salaboy/fmtok8s-email)
+    - [Speakers Service](https://github.com/salaboy/fmtok8s-speakers)
 - **Helm Charts for Applications**
-  - [Version 1]()
-  - [Version 2]()
-  - [Version 3]()
+  - [Version 1](https://github.com/salaboy/fmtok8s-app)
+  - [Version 2](https://github.com/salaboy/fmtok8s-app-v2)
+  - [Version 3](https://github.com/salaboy/fmtok8s-app-v3)
 - **Frameworks and Tools**
- - [CloudEvents]()
- - [Spring Cloud Gateway]()
- - [Spring Cloud Contracts]()
- - [Helm]()
- - [Knative]()
- - [Jenkins X]()
+ - [CloudEvents](http://cloudevents.io)
+ - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway)
+ - [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract)
+ - [Helm](http://helm.sh)
+ - [Knative](http://knative.dev)
+ - [Jenkins X](http://jenkins-x.io)
 
