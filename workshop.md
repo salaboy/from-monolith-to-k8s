@@ -838,6 +838,7 @@ Here you can find the repositories which host the source code for each service a
   - [Version 2](https://github.com/salaboy/fmtok8s-app-v2)
   - [Version 3](https://github.com/salaboy/fmtok8s-app-v3)
 - **Frameworks and Tools**
+ - [Zeebe](http://zeebe.io)
  - [CloudEvents](http://cloudevents.io)
  - [Spring Cloud Gateway](https://spring.io/projects/spring-cloud-gateway)
  - [Spring Cloud Contract](https://spring.io/projects/spring-cloud-contract)
