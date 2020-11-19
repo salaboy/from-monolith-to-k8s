@@ -102,14 +102,14 @@ Then use the **Run in Cloud Shell** button to connect
 
 [Create a Camunda Cloud Account and Cluster](https://accounts.cloud.camunda.io/signup?campaign=workshop) <- You must to use this link, even if you have another Camunda Cloud Account.
 
-**Fill the form** to create a new account, you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
+**Fill the form** to create a new account - you will need to use your email to confirm your account creation. You will be using Camunda Cloud for **Microservices Orchestration** ;)  
 <img src="workshop-imgs/13-create-camunda-cloud-account.png" alt="Create Camunda Cloud Account" width="700px">
 
-Check your inbox to **Activate your account** and follow the links to login, after confirmation:
+Check your inbox to **activate your account** and follow the links to login, after confirmation:
 
 <img src="workshop-imgs/14-activate-your-account.png" alt="Activate" width="700px">
 
-**Once activated, Login with your credentials** and let's create a new **Zeebe Cluster**, you will be using this cluster later on in the workshop, but it is better to set it up early on. 
+**Once activated, login with your credentials** and let's create a new **Zeebe cluster**, you will be using this cluster later on in the workshop, but it is better to set it up early on. 
 
 <img src="workshop-imgs/15-create-a-new-zeebe-cluster.png" alt="Create Cluster" width="700px">
 
@@ -117,7 +117,7 @@ Check your inbox to **Activate your account** and follow the links to login, aft
 
 <img src="workshop-imgs/16-call-it-my-cluster.png" alt="My Cluster" width="700px">
 
-Disregard, creating a model if you are asked to and just close the popup:
+Disregard and close this popup if you see it:
 
 <img src="workshop-imgs/17-disregard-creating-model.png" alt="Close popup" width="700px">
 
@@ -125,11 +125,11 @@ Your cluster is now being created:
 
 <img src="workshop-imgs/18-cluster-is-being-created.png" alt="Cluster is being created" width="700px">
 
-Make sure that you have followed the steps in [Setting up your Google Cloud account](#setting-up-your-google-cloud-account) and [Setting up your Camunda Cloud account](#setting-up-your-camunda-cloud-account), as both of these accounts needs to be ready to proceed to the next sections.
+Make sure that you have followed the steps in [Setting up your Google Cloud account](#google-cloud-account) and [Setting up your Camunda Cloud account](#camunda-cloud-account), as both of these accounts needs to be ready to proceed to the next section.
 
-**Let's switch back to Google Cloud to setup your Kubernetes Cluster to start deploying your Cloud-Native Applications!** :rocket:
+**Let's switch back to Google Cloud to setup your Kubernetes cluster, to start deploying your Cloud-Native Applications!** :rocket:
 
-# Checking your Kubernetes Cluster and installing Knative
+# Checking your Kubernetes cluster and installing Knative
 
 During this workshop, you will be using **Cloud Shell** to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
 
