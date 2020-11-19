@@ -79,7 +79,9 @@ gcloud container clusters create workshop \
 
 This can take a few minutes, so leave the Tab and move forward to **Camunda Cloud Account and Cluster** while the Kubernetes cluster is being created.
   
-**Extras**<details>
+**Extras**
+
+<details>
   <summary>Finding your Kubernetes Cluster in GCP (Click to Expand)</summary>
 
 If for some reason, you close the browser or you want to see where your Kubernetes clusters are inside GCP you can use the left-hand side menu:
@@ -159,7 +161,9 @@ Next step you will install **Knative Serving** and **Knative Eventing**.
 
 The Cloud-Native applications that you will deploy in later steps were built having Knative in mind. 
 
-**Extras**<details>
+**Extras**
+
+<details>
   <summary>What and Why Knative?</summary>
 
 [Knative](https://knative.dev/) is a project that provides higher-level abstractions to build robust Cloud-Native applications. Knative is currently split into two main components:
@@ -411,11 +415,14 @@ Now you can access the **Connection Information**:
 
 By clicking the button **Copy Kubernetes Secret** the command will be copied into your clipboard and you can paste it inside **Cloud Shell** inside Google Cloud.
 
+<img src="workshop-imgs/84-kubectl-get-secret-camunda-secret.png" alt="Cluster Details" width="700px">
+
+By running the previous command, you have created a new `Kubernetes Secret` that hosts the credentials for our applications to talk to Camunda Cloud. As shown, in the previous screenshot you can check that the `Kubernetes Secret` was created with: 
+
 ``` bash
-k create secret generic camunda-cloud-secret --from-literal=ZEEBE_ADDRESS=...
+k get secret
 ```
 
-By running the previous command, you have created a new `Kubernetes Secret` that hosts the credentials for our applications to talk to Camunda Cloud. 
 Now you are ready to install Version 2 of the application by running (again ignore the warnings):
 
 ``` bash 
