@@ -519,8 +519,10 @@ If you go ahead to the **Back Office** of the application and **approve** the pr
 
 <img src="workshop-imgs/44-approved-instance.png" alt="Cluster Details" width="700px">
 
+**Extras**
+
 <details>
-  <summary>**Extras**: Understanding different branches (Click to Expand)</summary>
+  <summary>Understanding different branches (Click to Expand)</summary>
 As you might notice, the previous workflow model will only work if you approve proposals, as the `Agenda Item Created` event is only emitted if the proposal is accepted. In order to also cover the case when you reject a proposal, you can deploy Version 2 of the workflow model, that describes these two branches for approving and rejecting proposals.
     
 In order to deploy the second version of the workflow model you follow the same steps as before  
@@ -705,11 +707,46 @@ It is important to understand, that as soon as the proposal is approved or rejec
 
 These contextual timer events (boundary events, in the BPMN spec) are extremely powerful to easily describe situations where reminders or time based actions needs to be schedule and triggered in the future. 
 
+In the next screenshot you can see the workflow model instance audit log, where multiple notifications were sent:
+
+<img src="workshop-imgs/83-multiple-notifications-triggered-in-instance.png" alt="Cluster Details" width="700px">
+
+Remember, that because all this data is already stored in ElasticSearch, reporting and analytics on what's the average number of times that these notifications are sent can help stakeholders to better plan, in this case maybe they might need to hire more reviewers if approving/rejecting proposals under 3 days is core for their organization. 
 
 </details>
 <details>
   <summary>Make the application fail to see how incidents are reported into Camunda Operate (Click to Expand)</summary>
-TBD
+
+When things go wrong, you want to find out as soon as possible. In Version 2 of the application, when you were observing the events emitted by the application, if something went wrong, events might never arrived, but in Version 3, because you are orchestrating the interactions, if something goes wrong with a service, the workflow engine can quickly notify you back so not only technical people is aware of the problem. 
+
+In this short section, you will make the `Agenda Service` fail by sending a payload that you know that will generate an exception.
+
+In the application submit a proposal with the following values:
+
+<img src="workshop-imgs/85-submit-fail-proposal.png" alt="Cluster Details" width="700px">
+
+Then in the Back Office, approve the proposal:
+
+<img src="workshop-imgs/86-approve-fail-proposal-backoffice.png" alt="Cluster Details" width="700px">
+
+Go to **Camunda Operate** and make sure that the `Call for Proposal` workflow is selected on the left-hand side menu, you should see a new incident:
+
+<img src="workshop-imgs/87-incident-reported-operate.png" alt="Cluster Details" width="700px">
+
+If you drill-down to the instance that is reporting the incident, you will find out some interesting details: 
+
+<img src="workshop-imgs/88-incident-instance-details.png" alt="Cluster Details" width="700px">
+
+You can see that the whole instance is marked as having a problem as well as the `Publish to Agenda` task. On the right-hand panel, you can also see the data that the workflow model had when it failed, which can help non-technical users to at least get in touch with the potential speaker to notify him/her about the ongoing issue.  
+
+On the top of the screen you can expand the incident report to find more about what is going on:
+
+<img src="workshop-imgs/89-incident-details-error.png" alt="Cluster Details" width="700px">
+
+From here, you can drill-down to see the actual technical problem that is happening, this can help non-technical users to communicate the error to technical teams. As you can see there is also a retry button in the `Operations` column, that can be used to solve issues when automatic retries had been exausted, but after fixing a technical problem, the operation can be retried.
+
+Incedents are a way to bubble up technical errors that are happening inside your workflows to non-technical users, who needs to understand how these issues are affecting the business and the organization. 
+
 </details>
 
 
