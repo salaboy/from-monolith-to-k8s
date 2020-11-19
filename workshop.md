@@ -131,11 +131,11 @@ Make sure that you have followed the steps in [Setting up your Google Cloud acco
 
 # Checking your Kubernetes cluster and installing Knative
 
-During this workshop, you will be using **Cloud Shell** to interact with your Kubernetes Cluster, this avoids you setting up tools in your local environment and it provides quick access to the cluster resources. 
+During this workshop, you will be using **Cloud Shell** to interact with your Kubernetes cluster. This avoids setting up tools in your local environment and provides quick access to the cluster resources.  
 
 **Cloud Shell** comes with pre-installed tools like: `kubectl` and `helm`. 
 
-Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you to create the following aliases:
+Because you will be using the `kubectl` and `helm` commands a lot during the next couple of hours we recommend you create the following aliases:
 
 ``` bash
 alias k=kubectl
@@ -173,7 +173,7 @@ For this workshop, I choose to use Knative because it provides a cloud provider 
 
 ### Installing Knative Serving
 
-If you have the previous aliases set up, you can copy the entire block and paste it Cloud Shell
+If you have the previous aliases set up, you can copy the entire block and paste it into Cloud Shell
 
 ``` bash
 k apply --filename https://github.com/knative/serving/releases/download/v0.18.0/serving-crds.yaml
@@ -197,6 +197,8 @@ You should see something like this:
 <img src="workshop-imgs/25-knative-serving-test.png" alt="KNative Serving Test" width="1000px">
 
 ### Installing Knative Eventing
+
+Copy the entire block and paste it into Cloud Shell:
 
 ``` bash
 k apply --filename https://github.com/knative/eventing/releases/download/v0.18.0/eventing-crds.yaml
@@ -222,21 +224,21 @@ You should see something like this:
 
 <img src="workshop-imgs/26-knative-eventing-test.png" alt="KNative Eventing Test" width="1000px">
 
-**Important**: if you see Error in the `imc-dispatcher***` pod try copy & pasting the previous `k apply..` commands again and check again. 
+**Important**: if you see Error in the `imc-dispatcher***` pod, try copy & pasting the previous `k apply..` commands again, and check again. 
 
 Now, **you have everything ready to deploy your Cloud-Native applications to Kubernetes**. :tada: :tada:
 
 # Version 1: Cloud-Native App
 
-In this section you will be deploying a Conference Cloud-Native application composed by 4 simple services. 
+In this section you will be deploying a Conference Cloud-Native application composed of 4 simple services. 
 
 <img src="workshop-imgs/microservice-architecture-for-k8s.png" alt="Architecture Diagram" width="700px">
 
 These services communicate between each other using REST calls.
 
-With Knative installed you can proceed to install the first version of the application. You will do this by using [**Helm**](http://helm.sh) a Kuberenetes Package Manager. As with every package manager you need to add a new `Helm Repository` where the **Helm packages/charts** for the workshop are stored. 
+With Knative installed, you can proceed to install the first version of the application. Do this by using [**Helm**](http://helm.sh) a Kuberenetes Package Manager. As with every package manager, you need to add a new `Helm Repository` where the **Helm packages/charts** for the workshop are stored.  
 
-You can do this by runnig the following commands: 
+You can do this by running the following commands: 
 
 ``` bash
 h repo add workshop http://chartmuseum-jx.35.222.17.41.nip.io
@@ -244,18 +246,18 @@ h repo update
 
 ```
 
-Now you are ready to install the application by just running the following command:
+Now you are ready to install the application by simply running the following command:
 ``` bash
 h install fmtok8s workshop/fmtok8s-app
 
 ```
-You should see something like this (ignore the warnings):
+You should see something like this (ignore the warnings!):
 
 <img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="1000px">
 
 The application [Helm Chart source code can be found here](https://github.com/salaboy/fmtok8s-app/).
 
-You can check that the application running with the following two commands:
+You can check that the application is running with the following two commands:
 
 - Check the pods of the running services with: 
 ``` bash
@@ -267,7 +269,7 @@ k get pods
 k get ksvc
 ```
 
-You should see that pods are being created or they are running and that the Knative Services were created, ready and have an URL:
+You should see that pods are being created or they are running and the Knative Services were created and have an URL:
 
 <img src="workshop-imgs/28-k-getpods-kgetksvc.png" alt="kubectl get pods and ksvcs" width="1000px">
 
@@ -282,7 +284,7 @@ Now you can go ahead and:
 
 <img src="workshop-imgs/backoffice-screen.png" alt="Conference BackOffice" width="500px">
 
-3) Check the email service to see the notification email sent to the potential speaker, this can be done with 
+3) Check the email service to see the notification email sent to the potential speaker, this can be done with: 
 ``` bash
 k get pods
 ```
@@ -291,24 +293,25 @@ Where you should see the Email Service pod:
 <img src="workshop-imgs/59-v1-get-pods-email-highlighted.png" alt="Conference BackOffice" width="1000px">
 
 And then you can tail the logs by running:
+
 ``` bash
 k logs -f fmtok8s-email-<YOUR POD ID> user-container
 ```
-You should see the service logs being tailed, you can exit/stop taling the logs with `CTRL+C`.
+You should see the service logs being tailed and you can exit/stop taling the logs with `CTRL+C`.
 
 <img src="workshop-imgs/60-email-service-spring-boot-started.png" alt="Conference BackOffice" width="1000px">
 
-And if you **approved** the submitted proposal you should also see something like this: 
+And if you **approved** the submitted proposal, you should also see something like this:  
 
 <img src="workshop-imgs/61-email-service-tail-logs-approved.png" alt="Conference BackOffice" width="1000px">
 
-4) If you approved the proposal, the proposal should pop up in the Agenda (main page) of the conference. 
+4) If you approved the proposal, it should pop up in the Agenda (main page) of the conference. 
 
 <img src="workshop-imgs/62-proposal-in-agenda.png" alt="Conference BackOffice" width="500px">
 
 If you made it this far, **you now have a Cloud-Native application running in a Kubernetes Managed service running in the Cloud!** :tada: :tada:
 
-Let's take a deeper look on what you just did in this section. 
+Let's take a closer look at what you just did in this section.  
 
 ## Understanding your application
 
