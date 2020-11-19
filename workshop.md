@@ -627,7 +627,8 @@ If you made it this far, **Well Done!!! You have now orchestrated your microserv
 Here are some extras that you might be interested in, to expand what you have learnt so far:
 
 <details>
-  <summary>Update the workflow model to use the newly introduced `Speakers Service` (Click to Expand)</summary>
+  <summary>Update the workflow model to use the newly introduced **Speakers Service** (Click to Expand)</summary>
+
 Imagine the situation where the organizers of the conference want to change the flow of actions required to approve an incoming proposal. They want to make sure that before publishing any session to the agenda, speakers confirm and commit with the participation in the event, to avoid confusions. This change requires, sending an email to the approved proposals author with a link to confirm that they are committed to participate in the event. Only after receiving this confirmation, the proposal can be published into the live agenda. 
     
 You can now go ahead and update the workflow model created by the `C4P Service` in Version 3 of the application. This can be done by uploading a new model from the **Camunda Cloud** BPMN Diagrams tab, as you did for Version 2. 
@@ -647,6 +648,24 @@ Now you can hit **Save and Deploy** to generate a new version in **Camunda Opera
 In **Camunda Operate** you can now see Version 2 of the `Call for Proposals` workflow model
 
 <img src="workshop-imgs/74-speakers-confirmation-v2-in-operate.png" alt="Cluster Details" width="700px">
+
+Now, if you submit and approve a proposal, the new workflow model will wait for the confirmation coming from the speaker. 
+
+<img src="workshop-imgs/77-waiting-for-speaker-conf.png" alt="Cluster Details" width="700px">
+
+If you tail the logs from the `Email Service` as you did before (`k get pods` and `k logs -f fmtok8s-email-<POD ID>`) you will see the the following email has been sent: 
+
+<img src="workshop-imgs/75-email-service-with-speakers-conf-link.png" alt="Cluster Details" width="700px">
+
+You can manually submit the speaker confirmation by copying the `curl` command to Cloud Shell. Notice that you need to replace the `API Gateway Service` URL, that you can find by running `k get ksvc` and look for the fmtok8s-api-gateway **Knative Service** URL. 
+
+<img src="workshop-imgs/76-submit-speaker-confirmation.png" alt="Cluster Details" width="700px">
+
+You have changed the steps to approve and publish a new proposal to the agenda. :tada: :tada:
+You applied the change and it is clear, for technical and non-technical users, how the application was working with Version 1 of the workflow model and how it is working now with Version 2. 
+
+More advanced setups, can include choosing between different version of these models. There is no restriction on always using the latest available version. 
+
 
 </details>
 
