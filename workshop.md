@@ -671,7 +671,41 @@ More advanced setups, can include choosing between different version of these mo
 
 <details>
   <summary>Update the workflow model to send notifications if a proposal is waiting for a decision for too long (Click to Expand)</summary>
-TBD
+
+Imagine that the organizers want to provide some kind of service level agreement to your potential speakers. Organizers wants to make sure that proposals are reviewed in the first 3 days after they arrive. If these proposals are not reviewed by day 2, an email needs to be sent to the group in charge of reviewing the proposals as a reminder. 
+
+Because these requirements are extremely common in every application, workflow engines provide out-of-the-box time-related triggers. 
+Once again, you will override our `C4P` workflow model. Go to **Camunda Cloud BPMN Diagrams Tab** and if you already have a model called `c4p` open it, if not create a new one.
+
+Once it is open hit `Import Diagram` and choose from the resources a file called `c4p-orchestration-with-notification.bpmn`, 
+
+<img src="workshop-imgs/78-choose-notification-workflow.png" alt="Cluster Details" width="700px">
+
+The imported diagram should look like this:
+
+<img src="workshop-imgs/79-workflow-model-with-notifications.png" alt="Cluster Details" width="700px">
+
+As you might notice, the highlighted section, shows a Timer Event attached to the `Decision Made` activity. This timer event will trigger based on a configured period and it will be only activated when the workflow model arrives to the `Decision Made` activity. Once the Timer Event is triggered, the `Notification to Committee` step will be executed. 
+
+Next, **Save and Deploy**
+
+<img src="workshop-imgs/81-save-and-deploy-notification-model.png" alt="Cluster Details" width="700px">
+
+Once the model its deployed you can switch to **Camunda Operate** and you will find a new version for the `Call for Proposals` workflow model:
+
+<img src="workshop-imgs/82-notif-workflow-in-operate.png" alt="Cluster Details" width="700px">
+
+If you submit a new proposal via the application user interface and once again tail the `Email Service` logs (with `k get pods` and `k logs -f fmtok8s-email-<POD ID>`) you should see the following output:
+
+<img src="workshop-imgs/80-reminder-email-service-log.png" alt="Cluster Details" width="700px">
+
+As you can see, the reminders are set to trigger every 15 seconds. This was set up to a very short period for you to see the logs, but it can be obviously changed to be days, months or years if needed. 
+
+It is important to understand, that as soon as the proposal is approved or rejected, the timer is not longer needed, and because the timer was attached to `Decision Made` activity in the workflow model, it will be stopped and garbage collected automaticailly. 
+
+These contextual timer events (boundary events, in the BPMN spec) are extremely powerful to easily describe situations where reminders or time based actions needs to be schedule and triggered in the future. 
+
+
 </details>
 <details>
   <summary>Make the application fail to see how incidents are reported into Camunda Operate (Click to Expand)</summary>
