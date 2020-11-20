@@ -75,7 +75,7 @@ gcloud container clusters create workshop \
       --scopes cloud-platform
 ```
 
-<img src="workshop-imgs/65-gke-created-in-cloud-shell.png" alt="GKE created in Cloud Shell" width="700px">
+<img src="workshop-imgs/65-gke-created-in-cloud-shell.png" alt="GKE created in Cloud Shell" width="1000px">
 
 This can take a few minutes, so leave the Tab and move forward to **Camunda Cloud Account and Cluster** while the Kubernetes cluster is being created.
   
@@ -615,7 +615,7 @@ An important change in Version 3 is that it doesn't use a REST-based communicati
 **Extras**
 <details>
   <summary>Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
-Zeebe, it is not interacting with your services REST endpoints, it is using its own [GRPC](https://grpc.io) based Pub/Sub mechanism to orchestrate these services. This requires your services to understand how to interchange messages with Zeebe which is hosted inside **Camunda Cloud**. Here are some links of the changes that were made between Version 1 of the services and Version 3. 
+Zeebe, it is not interacting with your services REST endpoints, it is using its own [GRPC](https://grpc.io) based Pub/Sub mechanism to orchestrate these services. This requires your services to understand how to interchange messages with Zeebe which is hosted inside **Camunda Cloud** . Here are some links of the changes that were made between Version 1 of the services and Version 3. 
 
 - [Zeebe Client Dependency](https://github.com/salaboy/fmtok8s-email/blob/8f009fc5f1dda36bb61eb565704d196363124233/pom.xml#L35): As you might have expected, a client is added to your services to interact with Camunda Cloud. There are multiple clients for all major programing languages. Here beacuse the service is Spring Boot based, there is a Spring Boot specific integration. 
 
@@ -788,6 +788,7 @@ This section includes a set of questions for you to experiment with and try to a
 - Would it make sense to produce **CloudEvents** from the workflow models? Why?
 - How and what would you evaluate when looking at orchestration tools (for example AWS Step Functions, Netflix Conductor, etc.)?
 - Would it be a good idea to add/represent explicitely User (Human) interactions into the workflow models? Why? What special charastericts and requirements do Human interactions usually involve? 
+- For the Time-Based actions (check the Extras), where would you look for how often the scheduled timer is scheduled to happen? 
 
 # Next Steps
 
