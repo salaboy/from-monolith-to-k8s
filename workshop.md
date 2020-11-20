@@ -41,11 +41,11 @@ Once the terms are accepted, it is **extremely important** that you select the c
 
 With the project selected, you can now open **Cloud Shell**
 
-<img src="workshop-imgs/63-google-cloud-home-cloud-shell.png" alt="Cloud Shell" height="700px">
+<img src="workshop-imgs/63-google-cloud-home-cloud-shell.png" alt="Cloud Shell" width="700px">
 
 You should see **Cloud Shell** at the bottom half of the screen, notice that you can resize it to make it bigger:
 
-<img src="workshop-imgs/64-cloud-shell-empty.png" alt="Cloud Shell" height="700px">
+<img src="workshop-imgs/64-cloud-shell-empty.png" alt="Cloud Shell" width="700px">
 
 The first step is to create a cluster to work with. You will create a Kubernetes cluster using **Google Kubernetes Engine**.
 
@@ -419,7 +419,7 @@ Now you can access the **Connection Information**:
 
 By clicking the button **Copy Kubernetes Secret** the command will be copied into your clipboard and you can paste it inside **Cloud Shell** inside Google Cloud.
 
-<img src="workshop-imgs/84-kubectl-get-secret-camunda-secret.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/84-kubectl-get-secret-camunda-secret.png" alt="Cluster Details" width="1000px">
 
 By running the previous command, you have created a new `Kubernetes Secret` that hosts the credentials for our applications to talk to Camunda Cloud. As shown, in the previous screenshot you can check that the `Kubernetes Secret` was created with: 
 
@@ -433,7 +433,7 @@ Now you are ready to install Version 2 of the application by running (again igno
 h install fmtok8s-v2 workshop/fmtok8s-app-v2
 ```
 
-<img src="workshop-imgs/29-helm-install-v2.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/29-helm-install-v2.png" alt="Cluster Details" width="1000px">
 
 You can check that all the services are up and running with the same two commands as before:
 
@@ -449,7 +449,7 @@ k get ksvc
 
 You should see something like this:
 
-<img src="workshop-imgs/30-k-get-pod-and-ksvc.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/30-k-get-pod-and-ksvc.png" alt="Cluster Details" width="1000px">
 
 Notice that now the **Zeebe CloudEvents Router** is running alongside the application services and is configured to use the Kubernetes Secret that was previously created to connect to **Camunda Cloud**.
 
@@ -464,7 +464,7 @@ k get triggers
 
 You should see an output like this: 
 
-<img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/31-k-get-triggers.png" alt="Cluster Details" width="1000px">
 
 Finally, even when **CloudEvents** are being routed to Camunda Cloud, you need to create a model that will consume the events that are coming from the application, so they can be correlated and visualized. 
 
@@ -600,11 +600,11 @@ h install fmtok8s-v3 workshop/fmtok8s-app-v3
 ```
 The ouput for this command should look familiar at this stage:
 
-<img src="workshop-imgs/53-installing-v3.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/53-installing-v3.png" alt="Cluster Details" width="1000px">
 
 Check that the Kubernetes Pods and the Knative Services are ready:
 
-<img src="workshop-imgs/54-checking-pods-ksvc-v3.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/54-checking-pods-ksvc-v3.png" alt="Cluster Details" width="1000px">
 
 When all the pods are ready (2/2) you can now access to the application. 
 
@@ -612,7 +612,8 @@ As you might have noticed, there is a new Knative Service and pod called **fmtok
 
 An important change in Version 3 is that it doesn't use a REST-based communication between services. This version lets the **[Zeebe](http://zeebe.io)** workflow engine inside **Camunda Cloud** define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
 
-**Extras**<details>
+**Extras**
+<details>
   <summary>Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
 @TODO: Add Links to Workers, and dependencies in projects, plus explain how the workers code is reusing the same code as rest endpoints internally. 
 </details>
@@ -677,11 +678,11 @@ Now, if you submit and approve a proposal, the new workflow model will wait for 
 
 If you tail the logs from the `Email Service` as you did before (`k get pods` and `k logs -f fmtok8s-email-<POD ID>`) you will see the the following email has been sent: 
 
-<img src="workshop-imgs/75-email-service-with-speakers-conf-link.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/75-email-service-with-speakers-conf-link.png" alt="Cluster Details" width="1000px">
 
 You can manually submit the speaker confirmation by copying the `curl` command to Cloud Shell. Notice that you need to replace the `API Gateway Service` URL, that you can find by running `k get ksvc` and look for the fmtok8s-api-gateway **Knative Service** URL. 
 
-<img src="workshop-imgs/76-submit-speaker-confirmation.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/76-submit-speaker-confirmation.png" alt="Cluster Details" width="1000px">
 
 If you made it this far, **you have changed the steps to approve and publish a new proposal to the agenda.** :tada: :tada:
 You applied the change and it is clear, for technical and non-technical users, how the application was working with Version 1 of the workflow model and how it is working now with Version 2. 
@@ -719,7 +720,7 @@ Once the model is deployed you can switch to **Camunda Operate** and you will fi
 
 If you submit a new proposal via the application user interface and once again tail the `Email Service` logs (with `k get pods` and `k logs -f fmtok8s-email-<POD ID>`) you should see the following output:
 
-<img src="workshop-imgs/80-reminder-email-service-log.png" alt="Cluster Details" width="700px">
+<img src="workshop-imgs/80-reminder-email-service-log.png" alt="Cluster Details" width="1000px">
 
 As you can see, the reminders are set to trigger every 15 seconds. This was set up for a very short period for you to see the logs, but it can be obviously changed to be days, months or years if needed. 
 
@@ -819,6 +820,7 @@ Thank you all, but especially to those people who helped with feedback, code and
 - [Matheus Cruz](http://twitter.com/MCruzDev1) for being awesome and refactoring the services to use databases, add tests and helping everywhere by testing this workshop steps
 - [Ray Tsang](http://twitter.com/saturnism) for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
 - [Charley Mann](http://twitter.com/charley_mann) for being awesome and providing loads of corrections and suggestions
+- [Mary Thengvall](https://twitter.com/mary_grace) for being awesome and providing loads of corrections and suggestions
 
 # Sources and References
 
