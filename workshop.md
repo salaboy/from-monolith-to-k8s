@@ -776,6 +776,12 @@ If you made it this far, **you are now aware how important is to report low leve
 
 </details>
 
+You can uninstall Version 3 with:
+
+```
+h delete fmtok8s-v3 --no-hooks
+```
+
 ## Questions
 
 This section includes a set of questions for you to experiment with and try to answer. We recommend doing this after the live workshop. 
@@ -810,8 +816,6 @@ Here are some recommendations for futher exploring, improvements that can lead t
 - [CloudEvents Orchestration](https://github.com/salaboy/orchestrating-cloud-events) (Advanced): This is an extension to this workshop, using a different application. It goes further into Orchestrating Cloud Events with the Zeebe Workflow Engine. In this example, you can explore how the Workflow Engine can also produce Cloud Events, which allows you to keep your Services and Applications from knowing anything about the fact that they are being orchestrated since no dependencies will be added to your services, they will just emit and consume CloudEvents. This example also covers the use of WebSockets to forward CloudEvents to the Client Side (browser).
 
 - [RSocket for Streams](https://rsocket.io) (Advanced): Notifications and reactive user interfaces require so kind of push mechanism or bi-directional communication with the backends. RSocket comes to solve this problem. Introducing RSocket to work with the application and demostrate how this can be scaled is an interesting experiment that can be added to this applications. 
-
-
 
 
 # Sum Up
