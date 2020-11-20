@@ -396,7 +396,7 @@ Go to the **Camunda Cloud** console, click on your cluster to see your cluster d
 
 <img src="workshop-imgs/19-cluster-details.png" alt="Cluster Details" width="500px">
 
-Go to the **Clients** tab and then **Create a New Client**:
+Go to the **API** tab and then **Create a New Client**:
 
 <img src="workshop-imgs/21-create-cluster-client.png" alt="Cluster Details" width="500px">
 
@@ -501,7 +501,7 @@ Well done! You made it! Now everything is set up for routing and fowarding event
 
 In order to see how this is actually working you can use **Camunda Operate**, a dashboard included inside **Camunda Cloud** which allows you to understand how these models are being executed, where things are at a given time and to troubleshoot errors that might arise from your applications' daily operations.
 
-You can access **Camunda Operate** from your cluster details, inside the **Overview Tab**, clicking in the **View in Operate** link:
+You can access **Camunda Operate** from your cluster details, inside the **Overview Tab**, clicking in the **Launch** link right beside `Healty` status for **Operate**:
 
 <img src="workshop-imgs/39-cluster-details-operate-link.png" alt="Cluster Details" width="700px">
 
