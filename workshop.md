@@ -610,7 +610,7 @@ When all the pods are ready (2/2) you can now access to the application.
 
 As you might have noticed, there is a new Knative Service and pod called **fmtok8s-speakers**. You will use that service later on in one of the **Extras**. 
 
-An important change in Version 3 is that it doesn't use a REST-based communication between services. This version lets the **[Zeebe](http://zeebe.io)**, workflow engine inside **Camunda Cloud** to define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures.  
+An important change in Version 3 is that it doesn't use a REST-based communication between services. This version lets the **[Zeebe](http://zeebe.io)** workflow engine inside **Camunda Cloud** define the sequence and orchestrate the services interactions. **[Zeebe](http://zeebe.io)** uses a Pub/Sub mechanism to communicate with each service, which introduces automatic retries in case of failure and reporting incidents when there are service failures. 
 
 **Extras**<details>
   <summary>Changes required to let Zeebe communicate with our existing services (Click to Expand)</summary>
@@ -629,7 +629,7 @@ If you now click into the new workflow model, you can see what it looks like:
 If you submit a **new proposal** from the application user interface, this new workflow model is in charge of defining the order in which services are invoked. 
 From the end user point of view, nothing has changed, besides the fact that they can now use **Camunda Operate** to understand in which step each proposal is at a given time. From the code perspective, the business logic required to define the steps is now delegated to the workflow engine, which enables non-technical people to gather valuable data about how the organization is working, where the bottlenecks are and how your Cloud-Native applications are working.  
 
-Having the state of all proposals in a single place can help organizers to prioritize other work, or just make decisions to move things forward:
+Having the state of all proposals in a single place can help organizers to prioritize other work, or just make decisions to move things forward.
 
 <img src="workshop-imgs/57-quick-overview-of-state.png" alt="Cluster Details" width="700px">
 
@@ -638,7 +638,7 @@ Remember that you can drill down into each individual workflow instance for more
 
 <img src="workshop-imgs/58-waiting-for-decision.png" alt="Cluster Details" width="700px">
 
-Based on the data that the workflow engine is collecting from the workflow's executions, you can understand better where the bottlenecks are or if there are simple things that can be done to improve how the organization is dealing with proposals. For this example, you can say that this workflow model represents 100% of the steps required to accept or reject a proposal, in some way this explains to non-technical people the steps that the application is executing under the hood. 
+Based on the data that the workflow engine is collecting from the workflow's executions, you can understand better where the bottlenecks are or if there are simple things that can be done to improve how the organization is dealing with proposals. For this example, you can say that this workflow model represents 100% of the steps required to accept or reject a proposal. In some ways, this explains to non-technical people the steps that the application is executing under the hood. 
 
 Becuase the workflow model is now in charge of the sequence of interactions, you are free to change and adapt the workflow model to better suit your organization's needs.  
 
@@ -646,12 +646,12 @@ If you made it this far, **Well Done!!! You have now orchestrated your microserv
 
 **Extras**
 
-Here are some extras that you might be interested in, to expand what you have learnt so far:
+Here are some extras that you might be interested in to expand what you have learnt so far:
 
 <details>
   <summary>Update the workflow model to use the newly introduced **Speakers Service** (Click to Expand)</summary>
 
-Imagine the situation where the organizers of the conference want to change the flow of actions required to approve an incoming proposal. They want to make sure that before publishing any session to the agenda, speakers confirm and commit with the participation in the event, to avoid confusions. This change requires, sending an email to the approved proposals author with a link to confirm that they are committed to participate in the event. Only after receiving this confirmation, the proposal can be published into the live agenda. 
+Imagine the situation where the organizers of the conference want to change the flow of actions required to approve an incoming proposal. They want to make sure that before publishing any session to the agenda, speakers confirm and commit to their participation in the event, to avoid confusion. This change requires sending an email to the approved proposal's author with a link to confirm that they are committed to participate in the event. Only after receiving this confirmation can the proposal be published into the live agenda. 
     
 You can now go ahead and update the workflow model created by the `C4P Service` in Version 3 of the application. This can be done by uploading a new model from the **Camunda Cloud** BPMN Diagrams tab, as you did for Version 2. 
 
@@ -694,12 +694,12 @@ More advanced setups, can include choosing between different version of these mo
 <details>
   <summary>Update the workflow model to send notifications if a proposal is waiting for a decision for too long (Click to Expand)</summary>
 
-Imagine that the organizers want to provide some kind of service level agreement to your potential speakers. Organizers wants to make sure that proposals are reviewed in the first 3 days after they arrive. If these proposals are not reviewed by day 2, an email needs to be sent to the group in charge of reviewing the proposals as a reminder. 
+Imagine that the organizers want to provide some kind of service level agreement to your potential speakers. Organizers want to make sure that proposals are reviewed in the first 3 days after they arrive. If these proposals are not reviewed by day 2, an email needs to be sent to the group in charge of reviewing the proposals as a reminder. 
 
 Because these requirements are extremely common in every application, workflow engines provide out-of-the-box time-related triggers. 
-Once again, you will override our `C4P` workflow model. Go to **Camunda Cloud BPMN Diagrams Tab** and if you already have a model called `c4p` open it, if not create a new one.
+Once again, you will override our `C4P` workflow model. Go to **Camunda Cloud BPMN Diagrams Tab** and if you already have a model called `c4p` open it; if not, create a new one.
 
-Once it is open hit `Import Diagram` and choose from the resources a file called `c4p-orchestration-with-notification.bpmn`, 
+Once it is open, click `Import Diagram` and choose from the resources a file called `c4p-orchestration-with-notification.bpmn`, 
 
 <img src="workshop-imgs/78-choose-notification-workflow.png" alt="Cluster Details" width="700px">
 
@@ -707,13 +707,13 @@ The imported diagram should look like this:
 
 <img src="workshop-imgs/79-workflow-model-with-notifications.png" alt="Cluster Details" width="700px">
 
-As you might notice, the highlighted section, shows a Timer Event attached to the `Decision Made` activity. This timer event will trigger based on a configured period and it will be only activated when the workflow model arrives to the `Decision Made` activity. Once the Timer Event is triggered, the `Notification to Committee` step will be executed. 
+As you might notice, the highlighted section shows a Timer Event attached to the `Decision Made` activity. This timer event will trigger based on a configured period and it will be only activated when the workflow model arrives to the `Decision Made` activity. Once the Timer Event is triggered, the `Notification to Committee` step will be executed. 
 
 Next, **Save and Deploy**
 
 <img src="workshop-imgs/81-save-and-deploy-notification-model.png" alt="Cluster Details" width="700px">
 
-Once the model its deployed you can switch to **Camunda Operate** and you will find a new version for the `Call for Proposals` workflow model:
+Once the model is deployed you can switch to **Camunda Operate** and you will find a new version for the `Call for Proposals` workflow model:
 
 <img src="workshop-imgs/82-notif-workflow-in-operate.png" alt="Cluster Details" width="700px">
 
@@ -721,17 +721,17 @@ If you submit a new proposal via the application user interface and once again t
 
 <img src="workshop-imgs/80-reminder-email-service-log.png" alt="Cluster Details" width="700px">
 
-As you can see, the reminders are set to trigger every 15 seconds. This was set up to a very short period for you to see the logs, but it can be obviously changed to be days, months or years if needed. 
+As you can see, the reminders are set to trigger every 15 seconds. This was set up for a very short period for you to see the logs, but it can be obviously changed to be days, months or years if needed. 
 
-It is important to understand, that as soon as the proposal is approved or rejected, the timer is not longer needed, and because the timer was attached to `Decision Made` activity in the workflow model, it will be stopped and garbage collected automaticailly. 
+It is important to understand that as soon as the proposal is approved or rejected, the timer is no longer needed, and because the timer was attached to `Decision Made` activity in the workflow model, it will be stopped and garbage collected automaticailly. 
 
-These contextual timer events (boundary events, in the BPMN spec) are extremely powerful to easily describe situations where reminders or time based actions needs to be schedule and triggered in the future. 
+These contextual timer events ([boundary events](https://docs.camunda.io/docs/product-manuals/zeebe/bpmn-workflows/call-activities/call-activities/#boundary-events), in the BPMN spec) are extremely powerful to easily describe situations where reminders or time based actions needs to be scheduled and triggered in the future. 
 
 In the next screenshot you can see the workflow model instance audit log, where multiple notifications were sent:
 
 <img src="workshop-imgs/83-multiple-notifications-triggered-in-instance.png" alt="Cluster Details" width="700px">
 
-Remember, that because all this data is already stored in ElasticSearch, reporting and analytics on what's the average number of times that these notifications are sent can help stakeholders to better plan, in this case maybe they might need to hire more reviewers if approving/rejecting proposals under 3 days is core for their organization. 
+Remember that because all this data is already stored in ElasticSearch, reporting and analytics on the average number of times that these notifications are sent can help stakeholders to better plan. In this case, maybe they might need to hire more reviewers if approving/rejecting proposals under 3 days is core for their organization. 
 
 If you made it this far, **you managed to schedule a distributed timer, that is highly available and it will be autmatically garbage collected when it is not needed anymore by just setting it up in your workflow model.** :rocket: 
 
@@ -739,11 +739,11 @@ If you made it this far, **you managed to schedule a distributed timer, that is 
 <details>
   <summary>Make the application fail to see how incidents are reported into Camunda Operate (Click to Expand)</summary>
 
-When things go wrong, you want to find out as soon as possible. In Version 2 of the application, when you were observing the events emitted by the application, if something went wrong, events might never arrived, but in Version 3, because you are orchestrating the interactions, if something goes wrong with a service, the workflow engine can quickly notify you back so not only technical people is aware of the problem. 
+When things go wrong, you want to find out as soon as possible. In Version 2 of the application, when you were observing the events emitted by the application, if something went wrong, events might never arrive, but in Version 3, because you are orchestrating the interactions, if something goes wrong with a service, the workflow engine can quickly notify you so technical and non-technical people alike are aware of the problem. 
 
 In this short section, you will make the `Agenda Service` fail by sending a payload that you know that will generate an exception.
 
-In the application submit a proposal with the following values:
+In the application, submit a proposal with the following values:
 
 <img src="workshop-imgs/85-submit-fail-proposal.png" alt="Cluster Details" width="700px">
 
@@ -751,7 +751,7 @@ Then in the Back Office, approve the proposal:
 
 <img src="workshop-imgs/86-approve-fail-proposal-backoffice.png" alt="Cluster Details" width="700px">
 
-Go to **Camunda Operate** and make sure that the `Call for Proposal` workflow is selected on the left-hand side menu, you should see a new incident:
+Go to **Camunda Operate** and make sure that the `Call for Proposal` workflow is selected on the left-hand side menu. You should see a new incident:
 
 <img src="workshop-imgs/87-incident-reported-operate.png" alt="Cluster Details" width="700px">
 
@@ -759,68 +759,70 @@ If you drill-down to the instance that is reporting the incident, you will find 
 
 <img src="workshop-imgs/88-incident-instance-details.png" alt="Cluster Details" width="700px">
 
-You can see that the whole instance is marked as having a problem as well as the `Publish to Agenda` task. On the right-hand panel, you can also see the data that the workflow model had when it failed, which can help non-technical users to at least get in touch with the potential speaker to notify him/her about the ongoing issue.  
+You can see that the whole instance is marked as having a problem, in addition to the `Publish to Agenda` task. On the right-hand panel, you can also see the data that the workflow model had when it failed, which can help non-technical users to at least get in touch with the potential speaker to notify them about the ongoing issue.  
 
 On the top of the screen you can expand the incident report to find more about what is going on:
 
 <img src="workshop-imgs/89-incident-details-error.png" alt="Cluster Details" width="700px">
 
-From here, you can drill-down to see the actual technical problem that is happening, this can help non-technical users to communicate the error to technical teams. As you can see there is also a retry button in the `Operations` column, that can be used to solve issues when automatic retries had been exausted, but after fixing a technical problem, the operation can be retried.
+From here, you can drill-down to see the actual technical problem that is happening. This can help non-technical users to communicate the error to technical teams. As you can see there is also a retry button in the `Operations` column that can be used to solve issues when automatic retries had been exhausted, but after fixing a technical problem, the operation can be retried.
 
-Incedents are a way to bubble up technical errors that are happening inside your workflows to non-technical users, who needs to understand how these issues are affecting the business and the organization. 
+Incidents are a way to bubble up technical errors that are happening inside your workflows to non-technical users who need to understand how these issues are affecting the business and the organization. 
 
-If you made it this far, **you are now aware how important is to report as soon as possible low level incidents to other departments and how collaboration can help to quickly remidiate these kind of situations** :dancer: :dancer:
+If you made it this far, **you are now aware how important is to report low level incidents to other departments as soon as possible and how collaboration can help to quickly remidiate these kinds of situations** :dancer: :dancer:
 
 </details>
 
 ## Questions
 
-This section includes a set of questions for you to experiment and try to answer, we recommend doing this after the live workshop. 
+This section includes a set of questions for you to experiment with and try to answer. We recommend doing this after the live workshop. 
 
 - Would it make sense to produce **CloudEvents** from the workflow models? Why?
-- How and what would you evaluate when looking at orchestration tools? For example AWS Step Functions, Netflix Conductor, etc. 
-- Would it be a good idea to add/represent explicetely User (Human) interactions into the workflow models? Why? What special charastericts and requirements Human interactions usually involve? 
+- How and what would you evaluate when looking at orchestration tools (for example AWS Step Functions, Netflix Conductor, etc.)?
+- Would it be a good idea to add/represent explicitely User (Human) interactions into the workflow models? Why? What special charastericts and requirements do Human interactions usually involve? 
 
 # Next Steps
 
-There are tons of options and challenges to solve in the Cloud-Native space, you can use this workshop and applications as a playground to test new projects before adopting them for your applications. That is exactly the reason why these apps were built in such way. Here are some recommendations for futher exploring, improvements that can lead to contributions to these repositories for future workshops or just to serve as examples for the entire Kubernetes community:
+There are tons of options and challenges to solve in the Cloud-Native space. You can use this workshop and the applications you've built as a playground to test new projects before adopting them for your applications. That is exactly the reason why these apps were built in this way.
 
-- **Adding New Services**: how would you go about adding a new service to this applications? what tools would you need in order to be efficient? Try defining the main steps that you will need in order to add a new service. 
+Here are some recommendations for futher exploring, improvements that can lead to contributions to these repositories for future workshops or just to serve as examples for the entire Kubernetes community:
+
+- **Adding New Services**: How would you go about adding a new service to this applications? What tools would you need in order to be efficient? Try defining the main steps that you will need in order to add a new service. 
 
 - **Adding Tracing and Centralized Logging**: 
 
-- [Jenkins X](http://jenkins-x.io) &  [Tekton](http://tekton.dev): These applications and services were built using Jenkins X which provides CI/CD for Kubernetes and it uses [Tekton](http://tekton.dev) as the underlying pipeline engine. Both of these projects, Tekton and Jenkins X do and implement their own tools in a Kubernetes Native way (meaning that they follow kubernetes best practices and tap into the Kubernetes ecosystem to design and implement their own components). I strongly recommend you to check both of these projects, if you are planning to build, maintain and deploy multiple services in Kubernetes.
+- [Jenkins X](http://jenkins-x.io) &  [Tekton](http://tekton.dev): These applications and services were built using Jenkins X which provides CI/CD for Kubernetes and it uses [Tekton](http://tekton.dev) as the underlying pipeline engine. Both of these projects implement their own tools in a Kubernetes Native way (meaning that they follow Kubernetes best practices and tap into the Kubernetes ecosystem to design and implement their own components). I strongly recommend you to check out both of these projects, if you are planning to build, maintain and deploy multiple services in Kubernetes.
 
-- [External Secrets](https://github.com/external-secrets/kubernetes-external-secrets): External Secrets created by GoDaddy, provides a set of abstractions similarly to Knative to deal with Secrets Management in a Cloud Agnostic way. Configuring the Camunda Cloud Secrets directly in Google Cloud Secrets Manager would be a cleaner and more real solution. You can explore how External Secrets work and how adding External Secrets to this projects would work. 
+- [External Secrets](https://github.com/external-secrets/kubernetes-external-secrets): External Secrets, created by GoDaddy, provides a set of abstractions similar to Knative that allow you to deal with Secrets Management in a Cloud Agnostic way. Configuring the Camunda Cloud Secrets directly in Google Cloud Secrets Manager would be a cleaner and more real solution. You can explore how External Secrets work and how adding External Secrets to these projects would work. 
 
-- [CloudEvents Orchestration](https://github.com/salaboy/orchestrating-cloud-events): an extension to this workshop, using a different application goes further into Orchestrating Cloud Events with the Zeebe Workflow Engine. On this example, you can explore how the Workflow Engine can also produce Cloud Events, avoiding your Services and Applications knowing anything about the fact that they are being orchestrated (no dependencies added to your services, they will just emit and consume CloudEvents). This example also covers the use of WebSockets to forward CloudEvents to the Client Side (browser).
+- [CloudEvents Orchestration](https://github.com/salaboy/orchestrating-cloud-events): This is an extension to this workshop, using a different application. It goes further into Orchestrating Cloud Events with the Zeebe Workflow Engine. In this example, you can explore how the Workflow Engine can also produce Cloud Events, which allows you to keep your Services and Applications from knowing anything about the fact that they are being orchestrated since no dependencies will be added to your services, they will just emit and consume CloudEvents. This example also covers the use of WebSockets to forward CloudEvents to the Client Side (browser).
 
-- **Kafka as Knative Eventing Channel Provider**: Leveraging the power of the Knative Eventing abstractions, you can swap the Eventing Channel provider by Kafka, for a more realistic and robust tech stack and the application will just work. Notice that the application as it is configured here, uses an InMemory provider which is good only for development purposes. For installing [Kafka you might want to use the Helm Chart located here](https://bitnami.com/stack/kafka/helm) to follow the same approach that we are using for the application itself. 
+- **Kafka as Knative Eventing Channel Provider**: Leveraging the power of the Knative Eventing abstractions, you can swap the Eventing Channel provider to Kafka for a more realistic and robust tech stack and the application will just work. Notice that the application as it is configured here uses an InMemory provider, which is good only for development purposes. For installing Kafka you might want to use the [Helm Chart located here](https://bitnami.com/stack/kafka/helm) to follow the same approach that we are using for the application itself. 
 
-- **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintaining a Kafka installation if you can leverage the power of Google Pub/Sub. In theory, and in the same way as with Kafka, you should be able to just replace the Channel implementation and your application should work without any changes. 
+- **Google Pub/Sub as Knative Eventing Channel Provider**: If you are running in Google Cloud, why maintain a Kafka installation if you can leverage the power of Google Pub/Sub? In theory, you should be able to just replace the Channel implementation, in the same way as you did with Kafka, and your application should work without any changes. 
 
-- **Adding Single Sign-On and Identity Management**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **Identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that requires authentication? This tends to be such a common requirement, that adding Single Sign On to this example, migth be an excelent conttribution for someone who wants to learn in the process. 
+- **Adding Single Sign-On and Identity Management**: Looking at projects like [Dex](https://github.com/dexidp/dex), how would you deal with SSO and **identity management** for your applications? What changes do you need to implement in each service? How would you configure the API Gateway to redirect requests that require authentication? This tends to be such a common requirement that adding Single Sign On to this example might be an excellent contribution for someone who wants to learn in the process. 
 
 
 # Sum Up
 
 If you made it this far, you are a **Cloud Warrior**! :suspect: :godmode: :feelsgood:
 
-It has been said before, "practice makes perfection" and I hope that you manage to get your hands dirty with **Kubernetes** and `kubectl`, **Helm**, **Knative** and **Camunda Cloud**. I know that there are tons of other things that you can do with these applications, and I hope that with some community collaboration we all can keep evolving this application to serve as a playground to explore new technologies in the Cloud-Native ecosystem. 
+It has been said before, "practice makes perfect" and I hope that you managed to get your hands dirty with **Kubernetes** and `kubectl`, **Helm**, **Knative** and **Camunda Cloud**. I know that there are tons of other things that you can do with these applications, and I hope that with some community collaboration we all can keep evolving this application to serve as a playground to explore new technologies in the Cloud-Native ecosystem. 
 
-Feedback is highly appreciated, feel free to drop me a [DM in Twitter](http://twitter.com/salaboy) or create an issue in this repository if you have comments, suggestions or if you want to contribute to make these examples better for everyone. I encourage people to give this workshop to their teams, if you do so, please leave a comment or send a PR with a link to where you used it. 
+Feedback is highly appreciated, feel free to drop me a [DM in Twitter](http://twitter.com/salaboy) or create an issue in this repository if you have comments, suggestions or if you want to contribute to make these examples better for everyone. I encourage people to give this workshop to their teams. If you do so, please leave a comment or send a PR with a link to where you used it. 
 
-Thank you all, but specially to those people who helped with feedback, code and suggestions. :blue_heart: :purple_heart: :heart:
+Thank you all, but especially to those people who helped with feedback, code and suggestions. :blue_heart: :purple_heart: :heart:
 
 
 # Thanks to all contributors
-- [Matheus Cruz](http://twitter.com/MCruzDev1) for being awesme and refactoring the services to use databases, add tests and helping everywhere by testing this workshop steps
+- [Matheus Cruz](http://twitter.com/MCruzDev1) for being awesome and refactoring the services to use databases, add tests and helping everywhere by testing this workshop steps
 - [Ray Tsang](http://twitter.com/saturnism) for being awesome and facilitating GCP accounts and helping me to set up 60+ clusters! 
 - [Charley Mann](http://twitter.com/charley_mann) for being awesome and providing loads of corrections and suggestions
 
 # Sources and References
 
-Here you can find the repositories which host the source code for each service and some links to tools and projects that you might find useful:
+Here you can find the repositories which host the source code for each service as well as some links to tools and projects that you might find useful:
 
 - **Services Source Code**
   - [API Gateway](https://github.com/salaboy/fmtok8s-api-gateway)
