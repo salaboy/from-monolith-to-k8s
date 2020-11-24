@@ -60,20 +60,36 @@ $ helm repo add external-secrets https://godaddy.github.io/kubernetes-external-s
 $ helm install external-secrets/kubernetes-external-secrets
 ```
 
-This requires you to create the following secrets in your secrets manager:
-- zeebe-address
-- zeebe-client-id
-- zeebe-client-secret
+This requires you to create the following secrets in your cluster:
 
-(if you are running outside of a Cloud Provider you can install Vault using Helm as well -> [https://www.vaultproject.io/docs/platform/k8s/helm](https://www.vaultproject.io/docs/platform/k8s/helm))
+But before you need [Create a Camunda Cloud Account and Cluster](https://github.com/salaboy/from-monolith-to-k8s/blob/master/workshop.md#camunda-cloud-account)
 
+Creating an object Secret with Camunda Secrets:
+
+```
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: camunda-cloud-secret
+  stringData:
+    ZEEBE_ADDRESS: <YOUR-ZEEBE-ADDRESS>
+    ZEEBE_CLIENT_ID: <YOUR-ZEEBE-CLIENT-ID>
+    ZEEBE_CLIENT_SECRET: <YOUT-CLIENT-SECRET>
+    ZEEBE_AUTHORIZATION_SERVER_URL: https://login.cloud.camunda.io/oauth/token
+```
+
+Save as fmtok8s-secret.yaml and apply:
+
+```
+ $ kubectl apply -f ./fmtok8s-secret.yaml
+```
 
 Then you can install all the application services:
 ```
 $ helm install frontend fmtok8s/fmtok8s-api-gateway
-$ helm install agenda fmtok8s/fmtok8s-agenda
-$ helm install c4p fmtok8s/fmtok8s-c4p
-$ helm install email fmtok8s/fmtok8s-email
+$ helm install agenda fmtok8s/fmtok8s-agenda --set "externalSecretForZeebe=true"
+$ helm install c4p fmtok8s/fmtok8s-c4p --set "externalSecretForZeebe=true"
+$ helm install email fmtok8s/fmtok8s-email --set "externalSecretForZeebe=true"
 ```
 
 Once all the services are installed you can use `kubectl port-forward` to access the website:
