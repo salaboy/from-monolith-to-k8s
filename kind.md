@@ -14,6 +14,19 @@ kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
 - role: worker
 - role: worker
 - role: worker
@@ -22,6 +35,8 @@ EOF
 
 The cluster that you are creating will have 4 nodes, 3 workers and a control plane. 
 This is to simulate a real cluster with a set of machines or virtual machines. 
+Notice that you are also setting up an ingress controller and some port-mappings in order to be able to route traffic from your laptop to the cluster.
+
 
 ![KIND Cluster creation](imgs/kind-cluster-creation.png)
 
@@ -42,6 +57,24 @@ kubectl get nodes -owide
 
 As you can see,  your Kubernetes Cluster is composed by 4 nodes and one of those is the control plane. 
 
+Finally, you will use NGINX Ingress Controller ([more detailed instructions can be found here](https://kind.sigs.k8s.io/docs/user/ingress/), this requires you to install it by running the following command:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+```
+
+![KIND install NGINX](imgs/kind-install-nginx.png)
+
+As a side note, you can check where this Ingress Controller is running in your cluster by running:
+
+```
+kubectl get pods -n ingress-nginx -owide
+```
+
+![KIND ingress controller in control plane node](imgs/kind-ingress-control-plane.png)
+
+As you might guessed, the Ingress Controller was installed in the Control Plane node. 
+
 Congrats your Cluster is up and running and you can connect with `kubectl`! 
 
 ## Installing the application
@@ -50,8 +83,8 @@ Now you are ready to install the application.
 You are going to install the application using Helm, a package manager for Kubernetes Applications. Helm allows you to install a complex Cloud-Native application and 3rd party software with a single command line. In order to install Helm Charts (packages/applications) you can add new repositories where your applications are stored. For java developers, these repositories are like Maven Central, Nexus or Artifactory. 
 
 ```
-h repo add dev http://chartmuseum-jx.35.222.17.41.nip.io
-h repo update
+helm repo add dev http://chartmuseum-jx.35.222.17.41.nip.io
+helm repo update
 ```
 
 The previous two lines added a new repository to your Helm installation called `dev`, the second one fetched a file describing all the available packages and their versions in each repo that you have registered. 
@@ -73,6 +106,8 @@ Chart Deployed: fmtok8s-app - 0.0.82
 Release Name: app
 
 ```
+
+![KIND Helm install](imgs/kind-helm-install.png)
 
 Once the application is deployed, containers will need to be downloaded to your laptop in order to run, this can take a while. You can monitor the progress by listing all the pods running in your cluster, once again, using the `-owide` flag to get more information:
 
