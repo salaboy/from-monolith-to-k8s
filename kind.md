@@ -109,6 +109,14 @@ Release Name: app
 
 ![KIND Helm install](imgs/kind-helm-install.png)
 
+This creates a Helm Release, which basically means that the application has one instance. With Helm you can deploy multiple instances of the application if you want to. You can list Helm releases by running:
+
+```
+helm list
+```
+
+![KIND Helm list releases](imgs/kind-helm-list.png)
+
 Once the application is deployed, containers will need to be downloaded to your laptop in order to run, this can take a while. You can monitor the progress by listing all the pods running in your cluster, once again, using the `-owide` flag to get more information:
 
 ```
