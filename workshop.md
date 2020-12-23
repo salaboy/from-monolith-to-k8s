@@ -253,10 +253,29 @@ h repo update
 ```
 
 Now you are ready to install the application by simply running the following command:
-``` bash
-h install fmtok8s workshop/fmtok8s-app
-
 ```
+cat <<EOF | h install fmtok8s workshop/fmtok8s-app --values=-
+fmtok8s-api-gateway:
+  knativeDeploy: true
+  env:
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+
+fmtok8s-agenda-rest:
+  knativeDeploy: true
+fmtok8s-c4p-rest:
+  knativeDeploy: true
+  env:
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+fmtok8s-email-rest:
+  knativeDeploy: true
+EOF  
+```
+The previous command is just using `helm` to install a chart called `workshop/fmtok8s-app` using the configuration parameters above to configure the services to use Knative.  
+
+
 You should see something like this (ignore the warnings!):
 
 <img src="workshop-imgs/27-helm-repo-add-update-install-v1.png" alt="Helm install" width="1000px">
