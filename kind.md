@@ -135,4 +135,22 @@ You can now go ahead and `Submit a Proposal`, go to the `Back Office` and `Appro
 
 ## Inspecting the application with `kubectl`
 
+Ok, if you have been using Kubernetes for a while you probably know all about `kubectl` and because this version of the application is using native Kubernetes Deployments and Services, you can inspect and troubleshoot these Kubernetes resources using `kubectl`.
+
+Usually, instead of just looking at the Pods that are running, in order to understand and operate the application you will be looking at Services and Deployments.
+
+Let's start with Deployments. Listing Deployments with:
+
+```
+kubectl get deployments
+```
+![KIND Get Deployments](kindimgs/kind-kubectl-get-deploy.png)
+
+And you can describe in more detail each deployment with: 
+
+```
+kubectl describe deployment app-fmtok8s-api-gateway
+```
+
+![KIND Describe Deployment API Gateway](kindimgs/kind-kubectl-descr-deploy.png)
 
