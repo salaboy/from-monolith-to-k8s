@@ -219,3 +219,5 @@ AS you can see, `Ingress`es also uses `Service`s name to route traffic. Also in 
 With `Ingress`es you can configure a single entry-point and use path based routing to redirect traffic to each service that you need to expose. Notice that Ingress rules are pretty simple and you shouldn't add any business logic at this level. 
 
 
+## Breaking the application
+
