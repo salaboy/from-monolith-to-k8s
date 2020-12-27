@@ -174,6 +174,18 @@ These `ReplicaSet` objects are fully managed by the `Deployment` resource and us
 
 `Deployment`s per se doesn't expose your containers to other container or outside the cluster, for exposing your containers, meaning to enable clients to connect to them, you need to use a Kubernetes `Service` resource. Each application service, defines this `Service` resource, so other services and clients can connect to them. In Kubernetes, `Service`s will be in charge of routing traffic to your application containers. These `Service`s represent a logical name that you can use to abstract where your containers are running. If you have multiple replicas of your containers, the `Service` resource will be in charge of load balance the traffic among all the replicas. 
 
+You can list all the services by running:
 
+```
+kubectl get services
+```
 
+![KIND Get Services](kindimgs/kind-kubectl-get-svc.png)
 
+And you can also describe a `Service` with:
+
+```
+kubectl describe service fmtok8s-api-gateway
+```
+
+![KIND Get Services](kindimgs/kind-kubectl-descr-svc.png)
