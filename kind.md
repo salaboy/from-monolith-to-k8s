@@ -195,3 +195,27 @@ kubectl describe service fmtok8s-api-gateway
 By using `Service`s, if your application service needs to send a request to any other service it can use the Kubernetes `Service`s name and port, which in most cases, as in this example, if you are using `HTTP` requests you can use port `80`, leaving the need to only use the `Service` name. 
 
 If you look at the [source code of the services](https://github.com/salaboy/fmtok8s-c4p-rest/blob/main/src/main/java/com/salaboy/conferences/c4p/rest/services/EmailService.java#L14), you will see that HTTP requests are created against the service name, no IP addresses or Ports are needed. 
+
+Finally, if you want to expose your `Service`s outside of the Kubernetes Cluster, you need an `Ingress`. As the name repesent, this Kubernetes resource is in charge of routing traffic from outside the cluster to services that are inside the cluster. Usually, you will not expose multiple services, as you want to limit the entry-points for your applications. 
+
+You can get all the defined ingress by running:
+
+```
+kubectl get ingress
+```
+
+![KIND Get Ingress](kindimgs/kind-kubectl-get-ingress.png)
+
+And then you can describe the `Ingress` resource in the same way as you did with other resource types:
+
+```
+kubectl describe ingress frontend
+```
+
+![KIND Get Ingress](kindimgs/kind-kubectl-descr-ingress.png)
+
+AS you can see, `Ingress`es also uses `Service`s name to route traffic. Also in order for this to work you need to have an Ingress Controller, as we installed when we created the KIND Cluster. 
+
+With `Ingress`es you can configure a single entry-point and use path based routing to redirect traffic to each service that you need to expose. Notice that Ingress rules are pretty simple and you shouldn't add any business logic at this level. 
+
+
