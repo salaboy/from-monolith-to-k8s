@@ -129,8 +129,10 @@ You need to pay attention to the `READY` and `STATUS` columns, where `1/1` in th
 
 Notice that pods can be scheduled in different nodes in the `NODE` column, this is Kubernetes using the resources available in the cluster in an efficient way.
 
-Finally, because the application contains an Ingress definition
+Finally, because the application contains an Ingress definition ([you can find it here](https://github.com/salaboy/fmtok8s-app/blob/master/charts/fmtok8s-app/templates/ingress.yaml)) you can access the application by pointing your browser to `http://localhost`
 
-## 
+You can now go ahead and `Submit a Proposal`, go to the `Back Office` and `Approve` or `Reject` each submitted proposal. Approved proposals will appear in the `Main Page`. 
+
+## Inspecting the application with `kubectl`
 
 
