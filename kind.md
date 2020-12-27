@@ -172,4 +172,8 @@ kubectl get replicaset
 
 These `ReplicaSet` objects are fully managed by the `Deployment` resource and usually you shouldn't need to deal with them. `ReplicaSet`s are important when dealing with [**Rolling Upgrades**, you can find more information about this topic here](https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/)
 
-`Deployment`s per se doesn't expose your containers to other container 
+`Deployment`s per se doesn't expose your containers to other container or outside the cluster, for exposing your containers, meaning to enable clients to connect to them, you need to use a Kubernetes `Service` resource. Each application service, defines this `Service` resource, so other services and clients can connect to them. In Kubernetes, `Service`s will be in charge of routing traffic to your application containers. These `Service`s represent a logical name that you can use to abstract where your containers are running. If you have multiple replicas of your containers, the `Service` resource will be in charge of load balance the traffic among all the replicas. 
+
+
+
+
