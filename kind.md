@@ -38,14 +38,14 @@ This is to simulate a real cluster with a set of machines or virtual machines.
 Notice that you are also setting up an ingress controller and some port-mappings in order to be able to route traffic from your laptop to the cluster.
 
 
-![KIND Cluster creation](imgs/kind-cluster-creation.png)
+![KIND Cluster creation](kindimgs/kind-cluster-creation.png)
 
 In order to connect your `kubectl` CLI tool with this newly created you might need to run:
 
 ```
 kubectl cluster-info --context kind-dev
 ```
-![KIND Cluster Connect](imgs/kind-kubectl-connect.png)
+![KIND Cluster Connect](kindimgs/kind-kubectl-connect.png)
 
 Once you connected with the cluster you can start running commands against the cluster. For example you can check the cluster nodes by running:
 
@@ -53,7 +53,7 @@ Once you connected with the cluster you can start running commands against the c
 kubectl get nodes -owide
 ```
 
-![KIND Get Nodes oWide](imgs/kind-kubectl-get-nodes.png)
+![KIND Get Nodes oWide](kindimgs/kind-kubectl-get-nodes.png)
 
 As you can see,  your Kubernetes Cluster is composed by 4 nodes and one of those is the control plane. 
 
@@ -63,7 +63,7 @@ Finally, you will use NGINX Ingress Controller ([more detailed instructions can 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
-![KIND install NGINX](imgs/kind-install-nginx.png)
+![KIND install NGINX](kindimgs/kind-install-nginx.png)
 
 As a side note, you can check where this Ingress Controller is running in your cluster by running:
 
@@ -71,7 +71,7 @@ As a side note, you can check where this Ingress Controller is running in your c
 kubectl get pods -n ingress-nginx -owide
 ```
 
-![KIND ingress controller in control plane node](imgs/kind-ingress-control-plane.png)
+![KIND ingress controller in control plane node](kindimgs/kind-ingress-control-plane.png)
 
 As you might guessed, the Ingress Controller was installed in the Control Plane node. 
 
@@ -107,7 +107,7 @@ Release Name: app
 
 ```
 
-![KIND Helm install](imgs/kind-helm-install.png)
+![KIND Helm install](kindimgs/kind-helm-install.png)
 
 This creates a Helm Release, which basically means that the application has one instance. With Helm you can deploy multiple instances of the application if you want to. You can list Helm releases by running:
 
@@ -115,7 +115,7 @@ This creates a Helm Release, which basically means that the application has one 
 helm list
 ```
 
-![KIND Helm list releases](imgs/kind-helm-list.png)
+![KIND Helm list releases](kindimgs/kind-helm-list.png)
 
 Once the application is deployed, containers will need to be downloaded to your laptop in order to run, this can take a while. You can monitor the progress by listing all the pods running in your cluster, once again, using the `-owide` flag to get more information:
 
@@ -123,11 +123,14 @@ Once the application is deployed, containers will need to be downloaded to your 
 kubectl get pods -owide
 ```
 
-![KIND Get Pods oWide](imgs/kind-kubectl-get-pods.png)
+![KIND Get Pods oWide](kindimgs/kind-kubectl-get-pods.png)
 
 You need to pay attention to the `READY` and `STATUS` columns, where `1/1` in the `READY` column means that one replica of pod is correctly running and one was expected to be running. 
 
 Notice that pods can be scheduled in different nodes in the `NODE` column, this is Kubernetes using the resources available in the cluster in an efficient way.
 
+Finally, because the application contains an Ingress definition
+
+## 
 
 
