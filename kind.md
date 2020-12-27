@@ -189,3 +189,9 @@ kubectl describe service fmtok8s-api-gateway
 ```
 
 ![KIND Get Services](kindimgs/kind-kubectl-descr-svc-label.png)
+
+`Service`s and `Deployment`s are linked by the Selector property highlighted in the previous image. In other words, the `Service` will route traffic to all the `Pod`s created by a `Deployment` containing the label `app=app-fmtok8s-api-gateway`.
+
+By using `Service`s, if your application service needs to send a request to any other service it can use the Kubernetes `Service`s name and port, which in most cases, as in this example, if you are using `HTTP` requests you can use port `80`, leaving the need to only use the `Service` name. 
+
+If you look at the [source code of the services](https://github.com/salaboy/fmtok8s-c4p-rest/blob/main/src/main/java/com/salaboy/conferences/c4p/rest/services/EmailService.java#L14), you will see that HTTP requests are created against the service name, no IP addresses or Ports are needed. 
