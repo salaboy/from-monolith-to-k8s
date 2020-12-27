@@ -188,4 +188,4 @@ And you can also describe a `Service` with:
 kubectl describe service fmtok8s-api-gateway
 ```
 
-![KIND Get Services](kindimgs/kind-kubectl-descr-svc.png)
+![KIND Get Services](kindimgs/kind-kubectl-descr-svc-label.png)
