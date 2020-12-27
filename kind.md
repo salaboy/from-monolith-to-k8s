@@ -152,5 +152,24 @@ And you can describe in more detail each deployment with:
 kubectl describe deployment app-fmtok8s-api-gateway
 ```
 
-![KIND Describe Deployment API Gateway](kindimgs/kind-kubectl-descr-deploy.png)
+![KIND Describe Deployment API Gateway](kindimgs/kind-kubectl-descr-deploy-label.png)
 
+In this case you are describing the `API Gateway / User Interface Service`
+
+From the `Deployment` details you can get very useful information, such as 
+ - **The number of replicas of the service**: for this example is 1, but you will change this in the next section
+ - **The container that is being used for this service**: notice that this is just a simple docker container, meaning that you can even run this container locally if you want to with `docker run`
+ - **The resources allocation for the container**: depending on the load and the technology stack that you used to build your service, you will need to fine tune how many resources Kubernetes allow your container to use. 
+ - **The status of the readyness and liveness probes**: Kubernetes by default will monitor the health of your container. It does that by executing two probes 1) readyness to understand if the container is ready to answer requests 2) liveness if the main process of the container is running
+ 
+If for some reason the deployment is not working, as for example, the number of replicas required is not met, describing the resource will give you insights of where the problem might be. In contrast with `Pods`, `Deployments` are not ephimeral, hence if you create a `Deployment` it it will be there for you to query. By default, Kubernetes create an intermediate object for handling the `Deployment` replicas. This object is called `ReplicaSet` and it can be queried by running:
+
+```
+kubectl get replicaset
+```
+
+![KIND Get ReplicaSets](kindimgs/kind-kubectl-get-rs.png)
+
+These `ReplicaSet` objects are fully managed by the `Deployment` resource and usually you shouldn't need to deal with them. `ReplicaSet`s are important when dealing with [**Rolling Upgrades**, you can find more information about this topic here](https://kubernetes.io/docs/tutorials/kubernetes-basics/update/update-intro/)
+
+`Deployment`s per se doesn't expose your containers to other container 
