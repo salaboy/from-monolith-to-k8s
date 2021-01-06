@@ -92,19 +92,7 @@ The previous two lines added a new repository to your Helm installation called `
 Now that your Helm installation fecthed all the available packages description, let's install the application with the following line:
 
 ```
-salaboy> helm install app dev/fmtok8s-app     
-NAME: app
-LAST DEPLOYED: Wed Dec 23 12:00:24 2020
-NAMESPACE: default
-STATUS: deployed
-REVISION: 1
-TEST SUITE: None
-NOTES:
-Cloud-Native Conference Platform V1
-
-Chart Deployed: fmtok8s-app - 0.0.82
-Release Name: app
-
+helm install app dev/fmtok8s-app     
 ```
 
 ![KIND Helm install](kindimgs/kind-helm-install.png)
