@@ -215,10 +215,6 @@ In this workshop, you will use Spring Security OAuth2. Let's go to use it.
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-oauth2-client</artifactId>
 </dependency>
-<dependency>
-    <groupId>org.springframework.cloud</groupId>
-    <artifactId>spring-cloud-starter-security</artifactId>
-</dependency>
 ```
 
 ### Configuring 
@@ -338,6 +334,8 @@ public class SecurityConfig {
 ```
 
 
+
+
 ## Securing our microservices (C4P)
 
 ### We need to add some dependecies on pom.xml
@@ -365,7 +363,7 @@ public class SecurityConfig {
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/realms/fmtok8s
 ```
 
-### Creat an class to configure CORS 
+### Create a class to configure CORS 
 
 ```
 package com.salaboy.conferences.c4p.rest.configuration;
