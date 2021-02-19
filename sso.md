@@ -7,13 +7,34 @@ During this step-by-step you will be using **Kubernetes Cluster** and a Keycloak
 ### Creating a Kubernetes Cluster with KIND
 
 ```
-$ kind create cluster --name keycloak
+$ cat <<EOF | kind create cluster --name dev --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+- role: worker
+- role: worker
+EOF
 ```
 
 Don't forget to set current cluster/context
 
 ```
-$ kubectl cluster-info --context kind-keycloak
+$ kubectl cluster-info --context dev
 ```
 
 
