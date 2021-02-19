@@ -16,12 +16,11 @@ Don't forget to set current cluster/context
 $ kubectl cluster-info --context kind-keycloak
 ```
 
-In this example we'll not create a namespace (It is not a best practice )
 
 ### Adding Keycloak on Cluster Kubernetes
 
 ```
-kubectl cretate -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
+kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
 ```
 
 Let's see the keycloak pod
