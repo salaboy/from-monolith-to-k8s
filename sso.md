@@ -139,7 +139,10 @@ Then you can point your browser to `http://localhost:8080`
 
 <img src="sso-imgs/sso-2.png" alt="Login" width="700px">
 
-### 3 - Let's create our realm (fmtok8s)
+**User**: admin
+**Password**: admin
+
+### 3 - Create your realm (fmtok8s)
 
 <br>
 <details>
