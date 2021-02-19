@@ -17,24 +17,26 @@ $ kubectl cluster-info --context kind-keycloak
 ```
 
 
-### Adding Keycloak on Cluster Kubernetes
+### Installing Keycloak in our Kubernetes Cluster
 
 ```
 kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
 ```
 
-Let's see the keycloak pod
+Let's see if the keycloak pod is up and running with: 
 
 ```
 $ kubectl get pods
 ```
+
 
 ## OAuth2 Concepts
 
 Before you start, I want to speak a bit about OAuth2 concepts:
 
 ### OAuth2 Roles
-<br>
+
+
 OAuth2 defines four roles:
 
 - Resource Owner
@@ -61,7 +63,7 @@ OAuth2 defines four roles:
 
     **In our case a Client is the API Gateway**
 
-<br>
+
 
 ### OAuth2 Grant Types:
 
@@ -100,6 +102,14 @@ In this workshop we'll use **Authorization Code Grant Types**
 
 
 ## Configuring Keycloak
+
+In order to access Keycloak you might need to run the following command to forward traffic from outside the cluster to the Keycloak Service:
+
+```
+kubectl port-forward svc/keycloak 8080:8080
+```
+Then you can point your browser to `http://localhost:8080`
+
 ### 1 - Let's access Administration Console:
 
 <img src="sso-imgs/sso-1.png" alt="Go to Administration Console" width="700px">
