@@ -20,7 +20,7 @@ $ kubectl cluster-info --context kind-keycloak
 ### Installing Keycloak in our Kubernetes Cluster
 
 ```
-kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
+$ kubectl create -f https://raw.githubusercontent.com/keycloak/keycloak-quickstarts/latest/kubernetes-examples/keycloak.yaml
 ```
 
 Let's see if the keycloak pod is up and running with: 
