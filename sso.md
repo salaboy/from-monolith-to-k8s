@@ -237,6 +237,21 @@ spring:
             client-secret: 7208a758-e57c-4045-8c4a-9831bb2b8144
 ```
 
+
+```
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: http://keycloak/auth/realms/fmtok8s
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_NAME
+          value: keycloak
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_PROVIDER
+          value: oidc
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: gateway
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: 
+
+```
+
 The property client-secret should be filled with client-secret from keycloak, let's get our client-secret from gateway keycloak client:
 
 **Copy gateway's secret:**
