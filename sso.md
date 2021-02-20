@@ -378,6 +378,13 @@ public class SecurityConfig {
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/realms/fmtok8s
 ```
 
+```
+ - name: OPENTRACING_JAEGER_ENABLED
+   value: "false"
+ - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
+   value: http://keycloak:8080/auth/realms/fmtok8s
+```
+
 ### Create a class to configure CORS 
 
 ```
