@@ -240,7 +240,7 @@ spring:
 
 ```
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: http://keycloak/auth/realms/fmtok8s
+          value: http://keycloak:8080/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_NAME
           value: keycloak
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_PROVIDER
