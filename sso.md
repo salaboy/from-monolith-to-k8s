@@ -239,6 +239,8 @@ spring:
 
 
 ```
+        - name: MANAGEMENT_SECURITY_ENABLED
+          value: "false"
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: http://keycloak:8080/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_NAME
@@ -379,6 +381,8 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/
 ```
 
 ```
+ - name: MANAGEMENT_SECURITY_ENABLED
+   value: "false"
  - name: OPENTRACING_JAEGER_ENABLED
    value: "false"
  - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
