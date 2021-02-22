@@ -43,6 +43,14 @@ Install Ingress Controller
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
+## Install the Application with SSO
+
+```
+helm repo update
+helm install app-sso dev/fmtok8s-app-sso
+```
+
+
 ### Installing Keycloak in our Kubernetes Cluster
 
 ```
@@ -55,6 +63,41 @@ Let's see if the keycloak pod is up and running with:
 $ kubectl get pods
 ```
 
+After installing keycloak you need to modify the base installation to set the keycloak service to use the port 80 instead of 8080, you can do this by editting the keyclaok service with:
+
+```
+$ kubectl edit svc keycloak
+```
+
+Modify the port from:
+```
+ - name: http
+    nodePort: 32595
+    **port: 8080**
+    protocol: TCP
+    targetPort: 8080
+
+```
+
+to
+
+
+```
+ - name: http
+    nodePort: 32595
+    **port: 80**
+    protocol: TCP
+    targetPort: 8080
+
+```
+
+Once this is done, you need to edit your `/etc/hosts` files in your host machine to include the `keycloak` host for the ingress definition to work:
+
+```
+$ sudo vi /etc/hosts
+
+127.0.0.1	localhost keycloak
+```
 
 
 
