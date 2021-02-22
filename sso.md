@@ -213,6 +213,7 @@ spring:
             client-secret: <CLIENT SECRET>
 ```
 
+Edit the API-Gateway deployment and add the following Environment Vairables:
 
 ```
         - name: SPRING_PROFILES_ACTIVE
@@ -223,16 +224,14 @@ spring:
           value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: http://keycloak:8080/auth/realms/fmtok8s
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_NAME
-          value: keycloak
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_PROVIDER
-          value: oidc
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
           value: <CLIENT SECRET>
 
 ```
+
+
 
 The property client-secret should be filled with client-secret from keycloak, let's get our client-secret from gateway keycloak client:
 
@@ -244,12 +243,13 @@ The property client-secret should be filled with client-secret from keycloak, le
 And add a filter a new filter on **API Gateway** to relay de Token to hiden services
 
 ```
+spring:
   cloud:
     gateway:
       default-filters:
         - TokenRelay=
         - RemoveRequestHeader=Cookie
-      httpclient:      
+    
 ``` 
 
 ### Creating class SecurityConfig to our Gateway
@@ -360,13 +360,15 @@ public class SecurityConfig {
 spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/realms/fmtok8s
 ```
 
+Edit the other services Deployments with the following Environment Variables: 
+
 ```
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: OPENTRACING_JAEGER_ENABLED
           value: "false"
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-          value: http://keycloak:8080/auth/realms/fmtok8s
+          value: http://keycloak/auth/realms/fmtok8s
 ```
 
 ### Create a class to configure CORS 
@@ -422,8 +424,8 @@ public class SecurityConfig {
         .csrf().disable()
         .authorizeExchange(exchanges ->
                 exchanges
-                        .pathMatchers(HttpMethod.POST, "/**").hasAnyAuthority("approver")
-                        .pathMatchers(HttpMethod.DELETE, "/**").hasAnyAuthority("approver")
+                        .pathMatchers(HttpMethod.POST, "/**").hasAnyAuthority("organizer")
+                        .pathMatchers(HttpMethod.DELETE, "/**").hasAnyAuthority("organizer")
                         .anyExchange().permitAll())
         .oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
