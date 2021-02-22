@@ -46,6 +46,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 ## Install the Application with SSO
 
 ```
+helm repo add dev http://chartmuseum-jx.34.67.22.199.nip.io
 helm repo update
 helm install app-sso dev/fmtok8s-app-sso
 ```
