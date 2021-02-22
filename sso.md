@@ -37,6 +37,11 @@ Don't forget to set current cluster/context
 $ kubectl cluster-info --context dev
 ```
 
+Install Ingress Controller
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+```
 
 ### Installing Keycloak in our Kubernetes Cluster
 
@@ -51,75 +56,7 @@ $ kubectl get pods
 ```
 
 
-## OAuth2 Concepts
 
-Before you start, I want to speak a bit about OAuth2 concepts:
-
-### OAuth2 Roles
-
-
-OAuth2 defines four roles:
-
-- Resource Owner
-
-    It is an user that have some resource protected, like your facebook account, Github repositories, Instagram images etc.
-
-    **In our case a Resource Owner is the admin user that approves or rejects a proposal**
-
-- Resource Server
-
-    Provides a protected resource and permits the access through valid access tokens. Examples of Resource Server: Facebook, Github, Instagram etc.
-
-    **In our case a Resource Server will be C4P Service, Email Service and Agenda Service**
-
-- Authorization Server
-
-    Authorization Server provides an API used to autenticates an user and generates an **access token**. Examples of Authorizaton Server: Spring Authorization Server, Okta, Google Identity etc.
-
-    **In our case, Keycloak is our Authorization Server**
-
-- Client
-
-    It is an application, web, SPA, Desktop or mobile, that want to access the resources from **Resource Owner**. A Client needs to be registred on Authorization Server, being identified by a **client id** and a **client secret**.
-
-    **In our case a Client is the API Gateway**
-
-
-
-### OAuth2 Grant Types:
-
-A Grant Type is a way that a Client use to give an **access token**, OAuth2 is very flexible and provides four grant types for us:
-
-- Password
-
-    Used when there is a strong relationship from Client and Authorization Server. The user provides your credentials (username and password) directly to Client, that forward (with his client id and client secret) the user's credentials to Authorization Server.
-
-- Client Credentials
-
-    Used when there is not an user involved, it is used when there is a sytem called a protected system, just client's credentials are provides to Authorization Server.
-
-- Authorization Code
-
-    Used when third applications want to access data from a protected resource without the Client see the user's credentials. By example: 
-    When an user (Resource Owner) permits that the Travis CI (Client) access your repositories from Github (Authorization Server and Resource Owner). 
-
-- Implicit
-
-    Is mostly used on Single Page Applications and Mobile Apps.
-    The user is redirected to Authorization Server's login page, but the redirect is made directly to user-agent (A browser, by example) with access token. With this way, the SPA or Mobile application knows directly the access token.
-    
-
-It is a brief explanation about OAuth2, to more details [look here](https://oauth.net/2/)
-
-In this workshop we'll use **Authorization Code Grant Types**
-
-**Authorization Server:** *Keycloak*
-
-**Client:** *API Gateway*
-
-**Resourse Owner:** *Admin*
-
-**Resource Server:** *C4P Service, Agenda Service, Email Service*
 
 
 ## Configuring Keycloak
@@ -480,3 +417,76 @@ public class SecurityConfig {
 }
 
 ```
+
+
+# Theory
+
+## OAuth2 Concepts
+
+Before you start, I want to speak a bit about OAuth2 concepts:
+
+### OAuth2 Roles
+
+
+OAuth2 defines four roles:
+
+- Resource Owner
+
+    It is an user that have some resource protected, like your facebook account, Github repositories, Instagram images etc.
+
+    **In our case a Resource Owner is the admin user that approves or rejects a proposal**
+
+- Resource Server
+
+    Provides a protected resource and permits the access through valid access tokens. Examples of Resource Server: Facebook, Github, Instagram etc.
+
+    **In our case a Resource Server will be C4P Service, Email Service and Agenda Service**
+
+- Authorization Server
+
+    Authorization Server provides an API used to autenticates an user and generates an **access token**. Examples of Authorizaton Server: Spring Authorization Server, Okta, Google Identity etc.
+
+    **In our case, Keycloak is our Authorization Server**
+
+- Client
+
+    It is an application, web, SPA, Desktop or mobile, that want to access the resources from **Resource Owner**. A Client needs to be registred on Authorization Server, being identified by a **client id** and a **client secret**.
+
+    **In our case a Client is the API Gateway**
+
+
+
+### OAuth2 Grant Types:
+
+A Grant Type is a way that a Client use to give an **access token**, OAuth2 is very flexible and provides four grant types for us:
+
+- Password
+
+    Used when there is a strong relationship from Client and Authorization Server. The user provides your credentials (username and password) directly to Client, that forward (with his client id and client secret) the user's credentials to Authorization Server.
+
+- Client Credentials
+
+    Used when there is not an user involved, it is used when there is a sytem called a protected system, just client's credentials are provides to Authorization Server.
+
+- Authorization Code
+
+    Used when third applications want to access data from a protected resource without the Client see the user's credentials. By example: 
+    When an user (Resource Owner) permits that the Travis CI (Client) access your repositories from Github (Authorization Server and Resource Owner). 
+
+- Implicit
+
+    Is mostly used on Single Page Applications and Mobile Apps.
+    The user is redirected to Authorization Server's login page, but the redirect is made directly to user-agent (A browser, by example) with access token. With this way, the SPA or Mobile application knows directly the access token.
+    
+
+It is a brief explanation about OAuth2, to more details [look here](https://oauth.net/2/)
+
+In this workshop we'll use **Authorization Code Grant Types**
+
+**Authorization Server:** *Keycloak*
+
+**Client:** *API Gateway*
+
+**Resourse Owner:** *Admin*
+
+**Resource Server:** *C4P Service, Agenda Service, Email Service*
