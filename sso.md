@@ -104,12 +104,8 @@ $ sudo vi /etc/hosts
 
 ## Configuring Keycloak
 
-In order to access Keycloak you might need to run the following command to forward traffic from outside the cluster to the Keycloak Service:
+If you already isntalled the application, an Ingress was created to route traffic to Keycloak under the `keycloak` host. Point your browser to `http://keycloak` to access the adminstration console. 
 
-```
-kubectl port-forward svc/keycloak 8080:8080
-```
-Then you can point your browser to `http://localhost:8080`
 
 ### 1 - Let's access Administration Console:
 
@@ -208,13 +204,13 @@ spring:
       client:
         provider:
           oidc:
-            issuer-uri: http://localhost:8081/auth/realms/fmtok8s
+            issuer-uri: http://keycloak/auth/realms/fmtok8s
         registration:
           oidc:
             client-name: keycloak
             provider: oidc
             client-id: gateway
-            client-secret: 7208a758-e57c-4045-8c4a-9831bb2b8144
+            client-secret: <CLIENT SECRET>
 ```
 
 
@@ -224,7 +220,7 @@ spring:
         - name: OPENTRACING_JAEGER_ENABLED
           value: "false"
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-          value: http://keycloak:8080/auth/realms/fmtok8s
+          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
           value: http://keycloak:8080/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_NAME
@@ -234,7 +230,7 @@ spring:
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
-          value: 
+          value: <CLIENT SECRET>
 
 ```
 
