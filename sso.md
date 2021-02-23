@@ -225,16 +225,12 @@ Look for the env section and add the following variables:
 ```
         - name: SPRING_PROFILES_ACTIVE
           value: prod
-        - name: OPENTRACING_JAEGER_ENABLED
-          value: "false"
-        - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: http://keycloak:8080/auth/realms/fmtok8s
+          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
-          value: <CLIENT SECRET>
+          value: <SECRET>
 
 ```
 
