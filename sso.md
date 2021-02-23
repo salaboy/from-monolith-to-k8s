@@ -217,6 +217,12 @@ spring:
 Edit the API-Gateway deployment and add the following Environment Vairables:
 
 ```
+$ kubectl edit deploy app-sso-fmtok8s-api-gateway
+```
+Look for the env section and add the following variables:
+
+
+```
         - name: SPRING_PROFILES_ACTIVE
           value: prod
         - name: OPENTRACING_JAEGER_ENABLED
@@ -362,6 +368,11 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/
 ```
 
 Edit the other services Deployments with the following Environment Variables: 
+
+```
+$ kubectl edit deploy app-sso-fmtok8s-c4p-rest
+```
+Look for the env section and add the following variables:
 
 ```
         - name: SPRING_PROFILES_ACTIVE
