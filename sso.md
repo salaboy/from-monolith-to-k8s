@@ -46,6 +46,7 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 ## Install the Application with SSO
 
 ```
+helm repo add dev http://chartmuseum-jx.34.67.22.199.nip.io
 helm repo update
 helm install app-sso dev/fmtok8s-app-sso
 ```
@@ -260,14 +261,16 @@ spring:
 Edit the API-Gateway deployment and add the following Environment Vairables:
 
 ```
+$ kubectl edit deploy app-sso-fmtok8s-api-gateway
+```
+Look for the env section and add the following variables:
+
+
+```
         - name: SPRING_PROFILES_ACTIVE
           value: prod
-        - name: OPENTRACING_JAEGER_ENABLED
-          value: "false"
-        - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
-          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: http://keycloak:8080/auth/realms/fmtok8s
+          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
@@ -407,6 +410,11 @@ spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/
 ```
 
 Edit the other services Deployments with the following Environment Variables: 
+
+```
+$ kubectl edit deploy app-sso-fmtok8s-c4p-rest
+```
+Look for the env section and add the following variables:
 
 ```
         - name: SPRING_PROFILES_ACTIVE
