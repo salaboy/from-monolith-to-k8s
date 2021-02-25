@@ -34,7 +34,7 @@ EOF
 Don't forget to set current cluster/context
 
 ```
-$ kubectl cluster-info --context dev
+$ kubectl cluster-info --context kind-dev
 ```
 
 Install Ingress Controller
@@ -100,6 +100,13 @@ $ sudo vi /etc/hosts
 127.0.0.1	localhost keycloak
 ```
 
+If you are using Windows
+```
+Go to file C:\Windows\System32\drivers\etc\hosts and add:
+
+127.0.0.1 keycloak
+```
+
 
 
 
@@ -127,10 +134,38 @@ If you already isntalled the application, an Ingress was created to route traffi
       A realm manages a set of users, credentials, roles, and groups. In our example, we'll create a Realm for fmtok8s application. A user belongs nd accesses one realm, a realm are isolated from one another, then if you create an user in Realm A the another Realm (B) cannot see, and if you create an user on Realm A this user cannot access Realm B.
 </details>
 <br>
-
 <img src="sso-imgs/sso-3.png" alt="Creating Keycloak Realm" width="700px">
+<br>
+
+### 4 - Creating Client Scope
+<br>
+<details>
+  <summary>What is Client Scopes?</summary>    
+      "Client scopes allow you to define a common set of protocol mappers and roles. Wich are shared between multiple clients".
+
+It will help us to mapper roles in token.
+</details>
+<br>
+
+
+In configure section, click on Client Scopes, after click on create button, to create a Client Scope. 
+
+You will se it:
+
+<img src="sso-imgs/sso-16.png" width="700px">
 
 <br>
+
+Return to Client Scopes page and click on `fmtok8s`
+
+<img src="sso-imgs/sso-19.png" width="700px">
+
+Go to Mappers tab and click on create button.
+
+Complete Protocol Mapper form, and click on save:
+
+<img src="sso-imgs/sso-17.png" width="700px">
+
 
 ### 4 - Creating a Realm's Client
 
@@ -149,11 +184,18 @@ If you already isntalled the application, an Ingress was created to route traffi
 
 The client configuration's page is very large, then I will divide it in two parts:
 
-Parte 1:
+<b>OAuth2 configuration:</b>
+
 <img style="margin-bottom: 10px;" src="sso-imgs/sso-6.png" alt="Configuring The Client Gateway part 1" width="700px">
 
-Parte 2:
 <img src="sso-imgs/sso-7.png" alt="Configuring The Client Gateway part 2" width="700px">
+
+<b>Client Scope configuration:</b><br><br>
+Click on Client Scopes tab, and add `fmtok8s` Client Scope 
+<br>
+
+<img src="sso-imgs/sso-18.png" alt="Creating Keycloak Realm" width="700px">
+
 
 ## 6 - Creating an Realm's User
 
@@ -212,6 +254,8 @@ spring:
             provider: oidc
             client-id: gateway
             client-secret: <CLIENT SECRET>
+            scope:
+              - openid
 ```
 
 Edit the API-Gateway deployment and add the following Environment Vairables:
@@ -230,7 +274,9 @@ Look for the env section and add the following variables:
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
-          value: <SECRET>
+          value: <CLIENT SECRET>
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SCOPE
+          value: openid
 
 ```
 
