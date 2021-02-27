@@ -107,9 +107,6 @@ Go to file C:\Windows\System32\drivers\etc\hosts and add:
 127.0.0.1 keycloak
 ```
 
-
-
-
 ## Configuring Keycloak
 
 If you already isntalled the application, an Ingress was created to route traffic to Keycloak under the `keycloak` host. Point your browser to `http://keycloak` to access the adminstration console. 
@@ -236,6 +233,8 @@ In this workshop, you will use Spring Security OAuth2. Let's go to use it.
 </dependency>
 ```
 
+It is important to notice that this Spring Boot dependency makes the API Gateway component an OAuth2 Client but not a Server hosting restricted resources. 
+
 ### Configuring 
 
 We should change the configuration of **API Gateway** on application.yml
@@ -265,12 +264,11 @@ $ kubectl edit deploy app-sso-fmtok8s-api-gateway
 ```
 Look for the env section and add the following variables:
 
-
 ```
         - name: SPRING_PROFILES_ACTIVE
-          value: prod
+          value: sso
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
-          value: http://keycloak/auth/realms/conference
+          value: http://keycloak/auth/realms/fmtok8s
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
           value: gateway
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
@@ -307,7 +305,10 @@ spring:
 ```
 package com.salaboy.conferences.site.security;
 
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -323,14 +324,19 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("sso")
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
+
+
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+
+
         return http.csrf().disable()
                 .authorizeExchange()
-                .pathMatchers("/backoffice/**").hasRole("approver")
+                .pathMatchers("/backoffice/**").hasAuthority("organizer")
                 .anyExchange().permitAll()
                 .and()
                 .oauth2Login()
@@ -339,6 +345,7 @@ public class SecurityConfig {
                 .and()
                 .build();
     }
+
 
     @Bean
     public ReactiveOAuth2UserService<OidcUserRequest, OidcUser> oidcUserService() {
@@ -365,19 +372,20 @@ public class SecurityConfig {
         return mapRolesToGrantedAuthorities(getRolesFromClaims(claims));
     }
 
-    @SuppressWarnings("unchecked")
     private static Collection<String> getRolesFromClaims(Map<String, Object> claims) {
-        return (Collection<String>) claims.getOrDefault("groups",
-                claims.getOrDefault("roles", new ArrayList<>()));
+
+        return (Collection<String>) claims.getOrDefault("roles", new ArrayList<>());
     }
 
     private static List<GrantedAuthority> mapRolesToGrantedAuthorities(Collection<String> roles) {
         return roles.stream()
-                .map("ROLE_"::concat)
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
+
 }
+
 ```
 
 
@@ -404,10 +412,12 @@ public class SecurityConfig {
         </dependency>
 ```
 
+Notice that here we need `spring-security-oauth2-resource-server` and `spring-security-oauth2-jose` to secure REST Endpoints hosted by this service. 
+
 ### Configuring Spring OAuth2 Resource Server through application.properties:
 
 ```
-spring.security.oauth2.resourceserver.jwt.issuer-uri=http://localhost:8080/auth/realms/fmtok8s
+spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak/auth/realms/fmtok8s
 ```
 
 Edit the other services Deployments with the following Environment Variables: 
@@ -419,9 +429,7 @@ Look for the env section and add the following variables:
 
 ```
         - name: SPRING_PROFILES_ACTIVE
-          value: prod
-        - name: OPENTRACING_JAEGER_ENABLED
-          value: "false"
+          value: sso
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
           value: http://keycloak/auth/realms/fmtok8s
 ```
@@ -448,9 +456,10 @@ public class CORSConfig implements WebFluxConfigurer {
 ### Creating our SecurityConfig
 
 ```
-package com.salaboy.conferences.c4p.rest.configuration;
+package com.salaboy.conferences.c4p.rest.security;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -464,11 +473,10 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import reactor.core.publisher.Mono;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+@Profile("sso")
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
@@ -476,17 +484,24 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
 
         http
-        .csrf().disable()
-        .authorizeExchange(exchanges ->
-                exchanges
-                        .pathMatchers(HttpMethod.POST, "/**").hasAnyAuthority("organizer")
-                        .pathMatchers(HttpMethod.DELETE, "/**").hasAnyAuthority("organizer")
-                        .anyExchange().permitAll())
-        .oauth2ResourceServer(oauth2 ->
-                oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
+                .csrf().disable()
+                .authorizeExchange(exchanges ->
+                        exchanges
+                                .pathMatchers(HttpMethod.POST, "/decide**").hasAuthority("organizer")
+                                .pathMatchers(HttpMethod.POST, "/").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/actuator/health").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/actuator/info").permitAll()
+                                .pathMatchers(HttpMethod.GET, "/prometheus").permitAll()
+                                .anyExchange().permitAll()
+
+                    )
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(grantedAuthoritiesExtractor())));
+
 
         return http.build();
     }
+
 
     Converter<Jwt, Mono<AbstractAuthenticationToken>> grantedAuthoritiesExtractor() {
         JwtAuthenticationConverter jwtAuthenticationConverter =
@@ -501,9 +516,7 @@ public class SecurityConfig {
 
         @Override
         public Collection<GrantedAuthority> convert(Jwt jwt) {
-
-            @SuppressWarnings("unchecked")
-            var roles = (List<String>) jwt.getClaims().getOrDefault("groups", Collections.emptyList());
+            var roles = (List<String>) jwt.getClaims().getOrDefault("roles", Collections.emptyList());
 
             return roles.stream()
                     .map(SimpleGrantedAuthority::new)
