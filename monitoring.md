@@ -110,6 +110,27 @@ default/fmtok8s-servicemonitor/0 (4 / 25 active targets)
 As this shows that **4** services are being scrapped. 
 
 
+## Creating Grafana Dashboards
+
+Grafana is already installed so let's access it using port-forward:
+
+```
+kubectl port-forward svc/my-prometheus-grafana 3000:80 
+```
+
+Point your browser to `http://localhost:3000`
+
+The user and password are: **admin** and **prom-operator** respectively. You can find the password by looking at the secrets created: 
+
+```
+k edit secret my-prometheus-grafana
+```
+
+and then you can base64 decode the field: `admin-password`
+
+Then you can click the **+** icon on the left of the screen and then Import to import a premade dashboard. Use the following file: [grafana-dashboard.json]()
 
 
 ## Adding Jaeger to our application
+
+
