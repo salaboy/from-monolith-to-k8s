@@ -1,0 +1,20 @@
+{{- if .Values.serviceMonitorEnabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: fmtok8s-servicemonitor 
+  labels:
+    release: my-prometheus
+spec:
+  selector:
+    matchLabels:
+      draft: draft-app
+  namespaceSelector:
+    matchNames:
+      - default
+  jobLabel: service-stats
+  endpoints:
+  - path: /actuator/prometheus
+    port: http
+    interval: 15s
+{{- end }}
