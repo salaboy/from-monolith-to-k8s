@@ -1,0 +1,90 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: compositepostgresqlinstances.gcp.db.fmtok8s.salaboy.com
+  labels:
+    provider: gcp
+    app: fmtok8s-app 
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: db.fmtok8s.salaboy.com/v1alpha1
+    kind: CompositePostgreSQLInstance
+  resources:
+    - name: cloudsqlinstance
+      base:
+        apiVersion: database.gcp.crossplane.io/v1beta1
+        kind: CloudSQLInstance
+        spec:
+          forProvider:
+            databaseVersion: POSTGRES_9_6
+            region: europe-west2
+            settings:
+              tier: db-custom-1-3840
+              dataDiskType: PD_SSD
+              ipConfiguration:
+                ipv4Enabled: true
+                authorizedNetworks:
+                  - value: "0.0.0.0/0"
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-postgresql"
+        - fromFieldPath: "spec.parameters.storageGB"
+          toFieldPath: "spec.forProvider.settings.dataDiskSizeGb"
+      connectionDetails:
+        - fromConnectionSecretKey: username
+        - fromConnectionSecretKey: password
+        - fromConnectionSecretKey: endpoint
+        - type: FromValue
+          name: port
+          value: "5432"
+
+---
+
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: compositeredisinstances.gcp.cache.fmtok8s.salaboy.com
+  labels:
+    provider: gcp
+    app: fmtok8s-app 
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
+    kind: CompositeRedisInstance
+  resources:
+    - name: cloudmemorystoreinstance
+      base:
+        apiVersion: cache.gcp.crossplane.io/v1beta1
+        kind: CloudMemorystoreInstance
+        spec:
+          forProvider:
+            redisVersion: REDIS_5_0
+            region: europe-west2
+            tier: BASIC
+            memorySizeGb: 1
+          writeConnectionSecretToRef:
+            namespace: crossplane-system
+      patches:
+        - fromFieldPath: "metadata.uid"
+          toFieldPath: "spec.writeConnectionSecretToRef.name"
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-redis"
+        - fromFieldPath: "spec.parameters.memorySizeGb"
+          toFieldPath: "spec.forProvider.settings.memorySizeGb"
+      connectionDetails:
+        - fromConnectionSecretKey: username
+        - fromConnectionSecretKey: password
+        - fromConnectionSecretKey: endpoint
+        - type: FromValue
+          name: port
+          value: "6379"

@@ -1,0 +1,13 @@
+apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
+kind: RedisInstance
+metadata:
+  name: my-redis
+  namespace: default
+spec:
+  parameters:
+    memorySizeGb: 1
+  compositionSelector:
+    matchLabels:
+      provider: gcp
+  writeConnectionSecretToRef:
+    name: redis-conn
