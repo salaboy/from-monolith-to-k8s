@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "salaboy-book",
+  "private_key_id": "09572501e3e05c8e7d34e86ba2b99d09d0b53913",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQD2o3PUvH1QgAis\ne41Re1VgjMwvR6hJIwAW3NHI/3uKAT6KssP9Ypp+JbRScqLyxOWwcZcWB1ABClm9\nE2Uz75kOrgY7uZyFvGRR96FTX/8nNIIKaZniWxIQtVgCw2XkdhxHJi7FXZBXvMFV\nuVXbPYntXdMzzAkN/Tsj8+meist7Vf84HCBtq1SLLsGGOul7L3xSh7qzhlbLHnih\ntl23v/iBNqBdfYFc3gE4Wk51iu1taU6r04es8KyBAEWp4KFlWHfN4OIhcg2EL5nm\nwaZBDMXi6hKTOr0qfl13ry2TDKL962hO1aZQoTVOhsQUPxqs2YP8u+8JpsnkSNXT\n8BlHDJTJAgMBAAECggEABPdjn2Fa8KJeClhujw55uKOn1Ofk0Ubde0MKYmQVRmvM\nqO79QqlConml45HKtYgWIUhtmhRJncu/Oi8ddunt3hLOWKjd0v+T0ZFinpLXSMsm\nNzQgf3iv/hrOC+LdYWKozRyit8yw2bjDooiZ3FFP6VyzTQlga/dbwoHohA3CwoKo\nWE8DQhpgorI0X8faCUoKbQxI0HzTLIivEgTgeHE5v96Q394WeUpAKSOQvDCr6+eI\nbTSYSWacqv/5EgvJRy9//qnlL4P26pcM4TWlL76P1M2iPkfdFEHux4TD/KHoOKmq\nP5aNYqOTbU6AliGGh5vtbFthRkLxw0N6U57z5p4utQKBgQD/ohKqS1RqOb2a1tnP\nujGkr9AwQUhYss+bgRkoGbLgyA1U/qIBzgd4eNwWS/lXbCRAscPVz3yvKDfeLPgr\n3PZQ8q5xV7m7EyXUfPoOqaQSjDtsHqZCMQ666nb9D7QAZDJnNp/fTKixcjzRlbhI\ndtCDB6vlzPx5g2UkeXvEJJmR2wKBgQD2/hMdlpv2Eo5ddRMGAR9DeddyPe9toiHO\nUAWsmYTgKNZhuXUSI89VdaL456m/iTtrmDjrOMbPMC350O7MQENFzEgApc2TtUON\nn5tJNY7vFLNcj/nuX7r1v/BQ1Pijp2N4/rT5albo84Q6qhZwOIhypNqyNKtYCHLe\n/HH32EPPKwKBgEqUTj3AnHAhSF/ULtebyr/xSxvI8AJwqIEFuQEp/jX2J22UnE9K\nfIN5PzyCDcyjkDAPrMLENewkH6iCFiU14ebb5mjK3zTk8TR9AbclZujCYNO6XWcS\nSOnfXbeWzT0P/mR+W0YaZ1zdp0C+HXWGtG6F3nC8zSvmWau6hZFD3EnhAoGAUrSH\nQBwjg0V5aHAAe706c8TD0NxOZR6qRURkcgRCCzGBf92zBuz4yzwF42TnYVyZihDB\n1nn/kHcongNJQxmtrRyXa6gZa4GB6lVskRofD42V9cO8RAbIOuwXk2mNDHfLhkN7\n5Byol36bY2167/7uKb1sAcpDKcpCdMqBeyVup1sCgYEAwo/PCbAJpGdymqJp4FP3\nBB30AZ6L2UwZ13sW4WzMezresxS4dvAgiScnlo9F8/wkI+wcboByyAtSOayyNQAE\nxMw/EWZMqsX72BTb2uTJzNi4LaZb+2Z5T3P3PUxDlSPClIc1Xkl4J4watQwPQsih\n5Nx/ZFiXOlY5vfZpmGyYG4c=\n-----END PRIVATE KEY-----\n",
+  "client_email": "test-service-account-name@salaboy-book.iam.gserviceaccount.com",
+  "client_id": "107689611028409129134",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-service-account-name%40salaboy-book.iam.gserviceaccount.com"
+}

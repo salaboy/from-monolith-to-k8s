@@ -1,0 +1,139 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: agenda-service-pipeline
+  annotations:
+    description: |
+      Build the container image of the Agenda service
+spec:
+  params:
+    - name: gitRepository
+      description: The git repository that hosts context and Dockerfile
+      default: https://github.com/salaboy/fmtok8s-agenda-rest
+    - name: gitRevision
+      description: The git revision to build
+      default: main
+    - name: context
+      description: The path to the docker context in the sources workspace
+      default: /
+    - name: dockerfile
+      description: The path to the dockerfile within the context
+      default: Dockerfile
+    - name: target
+      description: The target container registry and path where to build the image
+      default: salaboy
+    - name: target-name
+      description: Name of the image to publish
+      default: fmtok8s-agenda-rest
+    - name: version
+      description: the target version to build
+      default: v1.0
+    - name: kanikoExtraArgs
+      type: array
+      description: extra args to pass to the kaniko builder
+      default: []
+  workspaces:
+    - name: sources
+      description: Workspace where the git repo is prepared for building
+    - name: maven-settings
+      description: custom maven settings workspace
+    - name: dockerconfig
+      description: Docker config secret
+  results:
+    - name: cd.artifact.id
+      value: $(tasks.export-results.results.artifactId)
+    - name: cd.artifact.name
+      value: $(tasks.export-results.results.artifactName)
+    - name: cd.artifact.version
+      value: $(tasks.export-results.results.artifactVersion)
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+        bundle: gcr.io/tekton-releases/catalog/upstream/git-clone:0.4
+      params:
+        - name: url
+          value: $(params.gitRepository)
+        - name: revision
+          value: $(params.gitRevision)
+      workspaces:
+        - name: output
+          workspace: sources
+    - name: maven-build
+      runAfter: [clone-repo]
+      taskRef:
+        name: maven
+        bundle: gcr.io/tekton-releases/catalog/upstream/maven:0.2
+      params:
+        - name: GOALS
+          value: 
+            - -DskipTests
+            - clean
+            - package
+        - name: CONTEXT_DIR
+          value: $(params.context)    
+      workspaces:
+        - name: maven-settings
+          workspace: maven-settings
+        - name: source
+          workspace: sources    
+    - name: image-build
+      runAfter: [maven-build]
+      taskRef:
+        name: kaniko
+        bundle: gcr.io/tekton-releases/catalog/upstream/kaniko:0.4
+      params:
+        - name: IMAGE
+          value: $(params.target)/$(params.target-name):$(params.version)
+        - name: CONTEXT
+          value: $(params.context)
+        - name: DOCKERFILE
+          value: $(params.dockerfile)
+        - name: EXTRA_ARGS
+          value: ["$(params.kanikoExtraArgs[*])"]
+      workspaces:
+        - name: source
+          workspace: sources
+        - name: dockerconfig
+          workspace: dockerconfig
+    - name: export-results
+      runAfter: [image-build]
+      taskSpec:
+        params:
+          - name: name
+          - name: version
+          - name: uri
+        results:
+          - name: artifactName
+            description: The name of the artifact
+          - name: artifactVersion
+            description: The version of the artifact
+          - name: artifactId
+            description: The full URL of the artifact, with version
+        steps:
+          - name: create-results
+            image: alpine
+            env:
+              - name: ARTIFACT_NAME_RESULT_PATH
+                value: $(results.artifactName.path)
+              - name: ARTIFACT_VERSION_RESULT_PATH
+                value: $(results.artifactVersion.path)
+              - name: ARTIFACT_ID_RESULT_PATH
+                value: $(results.artifactId.path)
+              - name: ARTIFACT_NAME_RESULT_VALUE
+                value: $(params.name)
+              - name: ARTIFACT_VERSION_RESULT_VALUE
+                value: $(params.version)
+              - name: ARTIFACT_ID_RESULT_VALUE
+                value: $(params.uri)
+            script: |
+              printf "$ARTIFACT_NAME_RESULT_VALUE" > "$ARTIFACT_NAME_RESULT_PATH"
+              printf "$ARTIFACT_VERSION_RESULT_VALUE" > "$ARTIFACT_VERSION_RESULT_PATH"
+              printf "$ARTIFACT_ID_RESULT_VALUE" > "$ARTIFACT_ID_RESULT_PATH"
+      params:
+        - name: name
+          value: $(params.target-name)
+        - name: version
+          value: $(params.version)
+        - name: uri
+          value: $(params.target)/$(params.target-name)@$(tasks.image-build.results.IMAGE-DIGEST)
