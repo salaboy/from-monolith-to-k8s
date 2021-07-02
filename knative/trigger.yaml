@@ -1,0 +1,9 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: c4p-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
