@@ -1,7 +1,7 @@
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: c4p-trigger
+  name: fmtok8s-trigger
   namespace: default
 spec:
   broker: default

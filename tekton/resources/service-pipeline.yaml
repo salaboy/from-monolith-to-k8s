@@ -1,18 +1,18 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: agenda-service-pipeline
+  name: api-gateway-service-pipeline
   annotations:
     description: |
-      Build the container image of the Agenda service
+      Build the artifacts for the API Gateway Service
 spec:
   params:
     - name: gitRepository
       description: The git repository that hosts context and Dockerfile
-      default: https://github.com/salaboy/fmtok8s-agenda-rest
+      default: https://github.com/salaboy/fmtok8s-api-gateway
     - name: gitRevision
       description: The git revision to build
-      default: main
+      default: master
     - name: context
       description: The path to the docker context in the sources workspace
       default: /
@@ -24,10 +24,10 @@ spec:
       default: salaboy
     - name: target-name
       description: Name of the image to publish
-      default: fmtok8s-agenda-rest
+      default: fmtok8s-api-gateway
     - name: version
       description: the target version to build
-      default: v1.0
+      default: 0.1.2
     - name: kanikoExtraArgs
       type: array
       description: extra args to pass to the kaniko builder
