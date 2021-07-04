@@ -23,7 +23,7 @@ salaboy> helm repo add fmtok8s https://salaboy.github.io/helm/
 You will need to run `helm update` everytime you want to fetch the latest version of the charts or the first time after adding a new repository: 
 
 ```
-salaboy> helm update
+salaboy> helm repo update
 ```
 
 ## Installing the Conference Application
