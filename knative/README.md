@@ -42,6 +42,29 @@ fmtok8s-email-rest:
 EOF
 ```
 
+You can list the Knative Services by running: 
+
+```
+kubectl get ksvc 
+```
+You should see something like: 
+```
+NAME                  URL                                                          LATESTCREATED               LATESTREADY                 READY   REASON
+fmtok8s-agenda        http://fmtok8s-agenda.default.X.X.X.X.sslip.io        fmtok8s-agenda-00001        fmtok8s-agenda-00001        True    
+fmtok8s-api-gateway   http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io   fmtok8s-api-gateway-00001   fmtok8s-api-gateway-00001   True    
+fmtok8s-c4p           http://fmtok8s-c4p.default.X.X.X.X.sslip.io           fmtok8s-c4p-00001           fmtok8s-c4p-00001           True    
+fmtok8s-email         http://fmtok8s-email.default.X.X.X.X.sslip.io         fmtok8s-email-00001         fmtok8s-email-00001         True    
+
+```
+Where instead of `X`s you should see your public IP address.  
+You can access the application by pointing your browser to: http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io
+
+You can send the following POST request to generate some talks proposals in the application: 
+```
+curl -X POST http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io/api/test
+```
+Then go to the Back office section of the application and approve all the proposals. You should see them in the Main Site listed in different days. 
+
 ### Testing Traffic Splitting by Headers or Percentage
 
 You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
