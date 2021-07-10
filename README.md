@@ -18,6 +18,8 @@ After installing playing around and trying to break the application you can try 
 - [Building your Services with Tekton](tekton/README.md)
 - [Canary Releases with Knative Serving](knative/README.md)
 - [Event-Driven Architectures with Knative Eventing](knative/README.md)
+- [Single Sign-On with Keycloak](sso/README.md)
+- [Monitoring with Prometheus and Graphana](monitoring/README.md)
 
 # Source Code
 
