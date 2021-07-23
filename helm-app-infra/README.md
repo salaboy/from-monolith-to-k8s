@@ -102,6 +102,48 @@ To connect to your database from outside the cluster execute the following comma
 
 Same here, highlighted in bold the Service URL and the password secret. 
 
+Now if you check the pods that are running besides your application you should see the following:
+
+```
+> kubectl get pods
+NAME                                       READY   STATUS      RESTARTS   AGE
+app-fmtok8s-agenda-rest-68bd9c8bcb-dxbdt   1/1     Running     0          12m
+app-fmtok8s-api-gateway-58d49588b4-vw7pc   1/1     Running     0          12m
+app-fmtok8s-c4p-rest-7cb8bc4485-scj7r      1/1     Running     0          12m
+app-fmtok8s-email-rest-8f954fbbd-p8hld     1/1     Running     0          12m
+postgresql-postgresql-0                    1/1     Running     0          6m30s
+redis-master-0                             1/1     Running     0          3m47s
+redis-replicas-0                           1/1     Running     0          3m47s
+redis-replicas-1                           1/1     Running     0          3m13s
+redis-replicas-2                           1/1     Running     0          2m36s
+```
+
+Both PostgreSQL and a Redis Cluster are running and ready to be used by our application. 
+
+Now it is time to connect our services to these databases, let's start with the Call for Proposal Sevice (C4P). 
+Edit the deployment called `app-fmtok8s-c4p-rest` and then look for the section `spec.template.spec.containers[0].env` and add the following variables:
+
+
+```
+ - name: SPRING_DATASOURCE_DRIVERCLASSNAME
+          value: org.postgresql.Driver
+        - name: SPRING_DATASOURCE_PLATFORM
+          value: postgres
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://${DB_ENDPOINT}:${DB_PORT}/postgres
+        - name: SPRING_DATASOURCE_USERNAME
+          value: postgres
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql
+              key: postgresql-password
+        - name: DB_ENDPOINT
+          value: postgresql.default.svc.cluster.local
+        - name: DB_PORT
+          value: "5432"
+```
+
 This approach is recommended for experimenting, development and maybe testing, but you should check [Crossplane](../crossplane/README.md) for production usage in Cloud Providers. This is mostly you will need to maintain these components in the long run, including upgrading versions, backing up data, etc.
 
  
