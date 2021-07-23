@@ -125,10 +125,10 @@ Edit the deployment called `app-fmtok8s-c4p-rest` and then look for the section 
 
 
 ```
- - name: SPRING_DATASOURCE_DRIVERCLASSNAME
+        - name: SPRING_DATASOURCE_DRIVERCLASSNAME
           value: org.postgresql.Driver
         - name: SPRING_DATASOURCE_PLATFORM
-          value: postgres
+          value: org.hibernate.dialect.PostgreSQLDialect
         - name: SPRING_DATASOURCE_URL
           value: jdbc:postgresql://${DB_ENDPOINT}:${DB_PORT}/postgres
         - name: SPRING_DATASOURCE_USERNAME
@@ -136,13 +136,36 @@ Edit the deployment called `app-fmtok8s-c4p-rest` and then look for the section 
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgresql
               key: postgresql-password
+              name: postgresql
         - name: DB_ENDPOINT
-          value: postgresql.default.svc.cluster.local
+          value: postgresql
         - name: DB_PORT
           value: "5432"
+
 ```
+
+Now you can scale up the replicas of your Call for Proposals (C4P) services and all the instances will connect to the same database. You have made your Call for Proposal Service stateless. 
+
+You can do exactly the same with the Agenda Service and Redis. Let's edit the deployment and add the following new variables in the `spec.template.spec.containers[0].env` section: 
+
+```
+        - name: SPRING_REDIS_IN_MEMORY
+          value: "false"
+        - name: SPRING_REDIS_HOST
+          value: redis-master
+        - name: SPRING_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: redis-password
+              name: redis
+
+```
+
+Notice that for ready we need to explicitely disable the in-memory db that is running inside our service. 
+
+
+
 
 This approach is recommended for experimenting, development and maybe testing, but you should check [Crossplane](../crossplane/README.md) for production usage in Cloud Providers. This is mostly you will need to maintain these components in the long run, including upgrading versions, backing up data, etc.
 
