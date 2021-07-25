@@ -1,5 +1,7 @@
 # Crossplane for Infrastructure in GCP
+
 This directory contains [Crossplane.io](http://crossplane.io) resources to expose and provision PostgreSQL and Redis in GCP by using Crossplane abstractions. 
+This tutorial uses the Conference Platform application that you can install with Helm following [this tutorial](../helm/README.md), so then you can connect the application services to the databases created in this tutorial. 
 
 
 ## Installation
