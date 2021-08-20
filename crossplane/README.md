@@ -1,5 +1,7 @@
 # Crossplane for Infrastructure in GCP
+
 This directory contains [Crossplane.io](http://crossplane.io) resources to expose and provision PostgreSQL and Redis in GCP by using Crossplane abstractions. 
+This tutorial uses the Conference Platform application that you can install with Helm following [this tutorial](../helm/README.md), so then you can connect the application services to the databases created in this tutorial. 
 
 
 ## Installation
@@ -8,11 +10,21 @@ Install Crossplane Self-Hosted: https://crossplane.io/docs/v1.2/getting-started/
 
 **Note**: Make sure that you also install the Crossplane Kubectl plugin. 
 
-**Note**: The following  enable Redis API, make sure you run the commands in the right order so the SA ends up with these Service and Role too. 
+**Note**: The following enable Redis API, make sure you run the commands in the right order so the SA ends up with these Service and Role too. 
 
 ```
 export SERVICE="redis.googleapis.com"
+gcloud services enable $SERVICE --project $PROJECT_ID
+
 export ROLE="roles/redis.admin"
+gcloud projects add-iam-policy-binding --role="$ROLE" $PROJECT_ID --member "serviceAccount:$SA"
+
+```
+Then you can create the Service Account Key file, as instructed in the docs: 
+
+```
+# create service account keyfile
+gcloud iam service-accounts keys create creds.json --project $PROJECT_ID --iam-account $SA
 ```
 
 Once you have the credentials set, install the `fmtok8s` package into Crossplane. This Crossplane Package contains the `fmtok8s` abstractions for PostgreSQL and Redis. Example of these resources are located in the `/resources/` sub-directory. 
@@ -51,7 +63,7 @@ kubectl apply -f resources/postgresql.yaml
 And then modifying the C4P Service to use it by adding some environment variables:
 
 ```
-- name: SPRING_DATASOURCE_DRIVERCLASSNAME
+        - name: SPRING_DATASOURCE_DRIVERCLASSNAME
           value: org.postgresql.Driver 
         - name: SPRING_DATASOURCE_PLATFORM
           value: postgres
@@ -77,4 +89,18 @@ And then modifying the C4P Service to use it by adding some environment variable
             secretKeyRef:
               name: db-conn
               key: port
+```
+
+You can do the same for the Agenda Service with Redis: 
+
+The variables needed for Redis are: 
+
+```
+- name: SPRING_REDIS_IN_MEMORY
+  value: "false"
+- name: SPRING_REDIS_HOST
+  valueFrom: 
+    secretKeRef:
+      key: endpoint
+      name: redis-conn
 ```
