@@ -11,10 +11,11 @@ Follow the instructions here:
 
 https://knative.dev/docs/install/install-serving-with-yaml/
 
-Apply the following patch to support traffic splitting with Headers (explained here: https://knative.dev/docs/serving/samples/tag-header-based-routing/):
+
+Apply the following patch to support traffic splitting with Headers (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref and  https://knative.dev/docs/serving/samples/tag-header-based-routing/) and Downward API (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref):
 
 ```
-kubectl patch cm config-features -n knative-serving -p '{"data":{"tag-header-based-routing":"Enabled"}}'
+kubectl patch cm config-features -n knative-serving -p '{"data":{"tag-header-based-routing":"Enabled", "kubernetes.podspec-fieldref": "Enabled"}}'
 ```
 
 Note: you can use ModHeader to modify the request headers in your browser: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en
@@ -26,6 +27,7 @@ cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
   knativeDeploy: true
   env:
+    KNATIVE_ENABLED: "true"
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
@@ -81,7 +83,7 @@ image: salaboy/fmtok8s-api-gateway:0.1.0
 ```
 To:
 ```
-image: salaboy/fmtok8s-api-gateway:0.1.0-color
+image: salaboy/fmtok8s-api-gateway:0.1.0-debug
 ```
 This change will create a new revision, which we can use to split traffic. For doint that we need to add the following values into the `traffic` section:
 
@@ -94,11 +96,15 @@ This change will create a new revision, which we can use to split traffic. For d
   - latestRevision: false
     percent: 0
     revisionName: fmtok8s-api-gateway-00002
-    tag: candidate
+    tag: debug
   - latestRevision: true
     percent: 0
     tag: latest
 ```
+
+With something like ModHeader for Chrome you can now specify the `debug` revision by setting the following header: 
+`Knative-Serving-Tag` with value `debug`
+
 
 ## Installing Knative Eventing
 
