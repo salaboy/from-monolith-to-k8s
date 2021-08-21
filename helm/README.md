@@ -97,3 +97,7 @@ And then add and change the following lines:
 - Add an annotation: `kubernetes.io/ingress.class: "gce"`
 - Special path format, modify the existing one `path: /` to: `path: /*`
 - Special pathType, modify the existing one with `pathType: ImplementationSpecific`
+
+This will instruct Google Cloud to provision a loadbalancer and provide a public IP to access your applications that are running inside the cluster, in this case via the API Gateway Service. 
+
+If you get the ingress resource now, you should be able to see the public IP after the loadbalancer is provisioned and configured. 
