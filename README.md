@@ -30,6 +30,7 @@ After installing playing around and trying to break the application you can try 
 - [Email Service](https://github.com/salaboy/fmtok8s-email-rest)
 
 # Conferences
+- [Jump! Conference 2021](https://www.slideshare.net/salaboy/intro-to-the-cloud-with-knative-spanish)
 - [Kubernetes Community Days - Spain 2021](https://www.slideshare.net/salaboy/kubernetes-community-day-spain-crossplane)
 - [QCon Plus - Private Workshop 2020](https://www.slideshare.net/salaboy/qcon-plus-from-monoliths-to-k8s-workshop)
 - [Spring One 2020](https://www.slideshare.net/salaboy/from-monolith-to-k8s-spring-one-2020)
