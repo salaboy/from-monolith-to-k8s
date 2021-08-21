@@ -85,3 +85,15 @@ app-fmtok8s-email-rest-8f954fbbd-99nkb     1/1     Running     0          2m18s
 
 
 
+## Google Cloud GKE ingress controller
+The application by default includes an ingress, but the Ingress definition is cloud-agnostic. If you want to install NGINX ingress controller to read and manage this resource you can do it, but in Cloud Provider like GKE, you can use their Ingress controllers so you don't need to manage and maintain another thing besides your application. 
+
+If you want to use GKE Ingress controller you need to make the following changes to the ingress resource. You can edit the ingress resource by running: 
+```
+kubectl edit ingress frontend
+```
+
+And then add and change the following lines: 
+- Add an annotation: `kubernetes.io/ingress.class: "gce"`
+- Special path format, modify the existing one `path: /` to: `path: /*`
+- Special pathType, modify the existing one with `pathType: ImplementationSpecific`
