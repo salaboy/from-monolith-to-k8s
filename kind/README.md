@@ -28,3 +28,19 @@ nodes:
 EOF
 
 ```
+
+## Installing NGINX Ingress Controller
+We need NGING Ingress Controller to route traffic from our laptop to the services that are running inside the cluster. NGINX Ingress Controller act as a router that is running inside the cluster, but exposed to the outside world. 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+```
+
+## Install Application using Helm
+
+Add Application Helm Chart Repository: 
+
+```
+helm repo add fmtok8s https://salaboy.github.io/helm/
+helm repo update
+```
