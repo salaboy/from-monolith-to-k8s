@@ -129,7 +129,7 @@ This change will create a new revision, which we can use to split traffic. For d
     tag: current
   - latestRevision: false
     percent: 0
-    revisionName: fmtok8s-api-gateway-00002
+    revisionName: fmtok8s-api-gateway-00003
     tag: debug
   - latestRevision: true
     percent: 0
