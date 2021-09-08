@@ -67,7 +67,41 @@ curl -X POST http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io/api/test
 ```
 Then go to the Back office section of the application and approve all the proposals. You should see them in the Main Site listed in different days. 
 
-### Testing Traffic Splitting by Headers or Percentage
+### Testing Traffic Splitting Using Percentages
+
+You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
+
+```
+kubectl edit ksvc fmtok8s-api-gateway
+```
+
+Then modify the `image` name with the following value: 
+
+From:
+```
+image: salaboy/fmtok8s-api-gateway:0.1.0
+```
+To:
+```
+image: salaboy/fmtok8s-api-gateway:0.1.0-color
+```
+
+```
+This change will create a new revision, which we can use to split traffic. For doint that we need to add the following values into the `traffic` section:
+
+```
+
+```
+  traffic:
+  - latestRevision: false
+    percent: 50
+    revisionName: fmtok8s-api-gateway-00001
+  - latestRevision: true
+    percent: 50
+```
+
+
+### Testing Traffic Splitting Using Headers
 
 You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
 
