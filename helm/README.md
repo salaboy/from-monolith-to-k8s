@@ -17,13 +17,13 @@ For this tutorial you will be adding my Helm Repository which is hosted in a Git
 You can add this Helm repository to you Helm installation by running:
 
 ```
-salaboy> helm repo add fmtok8s https://salaboy.github.io/helm/
+helm repo add fmtok8s https://salaboy.github.io/helm/
 ```
 
 You will need to run `helm update` everytime you want to fetch the latest version of the charts or the first time after adding a new repository: 
 
 ```
-salaboy> helm repo update
+helm repo update
 ```
 
 ## Installing the Conference Application
@@ -33,7 +33,7 @@ You can always do searchs against the added Helm repositories with `helm search 
 For example, you can search the following application, which is hosted in my repository `fmtok8s-app`: 
 
 ```
-salaboy> helm search repo fmtok8s-app
+helm search repo fmtok8s-app
 ```
 
 Should return: 
@@ -46,7 +46,7 @@ fmtok8s/fmtok8s-app	0.1.0        	0.1.0      	A Helm chart for a Conference Plat
 Which now you can install by running: 
 
 ```
-salaboy> helm install app fmtok8s/fmtok8s-app
+helm install app fmtok8s/fmtok8s-app
 
 ```
 
@@ -71,7 +71,7 @@ The application is composed by 4 independent services that can be installed sepa
 You can check that the application is up and running by checking if the Kubernetes Pods have started and are in READY status: 
 
 ```
-salaboy> kubectl get pods
+kubectl get pods
 ```
 
 You should see something like: 
