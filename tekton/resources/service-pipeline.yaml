@@ -27,7 +27,7 @@ spec:
       default: fmtok8s-api-gateway
     - name: version
       description: the target version to build
-      default: 0.1.2
+      default: 0.1.0-test-pipeline
     - name: kanikoExtraArgs
       type: array
       description: extra args to pass to the kaniko builder

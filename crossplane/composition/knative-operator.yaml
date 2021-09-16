@@ -1,0 +1,13 @@
+apiVersion: operator.in-cluster.crossplane.io/v1alpha1
+kind: Operator
+metadata:
+  name: my-knative-operator
+  namespace: default
+spec:
+  providerConfigRef:
+    name: provider-in-cluster
+  forProvider:
+    channel: alpha 
+    operatorName: knative-operator
+    catalogSource: krishchow-catalog-source
+    catalogSourceNamespace: openshift-marketplace

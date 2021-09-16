@@ -1,0 +1,19 @@
+apiVersion: helm.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: conference-platform
+spec:
+  forProvider:
+    chart:
+      name: fmtok8s-app
+      repository: https://salaboy.github.io/helm/
+      version: 0.1.0
+    namespace: conference-1
+    values:
+      service:
+        type: ClusterIP
+#    set:
+#      - name: param1
+#        value: value2
+  providerConfigRef:
+    name: helm-provider

@@ -104,3 +104,6 @@ The variables needed for Redis are:
       key: endpoint
       name: redis-conn
 ```
+
+
+## Using Provider Helm

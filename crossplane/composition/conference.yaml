@@ -1,0 +1,6 @@
+apiVersion: example.crossplane.io/v1alpha1
+kind: ConferenceCluster
+metadata:
+  name: myconference
+spec:
+  clusterVersion: "1.18"

@@ -1,0 +1,19 @@
+apiVersion: database.gcp.crossplane.io/v1beta1
+kind: CloudSQLInstance
+metadata:
+  name: my-gcp-postgresql
+spec:
+  forProvider:
+    databaseVersion: POSTGRES_9_6
+    region: europe-west2
+    settings:
+      tier: db-custom-1-3840
+      dataDiskType: PD_SSD
+      dataDiskSizeGb: 10
+      ipConfiguration:
+        ipv4Enabled: true
+        authorizedNetworks:
+          - value: "0.0.0.0/0"
+  writeConnectionSecretToRef:
+    namespace: default
+    name: postgresql-secret

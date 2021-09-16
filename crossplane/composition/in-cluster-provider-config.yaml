@@ -1,0 +1,11 @@
+apiVersion: in-cluster.crossplane.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: provider-in-cluster
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      name: cluster-config
+      key: kubeconfig
+      namespace: default
