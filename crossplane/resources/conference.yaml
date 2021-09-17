@@ -1,0 +1,10 @@
+apiVersion: conferences.fmtok8s.salaboy.com/v1alpha1
+kind: ConferenceInstance
+metadata:
+  name: my-conference
+spec:
+  parameters: 
+    name: my-conference
+    storagePostgresqlGB: 10
+    storageRedisGB: 10
+  

@@ -1,9 +1,9 @@
 apiVersion: meta.pkg.crossplane.io/v1
 kind: Configuration
 metadata:
-  name: fmtok8s-db-gcp
+  name: fmtok8s-conference
   annotations:
-    app: fmtok8s-app 
+    app: fmtok8s-conference
     provider: gcp
 spec:
   crossplane:
@@ -11,3 +11,5 @@ spec:
   dependsOn:
     - provider: crossplane/provider-gcp
       version: ">=v0.16.0"
+    - provider: crossplane/provider-helm
+      version: ">=v0.8.0"  

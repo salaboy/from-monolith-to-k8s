@@ -1,0 +1,38 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: compositeconferenceinstances.conferences.fmtok8s.salaboy.com
+spec:
+  group: conferences.fmtok8s.salaboy.com
+  names:
+    kind: CompositeConferenceInstance
+    plural: compositeconferenceinstances
+  claimNames:
+    kind: ConferenceInstance
+    plural: conferenceinstances
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties:
+              parameters:
+                type: object
+                properties:
+                  name: 
+                    type: string
+                  storagePostgresqlGB:
+                    type: integer
+                  storageRedisGB:
+                    type: integer  
+                required:
+                  - name
+                  - storagePostgresqlGB
+                  - storageRedisGB
+            required:
+              - parameters
