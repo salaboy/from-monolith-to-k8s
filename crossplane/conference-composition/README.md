@@ -7,6 +7,8 @@ In this example, we create a Crossplane Composition to install:
 
 You need to have installed the GCP and Helm provider for this composition to work. 
 
+![Conference Composition](conference-composition-crossplane.png)
+
 In order to build and package this configuration package you need to run, inside this directory: 
 
 Build Configuration:
