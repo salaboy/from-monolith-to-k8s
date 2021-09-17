@@ -24,14 +24,11 @@ spec:
               parameters:
                 type: object
                 properties:
-                  name: 
-                    type: string
                   storagePostgresqlGB:
                     type: integer
                   storageRedisGB:
                     type: integer  
                 required:
-                  - name
                   - storagePostgresqlGB
                   - storageRedisGB
             required:
