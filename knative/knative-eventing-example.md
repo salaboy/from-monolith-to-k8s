@@ -21,3 +21,9 @@ EOF
 ```
 
 
+To enable the Tickets section in the application you should update the Knative Service called `fmtok8s-api-gateway` to have the following environment variable set: 
+
+```
+- name: TICKETS_ENABLED
+  value: "true"
+```
