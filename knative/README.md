@@ -9,7 +9,7 @@ Then it goes to add Knative Eventing and enable the application to emit events t
 
 Follow the instructions here: 
 
-https://knative.dev/docs/install/install-serving-with-yaml/
+https://knative.dev/docs/install/serving/install-serving-with-yaml/ 
 
 
 Apply the following patch to support traffic splitting with Headers (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref and  https://knative.dev/docs/serving/samples/tag-header-based-routing/) and Downward API (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref):
@@ -143,7 +143,7 @@ With something like ModHeader for Chrome you can now specify the `debug` revisio
 ## Installing Knative Eventing
 
 Follow the instructions from here: 
-https://knative.dev/docs/install/install-eventing-with-yaml/
+https://knative.dev/docs/install/eventing/install-eventing-with-yaml/
 
 Then create a Broker:
 
