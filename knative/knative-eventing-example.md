@@ -37,7 +37,7 @@ You need to create a broker and have sockeye if you want to see the events flowi
 Then to install the remaining services you can install the following Helm chart:
 
 ```
-cat <<EOF | helm install app fmtok8s/fmtok8s-tickets --values=-
+cat <<EOF | helm install tickets-app fmtok8s/fmtok8s-tickets --values=-
 fmtok8s-tickets-service:
   knativeDeploy: true
   env:
