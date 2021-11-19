@@ -40,8 +40,6 @@ Then to install the remaining services you can install the following Helm chart:
 cat <<EOF | helm install app fmtok8s/fmtok8s-tickets --values=-
 fmtok8s-tickets-service:
   knativeDeploy: true
-  env:
-    KNATIVE_ENABLED: "true"
 fmtok8s-payments-service:
   knativeDeploy: true
 fmtok8s-queue-service:
@@ -54,6 +52,6 @@ EOF
 To enable the Tickets section in the application you should update the Knative Service called `fmtok8s-api-gateway` to have the following environment variable set: 
 
 ```
-- name: TICKETS_ENABLED
+- name: FEATURE_TICKETS_ENABLED
   value: "true"
 ```
