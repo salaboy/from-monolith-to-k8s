@@ -20,12 +20,16 @@ kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.17.0
 You can access the dashboard by port-forwarding using `kubectl`:
 
 ```
-port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
+kubectl port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
 ```
 
 ![Tekton Dashboard](tekton-dashboard.png)
 
-Install Tekton `tkn` CLI tool: https://github.com/tektoncd/cli
+Then you can access pointing your browser to [http://localhost:9097](http://localhost:9097)
+
+
+4. Install Tekton Dashboard (optional): 
+You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
 
 ### Configure Tekton Pipeline
 
