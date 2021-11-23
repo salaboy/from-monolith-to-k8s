@@ -46,7 +46,6 @@ kind: ConfigMap
 
 If the pipeline is going to push docker images to DockerHub you need the following steps: 
 
-
 Create Docker Hub secret: 
 
 ```
@@ -55,16 +54,15 @@ kubectl create secret docker-registry regcred --docker-server=https://index.dock
 
 Then apply all the RBAC configurations and the pipelines: 
 
-
 ```
 kubectl apply -f tekton/
 ```
 
 ## Service Pipeline
 
-The Service Pipeline definition described in `resources/service-pipeline.yaml` implements the following tasks:
+The Service Pipeline definition described in [`resources/service-pipeline.yaml`](resources/service-pipeline.yaml) implements the following tasks:
 
-<Diagram>
+![Service Pipeline](service-pipeline.png)
 
 You can start this Service Pipeline by running the following command:
 
@@ -72,8 +70,12 @@ You can start this Service Pipeline by running the following command:
 tkn pipeline start api-gateway-service-pipeline -s dockerconfig -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -w name=dockerconfig,secret=regcred -w name=maven-settings,emptyDir=
 ```
 
+## Environment Pipeline
+
+(TBD)
+
 
 
 # References
-Why [JX uses Helmfile](https://jenkins-x.io/v3/develop/faq/general/#why-does-jenkins-x-use-helmfile-template)?
+- Why [JX uses Helmfile](https://jenkins-x.io/v3/develop/faq/general/#why-does-jenkins-x-use-helmfile-template)?
 
