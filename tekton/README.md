@@ -4,16 +4,21 @@ This document explains how to run a Service and an Environment Pipeline using Te
 
 ## Installing Tekton
 
-1. Install Tekton Pipeline:
+Follow the next steps in order to install and setup Tekton in your Kubernetes Cluster.
+
+1. **Install Tekton Pipelines**
+
 ```
 kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.25.0/release.yaml
 ```
-2. Install Tekton Triggers:
+2. **Install Tekton Triggers**
+
 ```
 kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.14.2/release.yaml
 kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.14.2/interceptors.yaml
 ```
-3. Install Tekton Dashboard (optional):
+3. **Install Tekton Dashboard (optional)**
+
 ```
 kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.17.0/tekton-dashboard-release.yaml
 ```
@@ -28,7 +33,8 @@ kubectl port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
 Then you can access pointing your browser to [http://localhost:9097](http://localhost:9097)
 
 
-4. Install Tekton Dashboard (optional): 
+4. **Install Tekton Dashboard (optional)**:
+
 You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
 
 ### Configure Tekton Pipeline
