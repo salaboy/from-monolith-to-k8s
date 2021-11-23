@@ -12,7 +12,7 @@ spec:
       default: https://github.com/salaboy/fmtok8s-api-gateway
     - name: gitRevision
       description: The git revision to build
-      default: master
+      default: main
     - name: context
       description: The path to the docker context in the sources workspace
       default: /
@@ -21,7 +21,7 @@ spec:
       default: Dockerfile
     - name: target
       description: The target container registry and path where to build the image
-      default: salaboy
+      default: grogdj
     - name: target-name
       description: Name of the image to publish
       default: fmtok8s-api-gateway
@@ -46,6 +46,10 @@ spec:
       value: $(tasks.export-results.results.artifactName)
     - name: cd.artifact.version
       value: $(tasks.export-results.results.artifactVersion)
+    - name: cd.package.name
+      value: $(tasks.export-results.results.packageName)
+    - name: cd.package.version
+      value: $(tasks.export-results.results.packageVersion)  
   tasks:
     - name: clone-repo
       taskRef:
@@ -96,8 +100,34 @@ spec:
           workspace: sources
         - name: dockerconfig
           workspace: dockerconfig
-    - name: export-results
+    - name: helm-package
       runAfter: [image-build]
+      workspaces:
+        - name: sources
+          workspace: sources
+      taskSpec:
+        workspaces:
+          - name: sources
+        steps:
+          - name: package
+            image: quay.io/roboll/helmfile:helm3-v0.135.0
+            script: |
+              #!/bin/sh
+              set -ex
+
+              cd $(workspaces.sources.path)/charts/fmtok8s-api-gateway
+
+              helm package .
+
+              # TODO: Need to fetch the chart name and version here
+              
+              echo "fmtok8s-api-gateway-0.1.0.tgz" | tee $(results.cd.package.name.path)
+              echo "0.1.0" | tee $(results.cd.package.version.path)
+
+              # TODO: push the chart to a chart repository
+
+    - name: export-results
+      runAfter: [helm-package]
       taskSpec:
         params:
           - name: name
@@ -108,6 +138,10 @@ spec:
             description: The name of the artifact
           - name: artifactVersion
             description: The version of the artifact
+          - name: packageName
+            description: The name of the helm chart 
+          - name: packageVersion
+            description: The version of the helm chart  
           - name: artifactId
             description: The full URL of the artifact, with version
         steps:
@@ -115,11 +149,15 @@ spec:
             image: alpine
             env:
               - name: ARTIFACT_NAME_RESULT_PATH
-                value: $(results.artifactName.path)
+                value: $(results.cd.artifact.name.path)
               - name: ARTIFACT_VERSION_RESULT_PATH
-                value: $(results.artifactVersion.path)
+                value: $(results.cd.artifact.version.path)
               - name: ARTIFACT_ID_RESULT_PATH
-                value: $(results.artifactId.path)
+                value: $(results.cd.artifact.id.path)
+              - name: PACKAGE_NAME_RESULT_PATH
+                value: $(results.cd.package.name)
+              - name: PACKAGE_VERSION_RESULT_PATH
+                value: $(results.cd.package.version)  
               - name: ARTIFACT_NAME_RESULT_VALUE
                 value: $(params.name)
               - name: ARTIFACT_VERSION_RESULT_VALUE
@@ -130,10 +168,12 @@ spec:
               printf "$ARTIFACT_NAME_RESULT_VALUE" > "$ARTIFACT_NAME_RESULT_PATH"
               printf "$ARTIFACT_VERSION_RESULT_VALUE" > "$ARTIFACT_VERSION_RESULT_PATH"
               printf "$ARTIFACT_ID_RESULT_VALUE" > "$ARTIFACT_ID_RESULT_PATH"
+              printf "$PACKAGE_NAME_RESULT_VALUE" > "$PACKAGE_NAME_RESULT_PATH"
+              printf "$PACKAGE_VERSION_RESULT_VALUE" > "$PACKAGE_VERSION_RESULT_PATH"
       params:
         - name: name
           value: $(params.target-name)
         - name: version
           value: $(params.version)
         - name: uri
-          value: $(params.target)/$(params.target-name)@$(tasks.image-build.results.IMAGE-DIGEST)
+          value: $(params.target)/$(params.target-name)@$(tasks.image-build.results.IMAGE-DIGEST) 

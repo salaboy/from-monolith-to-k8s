@@ -1,14 +1,14 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: ui-service
+  name: email-service
 spec:
   template:
     spec:
       containers:
-        - image: salaboy/fmtok8s-api-gateway:0.1.0
+        - image: salaboy/fmtok8s-email-rest:0.1.0
           env: 
           - name: SPRING_PROFILES_ACTIVE
             value: dev
           - name: VERSION
-            value: 0.1.0
+            value: 0.1.0  

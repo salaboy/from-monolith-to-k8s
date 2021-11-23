@@ -1,7 +1,7 @@
 apiVersion: database.gcp.crossplane.io/v1beta1
 kind: CloudSQLInstance
 metadata:
-  name: postgresql-with-crossplane
+  name: postgresql-crossplane-789
 spec:
   forProvider:
     databaseVersion: POSTGRES_9_6

@@ -6,9 +6,14 @@ spec:
   template:
     spec:
       containers:
-        - image: salaboy/fmtok8s-api-gateway:0.1.0
+        - image: salaboy/fmtok8s-api-gateway:0.1.0-color
           env: 
           - name: SPRING_PROFILES_ACTIVE
             value: dev
           - name: VERSION
-            value: 0.1.0
+            value: 0.1.0  
+  traffic: 
+  - percent: 100
+    revisionName: ui-service-00001
+  - latestRevision: true
+    tag: color
