@@ -17,6 +17,13 @@ kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previou
 ```
 kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.17.0/tekton-dashboard-release.yaml
 ```
+You can access the dashboard by port-forwarding using `kubectl`:
+
+```
+port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
+```
+
+![Tekton Dashboard](tekton-dashboard.png)
 
 Install Tekton `tkn` CLI tool: https://github.com/tektoncd/cli
 
