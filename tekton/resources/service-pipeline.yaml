@@ -155,9 +155,9 @@ spec:
               - name: ARTIFACT_ID_RESULT_PATH
                 value: $(results.cd.artifact.id.path)
               - name: PACKAGE_NAME_RESULT_PATH
-                value: $(results.cd.package.name)
+                value: $(results.cd.package.name.path)
               - name: PACKAGE_VERSION_RESULT_PATH
-                value: $(results.cd.package.version)  
+                value: $(results.cd.package.version.path)  
               - name: ARTIFACT_NAME_RESULT_VALUE
                 value: $(params.name)
               - name: ARTIFACT_VERSION_RESULT_VALUE
