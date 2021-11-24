@@ -1,7 +1,7 @@
 apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
 kind: RedisInstance
 metadata:
-  name: my-redis
+  name: my-redis-instance-123
   namespace: default
 spec:
   parameters:

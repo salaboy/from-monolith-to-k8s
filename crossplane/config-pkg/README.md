@@ -103,13 +103,40 @@ You can now delete the database by removing the resource by running:
 kubectl delete postgresqlinstance.db.fmtok8s.salaboy.com
 ```
 
+The process provisioning a Redis instance is pretty much the same: 
+
+```
+apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
+kind: RedisInstance
+metadata:
+  name: my-redis-instance-123
+  namespace: default
+spec:
+  parameters:
+    memorySizeGb: 1
+  compositionSelector:
+    matchLabels:
+      provider: gcp
+  writeConnectionSecretToRef:
+    name: redis-conn
+```
+
+Apply this resource and a new Redis instance will be provisioned: 
+
+```
+kubectl apply -f ../resources/redis.yaml
+```
+
 In contrast with other tools, Crossplane is constantly reconciling these resources. This means that if you go the GCP console and manaully delete the previously created Database, Crossplane will try to create it again if the resource is still present. 
 
 ## Conference Platform services connecting to the provisioned infrastructure
 
+If you installed the application using [Helm as explained here](../helm/README.md), you can now connect the C4P Service to PostgreSQL and the Agenda Service to Redis. But you might be wondering "which user should I use? to which IP should I connect?"
 
+If you look closely to the `postgresql.yaml` and `redis.yaml` file you will notice that both define a property under `spec` called `writeConnectionSecretToRef:`. Crossplane automatically create a Kubernetes Secret containing the URL and credentails to connect to the provisioned instances. Hence we can configure our services to just use the values inside this secret to connect. 
 
-And then modifying the C4P Service to use it by adding some environment variables:
+Let's update some Environment Variables from the C4P Service to connect to the newly created `PostgreSQLInstance`:
+
 
 ```
         - name: SPRING_DATASOURCE_DRIVERCLASSNAME
@@ -140,9 +167,7 @@ And then modifying the C4P Service to use it by adding some environment variable
               key: port
 ```
 
-You can do the same for the Agenda Service with Redis: 
-
-The variables needed for Redis are: 
+You can do the same for the Agenda Service and Redis: 
 
 ```
 - name: SPRING_REDIS_IN_MEMORY
@@ -153,3 +178,5 @@ The variables needed for Redis are:
       key: endpoint
       name: redis-conn
 ```
+
+Now that the state of the services is handled by PostgreSQL and Redis you can scale up the number of replicas for the services to handle more load. 
