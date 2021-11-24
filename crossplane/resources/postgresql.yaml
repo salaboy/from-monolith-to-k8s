@@ -1,7 +1,7 @@
 apiVersion: db.fmtok8s.salaboy.com/v1alpha1
 kind: PostgreSQLInstance
 metadata:
-  name: my-db
+  name: my-postgresql-instance-123
   namespace: default
 spec:
   parameters:

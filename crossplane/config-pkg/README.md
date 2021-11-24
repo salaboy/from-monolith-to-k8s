@@ -17,6 +17,13 @@ Inside this directory (`config-pkg`) directory you will find 3 files, and that i
 - [definition.yaml](definition.yaml): the `definition.yaml` file materialize the simplifications configured by the `composition.yaml` file. In other words, the `definition.yaml` file contains CRDs definitions of the simple interfaces that we are going to expose to our users. This example includes two CRDs that will be installed in the cluster when we install this package: `PostgreSQLInstance` and `RedisInstance`.
 
 
+In a way, what we are abstracting here with Crossplane are the following screens in GCP that allows us to configure our CloudSQL and MemoryStore instances: 
+
+![CloudSQL PostgreSQL Creation](gcp-cloudsql-postgresql-creation.png)
+![Memorystore Redis Creation](gcp-memorystore-redis-creation.png)
+
+In other words, when we install this configuration package in Crossplane our users will be able to define a resource that allows them to create instances in a very similar way as when they use the GCP cloud console or the GCP CLI (`gcloud`). 
+
 ## Creating and Publishing our Configuration Package
 
 Let's create and publish our custom configuration package. From inside the `config-pkg` directory run:
@@ -55,11 +62,50 @@ salaboy-crossplane-fmtok8s-gcp   True        True      salaboy/crossplane-fmtok8
 xp-getting-started-with-gcp      True        True      registry.upbound.io/xp/getting-started-with-gcp:v1.5.0   20h
 ```
 
-Once you have this running you can create a PostgreSQL database instance by running
+Once you have this running you can create a PostgreSQL database instance by running:
 
 ```
 kubectl apply -f ../resources/postgresql.yaml
+postgresqlinstance.db.fmtok8s.salaboy.com/my-postgresql-instance-123 created
 ```
+
+The PostgreSQLInstance resource looks as follows: 
+
+```
+apiVersion: db.fmtok8s.salaboy.com/v1alpha1
+kind: PostgreSQLInstance
+metadata:
+  name: my-postgresql-instance-123
+  namespace: default
+spec:
+  parameters:
+    storageGB: 20
+  compositionSelector:
+    matchLabels:
+      provider: gcp
+  writeConnectionSecretToRef:
+    name: db-conn
+```
+
+
+If you take a look at CloudSQL inside your GCP console you should see that a new PostgreSQL instance is being created. You can check the status by listing the PostgreSQLInstance resource that we have defined in the configuration package with: 
+
+```
+salaboy> kubectl get postgresqlinstance.db.fmtok8s.salaboy.com
+NAME                         READY   CONNECTION-SECRET   AGE
+my-postgresql-instance-123   False   db-conn             21s
+```
+
+![Creating PostgreSQL instance](gcp-cloudsql-postgresql-creating.png)
+
+You can now delete the database by removing the resource by running: 
+```
+kubectl delete postgresqlinstance.db.fmtok8s.salaboy.com
+```
+
+In contrast with other tools, Crossplane is constantly reconciling these resources. This means that if you go the GCP console and manaully delete the previously created Database, Crossplane will try to create it again if the resource is still present. 
+
+## Conference Platform services connecting to the provisioned infrastructure
 
 
 
