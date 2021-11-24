@@ -179,4 +179,5 @@ You can do the same for the Agenda Service and Redis:
       name: redis-conn
 ```
 
+
 Now that the state of the services is handled by PostgreSQL and Redis you can scale up the number of replicas for the services to handle more load. 

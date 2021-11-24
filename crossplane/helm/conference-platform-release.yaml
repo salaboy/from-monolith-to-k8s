@@ -8,7 +8,7 @@ spec:
       name: fmtok8s-app
       repository: https://salaboy.github.io/helm/
       version: 0.1.0
-    namespace: conference-1
+    namespace: conference-customer-a
     values:
       service:
         type: ClusterIP

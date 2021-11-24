@@ -7,7 +7,7 @@ These tutorials uses GCP, but the same approach and concepts apply for Azure and
 There are currently 4 different tutorials:
 - [Installing & configuring Crossplane for the Conference Platform Scenario using the GCP Provider](installing/README.md)
 - [Creating a Crossplane Configuration package with Application Infrastructure](config-pkg/README.md)
-- Using the Crossplane Helm Provider to install our Conference Platform Application
+- [Using the Crossplane Helm Provider to install our Conference Platform Application](helm/README.md)
 - Creating a Crossplane Composition for our Conferences
 
  
