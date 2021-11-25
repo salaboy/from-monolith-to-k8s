@@ -25,21 +25,13 @@ spec:
               repository: https://salaboy.github.io/helm/
               version: 0.1.0
             namespace: conference
-    - name: cloudsqlinstance
+    - name: PostgreSQL
       base:
-        apiVersion: database.gcp.crossplane.io/v1beta1
-        kind: CloudSQLInstance
+        apiVersion: db.fmtok8s.salaboy.com/v1alpha1
+        kind: PostgreSQLInstance
         spec:
           forProvider:
-            databaseVersion: POSTGRES_9_6
-            region: europe-west2
-            settings:
-              tier: db-custom-1-3840
-              dataDiskType: PD_SSD
-              ipConfiguration:
-                ipv4Enabled: true
-                authorizedNetworks:
-                  - value: "0.0.0.0/0"
+            storageGB: 20
           writeConnectionSecretToRef:
             namespace: crossplane-system
       patches:
@@ -50,23 +42,13 @@ spec:
               string:
                 fmt: "%s-postgresql"
         - fromFieldPath: "spec.parameters.storagePostgresqlGB"
-          toFieldPath: "spec.forProvider.settings.dataDiskSizeGb"
-      connectionDetails:
-        - fromConnectionSecretKey: username
-        - fromConnectionSecretKey: password
-        - fromConnectionSecretKey: endpoint
-        - type: FromValue
-          name: port
-          value: "5432"
-    - name: cloudmemorystoreinstance
+          toFieldPath: "spec.forProvider.storageGB"
+    - name: Redis
       base:
-        apiVersion: cache.gcp.crossplane.io/v1beta1
-        kind: CloudMemorystoreInstance
+        apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
+        kind: RedisInstance
         spec:
           forProvider:
-            redisVersion: REDIS_5_0
-            region: europe-west2
-            tier: BASIC
             memorySizeGb: 1
           writeConnectionSecretToRef:
             namespace: crossplane-system
@@ -78,11 +60,4 @@ spec:
               string:
                 fmt: "%s-redis"
         - fromFieldPath: "spec.parameters.storageRedisGB"
-          toFieldPath: "spec.forProvider.settings.memorySizeGb"
-      connectionDetails:
-        - fromConnectionSecretKey: username
-        - fromConnectionSecretKey: password
-        - fromConnectionSecretKey: endpoint
-        - type: FromValue
-          name: port
-          value: "6379"
+          toFieldPath: "spec.forProvider.memorySizeGb"
