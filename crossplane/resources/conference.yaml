@@ -4,7 +4,6 @@ metadata:
   name: my-conference
 spec:
   parameters: 
-    name: my-conference
     storagePostgresqlGB: 10
     storageRedisGB: 10
   

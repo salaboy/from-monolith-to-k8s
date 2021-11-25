@@ -39,18 +39,18 @@ You can now push the generated package as an OCI image to any Container Registry
 ```
 # Set this to the Docker Hub username or OCI registry you wish to use.
 REG=salaboy
-kubectl crossplane push configuration ${REG}/crossplane-fmtok8s-gcp:0.1.0
+kubectl crossplane push configuration ${REG}/fmtok8s-db-gcp:0.1.0
 ```
 
-I've pushed mine here: [https://hub.docker.com/repository/docker/salaboy/crossplane-fmtok8s-gcp](https://hub.docker.com/repository/docker/salaboy/crossplane-fmtok8s-gcp)
+I've pushed mine here: [https://hub.docker.com/repository/docker/salaboy/fmtok8s-db-gcp](https://hub.docker.com/repository/docker/salaboy/fmtok8s-db-gcp)
 
 Now you can distribute this package and install it in any Crossplane installation. 
 
 To install this package in your Crossplane installation you need to run: 
 
 ```
-salaboy> kubectl crossplane install configuration salaboy/crossplane-fmtok8s-gcp:0.1.0
-configuration.pkg.crossplane.io/salaboy-crossplane-fmtok8s-gcp created
+salaboy> kubectl crossplane install configuration salaboy/fmtok8s-db-gcp:0.1.0
+configuration.pkg.crossplane.io/salaboy-fmtok8s-db-gcp created
 ```
 
 You can check all the configuration packages installed by running: 
@@ -58,7 +58,7 @@ You can check all the configuration packages installed by running:
 ```
 salaboy> kubectl get configurations.pkg.crossplane.io 
 NAME                             INSTALLED   HEALTHY   PACKAGE                                                  AGE
-salaboy-crossplane-fmtok8s-gcp   True        True      salaboy/crossplane-fmtok8s-gcp:0.1.0                     55s
+salaboy-fmtok8s-db-gcp   True        True      salaboy/fmtok8s-db-gcp:0.1.0                     55s
 xp-getting-started-with-gcp      True        True      registry.upbound.io/xp/getting-started-with-gcp:v1.5.0   20h
 ```
 

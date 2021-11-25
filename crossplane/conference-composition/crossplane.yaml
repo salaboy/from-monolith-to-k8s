@@ -10,8 +10,8 @@ spec:
     version: ">=v1.0.0-0"
   dependsOn:
     - provider: crossplane/provider-gcp
-      version: ">=v0.16.0"
+      version: ">=v0.18.0"
     - provider: crossplane/provider-helm
-      version: ">=v0.8.0"    
-    - configuration: salaboy/crossplane-fmtok8s-gcp
+      version: ">=v0.9.0"    
+    - configuration: salaboy/fmtok8s-db-gcp
       version: ">=0.1.0"
