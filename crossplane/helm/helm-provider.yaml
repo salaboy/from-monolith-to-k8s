@@ -3,4 +3,4 @@ kind: Provider
 metadata:
   name: provider-helm
 spec:
-  package: "crossplane/provider-helm:0.9.0"
+  package: "crossplane/provider-helm:v0.9.0"

@@ -1,3 +1,81 @@
+# WORK IN PROGRESS >> the PostgreSQLInstance and RedisInstance resources are not created and 
+# they complain about empty namespace -> https://github.com/crossplane/crossplane/issues/1911
+# Uncomment, install and then do `kubectl describe composite` to see the issues
+# apiVersion: apiextensions.crossplane.io/v1
+# kind: Composition
+# metadata:
+#   name: compositeconferenceinstances.conferences.fmtok8s.salaboy.com
+#   labels:
+#     provider: gcp
+#     app: fmtok8s-conference
+# spec:
+#   writeConnectionSecretsToNamespace: crossplane-system
+#   compositeTypeRef:
+#     apiVersion: conferences.fmtok8s.salaboy.com/v1alpha1
+#     kind: CompositeConferenceInstance
+#   resources:
+#     - name: release
+#       base:
+#         apiVersion: helm.crossplane.io/v1beta1
+#         kind: Release
+#         metadata:
+#           annotations: 
+#             crossplane.io/external-name: conference
+#         spec:
+#           forProvider:
+#             chart:
+#               name: fmtok8s-app
+#               repository: https://salaboy.github.io/helm/
+#               version: 0.1.0
+#             namespace: conference
+#       patches:
+#         - fromFieldPath: "metadata.name"
+#           toFieldPath: "spec.forProvider.namespace"
+#     - name: postgresql
+#       base:
+#         apiVersion: db.fmtok8s.salaboy.com/v1alpha1
+#         kind: PostgreSQLInstance
+#         spec:
+#           forProvider:
+#             parameters:
+#               storageGB: 20
+#             namespace: conference  
+#           writeConnectionSecretToRef:
+#             namespace: crossplane-system
+#       patches:
+#         - fromFieldPath: "metadata.uid"
+#           toFieldPath: "spec.writeConnectionSecretToRef.name"
+#           transforms:
+#             - type: string
+#               string:
+#                 fmt: "%s-postgresql"
+#         - fromFieldPath: "spec.parameters.storagePostgresqlGB"
+#           toFieldPath: "spec.forProvider.parameters.storageGB"
+#         - fromFieldPath: "metadata.namespace"
+#           toFieldPath: "metadata.namespace"  
+#     - name: redis
+#       base:
+#         apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
+#         kind: RedisInstance
+#         spec:
+#           forProvider:
+#             parameters:
+#               memorySizeGb: 1
+#             namespace: conference  
+#           writeConnectionSecretToRef:
+#             namespace: crossplane-system
+#       patches:
+#         - fromFieldPath: "metadata.uid"
+#           toFieldPath: "spec.writeConnectionSecretToRef.name"
+#           transforms:
+#             - type: string
+#               string:
+#                 fmt: "%s-redis"
+#         - fromFieldPath: "spec.parameters.storageRedisGB"
+#           toFieldPath: "spec.forProvider.parameters.memorySizeGb" 
+#         - fromFieldPath: "metadata.namespace"
+#           toFieldPath: "metadata.namespace"  
+
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
@@ -25,13 +103,24 @@ spec:
               repository: https://salaboy.github.io/helm/
               version: 0.1.0
             namespace: conference
-    - name: PostgreSQL
+      patches:
+        - fromFieldPath: "metadata.name"
+          toFieldPath: "spec.forProvider.namespace"    
+    - name: cloudsqlinstance
       base:
-        apiVersion: db.fmtok8s.salaboy.com/v1alpha1
-        kind: PostgreSQLInstance
+        apiVersion: database.gcp.crossplane.io/v1beta1
+        kind: CloudSQLInstance
         spec:
           forProvider:
-            storageGB: 20
+            databaseVersion: POSTGRES_9_6
+            region: europe-west2
+            settings:
+              tier: db-custom-1-3840
+              dataDiskType: PD_SSD
+              ipConfiguration:
+                ipv4Enabled: true
+                authorizedNetworks:
+                  - value: "0.0.0.0/0"
           writeConnectionSecretToRef:
             namespace: crossplane-system
       patches:
@@ -42,13 +131,23 @@ spec:
               string:
                 fmt: "%s-postgresql"
         - fromFieldPath: "spec.parameters.storagePostgresqlGB"
-          toFieldPath: "spec.forProvider.storageGB"
-    - name: Redis
+          toFieldPath: "spec.forProvider.settings.dataDiskSizeGb"
+      connectionDetails:
+        - fromConnectionSecretKey: username
+        - fromConnectionSecretKey: password
+        - fromConnectionSecretKey: endpoint
+        - type: FromValue
+          name: port
+          value: "5432"
+    - name: cloudmemorystoreinstance
       base:
-        apiVersion: cache.fmtok8s.salaboy.com/v1alpha1
-        kind: RedisInstance
+        apiVersion: cache.gcp.crossplane.io/v1beta1
+        kind: CloudMemorystoreInstance
         spec:
           forProvider:
+            redisVersion: REDIS_5_0
+            region: europe-west2
+            tier: BASIC
             memorySizeGb: 1
           writeConnectionSecretToRef:
             namespace: crossplane-system
@@ -60,4 +159,11 @@ spec:
               string:
                 fmt: "%s-redis"
         - fromFieldPath: "spec.parameters.storageRedisGB"
-          toFieldPath: "spec.forProvider.memorySizeGb"
+          toFieldPath: "spec.forProvider.settings.memorySizeGb"
+      connectionDetails:
+        - fromConnectionSecretKey: username
+        - fromConnectionSecretKey: password
+        - fromConnectionSecretKey: endpoint
+        - type: FromValue
+          name: port
+          value: "6379"
