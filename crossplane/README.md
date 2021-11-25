@@ -4,11 +4,12 @@ This directory contains a set of different use cases that you can implement usin
 
 These tutorials uses GCP, but the same approach and concepts apply for Azure and AWS. There is no particular reason behind using GCP and the aim of Crossplane is to enable users to choose any Cloud Provider they want. 
 
-There are currently 4 different tutorials:
+There are currently 5 different tutorials:
 - [Installing & configuring Crossplane for the Conference Platform Scenario using the GCP Provider](installing/README.md)
 - [Creating a Crossplane Configuration package with Application Infrastructure](config-pkg/README.md)
 - [Using the Crossplane Helm Provider to install our Conference Platform Application](helm/README.md)
 - [Creating a Crossplane Composition for our Conferences](conference-composition/README.md)
+- [WIP Multi-Cluster Provisioning Composition](conference-cluster-composition/README.md)
 
  
 

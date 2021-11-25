@@ -41,7 +41,7 @@ kubectl crossplane install configuration <USER>/fmtok8s-conference:0.1.0
 Notice that you can use the composition that I've already built with: 
 
 ```
-kubectl crossplane install configuration salaboy/fmtok8s-conference:0.1.5
+kubectl crossplane install configuration salaboy/fmtok8s-conference:0.1.0
 ```
 
 Now you can provision conference platforms + their application infrastructure by applying the following yaml file:
