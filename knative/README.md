@@ -192,3 +192,118 @@ spec:
   subscriber:
     uri: http://sockeye.default.svc.cluster.local
 ```
+
+## Configuring the project to use the Knative Eventing RabbitMQ Broker
+
+To change the Broker implementation, and use the [https://github.com/knative-sandbox/eventing-rabbitmq/](https://github.com/knative-sandbox/eventing-rabbitmq/).
+
+First we need to have the required CRDs for a RabbitMQ Operator to work:
+- Install the RabbitMQ Cluster Operator
+  kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml
+- Install the Cert Manager required for the RabbitMQ Message Topology Operator, this because the TLS enabled admission webhooks needed for the Topology Operator to work properly
+  kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
+  kubectl wait --for=condition=Ready pods --all -n cert-manager
+- Lastly, install the RabbitMQ Message Topology Operator
+  kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
+
+Then, lets create a RabbitMQ Cluster:
+```
+kubectl create -f - <<EOF
+  apiVersion: rabbitmq.com/v1beta1
+  kind: RabbitmqCluster
+  metadata:
+    name: rabbitmq-cluster
+    namespace: rabbitmq-resources
+  spec:
+    replicas: 1
+EOF
+```
+
+Apply the RabbitMQ Broker CRD YAML:
+```
+kubectl apply -f https://github.com/knative-sandbox/eventing-rabbitmq/releases/download/knative-v1.0.0/rabbitmq-broker.yaml
+```
+
+Now lets create a RabbitMQ Broker:
+```
+kubectl create -f - <<EOF
+  apiVersion: eventing.knative.dev/v1
+  kind: Broker
+  metadata:
+    name: default
+    namespace: rabbitmq-resources
+    annotations:
+      eventing.knative.dev/broker.class: RabbitMQBroker
+  spec:
+    config:
+      apiVersion: rabbitmq.com/v1beta1
+      kind: RabbitmqCluster
+      name: rabbitmq-cluster
+EOF
+```
+
+Now install the frontend (named app) and tickets charts using helm:
+```
+cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
+fmtok8s-api-gateway:
+  knativeDeploy: true
+  env:
+    KNATIVE_ENABLED: "true"
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+    K_SINK_POST_FIX: "/broker, /"
+    FEATURE_TICKETS_ENABLED: "true"
+
+fmtok8s-agenda-rest:
+  knativeDeploy: true
+fmtok8s-c4p-rest:
+  knativeDeploy: true
+  env:
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+fmtok8s-email-rest:
+  knativeDeploy: true
+EOF
+```
+
+```
+cat <<EOF | helm install tickets fmtok8s/fmtok8s-tickets --values=-
+fmtok8s-tickets-service:
+  knativeDeploy: true
+  env:
+    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+fmtok8s-payments-service:
+  knativeDeploy: true
+fmtok8s-queue-service:
+  knativeDeploy: true
+  env:
+    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+EOF
+```
+
+## Debugging RabbitMQ
+
+To debug RabbitMQ resources, fin the pod in the default namespace called
+cluste-server-0, and port forward the port 15672:
+kubectl port-forward cluster-server-0 15672:15672
+
+Then find the RabbitMQ cluster default credentials, created when the Cluster yaml
+was executed. This are located on the secret cluster-default-user in base64 encoding:
+kubectl get secrets cluster-default-user -o json | jq -r '.data["default_user.conf"]' | base64 -d
+
+Now go to http://localhost:15672/ and login with this credentials, here you have the
+RabbitMQ Management UI were are the resources of RabbitMQ can be managed and monitored.
+
+## Cleanup
+
+To clean up this project resources use the next commands:
+```
+helm delete app tickets
+```
+
+And if you have the Knative Eventing RabbitMQ Broker implementation:
+```
+kubectl delete ns rabbitmq-resources
+```
