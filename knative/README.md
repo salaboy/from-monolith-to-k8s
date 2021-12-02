@@ -23,7 +23,7 @@ Note: you can use ModHeader to modify the request headers in your browser: https
 ### Install the application using Knative Services
 
 ```
-cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
+cat <<EOF | helm install conference fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
   knativeDeploy: true
   env:
@@ -206,14 +206,20 @@ First we need to have the required CRDs for a RabbitMQ Operator to work:
 - Lastly, install the RabbitMQ Message Topology Operator
   kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
 
+// TODO: not working with the namespace
+First, we create a namespace for the RabbitMQ resources to live in:
+```
+kubectl create ns rabbitmq-resources
+```
+
 Then, lets create a RabbitMQ Cluster:
 ```
 kubectl create -f - <<EOF
   apiVersion: rabbitmq.com/v1beta1
   kind: RabbitmqCluster
   metadata:
-    name: rabbitmq-cluster
-    namespace: rabbitmq-resources
+    name: rabbitmq-cluster  
+    # namespace: rabbitmq-resources
   spec:
     replicas: 1
 EOF
@@ -239,12 +245,13 @@ kubectl create -f - <<EOF
       apiVersion: rabbitmq.com/v1beta1
       kind: RabbitmqCluster
       name: rabbitmq-cluster
+      # namespace: rabbitmq-resources
 EOF
 ```
 
-Now install the frontend (named app) and tickets charts using helm:
+Now install the conference and tickets charts using helm:
 ```
-cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
+cat <<EOF | helm install conference fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
   knativeDeploy: true
   env:
@@ -252,7 +259,7 @@ fmtok8s-api-gateway:
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
-    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+    K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
     K_SINK_POST_FIX: "/broker, /"
     FEATURE_TICKETS_ENABLED: "true"
 
@@ -273,13 +280,13 @@ cat <<EOF | helm install tickets fmtok8s/fmtok8s-tickets --values=-
 fmtok8s-tickets-service:
   knativeDeploy: true
   env:
-    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+    K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
 fmtok8s-payments-service:
   knativeDeploy: true
 fmtok8s-queue-service:
   knativeDeploy: true
   env:
-    K_SINK: http://default-broker-ingress.default.svc.cluster.local
+    K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
 EOF
 ```
 
@@ -300,9 +307,10 @@ RabbitMQ Management UI were are the resources of RabbitMQ can be managed and mon
 
 To clean up this project resources use the next commands:
 ```
-helm delete app tickets
+helm delete conference tickets
 ```
 
+// TODO
 And if you have the Knative Eventing RabbitMQ Broker implementation:
 ```
 kubectl delete ns rabbitmq-resources
