@@ -15,11 +15,14 @@ The examples included and linked in this repository all use the same application
 
 After installing playing around and trying to break the application you can try to use different Open Source projects to solve different challenges, and you can find separate guides to do so: 
 - [Using Helm as a Package Manager](helm/README.md)
-- [Building your Services with Tekton](tekton/README.md)
-- [Canary Releases with Knative Serving](knative/README.md)
+- [Building your Services and Environment pipelines with Tekton](tekton/README.md)
+- [Release Strategies with Knative Serving](knative/README.md)
 - [Event-Driven Architectures with Knative Eventing](knative/README.md)
+- [Adding Functions to your repertoire with Knative `func` (TBD)]()
+- [Platform Composition and Multi-Cloud Infrastructure with Crossplane](crossplane/README.md)
 - [Single Sign-On with Keycloak](sso/README.md)
 - [Monitoring with Prometheus and Graphana](monitoring/README.md)
+- [Supply Chain tools with Keptn and Cartographer(TBD)]()
 
 # Source Code
 
@@ -28,6 +31,9 @@ After installing playing around and trying to break the application you can try 
 - [C4P Service](https://github.com/salaboy/fmtok8s-c4p-rest)
 - [Agenda Service](https://github.com/salaboy/fmtok8s-c4p-rest)
 - [Email Service](https://github.com/salaboy/fmtok8s-email-rest)
+- [Queue Service](https://github.com/salaboy/fmtok8s-queue-service)
+- [Tickets Service](https://github.com/salaboy/fmtok8s-tickets-service)
+- [Payments Service](https://github.com/salaboy/fmtok8s-payments-service)
 
 # Conferences
 - [Jump! Conference 2021](https://www.slideshare.net/salaboy/intro-to-the-cloud-with-knative-spanish)
