@@ -18,7 +18,7 @@ After installing playing around and trying to break the application you can try 
 - [Building your Services and Environment pipelines with Tekton](tekton/README.md)
 - [Release Strategies with Knative Serving](knative/README.md)
 - [Polyglot CloudEvents consumers and producers](cloudevents/README.md)
-- [Event-Driven Architectures with Knative Eventing and CD Events](knative/README.md)
+- [Event-Driven Architectures with Knative Eventing and CD Events](knative/knative-eventing-example.md)
 - [Adding Functions to your repertoire with Knative `func` (TBD)]()
 - [Platform Composition and Multi-Cloud Infrastructure with Crossplane](crossplane/README.md)
 - [Single Sign-On with Keycloak](sso/README.md)
