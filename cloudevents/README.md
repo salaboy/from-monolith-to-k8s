@@ -54,3 +54,8 @@ Feel free to test the other way around, by calling the `/produce` endpoint in Ap
 ```
 curl -X POST http://localhost:8081/produce
 ```
+
+# On Kubernetes
+(TBD)
+# With Knative Eventing
+(TBD)
