@@ -303,7 +303,7 @@ kubectl get secrets cluster-default-user -o json | jq -r '.data["default_user.co
 Now go to http://localhost:15672/ and login with this credentials, here you have the
 RabbitMQ Management UI were are the resources of RabbitMQ can be managed and monitored.
 
-## Cleanup
+## RabbitMQ Cleanup
 
 To clean up this project resources use the next commands:
 ```
@@ -314,4 +314,122 @@ helm delete conference tickets
 And if you have the Knative Eventing RabbitMQ Broker implementation:
 ```
 kubectl delete ns rabbitmq-resources
+```
+
+## Configuring the project to use the Knative Eventing Kafka Broker
+
+To change the Broker implementation, and use the [https://github.com/knative-sandbox/eventing-kafka-broker](https://github.com/knative-sandbox/eventing-kafka-broker).
+
+- Follow the installation docs [here](https://knative.dev/docs/eventing/broker/kafka-broker/)
+
+
+First, we create a namespace for the Kafka resources to live in:
+```
+kubectl create ns kafka
+```
+
+Then use an existing Kafka Cluster or create your own using [this docs](https://strimzi.io/quickstarts/)
+
+
+Now lets create a Kafka Broker with its ConfigMap and DLS:
+```
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  annotations:
+    # case-sensitive
+    eventing.knative.dev/broker.class: Kafka
+  name: default
+  namespace: default
+spec:
+  # Configuration specific to this broker.
+  config:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kafka-broker-config
+    namespace: knative-eventing
+  # Optional dead letter sink, you can specify either:
+  #  - deadLetterSink.ref, which is a reference to a Callable
+  #  - deadLetterSink.uri, which is an absolute URI to a Callable (It can potentially be out of the Kubernetes cluster)
+  delivery:
+    deadLetterSink:
+      ref:
+        apiVersion: serving.knative.dev/v1
+        kind: Service
+        name: dlq-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-broker-config
+  namespace: knative-eventing
+data:
+  # Number of topic partitions
+  default.topic.partitions: "10"
+  # Replication factor of topic messages.
+  default.topic.replication.factor: "1"
+  # A comma separated list of bootstrap servers. (It can be in or out the k8s cluster)
+  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: dlq-service
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/n3wscott/sockeye:v0.7.0@sha256:e603d8494eeacce966e57f8f508e4c4f6bebc71d095e3f5a0a1abaf42c5f0e48
+```
+
+Now install the conference and tickets charts using helm:
+```
+cat <<EOF | helm install conference fmtok8s/fmtok8s-app --values=-
+fmtok8s-api-gateway:
+  knativeDeploy: true
+  env:
+    KNATIVE_ENABLED: "true"
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+    K_SINK: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/default
+    K_SINK_POST_FIX: "/broker, /"
+    FEATURE_TICKETS_ENABLED: "true"
+
+fmtok8s-agenda-rest:
+  knativeDeploy: true
+fmtok8s-c4p-rest:
+  knativeDeploy: true
+  env:
+    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+fmtok8s-email-rest:
+  knativeDeploy: true
+EOF
+```
+
+```
+cat <<EOF | helm install tickets fmtok8s/fmtok8s-tickets --values=-
+fmtok8s-tickets-service:
+  knativeDeploy: true
+  env:
+    K_SINK: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/default
+fmtok8s-payments-service:
+  knativeDeploy: true
+fmtok8s-queue-service:
+  knativeDeploy: true
+  env:
+    K_SINK: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/default
+EOF
+```
+
+## Kafka Cleanup
+
+To clean up this project resources use the next commands:
+```
+helm delete conference tickets
+```
+and
+```
+kubectl delete ns kafka
 ```
