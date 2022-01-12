@@ -8,7 +8,7 @@ This tutorial install the Conference Platform application using Helm, but it als
 ![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
 ## Pre Requisites
-- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/).
+- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/). For Knative Eventing, install the In Memory Channel and the MT-Channel based Broker. 
 - Patch ConfigMap to support downstream API
 - Install the Conference Platform App using Helm and setting the `knativeDeploy` variable to `true`
 - Create a Knative Eventing Broker, install SockEye and create a trigger to see all the events
