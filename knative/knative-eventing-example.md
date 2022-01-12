@@ -74,6 +74,7 @@ kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/re
 ### Creating a trigger to see all the events going to the broker
 
 ```
+kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
@@ -83,6 +84,7 @@ spec:
   broker: default
   subscriber:
     uri: http://sockeye.default.svc.cluster.local
+EOF
 ```
 
 ## Installing the Tickets Queue Services
