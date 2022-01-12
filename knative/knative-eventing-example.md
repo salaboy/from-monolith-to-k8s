@@ -1,12 +1,26 @@
 # Knative Eventing Tickets Sale Example
 
 
-This tutorial install the Conference Platform application using Helm, but it also adds the services to implement the Ticket Sale flow. 
+This tutorial install the Conference Platform application using Helm, but it also adds the services to implement the Tickets Selling flow. 
 
 ## Pre Requisites
-- Install Knative Serving and Knative Eventing
-- Install the Conference Platform App using Helm, You can follow the Knative tutorial for installing the main Application Services: https://github.com/salaboy/from-monolith-to-k8s/tree/master/knative
+- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/).
+- Install the Conference Platform App using Helm and setting the `knativeDeploy` variable to `true`
+- Create a Knative Eventing Broker, install SockEye and create a trigger to see all the events
 
+### Creating a Knative Eventing Broker
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: broker
+metadata:
+ name: default
+ namespace: default
+EOF
+```
+
+### Installing the base Conference Platform using Knative Resources
 ```
 cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
@@ -28,9 +42,25 @@ fmtok8s-email-rest:
   knativeDeploy: true
 EOF
 ```
+### Installing Sockeye for monitoring events
 
-You need to create a broker and have sockeye if you want to see the events flowing. 
+```
+kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml
+```
 
+### Creating a trigger to see all the events going to the broker
+
+```
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: wildcard-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+```
 
 ## Installing the Tickets Queue Services
 
