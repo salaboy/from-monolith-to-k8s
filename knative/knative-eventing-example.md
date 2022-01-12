@@ -5,6 +5,7 @@ This tutorial install the Conference Platform application using Helm, but it als
 
 ## Pre Requisites
 - Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/).
+- Patch ConfigMap to support downstream API
 - Install the Conference Platform App using Helm and setting the `knativeDeploy` variable to `true`
 - Create a Knative Eventing Broker, install SockEye and create a trigger to see all the events
 
@@ -19,8 +20,14 @@ metadata:
  namespace: default
 EOF
 ```
-
+### Patch to support Downstream API
+```
+kubectl patch cm config-features -n knative-serving -p '{"data":{"tag-header-based-routing":"Enabled", "kubernetes.podspec-fieldref": "Enabled"}}'
+```
 ### Installing the base Conference Platform using Knative Resources
+
+This is installing the base services, enabling Knative Deployment with Knative Services and also enabling events to be emitted by the services to the newly created broker. You will need to fine-tune this configuration if you are using a different broker implementation.
+
 ```
 cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
@@ -30,16 +37,25 @@ fmtok8s-api-gateway:
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
-
+    EVENTS_ENABLED: "true"
+    K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 fmtok8s-agenda-rest:
   knativeDeploy: true
+  env:
+    EVENTS_ENABLED: "true"
+    K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 fmtok8s-c4p-rest:
   knativeDeploy: true
   env:
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
+    EVENTS_ENABLED: "true"
+    K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default  
 fmtok8s-email-rest:
   knativeDeploy: true
+  env:
+    EVENTS_ENABLED: "true"
+    K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 EOF
 ```
 ### Installing Sockeye for monitoring events
