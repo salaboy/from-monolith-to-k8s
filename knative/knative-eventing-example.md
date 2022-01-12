@@ -18,7 +18,7 @@ This tutorial install the Conference Platform application using Helm, but it als
 ```
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
-kind: broker
+kind: Broker
 metadata:
  name: default
  namespace: default
