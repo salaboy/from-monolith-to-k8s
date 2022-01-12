@@ -72,7 +72,7 @@ kubectl create secret docker-registry regcred --docker-server=https://index.dock
 Then apply all the RBAC configurations and the pipelines: 
 
 ```
-kubectl apply -f tekton/
+kubectl apply -f tekton/resources/
 ```
 
 ## Service Pipeline
