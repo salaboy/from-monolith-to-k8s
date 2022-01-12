@@ -34,7 +34,6 @@ cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
   knativeDeploy: true
   env:
-    SPRING_PROFILES_ACTIVE: "dev"
     KNATIVE_ENABLED: "true"
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
@@ -46,13 +45,11 @@ fmtok8s-api-gateway:
 fmtok8s-agenda-rest:
   knativeDeploy: true
   env:
-    SPRING_PROFILES_ACTIVE: "dev"
     EVENTS_ENABLED: "true"
     K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 fmtok8s-c4p-rest:
   knativeDeploy: true
   env:
-    SPRING_PROFILES_ACTIVE: "dev"
     AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
     EVENTS_ENABLED: "true"
@@ -60,7 +57,6 @@ fmtok8s-c4p-rest:
 fmtok8s-email-rest:
   knativeDeploy: true
   env:
-    SPRING_PROFILES_ACTIVE: "dev"
     EVENTS_ENABLED: "true"
     K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 EOF
