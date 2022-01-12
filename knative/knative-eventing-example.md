@@ -27,6 +27,7 @@ kubectl patch cm config-features -n knative-serving -p '{"data":{"tag-header-bas
 ### Installing the base Conference Platform using Knative Resources
 
 This is installing the base services, enabling Knative Deployment with Knative Services and also enabling events to be emitted by the services to the newly created broker. You will need to fine-tune this configuration if you are using a different broker implementation.
+This is also setting some feature flags in the API Gateway Service to enable the tickets menu option and the Call for Proposals (C4P) feature. 
 
 ```
 cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
@@ -39,6 +40,8 @@ fmtok8s-api-gateway:
     EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
     EVENTS_ENABLED: "true"
     K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+    FEATURE_TICKETS_ENABLED: "true"
+    FEATURE_C4P_ENABLED: "true"
 fmtok8s-agenda-rest:
   knativeDeploy: true
   env:
