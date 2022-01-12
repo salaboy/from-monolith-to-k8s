@@ -4,6 +4,8 @@
 This tutorial install the Conference Platform application using Helm, but it also adds the services to implement the Tickets Selling flow. 
 
 ![Selling Tickets Services](imgs/selling-tickets-services.png)
+![Selling Tickets Events](imgs/selling-tickets-events.png)
+![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
 ## Pre Requisites
 - Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/).
