@@ -103,3 +103,106 @@ fmtok8s-queue-service:
 EOF
 ```
 
+## Replacing In-Memory Broker for RabbitMQ Broker
+
+This sections guides you to to change the Broker implementation to use the [https://github.com/knative-sandbox/eventing-rabbitmq/](https://github.com/knative-sandbox/eventing-rabbitmq/).
+
+First we need to have the required CRDs for a RabbitMQ Operator to work:
+- Install the RabbitMQ Cluster Operator
+```
+  kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml  
+```
+- Install the Cert Manager required for the RabbitMQ Message Topology Operator, this because the TLS enabled admission webhooks needed for the Topology Operator to work properly
+```
+  kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
+  kubectl wait --for=condition=Ready pods --all -n cert-manager
+```
+- Lastly, install the RabbitMQ Message Topology Operator
+```
+  kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
+```
+
+// TODO: not working with the namespace
+First, we create a namespace for the RabbitMQ resources to live in:
+```
+kubectl create ns rabbitmq-resources
+```
+
+Then, lets create a RabbitMQ Cluster:
+```
+kubectl create -f - <<EOF
+  apiVersion: rabbitmq.com/v1beta1
+  kind: RabbitmqCluster
+  metadata:
+    name: rabbitmq-cluster  
+    # namespace: rabbitmq-resources
+  spec:
+    replicas: 1
+EOF
+```
+
+Apply the RabbitMQ Broker CRD YAML:
+```
+kubectl apply -f https://github.com/knative-sandbox/eventing-rabbitmq/releases/download/knative-v1.0.0/rabbitmq-broker.yaml
+```
+
+Now lets create a RabbitMQ Broker:
+```
+kubectl create -f - <<EOF
+  apiVersion: eventing.knative.dev/v1
+  kind: Broker
+  metadata:
+    name: default
+    namespace: rabbitmq-resources
+    annotations:
+      eventing.knative.dev/broker.class: RabbitMQBroker
+  spec:
+    config:
+      apiVersion: rabbitmq.com/v1beta1
+      kind: RabbitmqCluster
+      name: rabbitmq-cluster
+      # namespace: rabbitmq-resources
+EOF
+
+The API-Gateway Knative Service needs to be updated with a new K_SINK and K_SINK_POST_FIX variables. This is due the URL for the RabbitMQ Broker is different from the In-Memory one. 
+
+```
+K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
+K_SINK_POST_FIX: "/broker, /"
+```
+
+For the same reason, we need to change the queue-service, tickets-service and payments-service
+```
+K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
+```
+
+## Debugging RabbitMQ
+
+To debug RabbitMQ resources, fin the pod in the default namespace called
+cluste-server-0, and port forward the port 15672:
+```
+kubectl port-forward cluster-server-0 15672:15672
+```
+
+Then find the RabbitMQ cluster default credentials, created when the Cluster yaml
+was executed. This are located on the secret cluster-default-user in base64 encoding:
+```
+kubectl get secrets cluster-default-user -o json | jq -r '.data["default_user.conf"]' | base64 -d
+```
+
+Now go to `http://localhost:15672/` and login with this credentials, here you have the
+RabbitMQ Management UI were are the resources of RabbitMQ can be managed and monitored.
+
+## RabbitMQ Cleanup
+
+To clean up this project resources use the next commands:
+```
+helm delete conference tickets
+```
+
+// TODO
+And if you have the Knative Eventing RabbitMQ Broker implementation:
+```
+kubectl delete ns rabbitmq-resources
+```
+
