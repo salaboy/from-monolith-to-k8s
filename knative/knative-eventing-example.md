@@ -8,7 +8,9 @@ This tutorial install the Conference Platform application using Helm, but it als
 ![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
 ## Pre Requisites
-- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/). For Knative Eventing, install the In Memory Channel and the MT-Channel based Broker. 
+- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/). 
+  - For Knative Serving make sure that you configure the DNS so you get URLs for your Knative Services. 
+  - For Knative Eventing install the In-Memory Channel and the MT-Channel based Broker. 
 - Patch ConfigMap to support downstream API
 - Install the Conference Platform App using Helm and setting the `knativeDeploy` variable to `true`
 - Create a Knative Eventing Broker, install SockEye and create a trigger to see all the events
@@ -65,13 +67,49 @@ fmtok8s-email-rest:
     K_SINK: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
 EOF
 ```
+
+At this point, if you have installed Knative Serving and Eventing, the applicaiton should be up and running. 
+You can run the following command to list your Knative Services, they should include the URLs for each service:
+
+```
+kubectl get ksvc
+```
+It should return something like this: 
+```
+salaboy> kubectl get ksvc
+NAME                  URL                                                         LATESTCREATED               LATESTREADY                 READY   REASON
+fmtok8s-agenda        http://fmtok8s-agenda.default.X.X.X.X.sslip.io        fmtok8s-agenda-00001        fmtok8s-agenda-00001        True    
+fmtok8s-api-gateway   http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io   fmtok8s-api-gateway-00001   fmtok8s-api-gateway-00001   True    
+fmtok8s-c4p           http://fmtok8s-c4p.default.X.X.X.X.sslip.io           fmtok8s-c4p-00001           fmtok8s-c4p-00001           True    
+fmtok8s-email         http://fmtok8s-email.default.X.X.X.X.sslip.io         fmtok8s-email-00001         fmtok8s-email-00001         True    
+```
+
+
+Now you can use the API-Gateway Knative Service URL to access the Conference Application: http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io (X.X.X.X should be your loadbalancer IP). 
+
+
 ### Installing Sockeye for monitoring events
+
+Sockeye will let you monitor the CloudEvents that are being sent by every service of the application
 
 ```
 kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml
 ```
 
+Once again, you can list your Knative Services to find Sockeye URL:
+
+```
+kubectl get ksvc
+```
+It should now include Sockeye Knative Service: 
+```
+sockeye               http://sockeye.default.X.X.X.X.sslip.io               sockeye-00001               sockeye-00001               True
+```
+
+
 ### Creating a trigger to see all the events going to the broker
+
+You need to let the Knative Eventing Broker to know that should send all the events in the Broker to Sockeye, you do this by creating a new Knative Eventing Trigger:
 
 ```
 kubectl create -f - <<EOF
@@ -89,7 +127,7 @@ EOF
 
 ## Installing the Tickets Queue Services
 
-Then to install the remaining services you can install the following Helm chart:
+To enable the services required to sell tickets inside the Conference application you need to install another Helm Chart
 
 ```
 cat <<EOF | helm install conference-tickets fmtok8s/fmtok8s-tickets --values=-
@@ -99,9 +137,13 @@ fmtok8s-payments-service:
   knativeDeploy: true
 fmtok8s-queue-service:
   knativeDeploy: true
-
 EOF
 ```
+
+This chart install 3 other Knative Services and register the Knative Triggers to wire services together.
+
+Now the application is ready to be use and you can buy conference tickets from the "Tickets" section. Also, check out the Backoffice Tickets Queue section to simulate other customers queuing for buying tickets. 
+
 
 ## Replacing In-Memory Broker for RabbitMQ Broker
 
