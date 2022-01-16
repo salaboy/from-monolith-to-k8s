@@ -34,7 +34,7 @@ This is installing the base services, enabling Knative Deployment with Knative S
 This is also setting some feature flags in the API Gateway Service to enable the tickets menu option and the Call for Proposals (C4P) feature. 
 
 ```
-cat <<EOF | helm install app fmtok8s/fmtok8s-app --values=-
+cat <<EOF | helm install conference fmtok8s/fmtok8s-app --values=-
 fmtok8s-api-gateway:
   knativeDeploy: true
   env:
@@ -92,7 +92,7 @@ EOF
 Then to install the remaining services you can install the following Helm chart:
 
 ```
-cat <<EOF | helm install tickets-app fmtok8s/fmtok8s-tickets --values=-
+cat <<EOF | helm install conference-tickets fmtok8s/fmtok8s-tickets --values=-
 fmtok8s-tickets-service:
   knativeDeploy: true
 fmtok8s-payments-service:
