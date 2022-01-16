@@ -1,0 +1,138 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-wildcard-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-ui-queue-exit-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Queue.CustomerExited
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-ui-tickets-payment-authorized-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.PaymentsAuthorized
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-ui-tickets-reservation-oneminnotification-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.Reservation1MExpired
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-ui-tickets-reservation-timedout-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.ReservationTimedOut
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-queue-join-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Queue.CustomerJoined
+  subscriber:
+    uri: http://queue-service.default.svc.cluster.local/join/
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-queue-abandon-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Queue.CustomerAbandoned
+  subscriber:
+    uri: http://queue-service.default.svc.cluster.local/abandon/
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-tickets-tickets-reserved-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.Reserved
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/reserve
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-tickets-tickets-payment-requested-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.PaymentRequested
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/checkout
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rmq-tickets-tickets-emitted-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  filter:
+    attributes:
+      type: Tickets.Emitted
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/emit
