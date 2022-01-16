@@ -235,7 +235,7 @@ kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: rabbitmq-wildcard-trigger
+  name: rmq-wildcard-trigger
   namespace: rabbitmq-resources
 spec:
   broker: rabbitmq-broker
@@ -244,6 +244,11 @@ spec:
 EOF
 ```
 
+To avoid manually creating all the triggers you can use the `knative-rabbitmq-triggers.yaml` file provided in this repository:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-rabbitmq-triggers.yaml
+```
 
 ## Debugging RabbitMQ
 
