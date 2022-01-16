@@ -200,7 +200,7 @@ kubectl create -f - <<EOF
   apiVersion: eventing.knative.dev/v1
   kind: Broker
   metadata:
-    name: default
+    name: rabbitmq-broker
     namespace: rabbitmq-resources
     annotations:
       eventing.knative.dev/broker.class: RabbitMQBroker
@@ -216,14 +216,34 @@ EOF
 The API-Gateway Knative Service needs to be updated with a new K_SINK and K_SINK_POST_FIX variables. This is due the URL for the RabbitMQ Broker is different from the In-Memory one. 
 
 ```
-K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
-K_SINK_POST_FIX: "/broker, /"
+- name: K_SINK
+  value: http://rabbitmq-broker-broker-ingress.rabbitmq-resources.svc.cluster.local
+- name: K_SINK_POST_FIX
+  value: "/broker, /"
 ```
 
-For the same reason, we need to change the queue-service, tickets-service and payments-service
+For the same reason, we need update all application services dispatching events (`fmtok8s-agenda`, `fmtok8s-c4p `, `fmtok8s-email`, `queue-service`, `tickets-service`) to use the following `K_SINK`: 
 ```
-K_SINK: http://default-broker-ingress.rabbitmq-resources.svc.cluster.local
+- name: K_SINK
+  value: http://rabbitmq-broker-broker-ingress.rabbitmq-resources.svc.cluster.local
 ```
+
+Finally, Knative Triggers cannot be patched to use the newly created RabbitMQ Broker, hence new triggers will need to be created, for example, let's create the wildcard trigger for the RabbitMQ Broker:
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: rabbitmq-wildcard-trigger
+  namespace: rabbitmq-resources
+spec:
+  broker: rabbitmq-broker
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+EOF
+```
+
 
 ## Debugging RabbitMQ
 
