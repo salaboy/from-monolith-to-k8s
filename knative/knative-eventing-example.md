@@ -169,8 +169,6 @@ kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/release
 ```
 Once we have the Operators and Cert Manager up and running, we can create a RabbitMQ Cluster to be used by the Knative RabbitMQ Broker implementation
 
-// TODO: not working with the namespace???
-
 First, we create a namespace for the RabbitMQ resources to live in:
 ```
 kubectl create ns rabbitmq-resources
@@ -252,16 +250,16 @@ kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/
 
 ## Debugging RabbitMQ
 
-To debug RabbitMQ resources, fin the pod in the default namespace called
-cluste-server-0, and port forward the port 15672:
+To debug RabbitMQ resources, find the pod in the `rabbitmq-resources` namespace called
+`rabbitmq-cluster-server-0`, and port forward the port `15672`:
 ```
-kubectl port-forward cluster-server-0 15672:15672
+kubectl port-forward rabbitmq-cluster-server-0 15672:15672 -n rabbitmq-resources
 ```
 
 Then find the RabbitMQ cluster default credentials, created when the Cluster yaml
 was executed. This are located on the secret cluster-default-user in base64 encoding:
 ```
-kubectl get secrets cluster-default-user -o json | jq -r '.data["default_user.conf"]' | base64 -d
+kubectl get secrets rabbitmq-cluster-default-user  -n rabbitmq-resources -o json | jq -r '.data["default_user.conf"]' | base64 -d
 ```
 
 Now go to `http://localhost:15672/` and login with this credentials, here you have the
@@ -271,10 +269,9 @@ RabbitMQ Management UI were are the resources of RabbitMQ can be managed and mon
 
 To clean up this project resources use the next commands:
 ```
-helm delete conference tickets
+helm delete conference conference-tickets
 ```
 
-// TODO
 And if you have the Knative Eventing RabbitMQ Broker implementation:
 ```
 kubectl delete ns rabbitmq-resources
