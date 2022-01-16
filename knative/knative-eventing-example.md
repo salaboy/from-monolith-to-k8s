@@ -149,46 +149,52 @@ Now the application is ready to be use and you can buy conference tickets from t
 
 This sections guides you to to change the Broker implementation to use the [https://github.com/knative-sandbox/eventing-rabbitmq/](https://github.com/knative-sandbox/eventing-rabbitmq/).
 
-First we need to have the required CRDs for a RabbitMQ Operator to work:
-- Install the RabbitMQ Cluster Operator
+To install RabbitMQ we are going to use the RabbitMQ Cluster Operator. We can install this operator by running:
+
 ```
-  kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml  
+kubectl apply -f https://github.com/rabbitmq/cluster-operator/releases/latest/download/cluster-operator.yml  
 ```
-- Install the Cert Manager required for the RabbitMQ Message Topology Operator, this because the TLS enabled admission webhooks needed for the Topology Operator to work properly
+This operator is hosted inside the `rabbitmq-system` namespace. 
+
+
+The Operator requires Cert Manager, (TLS enabled admission webhooks require Cert Manager)
 ```
   kubectl apply -f https://github.com/jetstack/cert-manager/releases/latest/download/cert-manager.yaml
   kubectl wait --for=condition=Ready pods --all -n cert-manager
 ```
-- Lastly, install the RabbitMQ Message Topology Operator
-```
-  kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
-```
 
-// TODO: not working with the namespace
+Lastly, install the RabbitMQ Message Topology Operator
+```
+kubectl apply -f https://github.com/rabbitmq/messaging-topology-operator/releases/latest/download/messaging-topology-operator-with-certmanager.yaml
+```
+Once we have the Operators and Cert Manager up and running, we can create a RabbitMQ Cluster to be used by the Knative RabbitMQ Broker implementation
+
+// TODO: not working with the namespace???
+
 First, we create a namespace for the RabbitMQ resources to live in:
 ```
 kubectl create ns rabbitmq-resources
 ```
 
-Then, lets create a RabbitMQ Cluster:
+Then, lets create a RabbitMQ Cluster for Knative Eventing to use:
 ```
 kubectl create -f - <<EOF
   apiVersion: rabbitmq.com/v1beta1
   kind: RabbitmqCluster
   metadata:
     name: rabbitmq-cluster  
-    # namespace: rabbitmq-resources
+    namespace: rabbitmq-resources
   spec:
     replicas: 1
 EOF
 ```
 
-Apply the RabbitMQ Broker CRD YAML:
+Now with a RabbitMQ Cluster created, we can install the RabbitMQ Broker implementation:
 ```
 kubectl apply -f https://github.com/knative-sandbox/eventing-rabbitmq/releases/download/knative-v1.0.0/rabbitmq-broker.yaml
 ```
 
-Now lets create a RabbitMQ Broker:
+Now lets create a RabbitMQ Broker instance inside the `rabbitmq-resources` namespace:
 ```
 kubectl create -f - <<EOF
   apiVersion: eventing.knative.dev/v1
@@ -203,8 +209,9 @@ kubectl create -f - <<EOF
       apiVersion: rabbitmq.com/v1beta1
       kind: RabbitmqCluster
       name: rabbitmq-cluster
-      # namespace: rabbitmq-resources
+      namespace: rabbitmq-resources
 EOF
+```
 
 The API-Gateway Knative Service needs to be updated with a new K_SINK and K_SINK_POST_FIX variables. This is due the URL for the RabbitMQ Broker is different from the In-Memory one. 
 
