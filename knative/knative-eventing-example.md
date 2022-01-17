@@ -368,7 +368,7 @@ spec:
     spec:
       containers:
         - image: docker.io/n3wscott/sockeye:v0.7.0@sha256:e603d8494eeacce966e57f8f508e4c4f6bebc71d095e3f5a0a1abaf42c5f0e48
-EOF        
+EOF
 ```
 
 
