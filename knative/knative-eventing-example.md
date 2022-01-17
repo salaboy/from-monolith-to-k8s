@@ -338,7 +338,7 @@ data:
 ```
 Make sure that the `default.topic.replication.factor: "1"` is set to 1
 
-Finally, lets create a Kafka Broker instance to connect with our recently created Kafka Cluster (we are also creating a DLQ Service):
+Finally, lets create a Kafka Broker instance to connect with our recently created Kafka Cluster (we are also setting a dead letter sink to `sockeye`):
 ```
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
@@ -364,17 +364,8 @@ spec:
       ref:
         apiVersion: serving.knative.dev/v1
         kind: Service
-        name: dlq-service
----
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: dlq-service
-spec:
-  template:
-    spec:
-      containers:
-        - image: docker.io/n3wscott/sockeye:v0.7.0@sha256:e603d8494eeacce966e57f8f508e4c4f6bebc71d095e3f5a0a1abaf42c5f0e48
+        name: sockeye
+
 EOF
 ```
 
@@ -392,6 +383,40 @@ kafka-broker   http://kafka-broker-ingress.knative-eventing.svc.cluster.local/de
 ```
 
 ### Updating the application to use the new Kafka Broker
+
+The API-Gateway Knative Service (`fmtok8s-api-gateway`) needs to be updated with a new K_SINK and K_SINK_POST_FIX variables. This is due the URL for the Kafka Broker is different from the In-Memory one. 
+
+```
+- name: K_SINK
+  value: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/kafka-broker
+```
+
+For the same reason, we need update all application services dispatching events (`fmtok8s-agenda`, `fmtok8s-c4p `, `fmtok8s-email`, `queue-service`, `tickets-service`) to use the following `K_SINK`: 
+```
+- name: K_SINK
+  value: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/kafka-broker
+```
+
+Finally, Knative Triggers cannot be patched to use the newly created Kafka Broker, hence new triggers will need to be created, for example, let's create the wildcard trigger for the Kafka Broker:
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: kafka-wildcard-trigger
+spec:
+  broker: kafka-broker
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+EOF
+```
+
+To avoid manually creating all the triggers you can use the `knative-rabbitmq-triggers.yaml` file provided in this repository:
+
+```
+kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-rabbitmq-triggers.yaml
+```
 
 ### Kafka Cleanup
 
