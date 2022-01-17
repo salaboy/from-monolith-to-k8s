@@ -7,6 +7,12 @@ This tutorial install the Conference Platform application using Helm, but it als
 ![Selling Tickets Events](imgs/selling-tickets-events.png)
 ![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
+
+This tutorial covers different implementations of Knative Eventing Brokers such as: 
+- In Memory MultiTenant Broker (default)
+- [RabbitMQ broker](#replacing-in-memory-broker-for-rabbitmq-broker) 
+- [Kafka Broker](#replacing-in-memory-broker-for-kafka-broker)
+
 ## Pre Requisites
 - Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/). 
   - For Knative Serving make sure that you configure the DNS so you get URLs for your Knative Services. 
@@ -276,4 +282,7 @@ And if you have the Knative Eventing RabbitMQ Broker implementation:
 ```
 kubectl delete ns rabbitmq-resources
 ```
+
+
+## Replacing In-Memory Broker for Kafka Broker
 
