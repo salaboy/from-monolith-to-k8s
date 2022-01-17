@@ -286,3 +286,99 @@ kubectl delete ns rabbitmq-resources
 
 ## Replacing In-Memory Broker for Kafka Broker
 
+To change the Broker implementation, and use the [Kafka Broker](https://github.com/knative-sandbox/eventing-kafka-broker) implementation follow the steps described in this section.
+
+A detailed set of instructions on how to install the Kafka Controller, Kafka Broker and a Kafka Cluster using Strimzi can be found [here](https://knative.dev/docs/eventing/broker/kafka-broker/) and [here](https://strimzi.io/quickstarts/). Here are just the basic steps to get things up and running: 
+
+
+First, we create a namespace for the Kafka resources to live in:
+```
+kubectl create ns kafka
+```
+
+Install the Kafka Controller: 
+```
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka-controller.yaml
+```
+
+Now install the Kafka Broker: 
+```
+kubectl apply --filename https://github.com/knative-sandbox/eventing-kafka-broker/releases/download/knative-v1.1.0/eventing-kafka-broker.yaml
+```
+
+And now let's create a new Kafka Cluster with Strimzi. First install the Strimzi Controller and all the permissions required to create Kafka Clusters:
+
+```
+kubectl create -f 'https://strimzi.io/install/latest?namespace=kafka' -n kafka
+```
+Now, we are ready to create a Kafka Cluster:
+
+```
+kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka 
+```
+
+
+Finally, lets create a Kafka Broker instance to connect with our recently created Kafka Cluster (we are also creating a ConfigMap and DLQ Service):
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+  annotations:
+    # case-sensitive
+    eventing.knative.dev/broker.class: Kafka
+  name: default
+  namespace: default
+spec:
+  # Configuration specific to this broker.
+  config:
+    apiVersion: v1
+    kind: ConfigMap
+    name: kafka-broker-config
+    namespace: knative-eventing
+  # Optional dead letter sink, you can specify either:
+  #  - deadLetterSink.ref, which is a reference to a Callable
+  #  - deadLetterSink.uri, which is an absolute URI to a Callable (It can potentially be out of the Kubernetes cluster)
+  delivery:
+    deadLetterSink:
+      ref:
+        apiVersion: serving.knative.dev/v1
+        kind: Service
+        name: dlq-service
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-broker-config
+  namespace: knative-eventing
+data:
+  # Number of topic partitions
+  default.topic.partitions: "10"
+  # Replication factor of topic messages.
+  default.topic.replication.factor: "1"
+  # A comma separated list of bootstrap servers. (It can be in or out the k8s cluster)
+  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: dlq-service
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/n3wscott/sockeye:v0.7.0@sha256:e603d8494eeacce966e57f8f508e4c4f6bebc71d095e3f5a0a1abaf42c5f0e48
+EOF        
+```
+
+
+## Kafka Cleanup
+
+To clean up this project resources use the next commands:
+```
+helm delete conference tickets
+```
+and
+```
+kubectl delete ns kafka
+```
