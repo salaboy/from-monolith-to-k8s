@@ -155,6 +155,7 @@ Now the application is ready to be use and you can buy conference tickets from t
 
 This sections guides you to to change the Broker implementation to use the [https://github.com/knative-sandbox/eventing-rabbitmq/](https://github.com/knative-sandbox/eventing-rabbitmq/).
 
+### Installing RabbitMQ Operators and RabbitMQ Broker
 To install RabbitMQ we are going to use the RabbitMQ Cluster Operator. We can install this operator by running:
 
 ```
@@ -217,6 +218,8 @@ kubectl create -f - <<EOF
 EOF
 ```
 
+### Updating the application to use the RabbitMQ Broker 
+
 The API-Gateway Knative Service needs to be updated with a new K_SINK and K_SINK_POST_FIX variables. This is due the URL for the RabbitMQ Broker is different from the In-Memory one. 
 
 ```
@@ -254,7 +257,7 @@ To avoid manually creating all the triggers you can use the `knative-rabbitmq-tr
 kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-rabbitmq-triggers.yaml
 ```
 
-## Debugging RabbitMQ
+### Debugging RabbitMQ
 
 To debug RabbitMQ resources, find the pod in the `rabbitmq-resources` namespace called
 `rabbitmq-cluster-server-0`, and port forward the port `15672`:
@@ -271,7 +274,7 @@ kubectl get secrets rabbitmq-cluster-default-user  -n rabbitmq-resources -o json
 Now go to `http://localhost:15672/` and login with this credentials, here you have the
 RabbitMQ Management UI were are the resources of RabbitMQ can be managed and monitored.
 
-## RabbitMQ Cleanup
+### RabbitMQ Cleanup
 
 To clean up this project resources use the next commands:
 ```
@@ -290,7 +293,7 @@ To change the Broker implementation, and use the [Kafka Broker](https://github.c
 
 A detailed set of instructions on how to install the Kafka Controller, Kafka Broker and a Kafka Cluster using Strimzi can be found [here](https://knative.dev/docs/eventing/broker/kafka-broker/) and [here](https://strimzi.io/quickstarts/). Here are just the basic steps to get things up and running: 
 
-
+### Installing Kafka Broker, Controller and Kafka Cluster
 First, we create a namespace for the Kafka resources to live in:
 ```
 kubectl create ns kafka
@@ -317,8 +320,25 @@ Now, we are ready to create a Kafka Cluster:
 kubectl apply -f https://strimzi.io/examples/latest/kafka/kafka-persistent-single.yaml -n kafka 
 ```
 
+Because we have just created a Kafka Cluster with a single node, we need to configure it on the Kafka Broker configuration, for that you need to edit the ConfigMap called `kafka-broker-config` inside the `knative-eventing` namespace: 
 
-Finally, lets create a Kafka Broker instance to connect with our recently created Kafka Cluster (we are also creating a ConfigMap and DLQ Service):
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kafka-broker-config
+  namespace: knative-eventing
+data:
+  # Number of topic partitions
+  default.topic.partitions: "10"
+  # Replication factor of topic messages.
+  default.topic.replication.factor: "1"
+  # A comma separated list of bootstrap servers. (It can be in or out the k8s cluster)
+  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
+```
+Make sure that the `default.topic.replication.factor: "1"` is set to 1
+
+Finally, lets create a Kafka Broker instance to connect with our recently created Kafka Cluster (we are also creating a DLQ Service):
 ```
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
@@ -346,19 +366,6 @@ spec:
         kind: Service
         name: dlq-service
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kafka-broker-config
-  namespace: knative-eventing
-data:
-  # Number of topic partitions
-  default.topic.partitions: "10"
-  # Replication factor of topic messages.
-  default.topic.replication.factor: "1"
-  # A comma separated list of bootstrap servers. (It can be in or out the k8s cluster)
-  bootstrap.servers: "my-cluster-kafka-bootstrap.kafka:9092"
----
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -371,8 +378,22 @@ spec:
 EOF
 ```
 
+Check that the broker is up and running and with a valid URL: 
 
-## Kafka Cleanup
+```
+kubectl get broker
+```
+Should show something like this: 
+```
+salaboy> k get broker
+NAME           URL                                                                                   AGE     READY   REASON
+default        http://broker-ingress.knative-eventing.svc.cluster.local/default/default              4d17h   True    
+kafka-broker   http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/kafka-broker   6m14s   True    
+```
+
+### Updating the application to use the new Kafka Broker
+
+### Kafka Cleanup
 
 To clean up this project resources use the next commands:
 ```
