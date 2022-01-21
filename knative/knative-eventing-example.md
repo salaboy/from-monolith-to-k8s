@@ -417,16 +417,24 @@ EOF
 To avoid manually creating all the triggers you can use the `knative-rabbitmq-triggers.yaml` file provided in this repository:
 
 ```
-kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-rabbitmq-triggers.yaml
+kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-kafka-triggers.yaml
 ```
 
 ### Kafka Cleanup
 
 To clean up this project resources use the next commands:
 ```
-helm delete conference tickets
+helm delete conference conference-tickets
 ```
 and
 ```
 kubectl delete ns kafka
+```
+
+## Triggers for Default In-Memory Broker
+If you changed the broker implementation and you deleted or modified the default triggers that are installed when you install the charts you can re-create them by running the following command: 
+
+
+```
+kubectl apply -f https://raw.githubusercontent.com/salaboy/from-monolith-to-k8s/master/knative/knative-default-triggers.yaml
 ```
