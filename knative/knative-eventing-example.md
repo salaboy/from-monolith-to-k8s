@@ -1,11 +1,21 @@
 # Knative Eventing Tickets Sale Example
 
 
-This tutorial install the Conference Platform application using Helm, but it also adds the services to implement the Tickets Selling flow. 
+This tutorial install the Conference Platform application using Helm, but it also adds the services to implement the Tickets Selling flow. While the flow of events is not really representative of how an Event-Driven application should be architected, it serves as an example of multiple producers and consumers of events using the CloudEvents SDK to react to other Services events. 
+
+The implemented flow is shown in the following figure: 
+
+![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
 ![Selling Tickets Services](imgs/selling-tickets-services.png)
+
+This extension of the Conference Platform adds a new set of services which emit and consume events to implement the flow: 
+- Queue Service: Serves as a queing mechanism to deal with demand, customers joins the queue and they are served in a first-come/first-served fashion. 
+- Tickets Service: handle the available tickest for the event, it locks the tickets until the payment is completed. 
+- Payments Service: Interface with a legacy bank system that is not event-driven and waits for payments to be authorized by the external service by polling and exposing the state using events.
+
+The following diagram shows the events that are emitted by each service:
 ![Selling Tickets Events](imgs/selling-tickets-events.png)
-![Buy Tickets Flow](imgs/buy-tickets-flow.png)
 
 
 This tutorial covers different implementations of Knative Eventing Brokers such as: 
