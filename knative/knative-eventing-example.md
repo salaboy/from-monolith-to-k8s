@@ -388,7 +388,9 @@ The API-Gateway Knative Service (`fmtok8s-api-gateway`) needs to be updated with
 
 ```
 - name: K_SINK
-  value: http://kafka-broker-ingress.knative-eventing.svc.cluster.local/default/kafka-broker
+  value: http://kafka-broker-ingress.knative-eventing.svc.cluster.local
+- name: K_SINK_POST_FIX
+  value: /broker/, /default/kafka-broker   
 ```
 
 For the same reason, we need update all application services dispatching events (`fmtok8s-agenda`, `fmtok8s-c4p `, `fmtok8s-email`, `queue-service`, `tickets-service`) to use the following `K_SINK`: 
