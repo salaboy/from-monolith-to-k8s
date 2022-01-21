@@ -1,0 +1,128 @@
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: wildcard-trigger
+spec:
+  broker: default
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: broker-ui-queue-exit-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Queue.CustomerExited
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: ui-tickets-payment-authorized-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.PaymentsAuthorized
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: ui-tickets-reservation-oneminnotification-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.Reservation1MExpired
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: ui-tickets-reservation-timedout-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.ReservationTimedOut
+  subscriber:
+    uri: http://fmtok8s-api-gateway.default.svc.cluster.local/api/events
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: queue-join-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Queue.CustomerJoined
+  subscriber:
+    uri: http://queue-service.default.svc.cluster.local/join/
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: queue-abandon-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Queue.CustomerAbandoned
+  subscriber:
+    uri: http://queue-service.default.svc.cluster.local/abandon/
+
+---
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: tickets-tickets-reserved-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.Reserved
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/reserve
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: tickets-tickets-payment-requested-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.PaymentRequested
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/checkout
+
+---
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: tickets-tickets-emitted-trigger
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: Tickets.Emitted
+  subscriber:
+    uri: http://tickets-service.default.svc.cluster.local/emit
