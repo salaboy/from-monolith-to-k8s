@@ -55,9 +55,19 @@ Feel free to test the other way around, by calling the `/produce` endpoint in Ap
 curl -X POST http://localhost:8081/produce
 ```
 
+You can also curl with CloudEvents to each application, for `application-a`
+```
+curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+```
+Same for `application-b` just different port: 
+
+```
+curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+```
+
 # On Kubernetes
 
-To run the same services inside Kubernetes you just need to have the right Kubernetes resources to run these containers. You can find two YAML files inside the `kubernetes` directory. These YAML files contains a Kubernetes Deployment and a Kubernetes Service definition for each service. 
+To run the same services inside Kubernetes you just need to have the right Kubernetes resources. You can find two YAML files inside the `kubernetes` directory. These YAML files contains a Kubernetes Deployment and a Kubernetes Service definition for each service. 
 By deploying these two services (application-a and application-b) on Kubernetes we are not changing the topology or the fact that one services needs to know the other service name in order to send a CloudEvent. 
 
 You will notices inside the Kubernetes Deployment of both applications that we are defining the SINK variable as we were doing with Docker. When deploying inside Kubernetes and using Kubernetes Services, we can use the Service name to interact with our containerized applications. Notice that in Kubernetes, we don't need to create any new network (as required with Docker) to be able to use the Service name discovery mechanism. By using the service name, we rely on Kubernetes to route the traffic to the right container. 
@@ -84,6 +94,119 @@ You can try the produce endpoint on `application-a`, as we did with Docker:
 ```
 curl -X POST http://localhost:8080/produce
 ```
+or to `application-b`:
+
+```
+curl -X POST http://localhost:8081/produce
+```
+
+Same you can send CloudEvents directly to each application, for example to `application-a`: 
+```
+curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+```
+
+and to `application-b` is the same, just different port: 
+```
+curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+```
+
 
 # With Knative Eventing
-(TBD)
+So far, applications are sending Events to each other, but if we are building Event-Driven applications we might want to decouple producers from consumers. 
+To achieve this more decoupled architecture we will use Knative Eventing. 
+If you have a Kubernetes Cluster you can install [Knative Eventing by following the getting started guide in the official site](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/).
+
+Make sure that you install the **In Memory Standalone channel** and the **MT-Channel-Based broker**, which both are listed optional in the installation guide.
+
+We will be deploying the same applications that we had deployed in the previous steps but they will not be sending events to each other directly. Instead, each application will know only about an Event Broker.
+
+(Diagram)
+
+Once we have Knative Eventing installed and the Channel and Broker implementation, we need to create a Broker instance for our applications to use. To create a broker run: 
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+ name: default
+ namespace: default
+EOF
+``` 
+
+Check that the broker is in Ready state and that it provides an URL: 
+
+````
+salaboy> kubectl get broker
+NAME      URL                                                                        AGE   READY   REASON
+default   http://broker-ingress.knative-eventing.svc.cluster.local/default/default   2s    True   
+```
+
+
+The only change that we need to perform in our application's configuration is the `SINK` environment variable which now need to point to the Knative Broker that we just created. Now your applications can send events to the broker URL (http://broker-ingress.knative-eventing.svc.cluster.local/default/default).
+
+If you have the applications already running in the cluster change the `SINK` variable value to `http://broker-ingress.knative-eventing.svc.cluster.local/default/default`. You can do that by editing the application's deployments: 
+
+```
+kubectl edit deploy application-a
+```
+
+Do the same for `application-b`.
+
+Notice that now, both of the applications will be sending events to the Broker, but the broker will not forward these events, because we haven't created any subscription to them. 
+
+Let's start by creating a Knative trigger (subscription) for `application-b` to receive CloudEvents sent to the Broker: 
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: app-b-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    uri: http://application-b-service.default.svc.cluster.local
+EOF
+```
+
+Check that the trigger was created and it is ready:
+
+```
+salaboy> kubectl get trigger
+NAME            BROKER    SUBSCRIBER_URI                 AGE   READY   REASON
+app-b-trigger   default   http://application-b-service   3s    True
+```
+
+Now if you produce an event from `application-a` the event will be sent to the Broker and the recently created Trigger will forward the event to `application-b`.
+
+Make sure that you have access to `application-a` by using `port-foward`
+```
+kubectl port-forward svc/application-a-service 8080:80
+```
+
+And then produce a cloud event by using `curl`:
+
+```
+curl -X POST http://localhost:8080/produce
+```
+
+If you check the logs of `application-b` you should see the CloudEvent arriving via the Broker. 
+
+Now if you add a trigger for `application-a`, as follow: 
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: app-a-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    uri: http://application-a-service.default.svc.cluster.local
+EOF
+```
+
+You will notice that no matter which application produces an event, both applications will get it. 
