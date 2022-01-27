@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-b
+  labels:
+    app: app-b
+spec:
+  selector:
+    matchLabels:
+      app: app-b
+  template:
+    metadata:
+      labels:
+        app: app-b
+    spec:
+      containers:
+      - name: app-b
+        image: salaboy/fmtok8s-go-cloudevents
+        env:
+        - name: SINK 
+          value: http://application-a-service
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-b-service
+spec:
+  selector:
+    app: app-b
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081

@@ -56,6 +56,34 @@ curl -X POST http://localhost:8081/produce
 ```
 
 # On Kubernetes
-(TBD)
+
+To run the same services inside Kubernetes you just need to have the right Kubernetes resources to run these containers. You can find two YAML files inside the `kubernetes` directory. These YAML files contains a Kubernetes Deployment and a Kubernetes Service definition for each service. 
+By deploying these two services (application-a and application-b) on Kubernetes we are not changing the topology or the fact that one services needs to know the other service name in order to send a CloudEvent. 
+
+You will notices inside the Kubernetes Deployment of both applications that we are defining the SINK variable as we were doing with Docker. When deploying inside Kubernetes and using Kubernetes Services, we can use the Service name to interact with our containerized applications. Notice that in Kubernetes, we don't need to create any new network (as required with Docker) to be able to use the Service name discovery mechanism. By using the service name, we rely on Kubernetes to route the traffic to the right container. 
+
+Running the following command you can get both applications up and running in your Kubernetes Cluster:
+```
+kubectl apply -f kubernetes/
+```
+
+Now if you want to interact with the services that are now running inside Kubernetes you can use `port-forward` for `application-a`: 
+
+```
+kubectl port-forward svc/application-a-service 8080:80
+```
+
+and for `application-b`:
+```
+kubectl port-forward svc/application-b-service 8081:80
+```
+
+Now all the traffic that you send to `localhost:8080` or `localhost:8081` will go to `application-a` and `application-b` respectively. 
+
+You can try the produce endpoint on `application-a`, as we did with Docker:
+```
+curl -X POST http://localhost:8080/produce
+```
+
 # With Knative Eventing
 (TBD)
