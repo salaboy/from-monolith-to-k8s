@@ -155,7 +155,17 @@ If you have the applications already running in the cluster change the `SINK` va
 ```
 kubectl edit deploy application-a
 ```
+It should look like this: 
 
+```
+    spec:
+      containers:
+      - env:
+        - name: SINK
+          value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+        image: salaboy/fmtok8s-java-cloudevents
+
+```
 Do the same for `application-b`.
 
 Notice that now, both of the applications will be sending events to the Broker, but the broker will not forward these events, because we haven't created any subscription to them. 
@@ -183,8 +193,9 @@ Check that the trigger was created and it is ready:
 
 ```
 salaboy> kubectl get trigger
-NAME            BROKER    SUBSCRIBER_URI                 AGE   READY   REASON
-app-b-trigger   default   http://application-b-service   3s    True
+NAME            BROKER    SUBSCRIBER_URI                                           AGE   READY   REASON
+app-b-trigger   default   http://application-b-service.default.svc.cluster.local   3s    True    
+
 ```
 
 Now if you produce an event from `application-a` the event will be sent to the Broker and the recently created Trigger will forward the event to `application-b`.
