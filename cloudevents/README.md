@@ -120,7 +120,7 @@ Make sure that you install the **In Memory Standalone channel** and the **MT-Cha
 
 We will be deploying the same applications that we had deployed in the previous steps but they will not be sending events to each other directly. Instead, each application will know only about an Event Broker.
 
-(Diagram)
+![Knative Eventing into the mix](cloudevents-fmtok8s-with-knative-eventing.png)
 
 Once we have Knative Eventing installed and the Channel and Broker implementation, we need to create a Broker instance for our applications to use. To create a broker run: 
 ```
@@ -166,7 +166,10 @@ metadata:
 spec:
   broker: default
   subscriber:
-    uri: http://application-b-service.default.svc.cluster.local
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: application-b-service
 EOF
 ```
 
@@ -200,6 +203,41 @@ kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
+  name: app-b-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: application-b-service
+EOF
+```
+
+You will notice that no matter which application produces an event, both applications will get it. Also notice that you need to use the full service name, including the namespace and `svc.cluster.local` for the event to arrive correctly. 
+
+For this example, `apiVersion: v1` and `kind: Service` makes reference to Kubernetes Services. But if you are using Knative Serving Services you will need to use `apiVersion: serving.knative.dev/v1` and `kind: Service`. 
+
+
+## Knative Eventing Extras
+
+This section covers a couple of details that you need to be aware when using Knative Eventing
+- `REF` vs `URI` nd oher properties for subscribers in Knative Eventing Triggers
+- Knative Eventing Trigger filters
+- Monitoring Events using Sockeye
+
+### `REF` vs `URI` and oher properties for subscribers in Knative Eventing Triggers
+
+When defining triggers, in the previous example, to point to a subscriber we have used `ref` which allows us to point to an `Addressable` Kubernetes resource. This allows Knative Eventing to validate that the resource is there to send events to. The trigger will fail to be ready if the resource is not present. 
+
+But there are situations where you don't have an addressable resource or you want to avoid Knative Eventing checking on the subscriber. For this scenarios you can use `uri`. In our previous example it will look as follows:  
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
   name: app-a-trigger
   namespace: default
 spec:
@@ -209,4 +247,72 @@ spec:
 EOF
 ```
 
-You will notice that no matter which application produces an event, both applications will get it. 
+Another important detail to know is that you can use `uri` in conjunction with `ref` to point to path different from `/`. For example, if you are listening for CloudEvents under `/events` you can use `uri` to add `/events` on top of a `ref` resource, as shown below:
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: app-b-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: application-a-service  
+    uri: /events
+EOF
+```
+
+### Knative Eventing Trigger Filters
+As covered in [the official documentation](https://knative.dev/docs/eventing/broker/triggers/#trigger-filtering) you can apply filters to CloudEvent attributes, including extensions. For now, only exact matches on strings are supported, the community is currently working on adding more advanced techniques for filtering events. 
+
+It is quite common for your applications to be interested in certain types of events and you can easily achieve this by adding the filter attribute to your triggers, as shown below: 
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: app-b-trigger
+  namespace: default
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: MyCloudEvent
+  subscriber:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: application-a-service  
+EOF
+```
+### Monitoring Events using Sockeye
+Finally, it is always good to tap into all events to monitor what is going on with your producers and consumers. This can be easily achieved by creating a trigger without any filters and redirecting them to a service or application that allows you to see every event that is sent to the Broker.
+
+One of these applications that you can use is called Sockeye and it has been used a lot in the Knative Eventing community. Don't expect anything complicated it is just a web applicaiton that will print every CloudEvent that receives. 
+
+You can install Sockeye if you have Knative Serving installed with: 
+
+```
+kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml
+```
+
+And then create a trigger to forward all the events from the Broker to Sockeye:
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: wildcard-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    uri: http://sockeye.default.svc.cluster.local
+EOF
+```
