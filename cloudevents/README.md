@@ -36,6 +36,8 @@ Application B (Go):
 docker run --name application-b --network cloudevents-net -e SINK=http://application-a:8080 -p 8081:8081 salaboy/fmtok8s-go-cloudevents.go
 ```
 
+![CloudEvents Examples Docker](cloudevents-fmtok8s-docker.png)
+
 Notice that it is pretty mucht the same command for both applications, just changing the SINK for the produced event and the application name. It is important to notice here that we are setting the container's name so they can call each other using a fixed name instead of an IP address. 
 
 From a third terminal you can ask Application A to produce a CloudEvent which will be sent to Application B (as the SINK is configured to point to Application B port on localhost 8081)
@@ -57,18 +59,20 @@ curl -X POST http://localhost:8081/produce
 
 You can also curl with CloudEvents to each application, for `application-a`
 ```
-curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: app-b.MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
 ```
 Same for `application-b` just different port: 
 
 ```
-curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: app-a.MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
 ```
 
 # On Kubernetes
 
 To run the same services inside Kubernetes you just need to have the right Kubernetes resources. You can find two YAML files inside the [`kubernetes/`](https://github.com/salaboy/from-monolith-to-k8s/tree/master/cloudevents/kubernetes) directory. These YAML files contains a Kubernetes Deployment and a Kubernetes Service definition for each service. 
 By deploying these two services (`application-a-service` and `application-b-service`) on Kubernetes we are not changing the topology or the fact that one services needs to know the other service name in order to send a CloudEvent. 
+
+![CloudEvents Examples Kubernetes](cloudevents-fmtok8s-kubernetes.png)
 
 You will notices inside the Kubernetes Deployment of both applications that we are defining the SINK variable as we were doing with Docker. When deploying inside Kubernetes and using Kubernetes Services, we can use the Service name to interact with our containerized applications. Notice that in Kubernetes, we don't need to create any new network (as required with Docker) to be able to use the Service name discovery mechanism. By using the service name, we rely on Kubernetes to route the traffic to the right container. 
 
@@ -104,12 +108,12 @@ You can inspect the logs of both applications by using `kubectl logs -f <POD_NAM
 
 Same you can send CloudEvents directly to each application, for example to `application-a`: 
 ```
-curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+curl -X POST http://localhost:8080/ -H "Content-Type: application/json" -H "ce-type: app-b.MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
 ```
 
 and to `application-b` is the same, just different port: 
 ```
-curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
+curl -X POST http://localhost:8081/ -H "Content-Type: application/json" -H "ce-type: app-a.MyCloudEvent"  -H "ce-id: 123"  -H "ce-specversion: 1.0" -H "ce-source: curl-command" -d '{"myData" : "hello from curl", "myCounter" : 1 }'
 ```
 
 # With Knative Eventing
