@@ -77,6 +77,7 @@ By deploying these two services (`application-a-service` and `application-b-serv
 You will notices inside the Kubernetes Deployment of both applications that we are defining the SINK variable as we were doing with Docker. When deploying inside Kubernetes and using Kubernetes Services, we can use the Service name to interact with our containerized applications. Notice that in Kubernetes, we don't need to create any new network (as required with Docker) to be able to use the Service name discovery mechanism. By using the service name, we rely on Kubernetes to route the traffic to the right container. 
 
 Running the following command you can get both applications up and running in your Kubernetes Cluster:
+
 ```
 kubectl apply -f kubernetes/
 ```
@@ -128,6 +129,7 @@ We will be deploying the same applications that we had deployed in the previous 
 ![Knative Eventing into the mix](cloudevents-fmtok8s-with-knative-eventing.png)
 
 Once we have Knative Eventing installed and the Channel and Broker implementation, we need to create a Broker instance for our applications to use. To create a broker run: 
+
 ```
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
@@ -140,12 +142,11 @@ EOF
 
 Check that the broker is in Ready state and that it provides an URL: 
 
-````
+```
 salaboy> kubectl get broker
 NAME      URL                                                                        AGE   READY   REASON
 default   http://broker-ingress.knative-eventing.svc.cluster.local/default/default   2s    True   
 ```
-
 
 The only change that we need to perform in our application's configuration is the `SINK` environment variable which now need to point to the Knative Broker that we just created. Now your applications can send events to the broker URL (http://broker-ingress.knative-eventing.svc.cluster.local/default/default).
 
