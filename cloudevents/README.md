@@ -1,6 +1,9 @@
 # Polyglot CloudEvents consumer/producer Tutorial
 
-In this short tutorial we are going to create two applications that produce and consume CloudEvents. These applications uses different technology stacks: 
+In this short tutorial we are going to create two applications that produce and consume CloudEvents. 
+[Check the full blog post explaining some background and the main resons why you should care about Knative Eventing and CloudEvents.](https://salaboy.com/2022/01/29/event-driven-applications-with-cloudevents-on-kubernetes/)
+
+These applications uses different technology stacks: 
 - Application A ([`fmtok8s-java-cloudevents`](https://github.com/salaboy/fmtok8s-java-cloudevents)) uses Java and Spring Boot and it adds the CloudEvents Java SDK to write and read CloudEvents. 
 - Application B ([`fmtok8s-go-cloudevents`](https://github.com/salaboy/fmtok8s-go-cloudevents)) uses Go and adds the CloudEvents Go SDK to read and write CloudEvents. 
 
