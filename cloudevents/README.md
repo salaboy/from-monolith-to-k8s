@@ -294,13 +294,13 @@ kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: app-b-trigger
+  name: app-a-trigger
   namespace: default
 spec:
   broker: default
   filter:
     attributes:
-      type: MyCloudEvent
+      type: app-b.MyCloudEvent
   subscriber:
     ref:
       apiVersion: v1
