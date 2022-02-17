@@ -25,8 +25,6 @@ You can use your favourite IDE to open the project and check the simple function
 
 If you take a look at the source code generated, right from the start we can see that the programming model is different in here. 
 
-Spring Cloud Functions 
-
 But if you want to get things going with the example function that is generated for you, you can run `func build` to build the function and generate a container for it, that by default will be pushed to the default Docker registry which is Docker Hub. 
 
 ```
@@ -37,6 +35,8 @@ Note: building a Function the first time will take longer than subsequent builds
 🕕 Still building
    🙌 Function image built: docker.io/salaboy/fmtok8s-java-function:latest
 ```
+
+For Java, and because we are using Spring Native, the initial build process takes quite a lot of time, this is improved by buildpacks caching all the Maven downloads in subsequent builds. But don't be alarmed if the first time you run `func build` takes around 5 minutes, as this accounts for Maven downloading all the project dependencies, downloading all plugins required to build the project with Spring Native and all the docker layers with the correct builders to build java and maven projects and the time required to compile a native java application that can run on top of GraalVM. 
 
 And just like that, without worrying about having a Dockerfile, `func` uses [CNCF Buildpacks](http://buildpacks.io) to build and containarize your application. As you can see, I've provided my Docker Hub user name (`salaboy`) to automatically push the container to the registry, so then the container can be fetched from inside the cluster. 
 
@@ -51,7 +51,15 @@ There you go, the function is deployed and ready to accept requests at the follo
 You can test your function by sending a CloudEvent using `curl` or `func invoke`.
 
 ```
-curl -X POST http://fmtok8s-java-function.default.X.X.X.X.sslip.io
+curl -v -X POST http://fmtok8s-java-function.default.X.X.X.X.sslip.io \
+-H "Content-Type:application/json" \
+-H "Ce-Id:1" \
+-H "Ce-Subject:Uppercase" \
+-H "Ce-Source:cloud-event-example" \
+-H "Ce-Type:uppercase" \
+-H "Ce-Specversion:1.0" \
+-d "{\"input\": \"salaboy\"}"
+
 ```
 
 ```
@@ -60,10 +68,56 @@ func invoke
 
 ## Creating a Go Function 
 
+We can follow the same process to create a Go function by using `func create` again: 
+
 ```
+func create fmtok8s-go-function -l go -t cloudevents
+```
+This command creates a new directory called `fmtok8s-go-function` which contains a Go function. 
+
+salaboy> func build
+A registry for Function images is required. For example, 'docker.io/tigerteam'.
+? Registry for Function images: salaboy
+Note: building a Function the first time will take longer than subsequent builds
+🕕 Still building
+   🙌 Function image built: docker.io/salaboy/fmtok8s-go-function:latest
+
+```
+
+The next step is to just run this function inside a configured cluster. Once again, `func` will take care creating the correct Knative Serving Service for our function to run.
+```
+salaboy> func deploy 
+   🙌 Function image built: docker.io/salaboy/fmtok8s-go-function:latest
+   Function deployed at URL: http://fmtok8s-go-function.default.X.X.X.X.sslip.io
+```
+
+curl -v -X POST http://fmtok8s-go-function.default.X.X.X.X.sslip.io \
+-H "Content-Type:application/json" \
+-H "Ce-Id:1" \
+-H "Ce-Subject:Uppercase" \
+-H "Ce-Source:cloud-event-example" \
+-H "Ce-Type:uppercase" \
+-H "Ce-Specversion:1.0" \
+-d "{\"input\": \"salaboy\"}"
 ```
 
 # Routing Events to functions using Knative Eventing Brokers and Triggers
+
+Remember that you need to have Knative Eventing installed in the target Cluster for this to work. 
+First step is to make sure that we have a Knative Broker to route events to different services. We can list brokers with `kubectl get brokers` or create a new one by running: 
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Broker
+metadata:
+ name: default
+ namespace: default
+EOF
+```
+
+Once we have a broker we can create triggers with filters to route events to our functions: 
+
 
 ```
 kubectl create -f - <<EOF
@@ -102,3 +156,26 @@ spec:
 
 EOF
 ```
+These create two triggers one for each function, both filtering on CloudEvents with Type: `uppercase`. 
+This will cause the Broker to deliver a copy of each CloudEvent with type `uppercase` to each function. Hence if we now send a CloudEvent to the Broker with the `uppercase` type, we should see both functions being upscaled to consume the event.  
+
+For that we need to have access to the Broker URL from outside the cluster, we can do that by using `kubectl port-forward`: 
+
+```
+kubectl port-forward svc/broker-ingress -n knative-eventing 8080:80
+```
+
+Then to send an event to the broker, we can use `curl` (notice the `/default/default` in the URL): 
+
+```
+curl -v "http://localhost:8080/default/default" \
+-H "Content-Type:application/json" \
+-H "Ce-Id:1" \
+-H "Ce-Subject:Uppercase" \
+-H "Ce-Source:cloud-event-example" \
+-H "Ce-Type:uppercase" \
+-H "Ce-Specversion:1.0" \
+-d "{\"input\": \"salaboy\"}"
+```
+
+This will trigger both the Java and Go functions, you can inspect the pods created for each function and the logs. 
