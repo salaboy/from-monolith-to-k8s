@@ -75,6 +75,7 @@ func create fmtok8s-go-function -l go -t cloudevents
 ```
 This command creates a new directory called `fmtok8s-go-function` which contains a Go function. 
 
+```
 salaboy> func build
 A registry for Function images is required. For example, 'docker.io/tigerteam'.
 ? Registry for Function images: salaboy
@@ -91,6 +92,7 @@ salaboy> func deploy
    Function deployed at URL: http://fmtok8s-go-function.default.X.X.X.X.sslip.io
 ```
 
+```
 curl -v -X POST http://fmtok8s-go-function.default.X.X.X.X.sslip.io \
 -H "Content-Type:application/json" \
 -H "Ce-Id:1" \
