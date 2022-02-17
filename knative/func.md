@@ -57,3 +57,48 @@ curl -X POST http://fmtok8s-java-function.default.X.X.X.X.sslip.io
 ```
 func invoke
 ```
+
+## Creating a Go Function 
+
+```
+```
+
+# Routing Events to functions using Knative Eventing Brokers and Triggers
+
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: java-function-trigger
+  namespace: default
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: uppercase
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: fmtok8s-java-function
+--- 
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: go-function-trigger
+  namespace: default
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: uppercase
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: fmtok8s-go-function
+
+EOF
+```
