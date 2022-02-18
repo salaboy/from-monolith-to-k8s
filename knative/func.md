@@ -56,9 +56,28 @@ curl -v -X POST http://fmtok8s-java-function.default.X.X.X.X.sslip.io \
 -H "Ce-Id:1" \
 -H "Ce-Subject:Uppercase" \
 -H "Ce-Source:cloud-event-example" \
--H "Ce-Type:uppercase" \
+-H "Ce-Type:UppercaseRequestedEvent" \
 -H "Ce-Specversion:1.0" \
 -d "{\"input\": \"salaboy\"}"
+
+```
+If you are running `curl` with `-v` you should see the output CloudEvent and the payload: 
+```
+< HTTP/1.1 200 OK
+< user-agent: curl/7.64.1
+< ce-id: c3e78cad-aaec-4f0c-8eeb-d0a90d450e3d
+< ce-subject: Convert to UpperCase
+< ce-source: http://example.com/uppercase
+< ce-type: UpperCasedEvent
+< ce-specversion: 1.0
+< uri: http://localhost:8080/
+< message-type: cloudevent
+< timestamp: 1645091431875
+< Content-Type: application/json
+< Content-Length: 75
+< 
+* Connection #0 to host localhost left intact
+{"input":"salaboy","operation":"Uppercase","output":"SALABOY","error":null}* Closing connection 0
 
 ```
 
@@ -98,7 +117,7 @@ curl -v -X POST http://fmtok8s-go-function.default.X.X.X.X.sslip.io \
 -H "Ce-Id:1" \
 -H "Ce-Subject:Uppercase" \
 -H "Ce-Source:cloud-event-example" \
--H "Ce-Type:uppercase" \
+-H "Ce-Type:UppercaseRequestedEvent" \
 -H "Ce-Specversion:1.0" \
 -d "{\"input\": \"salaboy\"}"
 ```
