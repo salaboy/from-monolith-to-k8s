@@ -126,6 +126,7 @@ salaboy> func deploy
    Function deployed at URL: http://fmtok8s-go-function.default.X.X.X.X.sslip.io
 ```
 
+Now we can send a CloudEvent to our Go function using `curl`:
 ```
 curl -v -X POST http://fmtok8s-go-function.default.X.X.X.X.sslip.io \
 -H "Content-Type:application/json" \
@@ -136,6 +137,8 @@ curl -v -X POST http://fmtok8s-go-function.default.X.X.X.X.sslip.io \
 -H "Ce-Specversion:1.0" \
 -d "{\"input\": \"salaboy\"}"
 ```
+
+
 
 # Gluing functions using Knative Eventing
 
@@ -227,6 +230,10 @@ curl -v "http://localhost:8080/default/default" \
 ```
 
 This will trigger both the Java and Go functions, you can inspect the pods created for each function and the logs. 
+
+Both functions have processed the incoming CloudEvent and produced a CloudEvent as response which is forwarded to the Broker. Because we don't have any trigger registered for the response type `UpperCasedEvent`, the events are going to be held in the broker. 
+
+What we can do now is to update our Java function project to include another function, so we can chain functions together by creating a function that consumes the output of another function. Then we can create a new trigger to route these response events to the new function. 
 
 # OnCluster Builds with Tekton and `func`
 
