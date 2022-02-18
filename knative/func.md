@@ -208,7 +208,7 @@ These create two triggers one for each function, both filtering on CloudEvents w
 This will cause the Broker to deliver a copy of each CloudEvent with type `uppercase` to each function. Hence if we now send a CloudEvent to the Broker with the `UppercaseRequestedEvent` type, we should see both functions being upscaled to consume the event. 
 
 We have created this topology:
-![fmtok8s-funcs-and-broker-trigger](fmtok8s-funcs-and-broker-trigger.png)
+![fmtok8s-funcs-and-broker-trigger](imgs/fmtok8s-funcs-and-broker-trigger.png)
 
 For that we need to have access to the Broker URL from outside the cluster, we can do that by using `kubectl port-forward`: 
 
