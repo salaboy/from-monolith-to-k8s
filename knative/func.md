@@ -235,6 +235,31 @@ Both functions have processed the incoming CloudEvent and produced a CloudEvent 
 
 What we can do now is to update our Java function project to include another function, so we can chain functions together by creating a function that consumes the output of another function. Then we can create a new trigger to route these response events to the new function. 
 
+```
+kubectl create -f - <<EOF
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: java-function-trigger
+  namespace: default
+spec:
+  broker: default
+  filter:
+    attributes:
+      type: UpperCasedEvent
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: fmtok8s-java-function
+EOF      
+```
+
+
+
+If we add a new function and a new trigger we end up with this scenario: 
+![fmtok8s-funcs-and-broker-trigger-chain](imgs/fmtok8s-funcs-and-broker-trigger-chain.png)
+
 # OnCluster Builds with Tekton and `func`
 
 (TBD)
