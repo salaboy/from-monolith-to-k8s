@@ -252,7 +252,9 @@ spec:
       apiVersion: serving.knative.dev/v1
       kind: Service
       name: fmtok8s-java-function
-EOF      
+
+EOF
+
 ```
 
 
