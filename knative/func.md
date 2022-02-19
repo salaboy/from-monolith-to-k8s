@@ -170,7 +170,7 @@ kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: java-function-trigger
+  name: uppercase-java-function-trigger
   namespace: default
 spec:
   broker: default
@@ -187,7 +187,7 @@ spec:
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: go-function-trigger
+  name: uppercase-go-function-trigger
   namespace: default
 spec:
   broker: default
@@ -240,7 +240,7 @@ kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
-  name: java-function-trigger
+  name: improve-function-trigger
   namespace: default
 spec:
   broker: default
