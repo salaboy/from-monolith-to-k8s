@@ -5,9 +5,10 @@ This tutorial shows how to use the `func` CLI in conjunction with Knative Servin
 
 ## Pre requisites
 - Kubernetes Cluster
-- Knative Serving & Eventing installed
+- Install [Knative Serving](https://knative.dev/docs/install/serving/install-serving-with-yaml/) and [Knative Eventing](https://knative.dev/docs/install/eventing/install-eventing-with-yaml/). For Knative Serving make sure that you configure the DNS so you get URLs for your Knative Services. For Knative Eventing install the In-Memory Channel and the MT-Channel based Broker.
 - `func` CLI installed
-- (Optional) for OnCluster builds Tekton installed inside the cluster (check the last section of this tutorial for more information)
+- (Optional) for OnCluster builds Tekton installed inside the cluster 
+  - `kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml`
 
 ## Scenario
 This examples builds up on top of the [CloudEvents example](https://github.com/salaboy/from-monolith-to-k8s/tree/master/cloudevents), we will be creating two functions in different languages Java and Go. We will be using Knative Eventing to route events between them by defining Knative Brokers and Triggers, as we also did in the [CloudEvents example with Knative](https://github.com/salaboy/from-monolith-to-k8s/tree/master/cloudevents#with-knative-eventing). 
