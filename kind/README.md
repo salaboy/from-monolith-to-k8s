@@ -38,9 +38,32 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/mast
 
 ## Install Application using Helm
 
-Add Application Helm Chart Repository: 
+Add a custom Helm Chart Repository for this application: 
 
 ```
 helm repo add fmtok8s https://salaboy.github.io/helm/
 helm repo update
+```
+
+Then run `helm install`: 
+
+```
+helm install app fmtok8s/fmtok8s-app
+```
+
+You should see the following output: 
+
+```
+NAME: app
+LAST DEPLOYED: Sat Aug 28 13:52:48 2021
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+Cloud-Native Conference Platform V1
+
+Chart Deployed: fmtok8s-app - 0.1.0
+Release Name: app
+
 ```
