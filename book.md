@@ -66,7 +66,26 @@ While following the 12-factor.net principles we will mitigate some of these chal
 
 ## Chapter 3: Service and Environment Pipelines
 
+Chapter 3 is about builing Cloud Native application, but going to the next step, of not just building a single service for your applications, but all of them and in an iterative and continuous manner. Automating everything is key for being able to deliver a large amount of services without suffering in the process, hence tools like pipeline engines can help us to automate all the process of building and delivering our services and every new version of them to different environments. 
+
+There are two main concepts covered in this chapter: 
+- **Service Pipelines**: the mechanisms to build your services from source until you have everything you need to deploy a runnable version of the service. You will end up having a pipeline definition per service in your application. 
+- **Environment Pipelines**: following the GitOps approach, we will have pipelines which their only purpose is to deploy our services to our defined environments. You will end up having one Environment Pipeline per environment that you want to have and these pipelines will take a source of truth as input, such as a git repository which will contain all the information required to set up the environment. When we use this approach, we don't interact with our clusters directly anymore, so no more `kubectl`, we let the Environment Pipeline to promote services and new version from these services to environments.
+ 
+To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with Tekton which builds on of the services and one environment. 
+
+https://github.com/salaboy/from-monolith-to-k8s/tree/master/tekton
+
+
+
 ## Chapter 4: Multi-Cloud Infrastructure
+
+When working with Kubernetes, your applications will depend on infrastructure such as Databases, Message Brokers, Load Balancers, API Gateways, Identity Management solutions, etc. All this infrastructure needs to be managed, secured and maintained. Depending on your operation teams, running and managing all this infrastructure is complex and out of the scope for delopment teams. This chapter covers some options to work with infrastructural components inside and outside Kubernetes and how using tools like Crossplane you can manage your Cloud-Provider specific infrastructure by using Kubernetes Resources. 
+
+A tutorial on how to setup the application to use two different databases inside Google Cloud can be found here: https://github.com/salaboy/from-monolith-to-k8s/blob/master/crossplane/config-pkg/README.md
+
+Interesting enough, this example can also be ported to work on any other major Cloud Provider such as Azure AKS or Amazon EKS without changing anything on the application, just Crossplane configuration resources. 
+
 
 ## Chapter 5: Release Strategies
 
