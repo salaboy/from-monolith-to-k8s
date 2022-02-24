@@ -2,7 +2,7 @@
 
 The contents of this repository had been used to write the [Continuous Delivery for Kubernetes book for Manning](http://mng.bz/jjKP)
 
-![book-cover](book-cover.png)
+![book-cover](https://salaboy.files.wordpress.com/2021/12/salatino-hi-1.png)
 
 This page contains some notes about the chapters and how they link to the tutorials included in this repository.
 
@@ -12,14 +12,14 @@ If you like the content please give it a Github star!
 # Table of Content
 
 - [Chapter 1: Cloud-Native Continuous Delivery](#chapter-1-cloud-native-continuous-delivery)
-- [Chapter 2: Cloud-Native applicaiton challenges]()
-- [Chapter 3: Service and Environment Pipelines]()
-- [Chapter 4: Multi-Cloud Infrastructure]()
-- [Chapter 5: Release Strategies]()
-- [Chapter 6: Events for Cloud-Native integrations]()
-- [Chapter 7: Serverless for Kubernetes]()
-- [Chapter 8: Building a Platform for CD]()
-- [Chapter 9: The road to Continuous and Progress Delivery]()
+- [Chapter 2: Cloud-Native applicaiton challenges](#chapter-2-cloud-native-applicaiton-challenges)
+- [Chapter 3: Service and Environment Pipelines](#chapter-3-service-and-environment-pipelines)
+- [Chapter 4: Multi-Cloud Infrastructure](#chapter-4-multi-cloud-infrastructure)
+- [Chapter 5: Release Strategies](#chapter-5-release-strategies)
+- [Chapter 6: Events for Cloud-Native integrations](#chapter-6-events-for-cloud-native-integrations)
+- [Chapter 7: Serverless for Kubernetes](#chapter-7-serverless-for-kubernetes)
+- [Chapter 8: Building a Platform for CD](#chapter-8-building-a-platform-for-cd)
+- [Chapter 9: The road to Continuous and Progress Delivery](#chapter-9-the-road-to-continuous-and-progress-delivery)
 
 ## Chapter 1: Cloud-Native Continuous Delivery
 
@@ -149,7 +149,10 @@ The examples for this chapter are going to be published soon.
 
 ## Chapter 8: Building a Platform for CD
 
+(To be written)
+
 ## Chapter 9: The road to Continuous and Progress Delivery
 
+(To be written)
 
 
