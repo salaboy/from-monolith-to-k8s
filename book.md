@@ -67,11 +67,12 @@ Dealing with the application state is not trivial: we have to understand each se
 - **Application Security and Identity Management**: dealing with users and security is always an after-thought. For distributed applications, having these aspects clearly documented and implemented early on will help you to refine the application requirements by defining “who can do what and when”.  
 
 **Service’s built-in resiliency**:
+
 <img src="service-downtime.png" width="450">
 
 **Application User-facing services resilience by replication**:
-<img src="app-resiliency.png" width="450">
 
+<img src="app-resiliency.png" width="450">
 
 While following the 12-factor.net principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
 
@@ -84,7 +85,13 @@ There are two main concepts covered in this chapter:
 - **Service Pipelines**: the mechanisms to build your services from source until you have everything you need to deploy a runnable version of the service. You will end up having a pipeline definition per service in your application. 
 - **Environment Pipelines**: following the GitOps approach, we will have pipelines which their only purpose is to deploy our services to our defined environments. You will end up having one Environment Pipeline per environment that you want to have and these pipelines will take a source of truth as input, such as a git repository which will contain all the information required to set up the environment. When we use this approach, we don't interact with our clusters directly anymore, so no more `kubectl`, we let the Environment Pipeline to promote services and new version from these services to environments.
  
-@TODO: Pipelines diagrams
+**Service Pipeline**:
+
+<img src="service-pipeline.png" width="450">
+
+**Environment Pipeline**:
+
+<img src="environment-pipeline.png" width="450">
  
 To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with Tekton which builds on of the services and one environment. 
 
