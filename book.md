@@ -35,8 +35,8 @@ A good definition of the term can be found in VMWare site by Joe Beda (Co-Founde
 
 Where https://12factor.net is a key ingredient of what we understand for Cloud-Native, in Kubernetes we get most of the tools to adhere to these factors, but we need to be aware of them to make sure that we don't design our applications against them. 
 
-![12-factors](12-factors.png)
 
+<img src="12-factors.png" width="250">
 
 **Continuous Delivery Goals**: 
  
