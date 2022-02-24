@@ -66,9 +66,11 @@ Dealing with the application state is not trivial: we have to understand each se
 - **Understanding how the application is working (monitoring, tracing and telemetry)**: having a clear understanding on how the application is performing and that it is doing what it is supposed to be doing is essential to quickly find problems when things go wrong. 
 - **Application Security and Identity Management**: dealing with users and security is always an after-thought. For distributed applications, having these aspects clearly documented and implemented early on will help you to refine the application requirements by defining “who can do what and when”.  
 
+**Service’s built-in resiliency**:
+<img src="service-downtime.png" width="450">
 
-<img src="service-downtime.png" width="350"><img src="app-resiliency.png" width="350">
-
+**Application User-facing services resilience by replication**:
+<img src="app-resiliency.png" width="450">
 
 
 While following the 12-factor.net principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
