@@ -2,7 +2,9 @@
 
 The contents of this repository had been used to write the [Continuous Delivery for Kubernetes book for Manning](http://mng.bz/jjKP)
 
-This page contains some notes about the chapters and the tutorials included in this repository.
+![book-cover](book-cover.png)
+
+This page contains some notes about the chapters and how they link to the tutorials included in this repository.
 
 If you have questions, comments or feedback of any kind please create an issue here, or drop me a message in [Twitter @salaboy](http://twitter.com/salaboy). 
 If you like the content please give it a Github star!
@@ -43,6 +45,7 @@ Highly recommended: [Grokking Continuous Delivery - By Christie Wilson - Manning
 
 This chapter also introduce the concept of a walking skeleton, which describes the application linked in the tutorials of this repository. The scenario is a Conference Platform that you can use to organize any kind of conference event with speakers, call for proposals, agenda, notifications, etc.
 
+![Walking Skeleton  Services](walking-skeleton-services.png)
 
 ## Chapter 2: Cloud-Native applicaiton challenges
 
@@ -63,6 +66,8 @@ Dealing with the application state is not trivial: we have to understand each se
 
 While following the 12-factor.net principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
 
+@TODO: Challenges diagrams
+
 
 ## Chapter 3: Service and Environment Pipelines
 
@@ -71,6 +76,8 @@ Chapter 3 is about builing Cloud Native application, but going to the next step,
 There are two main concepts covered in this chapter: 
 - **Service Pipelines**: the mechanisms to build your services from source until you have everything you need to deploy a runnable version of the service. You will end up having a pipeline definition per service in your application. 
 - **Environment Pipelines**: following the GitOps approach, we will have pipelines which their only purpose is to deploy our services to our defined environments. You will end up having one Environment Pipeline per environment that you want to have and these pipelines will take a source of truth as input, such as a git repository which will contain all the information required to set up the environment. When we use this approach, we don't interact with our clusters directly anymore, so no more `kubectl`, we let the Environment Pipeline to promote services and new version from these services to environments.
+ 
+@TODO: Pipelines diagrams
  
 To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with Tekton which builds on of the services and one environment. 
 
@@ -89,7 +96,41 @@ Interesting enough, this example can also be ported to work on any other major C
 
 ## Chapter 5: Release Strategies
 
+Being able to release software continuosly require us to have the right tools at hand. When working with Kubernetes, dealing with multiple versions of our services concurrently running at the same time is a big challenge. When you are dealing with high-demand scenarios Kubernetes built-in mechanisms might not be enough or are not optimal to manage multiple versions of our services running at the same time. This chapter goes over using tools like Knative Serving which allows us to implement different release strategies: 
+
+- Rolling Updates
+- Canary Releases
+- Blue/Green Deployments
+- A/B Testing
+
+@TODO: Diagrams
+
+By using Knative Serving Services, we reduce the amount of YAML used to describe our Services, but also can have fine grain control on how the traffic is routed to different versions of our services. This is very useful for implementing Canary Releases, Blue Green Deployments and A/B Testing strategies.
+```
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: email-service 
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/fmtok8s-email-rest:0.1.0-improved
+  traffic:
+  - percent: 80
+    revisionName: email-service-00001
+  - latestRevision: true
+    percent: 20
+
+```
+
+Knative Serving does also bring an autoscaler that enable our services to behave more like Serverless applications, as they can be downscaled to zero automatically if they are not receiving any request. 
+
 ## Chapter 6: Events for Cloud-Native integrations
+
+Kubernetes built-in resources doesn't deal with producers and consumers of events. So if you are building Event-Driven applications, or if you want to extend your applications to emit and consume events, from the Kubernetes perspective we will not have any visibility about how the events are flowing or how they are routed between different services. 
+
+In this chapter, 
 
 ## Chapter 7: Serverless for Kubernetes
 
