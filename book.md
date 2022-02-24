@@ -11,15 +11,15 @@ If you like the content please give it a Github star!
 
 # Table of Content
 
-- Chapter 1: Cloud-Native Continuous Delivery
-- Chapter 2: Cloud-Native applicaiton challenges
-- Chapter 3: Service and Environment Pipelines
-- Chapter 4: Multi-Cloud Infrastructure
-- Chapter 5: Release Strategies
-- Chapter 6: Events for Cloud-Native integrations
-- Chapter 7: Serverless for Kubernetes
-- Chapter 8: TBD
-- Chapter 9: TBD 
+- [Chapter 1: Cloud-Native Continuous Delivery](#chapter-1-cloud-native-continuous-delivery)
+- [Chapter 2: Cloud-Native applicaiton challenges]()
+- [Chapter 3: Service and Environment Pipelines]()
+- [Chapter 4: Multi-Cloud Infrastructure]()
+- [Chapter 5: Release Strategies]()
+- [Chapter 6: Events for Cloud-Native integrations]()
+- [Chapter 7: Serverless for Kubernetes]()
+- [Chapter 8: Building a Platform for CD]()
+- [Chapter 9: The road to Continuous and Progress Delivery]()
 
 ## Chapter 1: Cloud-Native Continuous Delivery
 
@@ -130,7 +130,26 @@ Knative Serving does also bring an autoscaler that enable our services to behave
 
 Kubernetes built-in resources doesn't deal with producers and consumers of events. So if you are building Event-Driven applications, or if you want to extend your applications to emit and consume events, from the Kubernetes perspective we will not have any visibility about how the events are flowing or how they are routed between different services. 
 
-In this chapter, 
+In this chapter we will be looking at how Knative Eventing builds on top of Kubernetes Resources the concepts of Event Producers, Event Routers, Events Subscriptions and Event Concumers.
+
+@TODO: add diagram here
+
+The chapter also introduce [CloudEvents](http://cloudevents.io) as a standard format to exchange events across different tech stacks. I wrote a blog post and a tutorial about building applications both in Java and Go which consume and emit CloudEvents with domain specific payloads. You can find a [step-by-step tutorial here](https://github.com/salaboy/from-monolith-to-k8s/tree/master/cloudevents) and the [blog post here](https://salaboy.com/2022/01/29/event-driven-applications-with-cloudevents-on-kubernetes/). 
+
+
 
 ## Chapter 7: Serverless for Kubernetes
+
+In this chapter we talk about developer experience, and how we can use the tools that we have seen so far to provide the right abstractions for user to work with. This chapter is focused on a serverless approach which uses functions as the main constructs to build functionality that can be integrated together using events. 
+
+This chapter goes over a Knative community project called `func`. This project allows developers to focus on building their functions and their busienss logic instead of worrying about how to build, package and deploy their applications. 
+
+The examples for this chapter are going to be published soon. 
+
+
+## Chapter 8: Building a Platform for CD
+
+## Chapter 9: The road to Continuous and Progress Delivery
+
+
 
