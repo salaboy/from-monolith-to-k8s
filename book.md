@@ -67,11 +67,11 @@ Dealing with the application state is not trivial: we have to understand each se
 - **Application Security and Identity Management**: dealing with users and security is always an after-thought. For distributed applications, having these aspects clearly documented and implemented early on will help you to refine the application requirements by defining “who can do what and when”.  
 
 
-![service-downtime](service-downtime.png)
+<img src="service-downtime.png" width="250"><img src="app-resiliency.png" width="250">
+
+
 
 While following the 12-factor.net principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
-
-@TODO: Challenges diagrams
 
 
 ## Chapter 3: Service and Environment Pipelines
