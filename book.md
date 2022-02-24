@@ -87,11 +87,11 @@ There are two main concepts covered in this chapter:
  
 **Service Pipeline**:
 
-<img src="service-pipeline.png" width="450">
+<img src="service-pipeline.png" width="700">
 
 **Environment Pipeline**:
 
-<img src="environment-pipeline.png" width="450">
+<img src="environment-pipeline.png" width="700">
  
 To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with Tekton which builds on of the services and one environment. 
 
