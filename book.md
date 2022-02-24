@@ -67,7 +67,7 @@ Dealing with the application state is not trivial: we have to understand each se
 - **Application Security and Identity Management**: dealing with users and security is always an after-thought. For distributed applications, having these aspects clearly documented and implemented early on will help you to refine the application requirements by defining “who can do what and when”.  
 
 
-<img src="service-downtime.png" width="250"><img src="app-resiliency.png" width="250">
+<img src="service-downtime.png" width="350"><img src="app-resiliency.png" width="350">
 
 
 
