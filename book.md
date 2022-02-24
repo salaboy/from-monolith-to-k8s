@@ -2,7 +2,8 @@
 
 The contents of this repository had been used to write the [Continuous Delivery for Kubernetes book for Manning](http://mng.bz/jjKP)
 
-![book-cover](https://salaboy.files.wordpress.com/2021/12/salatino-hi-1.png| width=400)
+
+<img src="https://salaboy.files.wordpress.com/2021/12/salatino-hi-1.png" width="400">
 
 This page contains some notes about the chapters and how they link to the tutorials included in this repository.
 
