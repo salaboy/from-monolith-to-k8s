@@ -30,7 +30,7 @@ curl -v -X POST -d '{"input": "salaboy"}' \
 
 ```
 func deploy
-``
+```
 
 ```
 mkdir improve
