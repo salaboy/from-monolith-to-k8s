@@ -89,8 +89,18 @@ tkn pipeline start api-gateway-service-pipeline -s dockerconfig -w name=sources,
 
 ## Environment Pipeline
 
-(TBD)
+The environment pipeline definition described in [`resources/envionment-pipeline.yaml`](resources/envionment-pipeline.yaml) implements the following tasks:
 
+![Environment Pipeline](environment-pipeline.png)
+
+
+You can start this Environment Pipeline by running the following command:
+
+```
+tkn pipeline start stating-environment-pipeline 
+```
+
+The environment pipeline is using [`helmfile`](https://github.com/roboll/helmfile) to describe the stating environment. 
 
 
 # References
