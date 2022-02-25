@@ -132,3 +132,7 @@ curl -v "http://localhost:8080/default/default" \
 -d "{\"input\": \"salaboy\"}"
 
 ```
+
+```
+kubectl logs -f improve user-container
+```
