@@ -187,7 +187,8 @@ Kubernetes built-in resources doesn't deal with producers and consumers of event
 
 In this chapter we will be looking at how Knative Eventing builds on top of Kubernetes Resources the concepts of Event Producers, Event Routers, Events Subscriptions and Event Concumers.
 
-@TODO: add diagram here
+<img src="events-router-with-knative-eventing.png" width="450">
+
 
 The chapter also introduce [CloudEvents](http://cloudevents.io) as a standard format to exchange events across different tech stacks. I wrote a blog post and a tutorial about building applications both in Java and Go which consume and emit CloudEvents with domain specific payloads. You can find a [step-by-step tutorial here](https://github.com/salaboy/from-monolith-to-k8s/tree/master/cloudevents) and the [blog post here](https://salaboy.com/2022/01/29/event-driven-applications-with-cloudevents-on-kubernetes/). 
 
