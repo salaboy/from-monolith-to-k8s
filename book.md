@@ -143,6 +143,9 @@ spec:
     spec:
       containers:
         - image: salaboy/fmtok8s-email-rest:0.1.0
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: dev
 EOF
 ```
 
@@ -159,6 +162,9 @@ spec:
     spec:
       containers:
         - image: salaboy/fmtok8s-email-rest:0.1.0-improved
+          env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: dev
   traffic:
   - percent: 80
     revisionName: email-service-00001
