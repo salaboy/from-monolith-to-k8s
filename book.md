@@ -146,31 +146,35 @@ spec:
           env:
           - name: SPRING_PROFILES_ACTIVE
             value: dev
+          - name: VERSION
+            value: 0.1.0
+          - name: POD_NODE_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: POD_ID
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: POD_NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace  
 EOF
 ```
 
-We can now, deploy a new version of the service and define a traffic split rule:
-
+Let's now update our Knative Service with a new image and new traffic rules: 
 ```
-kubectl create -f - <<EOF
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: email-service 
-spec:
   template:
     spec:
       containers:
-        - image: salaboy/fmtok8s-email-rest:0.1.0-improved
-          env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: dev
+        - **image: salaboy/fmtok8s-email-rest:0.1.0-improved**
+```        
   traffic:
   - percent: 80
     revisionName: email-service-00001
   - latestRevision: true
     percent: 20
-EOF
 ```
 
 Knative Serving does also bring an autoscaler that enable our services to behave more like Serverless applications, as they can be downscaled to zero automatically if they are not receiving any request. 
