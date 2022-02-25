@@ -169,7 +169,9 @@ Let's now update our Knative Service with a new image and new traffic rules:
     spec:
       containers:
         - **image: salaboy/fmtok8s-email-rest:0.1.0-improved**
-```        
+```  
+
+```
   traffic:
   - percent: 80
     revisionName: email-service-00001
