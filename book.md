@@ -198,6 +198,12 @@ The chapter also introduce [CloudEvents](http://cloudevents.io) as a standard fo
 
 In this chapter we talk about developer experience, and how we can use the tools that we have seen so far to provide the right abstractions for user to work with. This chapter is focused on a serverless approach which uses functions as the main constructs to build functionality that can be integrated together using events. 
 
+<img src="function.png" width="700">
+
+Functions react on events, so they can be chained or multiple functions can be triggered for the same event:
+
+<img src="functions.png" width="700">
+
 This chapter goes over a Knative community project called `func`. This project allows developers to focus on building their functions and their busienss logic instead of worrying about how to build, package and deploy their applications. 
 
 The examples for this chapter are going to be published soon. 
