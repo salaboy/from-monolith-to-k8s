@@ -65,6 +65,9 @@ curl -v -X POST -d '{"input": "salaboy", "output": "SALABOY", "operation": "uppe
 func deploy
 ```
 
+```
+kubectl logs -f improve<TAB> user-container
+```
 
 ```
 kubectl create -f - <<EOF
