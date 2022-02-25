@@ -143,7 +143,7 @@ spec:
     spec:
       containers:
         - image: salaboy/fmtok8s-email-rest:0.1.0
-EOF        
+EOF
 ```
 
 We can now, deploy a new version of the service and define a traffic split rule:
@@ -164,7 +164,7 @@ spec:
     revisionName: email-service-00001
   - latestRevision: true
     percent: 20
-EOF    
+EOF
 ```
 
 Knative Serving does also bring an autoscaler that enable our services to behave more like Serverless applications, as they can be downscaled to zero automatically if they are not receiving any request. 
