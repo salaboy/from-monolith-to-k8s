@@ -102,9 +102,22 @@ To show how these pipelines can look like I used Tekton, which brings the right 
 
 ## Chapter 4: Multi-Cloud Infrastructure
 
-When working with Kubernetes, your applications will depend on infrastructure such as Databases, Message Brokers, Load Balancers, API Gateways, Identity Management solutions, etc. All this infrastructure needs to be managed, secured and maintained. Depending on your operation teams, running and managing all this infrastructure is complex and out of the scope for delopment teams. This chapter covers some options to work with infrastructural components inside and outside Kubernetes and how using tools like Crossplane you can manage your Cloud-Provider specific infrastructure by using Kubernetes Resources. 
+When working with Kubernetes, your applications will depend on infrastructure such as Databases, Message Brokers, Load Balancers, API Gateways, Identity Management solutions, etc. All this infrastructure needs to be managed, secured and maintained. Depending on your operation teams, running and managing all this infrastructure is complex and out of the scope for delopment teams. This chapter covers some options to work with infrastructural components inside and outside Kubernetes and how using tools like [Crossplane](http://crossplane.io) you can manage your Cloud-Provider specific infrastructure by using Kubernetes Resources. 
+
+<img src="application-infrastructure.png" width="450">
+
+Crossplane allow you to install Cloud-Provider specific providers which enable the creation of resources such as databases, message brokers, etc using Kubernetes Resources. 
+
+<img src="crossplane-providers.png" width="450">
+
+Now, with Crossplane installed, we can use the same tools that we used to define how our applications and services needs to be deployed to also include which resources needs to be created inside one or more Cloud Providers. 
+
+But that's not all, Crossplane goes one step ahead and enable us to define abstractions for our Application Teams that can be Cloud-Provider agnostic, while letting our Operation Teams to provide Cloud Provider specific configurations for the resources that needs to be created for our applications. 
+
+<img src="crossplane-resource-abstractions.png" width="450">
 
 A tutorial on how to setup the application to use two different databases inside Google Cloud can be found here: https://github.com/salaboy/from-monolith-to-k8s/blob/master/crossplane/config-pkg/README.md
+
 
 Interesting enough, this example can also be ported to work on any other major Cloud Provider such as Azure AKS or Amazon EKS without changing anything on the application, just Crossplane configuration resources. 
 
