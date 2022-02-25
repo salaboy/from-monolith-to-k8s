@@ -70,6 +70,11 @@ kubectl logs -f improve<TAB> user-container
 ```
 
 ```
+kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml
+
+```
+
+```
 kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Broker
@@ -113,6 +118,23 @@ spec:
       apiVersion: serving.knative.dev/v1
       kind: Service
       name: improve
+
+EOF
+
+--- 
+
+apiVersion: eventing.knative.dev/v1
+kind: Trigger
+metadata:
+  name: sockeye-trigger
+  namespace: default
+spec:
+  broker: default
+  subscriber:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: sockeye
 
 EOF
 ```
