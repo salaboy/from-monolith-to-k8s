@@ -9,13 +9,13 @@ Follow the next steps in order to install and setup Tekton in your Kubernetes Cl
 1. **Install Tekton Pipelines**
 
 ```
-kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.25.0/release.yaml
+kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
 ```
 2. **Install Tekton Triggers**
 
 ```
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.14.2/release.yaml
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.14.2/interceptors.yaml
+kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
+kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
 ```
 3. **Install Tekton Dashboard (optional)**
 
