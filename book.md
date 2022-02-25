@@ -14,7 +14,7 @@ Important before we jump into the chapters summary: **This book is written by a 
 # Table of Content
 
 - [Chapter 1: Cloud-Native Continuous Delivery](#chapter-1-cloud-native-continuous-delivery)
-- [Chapter 2: Cloud-Native applicaiton challenges](#chapter-2-cloud-native-applicaiton-challenges)
+- [Chapter 2: Cloud-Native application challenges](#chapter-2-cloud-native-application-challenges)
 - [Chapter 3: Service and Environment Pipelines](#chapter-3-service-and-environment-pipelines)
 - [Chapter 4: Multi-Cloud Infrastructure](#chapter-4-multi-cloud-infrastructure)
 - [Chapter 5: Release Strategies](#chapter-5-release-strategies)
@@ -51,15 +51,17 @@ This chapter also introduce the concept of a walking skeleton, which describes t
 
 ![Walking Skeleton  Services](walking-skeleton-services.png)
 
-## Chapter 2: Cloud-Native applicaiton challenges
+## Chapter 2: Cloud-Native application challenges
 
 While looking at the walking skeleton application introduced in chapter 1, chapter 2 focus on describing the challenges that you will face to run this application on top of Kubernetes. 
 
-Starting with defining which Kubernetes flavour you choose and looking into package managers like Helm, this chapter explores the basic Kubernetes resources that you will be using to get the walking skeleton application and up and running. 
+Starting with defining which Kubernetes flavour you choose and looking into package managers like Helm, this chapter explores the basic Kubernetes resources that you will be using to get the walking skeleton application and up and running. Are you going to use a Cloud-Provider? which one? Are you going to promote your developers to use a local Kubernetes Cluster? Are you going to set up your own On-Prem Kubernetes Cluster?
 
-This chapter makes reference to the step by step tutorials that can be found [here: https://github.com/salaboy/from-monolith-to-k8s/tree/master/kind](https://github.com/salaboy/from-monolith-to-k8s/tree/master/kind)
+This chapter makes reference to the following step-by-step tutorials
+- [Using KinD to run our Walking Skeleton](https://github.com/salaboy/from-monolith-to-k8s/tree/master/kind)
+- [Using Helm to package our applications](https://github.com/salaboy/from-monolith-to-k8s/tree/master/helm) 
 
-Once you get the applicaiton up and running and we review the basics around Kubernetes Deployments, Services, and Ingresses, the chapter goes on describing the most common challenges that developers will face when building this kind of applications.
+Once you get the applicaiton up and running and we review the basics around Kubernetes `Deployments`, `Services`, and `Ingresses`, the chapter goes on describing the most common challenges that developers will face when building this kind of applications.
 
 - **Downtime is not allowed**: If you are building and running a Cloud-Native application on top of Kubernetes and you are still suffering from application downtime, then you are not capitalizing on the advantages of the technology stack that you are using. 
 - **Service’s built-in resiliency**: downstream services will go down and you need to make sure that your services are prepared for that. Kubernetes helps with dynamic Service Discovery, but that is not enough for your application to be resilient. 
@@ -76,7 +78,7 @@ Dealing with the application state is not trivial: we have to understand each se
 
 <img src="app-resiliency.png" width="450">
 
-While following the 12-factor.net principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
+While following the [12-factor.net](12-factor.net) principles we will mitigate some of these challenges, we need to consiously design and tackle these challenges to avoid a large number of headaches. 
 
 
 ## Chapter 3: Service and Environment Pipelines
@@ -95,10 +97,7 @@ There are two main concepts covered in this chapter:
 
 <img src="environment-pipeline.png" width="700">
  
-To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with Tekton which builds on of the services and one environment. 
-
-https://github.com/salaboy/from-monolith-to-k8s/tree/master/tekton
-
+To show how these pipelines can look like I used Tekton, which brings the right constructs to build Cloud-Native pipelines on top of Kubernetes. You can find a tutorial with [Tekton which builds one of the services and sync an environment to a cluster here](https://github.com/salaboy/from-monolith-to-k8s/tree/master/tekton). 
 
 
 ## Chapter 4: Multi-Cloud Infrastructure
