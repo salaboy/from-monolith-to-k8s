@@ -119,8 +119,6 @@ spec:
       kind: Service
       name: improve
 
-EOF
-
 --- 
 
 apiVersion: eventing.knative.dev/v1
