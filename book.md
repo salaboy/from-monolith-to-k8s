@@ -2,13 +2,14 @@
 
 The contents of this repository had been used to write the [Continuous Delivery for Kubernetes book for Manning](http://mng.bz/jjKP)
 
-
 <img src="https://salaboy.files.wordpress.com/2021/12/salatino-hi-1.png" width="400">
 
 This page contains some notes about the chapters and how they link to the tutorials included in this repository.
 
 If you have questions, comments or feedback of any kind please create an issue here, or drop me a message in [Twitter @salaboy](http://twitter.com/salaboy). 
 If you like the content please give it a Github star!
+
+Important before we jump into the chapters summary: **This book is written by a developer for developers**. All the topics and tools covered are analyzed using a developer perspective. This book uses the examples that can be found in this repository to examplify how different tools solve concrete problems in a practical way. In no way, the tools discussed here are silver bullets that will solve all your problems. Most of the time, the tools presented here are just the building blocks that you will need to glue together to streamline your Cloud-Native applications. This book, on purpose, doesn't focus only on automation and building software, as developers needs much more than automation to be efficient. In other words, this book is not about **Dev-Ops**. 
 
 # Table of Content
 
@@ -25,24 +26,25 @@ If you like the content please give it a Github star!
 ## Chapter 1: Cloud-Native Continuous Delivery
 
 The first chapter introduce the approach of the book and cover the most important concepts that will be later expanded in the remaining of the book. 
-There are two main definitions worth highlighting: What does Cloud-Native means in the context of Kubernetes and Continuous Delivery Goals. 
+There are two main definitions worth highlighting: **What does Cloud-Native means in the context of Kubernetes and Continuous Delivery Goals**. 
 
 
-**Cloud-Native in the context of Kubernetes**: 
+### Cloud-Native in the context of Kubernetes: 
 
 A good definition of the term can be found in VMWare site by Joe Beda (Co-Founder, Kubernetes and Principal Engineer, VMware) https://tanzu.vmware.com/cloud-native
-“Cloud-Native is structuring teams, culture, and technology to utilise automation and architectures to manage complexity and unlock velocity.”
 
-Where https://12factor.net is a key ingredient of what we understand for Cloud-Native, in Kubernetes we get most of the tools to adhere to these factors, but we need to be aware of them to make sure that we don't design our applications against them. 
+**“Cloud-Native is structuring teams, culture, and technology to utilise automation and architectures to manage complexity and unlock velocity.”**
+
+Where [12-Factor principles](https://12factor.net) are a key ingredient of what we understand for Cloud-Native today, in Kubernetes we get most of the tools to adhere to these factors, but we need to be aware of them to make sure that we don't design our applications against them. 
 
 
 <img src="12-factors.png" width="250">
 
-**Continuous Delivery Goals**: 
+### Continuous Delivery Goals: 
  
-“Deliver useful, working software to users as quickly as possible by organising teams to build and deploy in an automated way Cloud-Native applications that run in cloud-agnostic setup.” 
+**“Deliver useful, working software to users as quickly as possible by organising teams to build and deploy in an automated way Cloud-Native applications that run in cloud-agnostic setup.”** 
 
-Highly recommended: [Grokking Continuous Delivery - By Christie Wilson - Manning](https://www.manning.com/books/grokking-continuous-delivery)
+I highly recommend [Grokking Continuous Delivery - By Christie Wilson - Manning](https://www.manning.com/books/grokking-continuous-delivery) which gives a comprehensive view about Continuous Delivery and go depth clarifying concepts and important topics that we need to consider if we are serious about improving our delivery practices.
 
 
 This chapter also introduce the concept of a walking skeleton, which describes the application linked in the tutorials of this repository. The scenario is a Conference Platform that you can use to organize any kind of conference event with speakers, call for proposals, agenda, notifications, etc.
