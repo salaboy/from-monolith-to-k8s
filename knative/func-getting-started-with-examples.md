@@ -15,7 +15,7 @@ func build
 
 ```
 func run
-``
+```
 
 ```
 curl -v -X POST -d '{"input": "salaboy"}' \
@@ -47,7 +47,7 @@ func build
 
 ```
 func run
-``
+```
 
 ```
 curl -v -X POST -d '{"input": "salaboy", "output": "SALABOY", "operation": "uppercase"}' \
@@ -63,7 +63,7 @@ curl -v -X POST -d '{"input": "salaboy", "output": "SALABOY", "operation": "uppe
 
 ```
 func deploy
-``
+```
 
 
 ```
