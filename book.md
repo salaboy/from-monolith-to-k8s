@@ -131,9 +131,21 @@ Being able to release software continuosly require us to have the right tools at
 - Blue/Green Deployments
 - A/B Testing
 
-@TODO: Diagrams
-
 By using Knative Serving Services, we reduce the amount of YAML used to describe our Services, but also can have fine grain control on how the traffic is routed to different versions of our services. This is very useful for implementing Canary Releases, Blue Green Deployments and A/B Testing strategies.
+```
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: email-service 
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/fmtok8s-email-rest:0.1.0
+```
+
+We can now, deploy a new version of the service and define a traffic split rule:
+
 ```
 apiVersion: serving.knative.dev/v1
 kind: Service
@@ -149,7 +161,6 @@ spec:
     revisionName: email-service-00001
   - latestRevision: true
     percent: 20
-
 ```
 
 Knative Serving does also bring an autoscaler that enable our services to behave more like Serverless applications, as they can be downscaled to zero automatically if they are not receiving any request. 
