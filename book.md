@@ -116,7 +116,7 @@ But that's not all, Crossplane goes one step ahead and enable us to define abstr
 
 <img src="crossplane-resource-abstractions.png" width="450">
 
-A tutorial on how to setup the application to use two different databases inside Google Cloud can be found here: https://github.com/salaboy/from-monolith-to-k8s/blob/master/crossplane/config-pkg/README.md
+A step-by-step tutorial on how to setup the application to use two different databases running on Google Cloud (CloudSQL PostgreSQL and Memorystore Redis) [using Crossplane can be found here](https://github.com/salaboy/from-monolith-to-k8s/blob/master/crossplane/)
 
 
 Interesting enough, this example can also be ported to work on any other major Cloud Provider such as Azure AKS or Amazon EKS without changing anything on the application, just Crossplane configuration resources. 
