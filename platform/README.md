@@ -1,6 +1,7 @@
 # Creating your own platform
 
-Create a Platform Cluster.
+
+## Create a Platform Cluster:
 
 Then install Kratix: 
 
@@ -22,10 +23,19 @@ vi /Users/msalatino/.mc/config.json
 Configure local keys to `minioamdin`/`minioamdin`
 
 
+Install a promise like Jenkins Promise: 
+
+```
+kubectl apply -f samples/jenkins/jenkins-promise.yaml
+```
+
+
 Check: 
 ```
 mc ls local/kratix-crds
 ```
+
+## Create a Worker Cluster:
 
 
 ## Reference
