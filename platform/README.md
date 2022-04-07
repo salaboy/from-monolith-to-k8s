@@ -10,6 +10,8 @@ kubectl apply -f distribution/kratix.yaml
 kubectl apply -f hack/platform/minio-install.yaml
 ```
 
+**Note**: change minio service to LoadBalancer type to expose outside of GKE
+
 We are using Minio inside the Cluster to store resources, 
 Port Forward
 ```
@@ -35,7 +37,8 @@ Check:
 mc ls local/kratix-crds
 ```
 
-## Create a Worker Cluster:
+## Create a Worker Cluster
+
 
 
 ## Reference
