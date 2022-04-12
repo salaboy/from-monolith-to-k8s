@@ -8,7 +8,7 @@ There is also a function to obtain a leaderboard based on the data recorded from
 
 This application is based on functions, but it relies on a `frontend` component that serves as an API Gateway to connect the User Interface to the functions, so functions are not exposed outside the cluster. 
 
-![game-architecture.png]
+![game-architecture.png](game-architecture.png)
   
 Each Game level is a different function that evaluates the submitted answers and score the results. 
 All the state is kept into a Redis database and each function access Redis by creating a connection to it.
