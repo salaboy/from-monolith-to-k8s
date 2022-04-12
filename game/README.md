@@ -59,6 +59,26 @@ For the application to work we need to install the functions that perform operat
 For this is recommend to have installed the `func` CLI. 
 
 You can build your own levels or deploy the provided ones. 
+Let's start by the `Start-Game` Function which source code is located [here](https://github.com/salaboy/start-game)
+If you clone the source code of this function you can build and deploy this function to your cluster by running the following commands: 
+
+```
+func build
+```
+Before deploying the function you need to update an environment variable (`REDIS_HOST`) to allow the function to connect with a Redis instance. 
+You can do this by editing the `func.yaml` file and under `envs` add the entry `REDIS_HOST` with the IP for where the Redis server is running: 
+
+```
+envs:
+- name: REDIS_HOST
+  value: X.X.X.X
+```
+
+Then you can run:  
+```
+func deploy
+```
+
 
 
 
@@ -66,7 +86,7 @@ You can build your own levels or deploy the provided ones.
 
 - [FrontEnd application (Spring Boot + React Application)](https://github.com/salaboy/fmtok8s-game-frontend): This contains the frontend project, you can run the client side from your environment to hit the remote backend services by following the instructions in the project README.md file. 
 - [Redis Function Template]() If you want to create functions that will connect to Redis you can create a function using this template, that already includes the Redis Go dependency and an environment variable that allows you to configure where the Redis instance is. 
-- [Start-Game Function]()
+- [Start-Game Function](https://github.com/salaboy/start-game)
 - [Start-Level Function]()
 - [Level Functions]()
 - [Get-Leaderbaord Function]()
