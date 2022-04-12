@@ -21,6 +21,7 @@ All the state is kept into a Redis database and each function access Redis by cr
 - Install Knative Serving
 - (Optional for the second part) Install Knative Eventing
 - Install Knative `func` CLI
+- A Redis database (local, remote, managed)
 
 ## Installing the game functions and components
   
@@ -52,14 +53,23 @@ spec:
               path: /actuator/health
 ```
 
+If you run `kubectl get ksvc` you should see the URL for the service, where we can access the User Interface. 
+
+For the application to work we need to install the functions that perform operations and store state in Redis. 
+For this is recommend to have installed the `func` CLI. 
+
+You can build your own levels or deploy the provided ones. 
+
+
+
 ## Source code and Projects
 
 - [FrontEnd application (Spring Boot + React Application)](https://github.com/salaboy/fmtok8s-game-frontend): This contains the frontend project, you can run the client side from your environment to hit the remote backend services by following the instructions in the project README.md file. 
 - [Redis Function Template]() If you want to create functions that will connect to Redis you can create a function using this template, that already includes the Redis Go dependency and an environment variable that allows you to configure where the Redis instance is. 
-- [Start Game Function]()
-- [Start Level Function]()
+- [Start-Game Function]()
+- [Start-Level Function]()
 - [Level Functions]()
-- [Get Leaderbaord Function]()
+- [Get-Leaderbaord Function]()
 
 
 
