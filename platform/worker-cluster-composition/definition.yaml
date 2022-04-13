@@ -1,0 +1,30 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: workerclusters.fmtok8s.salaboy.com
+spec:
+  connectionSecretKeys:
+    - kubeconfig
+  group: fmtok8s.salaboy.com
+  names:
+    kind: WorkerCluster
+    listKind: WorkerClusterList
+    plural: workerclusters
+    singular: workercluster
+  versions:
+    - name: v1alpha1
+      served: true
+      referenceable: true
+      schema:
+        openAPIV3Schema:
+          description: A WorkerCluster is a composite resource that represents a K8S Cluster with the components for the Worker Cluster Installed
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                clusterVersion:
+                  type: string
+                  description: GKE cluster version
+              required:
+                - clusterVersion

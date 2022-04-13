@@ -1,0 +1,13 @@
+apiVersion: meta.pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: worker-cluster-gcp
+  annotations:
+    app: fmtok8s-workercluster
+    provider: gcp
+spec:
+  crossplane:
+    version: ">=v1.4.0-0"
+  dependsOn:
+    - provider: crossplane/provider-gcp
+      version: ">=v0.21.0"
