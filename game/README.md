@@ -87,9 +87,11 @@ func deploy
 - [FrontEnd application (Spring Boot + React Application)](https://github.com/salaboy/fmtok8s-game-frontend): This contains the frontend project, you can run the client side from your environment to hit the remote backend services by following the instructions in the project README.md file. 
 - [Redis Function Template]() If you want to create functions that will connect to Redis you can create a function using this template, that already includes the Redis Go dependency and an environment variable that allows you to configure where the Redis instance is. 
 - [Start-Game Function](https://github.com/salaboy/start-game)
-- [Start-Level Function]()
-- [Level Functions]()
-- [Get-Leaderbaord Function]()
+- [Start-Level Function](https://github.com/salaboy/start-level)
+- **Level Functions**
+  - [Level-1](https://github.com/salaboy/level-1) 
+  - [Level-2](https://github.com/salaboy/level-2) 
+- [Get-Leaderbaord Function](https://github.com/salaboy/get-leaderboard)
 
 
 
