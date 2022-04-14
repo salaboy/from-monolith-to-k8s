@@ -92,6 +92,7 @@ func deploy
   - [Level-1](https://github.com/salaboy/level-1) 
   - [Level-2](https://github.com/salaboy/level-2) 
 - [Get-Leaderbaord Function](https://github.com/salaboy/get-leaderboard)
+- [Clean-DB](https://github.com/salaboy/clean-db)
 
 
 
