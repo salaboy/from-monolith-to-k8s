@@ -28,32 +28,70 @@ All the state is kept into a Redis database and each function access Redis by cr
 Once you have Knative Serving installed you can installing the FrontEnd Service
   
 ```
-apiVersion: serving.knative.dev/v1
+apiVersion: v1
 kind: Service
 metadata:
   name: game-frontend
+  annotations:
+    beta.cloud.google.com/backend-config: '{"ports": {"80":"frontend-backendconfig"}}'
 spec:
+  type: LoadBalancer #this is needed to expose the service, using ingress will not work for websockets
+  selector:
+    app: frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+      name: http
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
+      name: rsocket
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
   template:
     metadata:
-      annotations:
-        autoscaling.knative.dev/minScale: "1"
+      labels:
+        app: frontend
     spec:
       containers:
-        - image: salaboy/fmtok8s-game-frontend:0.1.0
+        - name: frontend
+          image: salaboy/fmtok8s-game-frontend:0.1.5
+          env:
+            - name: EXTERNAL_IP
+              value: <EXTERNAL_IP from the Loadbalancer Service here>
           imagePullPolicy: Always
-          livenessProbe:
-            httpGet:
-              path: /actuator/health
           ports:
             - containerPort: 8080
-              name: http1
-              protocol: TCP
-          readinessProbe:
-            httpGet:
-              path: /actuator/health
+            - containerPort: 9000
+
+---
+# This is needed for GKE to work and don't close the websocket connection
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: frontend-backendconfig
+spec:
+  timeoutSec: 1800
+  connectionDraining:
+    drainingTimeoutSec: 1800
+
+
 ```
 
-If you run `kubectl get ksvc` you should see the URL for the service, where we can access the User Interface. 
+If you run `kubectl get svc game-frontend` you should see the URL for the service, where we can access the User Interface. 
 
 For the application to work we need to install the functions that perform operations and store state in Redis. 
 For this is recommend to have installed the `func` CLI. 
@@ -71,7 +109,7 @@ You can do this by editing the `func.yaml` file and under `envs` add the entry `
 ```
 envs:
 - name: REDIS_HOST
-  value: X.X.X.X
+  value: X.X.X.X # this should include the port which is usually 6379
 ```
 
 Then you can run:  
@@ -79,6 +117,7 @@ Then you can run:
 func deploy
 ```
 
+Follow the same steps for the other functions. 
 
 
 
