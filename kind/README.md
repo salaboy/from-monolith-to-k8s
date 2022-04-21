@@ -82,7 +82,7 @@ You should see the following output:
 
 ```
 NAME: app
-LAST DEPLOYED: Sat Aug 28 13:52:48 2021
+LAST DEPLOYED: Thu Apr 21 09:04:46 2022
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
