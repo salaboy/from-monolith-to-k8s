@@ -44,7 +44,7 @@ We need NGINGX Ingress Controller to route traffic from our laptop to the servic
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
-## Install Application using Helm
+## Installing the Application using Helm
 Finally, we can install the application by adding a Helm chart repository. 
 
 Add a custom Helm Chart Repository for this application: 
