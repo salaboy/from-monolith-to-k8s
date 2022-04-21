@@ -105,7 +105,7 @@ app-fmtok8s-c4p-rest-856c5d584d-9m7wl      1/1     Running     0          7m22s
 app-fmtok8s-email-rest-7c8f54f6d9-s5ztz    1/1     Running     0          7m22s
 ```
 
-When yo0u  get all the pods up and running, you should be able to access the application pointing your browser to: http://localhost
+When you  get all the pods up and running, you should be able to access the application pointing your browser to: http://localhost
 
 
 ## Other options
