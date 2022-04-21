@@ -44,10 +44,28 @@ We need NGINGX Ingress Controller to route traffic from our laptop to the servic
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
 ```
 
-## Installing the Application using Helm
-Finally, we can install the application by adding a Helm chart repository. 
+This allows you to route traffic from http://localhost to services running inside the cluster. Notice that for KinD to work in this way, when we created the cluster we provided extra parameters and labels for the control plane node:
+```
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true" #This allow the ingress controller to be installed in the control plane node
+  extraPortMappings:
+  - containerPort: 80 # This allows us to bind port 80 in local host to the ingress controller, so it can route traffic to services running inside the cluster.
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+```
 
-Add a custom Helm Chart Repository for this application: 
+
+## Installing the Application using Helm
+Finally, we can install the application by adding a Helm chart repository. To achieve this, first we need to add a custom Helm Chart Repository for this application: 
 
 ```
 helm repo add fmtok8s https://salaboy.github.io/helm/
@@ -77,5 +95,20 @@ Release Name: app
 
 ```
 
-You should be able to access the application pointing your browser to: http://localhost:8080
+Now you can check that the pods of the application are being created correctly with: 
+```
+kubectl get pods
+NAME                                       READY   STATUS      RESTARTS   AGE
+app-fmtok8s-agenda-rest-65d7778fd7-pp4tf   1/1     Running     0          7m22s
+app-fmtok8s-api-gateway-5dfd76594-j5bms    1/1     Running     0          7m22s
+app-fmtok8s-c4p-rest-856c5d584d-9m7wl      1/1     Running     0          7m22s
+app-fmtok8s-email-rest-7c8f54f6d9-s5ztz    1/1     Running     0          7m22s
+```
+
+When yo0u  get all the pods up and running, you should be able to access the application pointing your browser to: http://localhost
+
+
+## Other options
+
+If you don't want to create a Helm release, which gets created when you run `helm install` you can use Helm to produce the all YAML files of your application's services by running `helm template`. 
 
