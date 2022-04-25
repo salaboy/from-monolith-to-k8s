@@ -130,6 +130,7 @@ Follow the same steps for the other functions.
 - **Level Functions**
   - [Level-1](https://github.com/salaboy/level-1) 
   - [Level-2](https://github.com/salaboy/level-2) 
+  - [Level-3](https://github.com/salaboy/level-3) 
 - [Get-Leaderbaord Function](https://github.com/salaboy/get-leaderboard)
 - [Clean-DB](https://github.com/salaboy/clean-db)
 
