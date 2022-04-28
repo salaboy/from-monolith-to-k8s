@@ -53,11 +53,23 @@ You can read more about how composition works here: https://crossplane.io/docs/v
 I've packaged this composition as an OCI image, so you can just install it by running: 
 
 ```
-kubectl crossplane install configuration salaboy/worker-cluster-gcp:0.1.0
+kubectl crossplane install configuration salaboy/spicy-project-template-gcp:0.1.0
 ```
 
 You can modify and build the package yourself:
 ```
 kubectl crossplane build configuration
-kubectl crossplane push configuration <USER>/worker-cluster-gcp:0.1.0
+kubectl crossplane push configuration <USER>/spicy-project-template-gcp:0.1.0
+```
+
+Then you can create a new Spicy Project Cluster by running:
+
+```
+kubectl apply -f spicy-project-template
+```
+
+and list the Spicy Clusters by doing: 
+
+```
+kubectl get spicy
 ```
