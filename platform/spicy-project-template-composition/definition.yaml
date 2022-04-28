@@ -1,23 +1,25 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: workerclusters.fmtok8s.salaboy.com
+  name: spicyprojecttemplategcps.fmtok8s.salaboy.com
 spec:
   connectionSecretKeys:
     - kubeconfig
   group: fmtok8s.salaboy.com
   names:
-    kind: WorkerCluster
-    listKind: WorkerClusterList
-    plural: workerclusters
-    singular: workercluster
+    kind: SpicyProjectTemplateGCP
+    listKind: SpicyProjectTemplateGCPList
+    plural: spicyprojecttemplategcps
+    singular: spicyprojectteamplategcp
+    shortNames:
+      - "spicy"
   versions:
     - name: v1alpha1
       served: true
       referenceable: true
       schema:
         openAPIV3Schema:
-          description: A WorkerCluster is a composite resource that represents a K8S Cluster with the components for the Worker Cluster Installed
+          description: A Spicy Project Template for GCP is a composite resource that represents a K8S Cluster with the components for Spicy Projects Installed
           type: object
           properties:
             spec:

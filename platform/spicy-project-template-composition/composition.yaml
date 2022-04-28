@@ -1,14 +1,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: workerclusters.fmtok8s.salaboy.com
+  name: spicyprojecttemplategcps.fmtok8s.salaboy.com
   labels:
     provider: gcp
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
     apiVersion: fmtok8s.salaboy.com/v1alpha1
-    kind: WorkerCluster
+    kind: SpicyProjectTemplateGCP
   resources:
     - base:
         apiVersion: compute.gcp.crossplane.io/v1beta1
@@ -60,7 +60,7 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "hc-%s"
+                fmt: "cluster-%s"
         - fromFieldPath: "metadata.labels"
           toFieldPath: "metadata.labels"
         - fromFieldPath: "metadata.annotations[crossplane.io/external-name]"

@@ -1,7 +1,7 @@
 apiVersion: meta.pkg.crossplane.io/v1
 kind: Configuration
 metadata:
-  name: worker-cluster-gcp
+  name: spicy-project-template-gcp
   annotations:
     app: fmtok8s-workercluster
     provider: gcp
