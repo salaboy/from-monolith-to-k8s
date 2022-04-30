@@ -175,6 +175,36 @@ kubectl delete spicy test-spicy-environment
 
 Now we know how to provision Cloud resources using Crossplane and Composite Resources, but what about installing tools in those clusters, configuring external tools that are not inside the platform cluster and applying security and company policies? The answer to this question is Kratix, and the main reason why you will not be installing this Crossplane Composite resource by hand, as Kratix will do that for you. 
 
+# Using Kratix and Crossplane to create new Team Environments
+
+While a Platform in reality will be way much more than Kratix and Crossplane, and it will probably include security, CI/CD, policies management and other concerns, we will use our current Platform Cluster to enable development team not only to create Cloud Resources, but also configure them to have the right tools installed and configured so the team can focus on writing their applications and not installing tools in the freshly created Cluster. 
+
+We will use Kratix Promises to define what a `SpicyDevEnvironment` is for the Spicy food team. You can find the Kratix resources used to create these [definitions here](https://github.com/syntasso/kratix/tree/dev/samples/spicy-dev-environment)
+
+You can find here Kratix's [Spicy Environment definition](https://github.com/syntasso/kratix/blob/dev/samples/spicy-dev-environment/spicy-dev-environment-promise.yaml). We need to install this definition in our platform cluster by running: 
+
+```
+kubectl apply -f spicy-dev-environment-promise.yaml
+```
+
+And then we can request one of these environments by applying the following resource: 
+
+```
+apiVersion: example.promise.syntasso.io/v1
+kind: spicydevenvironment
+metadata:
+  name: my-spicy-dev-environment
+spec:
+  gcpProject: <INSERT YOUR GCP PROJECT NAME>
+  gcpServiceAccount: <INSERT YOUR GCP SERVICE ACCOUNT>
+  gcpSecretName: <INSERT YOUR GCP SECRET NAME>
+  minioEndpoint: <INSERT YOUR MINIO ENDPOINT>
+```
+
+This new resource currently require some details regarding GCP and where the new environment will be created, this will probably be externalized to more global configuraitons later on. I do imagine that each different kind of Environment that we want to create will expose a set of knobs for the requesting teams to parameterize based on their needs. Some examples of this can be choosing from different sizes depending what the team want to do with the newly created environment, for example a medium size cluster for testing or small environments for development tasks. 
+
+
+When we create this new resource in Kubernetes, Kratix will start a new pipeline to install the previouly describe crossplane package, then create a new instance of the composition to create the Cloud Resources and when it is done it will use another Kratix promise to install Knative in the freshly created Cluster. 
 
 
 # References and Links
