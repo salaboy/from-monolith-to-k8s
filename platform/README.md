@@ -87,12 +87,48 @@ In this section we will install Crossplane in the Platform Cluster and we need t
 Check the Crossplane [installation instructions for GCP here](https://crossplane.io/docs/v1.7/getting-started/install-configure.html)
 You can also install the `kubectl` plugin if you want to play around with the Crossplane composition that I've created for this example. 
 
-When installing Crossplane you need to make sure that you give Crossplane permissions to create new GKE clusters, networks and containers. 
+When installing Crossplane you need to make sure that you give Crossplane permissions to create new GKE clusters and containers. You will need to enable the following services and create the following roles before creating the GCP credentials: 
+
+```
+SERVICE="container.googleapis.com"
+gcloud services enable $SERVICE --project $PROJECT_ID
+```
+
+```
+ROLE="roles/container.admin"
+gcloud projects add-iam-policy-binding --role="$ROLE" $PROJECT_ID --member "serviceAccount:$SA"
+```
+
+```
+SERVICE="compute.googleapis.com"
+gcloud services enable $SERVICE --project $PROJECT_ID
+```
+
+```
+ROLE="roles/compute.admin"
+gcloud projects add-iam-policy-binding --role="$ROLE" $PROJECT_ID --member "serviceAccount:$SA"
+```
+
+Make sure that you do this before creating the service account secret, meaning before you do this: 
+```
+
+# create service account keyfile
+gcloud iam service-accounts keys create creds.json --project $PROJECT_ID --iam-account $SA
+
+```
+
+and then you can create the secret with the credentials in it: 
+
+```
+kubectl create secret generic gcp-creds -n crossplane-system --from-file=creds=./creds.json
+```
+
+By doing this, now Crossplane will be able to create GKE clusters on your behalf. 
 
 
-
-
+## 
 
 ## Reference
-- Kratix Getting Started Guide: https://github.com/syntasso/kratix/blob/main/docs/quick-start.md
-- Crossplane and GCP Provider
+- [Kratix Getting Started Guide](https://github.com/syntasso/kratix/blob/main/docs/quick-start.md)
+- [Crossplane and GCP Provider](https://crossplane.io/docs/v1.7/getting-started/install-configure.html)
+- 
