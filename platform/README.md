@@ -140,10 +140,42 @@ kubectl crossplane install configuration salaboy/spicy-project-template-gcp:0.1.
 
 This will enable your Crossplane installation to create new `SpicyProjectTemplateGCP` resources, which will automatically create a GKE Cluster + NodePool + Network for your teams to use. Crossplane doesn't stop there, it also creates a secret containing the credentails to connect to your newly created Kubernetes Cluster. :metal:
 
-You can test this by applying the following resource against the Platform Cluster:
-```
+After installing the package if you list the availble Custom Resource Definitions inside the cluster you should see new CRD: 
 
 ```
+kubectl get crd | grep spicy
+spicyprojecttemplategcps.fmtok8s.salaboy.com               2022-04-28T14:32:43Z
+```
+
+You can test this by applying the following resource against the Platform Cluster:
+```
+apiVersion: fmtok8s.salaboy.com/v1alpha1
+kind: SpicyProjectTemplateGCP
+metadata:
+  name: test-spicy-environment
+spec:
+  clusterVersion: "1.19"
+```
+
+**Note**: you can find [this file here](spicy-project-template.yaml)
+
+If you correctly configured Crossplane, the GCP provider and the services and roles listed before, by applying the previous resource a new GKE Cluster will be spawned up, you can check that in the GCP Kubernetes Engine dashboard, but you can also use kubectl to monitor the `spicy` resources. 
+
+```
+kubectl get spicy
+NAME                       READY   COMPOSITION                                    AGE
+test-spicy-environment     True   spicyprojecttemplategcps.fmtok8s.salaboy.com   88s
+```
+
+And because Crossplane is dealing with these Kubernetes resources you can always get rid of the created Cloud resources in GCP by deleting the Spicy resource: 
+
+```
+kubectl delete spicy test-spicy-environment
+```
+
+Now we know how to provision Cloud resources using Crossplane and Composite Resources, but what about installing tools in those clusters, configuring external tools that are not inside the platform cluster and applying security and company policies? The answer to this question is Kratix, and the main reason why you will not be installing this Crossplane Composite resource by hand, as Kratix will do that for you. 
+
+
 
 # References and Links
 - [Kratix Getting Started Guide](https://github.com/syntasso/kratix/blob/main/docs/quick-start.md)
