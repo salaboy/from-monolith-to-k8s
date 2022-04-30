@@ -135,6 +135,14 @@ The Crossplane Composite Resources can be packaged and distributed as OCI images
 
 You can install this Crossplane Package by running the following command: 
 ```
+kubectl crossplane install configuration salaboy/spicy-project-template-gcp:0.1.0
+```
+
+This will enable your Crossplane installation to create new `SpicyProjectTemplateGCP` resources, which will automatically create a GKE Cluster + NodePool + Network for your teams to use. Crossplane doesn't stop there, it also creates a secret containing the credentails to connect to your newly created Kubernetes Cluster. :metal:
+
+You can test this by applying the following resource against the Platform Cluster:
+```
+
 ```
 
 # References and Links
