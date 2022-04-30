@@ -14,8 +14,12 @@ In general, the Platform Team will be in charge of creating the "Platform", deve
 ![Platform Teams and Developer Teams]
 
 
+## Use Case
+ 
+(TBD)
 
-## Create a Platform:
+
+## Creating a Self-Service Platform for K8s
 
 Because we are using Kubernetes as the target platform, we will be using [Kratix](https://github.com/syntasso/kratix) to provide a consistent API using Kubernetes resources to enable developer teams to create their requests to the platform. 
 This means that our Platform will be materialized as a Kubernetes Cluster with Kratix installed in it. Kratix, besides exposing a consistent and high-level API, will be in charge of orchestrating different tools inside this cluster to provision team environments. 
@@ -49,6 +53,7 @@ We are using Minio inside the Cluster to store resources that will be applied to
 
 **Note**: Check the Minio Service External IP with `kubectl get svc/minio -n kratix-platform-system` .  
 
+![Kratix Diagram]()
 
 #### Accessing Minio files from local environment
 If you want to access from your local environment then use `Port Forward`
@@ -74,9 +79,18 @@ mc ls local/kratix-crds
 
 
 ###  Installing Crossplane into the Platform Cluster
+
 We will be installing Crossplane into the platform cluster so the platform can provision new environments for the teams. We don't want to expose Crossplane Resources to our development teams, hence Crossplane resources will be applied by Kratix. 
 
 In this section we will install Crossplane in the Platform Cluster and we need to make sure that Crossplane have enough rights to provision new Kubernetes Clusters for our teams. 
+
+Check the Crossplane [installation instructions for GCP here](https://crossplane.io/docs/v1.7/getting-started/install-configure.html)
+You can also install the `kubectl` plugin if you want to play around with the Crossplane composition that I've created for this example. 
+
+When installing Crossplane you need to make sure that you give Crossplane permissions to create new GKE clusters, networks and containers. 
+
+
+
 
 
 ## Reference
