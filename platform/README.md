@@ -14,12 +14,12 @@ In general, the Platform Team will be in charge of creating the "Platform", deve
 ![Platform Teams and Developer Teams]
 
 
-## Use Case
+# Use Case
  
 (TBD)
 
 
-## Creating a Self-Service Platform for K8s
+# Creating a Self-Service Platform for K8s
 
 Because we are using Kubernetes as the target platform, we will be using [Kratix](https://github.com/syntasso/kratix) to provide a consistent API using Kubernetes resources to enable developer teams to create their requests to the platform. 
 This means that our Platform will be materialized as a Kubernetes Cluster with Kratix installed in it. Kratix, besides exposing a consistent and high-level API, will be in charge of orchestrating different tools inside this cluster to provision team environments. 
@@ -30,7 +30,7 @@ In this folling sections, we will install all we need in the Platform Cluster, h
 - Installing Crossplane and the GCP provider
 - Understanding what we have installed and why
 
-### Installing Kratix into the Platform cluster
+## Installing Kratix into the Platform cluster
 
 First it is recommended for you to clone Kratix repository so then we can modify and apply some Kubernetes resources:
 
@@ -55,7 +55,7 @@ We are using Minio inside the Cluster to store resources that will be applied to
 
 ![Kratix Diagram]()
 
-#### Accessing Minio files from local environment
+### Accessing Minio files from local environment
 If you want to access from your local environment then use `Port Forward`
 
 ```
@@ -78,7 +78,7 @@ mc ls local/kratix-crds
 ```
 
 
-###  Installing Crossplane into the Platform Cluster
+##  Installing Crossplane into the Platform Cluster
 
 We will be installing Crossplane into the platform cluster so the platform can provision new environments for the teams. We don't want to expose Crossplane Resources to our development teams, hence Crossplane resources will be applied by Kratix. 
 
@@ -126,9 +126,18 @@ kubectl create secret generic gcp-creds -n crossplane-system --from-file=creds=.
 By doing this, now Crossplane will be able to create GKE clusters on your behalf. 
 
 
-## 
+### Provisioning infrastructure with Crossplane
 
-## Reference
+Now that we have Crossplane installed, we can use [Crossplane Composite Resources](https://crossplane.io/docs/v1.7/concepts/composition.html) to define the resources that we have identified that a team might need to get started with a new project. 
+
+I've created a composition which represent a template for the Spicy Team in our Food Delivery company, this team is going to deal with Spicy food restaurants and they will need to build their own integrations to coordinate their spicy food deliveries. 
+The Crossplane Composite Resources can be packaged and distributed as OCI images, allowing the platform team to build reusable cloud resource aggregations that can be versioned and distributed alongside the application's containers. 
+
+You can install this Crossplane Package by running the following command: 
+```
+```
+
+# References and Links
 - [Kratix Getting Started Guide](https://github.com/syntasso/kratix/blob/main/docs/quick-start.md)
 - [Crossplane and GCP Provider](https://crossplane.io/docs/v1.7/getting-started/install-configure.html)
 - 
