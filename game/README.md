@@ -26,59 +26,13 @@ All the state is kept into a Redis database and each function access Redis by cr
 ## Installing the game functions and components
   
 Once you have Knative Serving installed you can installing the FrontEnd Service
-  
+
+If you are running in GKE you need the following `BackendConfig` to make sure that GKE doesn't drop websocket connections.
+
 ```
-apiVersion: v1
-kind: Service
-metadata:
-  name: game-frontend
-  annotations:
-    beta.cloud.google.com/backend-config: '{"ports": {"80":"frontend-backendconfig"}}'
-spec:
-  type: LoadBalancer #this is needed to expose the service, using ingress will not work for websockets
-  selector:
-    app: frontend
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
-      name: http
-    - protocol: TCP
-      port: 9000
-      targetPort: 9000
-      name: rsocket
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: game-frontend
-  labels:
-    app: frontend
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: frontend
-  template:
-    metadata:
-      labels:
-        app: frontend
-    spec:
-      containers:
-        - name: frontend
-          image: salaboy/fmtok8s-game-frontend:0.1.5
-          env:
-            - name: EXTERNAL_IP
-              value: <EXTERNAL_IP from the Loadbalancer Service here>
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-            - containerPort: 9000
-
----
-# This is needed for GKE to work and don't close the websocket connection
 apiVersion: cloud.google.com/v1beta1
 kind: BackendConfig
 metadata:
@@ -91,7 +45,7 @@ spec:
 
 ```
 
-If you run `kubectl get svc game-frontend` you should see the URL for the service, where we can access the User Interface. 
+If you run `kubectl get ksvc game-frontend` you should see the URL for the service, where we can access the User Interface. 
 
 For the application to work we need to install the functions that perform operations and store state in Redis. 
 For this is recommend to have installed the `func` CLI. 
