@@ -1,0 +1,69 @@
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: start-game
+  namespace: demo
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/start-game:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+--- 
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: demo-question-1
+  namespace: demo
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/demo-question-1:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/demo/default
+
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: demo-question-2
+  namespace: demo
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/demo-question-2:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/demo/default

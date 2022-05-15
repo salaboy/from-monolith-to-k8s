@@ -1,0 +1,212 @@
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: delete-leaderboard
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/delete-leaderboard:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+
+--- 
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: get-leaderboard
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/get-leaderboard:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+
+--- 
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: start-game
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/start-game:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+--- 
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kubeconeu-question-5
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/kubeconeu-question-5:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kubeconeu-question-4
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/kubeconeu-question-4:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default
+
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kubeconeu-question-3
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/kubeconeu-question-3:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default              
+
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kubeconeu-question-2
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/kubeconeu-question-2:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default                
+---
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: kubeconeu-question-1
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+        - image: salaboy/kubeconeu-question-1:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /health/liveness
+          readinessProbe:
+            httpGet:
+              path: /health/readiness
+          env:
+            - name: REDIS_HOST
+              value: 10.200.130.188:6379
+            - name: GAME_EVENTING_ENABLED
+              value: "true"
+            - name: GAME_EVENTING_BROKER_URI
+              value: http://broker-ingress.knative-eventing.svc.cluster.local/default/default                
