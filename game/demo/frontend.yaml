@@ -1,0 +1,52 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: game-frontend
+  namespace: demo
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      containers:
+        - image: ghcr.io/salaboy/fmtok8s-game-frontend:latest
+          imagePullPolicy: Always
+          env:
+            - name: GAME_NAMESPACE
+              value: demo
+            - name: GAME_LEADERBOARD_URI
+              value: http://get-leaderboard.demo.svc.cluster.local
+            - name: GAME_START_GAME_URI
+              value: http://start-game.demo.svc.cluster.local
+            - name: GAME_LEVELS_0_NAME
+              value: Start
+            - name: GAME_LEVELS_0_FUNCTIONNAME
+            - name: GAME_LEVELS_0_COMPONENTNAME
+            - name: GAME_LEVELS_1_NAME
+              value: Question 1
+            - name: GAME_LEVELS_1_FUNCTIONNAME
+              value: demo-question-1
+            - name: GAME_LEVELS_1_COMPONENTNAME
+              value: DemoLevel1
+            - name: GAME_LEVELS_2_NAME
+              value: Question 2
+            - name: GAME_LEVELS_2_FUNCTIONNAME
+              value: demo-question-2
+            - name: GAME_LEVELS_2_COMPONENTNAME
+              value: DemoLevel2
+            - name: GAME_LEVELS_3_NAME
+              value: End
+            - name: GAME_LEVELS_3_FUNCTIONNAME
+            - name: GAME_LEVELS_3_COMPONENTNAME
+              value: GameComplete
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+          ports:
+            - containerPort: 8080
+              name: http1
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /actuator/health

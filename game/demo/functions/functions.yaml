@@ -9,7 +9,7 @@ spec:
   template:
     spec:
       containers:
-        - image: salaboy/start-game:latest
+        - image: ghcr.io/salaboy/start-game:latest
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -29,7 +29,7 @@ spec:
   template:
     spec:
       containers:
-        - image: salaboy/demo-question-1:latest
+        - image: ghcr.io/salaboy/demo-question-1:latest
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -54,7 +54,7 @@ spec:
   template:
     spec:
       containers:
-        - image: salaboy/demo-question-2:latest
+        - image: ghcr.io/salaboy/demo-question-2:latest
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
