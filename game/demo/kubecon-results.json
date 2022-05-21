@@ -1,0 +1,2209 @@
+{
+  "Sessions": [
+    {
+      "SessionId": "game-fc732df2-0b32-4a43-964c-827a6ee1ddab",
+      "Nickname": "bold_kalam3",
+      "AccumulatedScore": 165,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d2b4f6a8-30bc-48f4-8f04-2e6e5f1754d7",
+      "Nickname": "xenodochial_greider5",
+      "AccumulatedScore": 162,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9248f700-62ea-4f2b-af27-c62212273257",
+      "Nickname": "adoring_austin6",
+      "AccumulatedScore": 155,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3fff6c53-dd41-47af-bde9-a3eeac214a46",
+      "Nickname": "great_cartwright1",
+      "AccumulatedScore": 152,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a537455e-bc7d-4017-a35f-d25c6279f6ab",
+      "Nickname": "nostalgic_margulis7",
+      "AccumulatedScore": 148,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-656cd818-f14c-4954-8a88-282add79a085",
+      "Nickname": "xenodochial_keller6",
+      "AccumulatedScore": 148,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6c240b30-4f26-433c-9da2-0f0b358ec8fe",
+      "Nickname": "elegant_cannon1",
+      "AccumulatedScore": 146,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c2bce618-aa8d-4f7c-9c24-ae38bf49c68e",
+      "Nickname": "youthful_liskov8",
+      "AccumulatedScore": 145,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6de614b7-e292-440a-ad0d-089aad82d09f",
+      "Nickname": "bold_varahamihira3",
+      "AccumulatedScore": 145,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-46a5ac26-c121-47d3-91d5-96c26d9a1ec1",
+      "Nickname": "thirsty_dewdney3",
+      "AccumulatedScore": 144,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-deb8a537-c1a5-4162-b55f-855759a19938",
+      "Nickname": "clever_meitner7",
+      "AccumulatedScore": 141,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-40b7274a-1f76-4e00-b819-2631ed098bea",
+      "Nickname": "jolly_payne1",
+      "AccumulatedScore": 140,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ee2bd1be-fae9-4ea9-8d20-5d8646882984",
+      "Nickname": "sharp_ritchie5",
+      "AccumulatedScore": 139,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c28d69e9-0982-4b65-8048-4e936e6a872e",
+      "Nickname": "practical_fermat7",
+      "AccumulatedScore": 139,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-824ef11a-db94-4cb0-baa9-4ed1afbbcda4",
+      "Nickname": "romantic_villani5",
+      "AccumulatedScore": 135,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0ec305c9-4c32-4b62-9a9c-f315f90b23ac",
+      "Nickname": "beautiful_swirles5",
+      "AccumulatedScore": 134,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d32dd1e6-1ed5-4273-8a6c-0d67fcf8654b",
+      "Nickname": "relaxed_dirac4",
+      "AccumulatedScore": 134,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4aa2475f-dabf-4dc2-ba1d-dc255322982e",
+      "Nickname": "romantic_tu6",
+      "AccumulatedScore": 133,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ef5b1e97-8690-47ab-b738-95c193a6ac9b",
+      "Nickname": "wizardly_lichterman5",
+      "AccumulatedScore": 132,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-68a14d3c-bea7-4a1a-b3bd-4b81dc706207",
+      "Nickname": "beautiful_lumiere7",
+      "AccumulatedScore": 132,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7bba7ea5-1eab-4be6-a89c-e4cbe844aa69",
+      "Nickname": "nifty_easley2",
+      "AccumulatedScore": 131,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-44c0ff2c-eb22-47c3-b72b-9115e43e1b8a",
+      "Nickname": "recursing_chebyshev2",
+      "AccumulatedScore": 131,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b6d2523f-2a70-461b-b461-99f76964d6c0",
+      "Nickname": "inspiring_lederberg8",
+      "AccumulatedScore": 130,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9b96ffab-5dd0-4153-9245-0c7cfd685200",
+      "Nickname": "interesting_jones3",
+      "AccumulatedScore": 129,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c4dd393a-2569-41a1-9590-39913034e79a",
+      "Nickname": "nice_mendel4",
+      "AccumulatedScore": 129,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b408dbe2-1d8b-4ba1-9b18-1d3c1732025e",
+      "Nickname": "festive_edison5",
+      "AccumulatedScore": 128,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ff285fbe-e075-4ec7-9a8d-545859df2b93",
+      "Nickname": "suspicious_ishizaka5",
+      "AccumulatedScore": 128,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8eeeda58-cc1f-4a23-9818-63fc94a06465",
+      "Nickname": "wonderful_cartwright5",
+      "AccumulatedScore": 128,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-34ccc451-7147-43c8-9c19-c719f36903f3",
+      "Nickname": "eager_goldwasser1",
+      "AccumulatedScore": 127,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-aa309981-ef22-45f6-8fe2-731d5a6a6581",
+      "Nickname": "pedantic_pasteur2",
+      "AccumulatedScore": 126,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2557ef3c-3fbe-4ef4-9e17-aea49a55c0ac",
+      "Nickname": "nice_wescoff6",
+      "AccumulatedScore": 125,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5289546a-3605-4304-b3b7-bd32695ee2cd",
+      "Nickname": "clever_carver9",
+      "AccumulatedScore": 125,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1e0c6292-9588-41f5-8149-988e70e240c6",
+      "Nickname": "tender_lamarr6",
+      "AccumulatedScore": 123,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-97514278-d0fe-419d-8a15-7a38533961a2",
+      "Nickname": "modest_torvalds6",
+      "AccumulatedScore": 123,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4bb01421-7627-4d72-b1b0-056105d8fdf3",
+      "Nickname": "focused_pike4",
+      "AccumulatedScore": 122,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e9586900-18aa-4ecd-9a7a-f4697d8cca7e",
+      "Nickname": "elastic_williams6",
+      "AccumulatedScore": 122,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-96188f27-72a4-4439-98a5-007e3604fccf",
+      "Nickname": "beautiful_bardeen8",
+      "AccumulatedScore": 122,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-aacc8258-fbbc-4c08-b63e-7823016c7d65",
+      "Nickname": "funny_ritchie5",
+      "AccumulatedScore": 122,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5a7d75d2-34c4-4bdc-bdd6-97b79e635d98",
+      "Nickname": "inspiring_antonelli7",
+      "AccumulatedScore": 121,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c8bdc72e-fedb-4e67-af53-05f845c3aedb",
+      "Nickname": "flamboyant_saha7",
+      "AccumulatedScore": 120,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-52bd2ed0-a336-4291-8275-d6787e827b98",
+      "Nickname": "elegant_newton7",
+      "AccumulatedScore": 120,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4f71c067-7c96-4863-99d8-652f52fa8d7f",
+      "Nickname": "quizzical_banzai5",
+      "AccumulatedScore": 119,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-76e40e8e-0092-49f9-8f31-0877dafd4df1",
+      "Nickname": "intelligent_brattain4",
+      "AccumulatedScore": 119,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-da384639-f323-48a6-8647-b36e86758fb2",
+      "Nickname": "crazy_babbage9",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3449b4e4-4b45-4b27-95d2-529335e4651a",
+      "Nickname": "thirsty_jang3",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a2840286-c364-4bc6-a53c-3e28225f83e7",
+      "Nickname": "infallible_elgamal3",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8320fa54-8389-4b28-a63b-ee14e419754e",
+      "Nickname": "nervous_panini9",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4e8ddd7e-bcf3-4dce-b1d1-97b9ce1b1fe8",
+      "Nickname": "sad_proskuriakova5",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9c417afb-b20e-42ef-9948-f4d9c72728f9",
+      "Nickname": "peaceful_faraday5",
+      "AccumulatedScore": 118,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cdb1fa4a-a6e6-403e-ad7b-58578da53fe6",
+      "Nickname": "pedantic_yonath9",
+      "AccumulatedScore": 117,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9245a166-d601-461b-84e3-f18a5399da5f",
+      "Nickname": "charming_wu6",
+      "AccumulatedScore": 117,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7c4f0a01-e0eb-4588-82e0-5b6ba5fbf60d",
+      "Nickname": "nice_williamson9",
+      "AccumulatedScore": 117,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1b9a8070-101c-4b02-93dd-7dbbd4c72354",
+      "Nickname": "beautiful_shirley5",
+      "AccumulatedScore": 116,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-58c7b5ef-5b17-470e-baf4-8dab9bac093c",
+      "Nickname": "friendly_goldwasser9",
+      "AccumulatedScore": 116,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6510886f-3854-4b99-8a69-53adab6b9958",
+      "Nickname": "lucid_merkle1",
+      "AccumulatedScore": 115,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a8c1da15-c3a2-4073-b335-9b08b0262951",
+      "Nickname": "hungry_wozniak9",
+      "AccumulatedScore": 115,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-792ace34-977b-42ac-b452-16ea396eaf52",
+      "Nickname": "nostalgic_ganguly1",
+      "AccumulatedScore": 115,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-92d661ba-a7dd-4baa-a58c-425c2b542e98",
+      "Nickname": "naughty_nightingale4",
+      "AccumulatedScore": 115,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9b5778b2-e507-42b2-80ab-efde0ca2b9a6",
+      "Nickname": "boring_volhard9",
+      "AccumulatedScore": 115,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ba74f0c0-e266-4f0d-a94b-97ab8de42a38",
+      "Nickname": "exciting_heyrovsky1",
+      "AccumulatedScore": 114,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-747f0513-ed1d-42c8-b77c-cf6ca9939891",
+      "Nickname": "pedantic_feistel4",
+      "AccumulatedScore": 113,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0190967d-1189-4120-9885-41a116761f66",
+      "Nickname": "nice_shannon3",
+      "AccumulatedScore": 113,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f1d45302-da3c-45a1-a8e6-63bc2b12c17f",
+      "Nickname": "sharp_shirley2",
+      "AccumulatedScore": 113,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-325d8689-4dec-4a10-8e42-ba4594c587b4",
+      "Nickname": "vigilant_nightingale9",
+      "AccumulatedScore": 112,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-50cfc766-20f1-42fd-abd9-2b9478f948ab",
+      "Nickname": "happy_wing2",
+      "AccumulatedScore": 112,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6bef7ea3-1914-4268-8bde-44e51e402e6f",
+      "Nickname": "nervous_mcnulty2",
+      "AccumulatedScore": 111,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a0b3f2d8-ca49-42ac-8520-0a4099047bff",
+      "Nickname": "interesting_greider9",
+      "AccumulatedScore": 111,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-67a25e4b-1767-4493-bc36-98c316083d8b",
+      "Nickname": "stupefied_curie1",
+      "AccumulatedScore": 111,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f35290ff-c8fc-4580-9bb1-fd2670ac0f8b",
+      "Nickname": "infallible_mccarthy4",
+      "AccumulatedScore": 110,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a11fc954-0ea6-43d6-94b1-c0cc747c1757",
+      "Nickname": "mystifying_ride9",
+      "AccumulatedScore": 110,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3f99b10f-e45e-4abc-a6a8-1da836afdcdb",
+      "Nickname": "competent_carver1",
+      "AccumulatedScore": 110,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d7088878-6ef9-4c06-98fc-0ae5feff9c17",
+      "Nickname": "gifted_mcnulty4",
+      "AccumulatedScore": 109,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-bc4919ee-c6c9-4a9c-abf7-e2ffe097b5d9",
+      "Nickname": "charming_hertz4",
+      "AccumulatedScore": 109,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c34cf508-7c2d-4953-b5b5-93d22ccaaad0",
+      "Nickname": "hardcore_mclean7",
+      "AccumulatedScore": 109,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cd356e69-e73b-4f4f-85be-f4037f1e15d9",
+      "Nickname": "bold_mahavira2",
+      "AccumulatedScore": 109,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0e2b072d-ef99-4b31-9b8b-386800c0aaa1",
+      "Nickname": "upbeat_ramanujan2",
+      "AccumulatedScore": 109,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6d61e1c7-4e74-4122-ab15-e9a6820345ac",
+      "Nickname": "zealous_meitner3",
+      "AccumulatedScore": 108,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8c3c81d1-4a6a-463c-9833-181044f19a68",
+      "Nickname": "mystifying_clarke1",
+      "AccumulatedScore": 108,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-bc762c9f-3aa4-4d37-8d48-4df321b0c56d",
+      "Nickname": "friendly_goodall3",
+      "AccumulatedScore": 108,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-50b874f3-2ee7-4758-9821-740a93fc2477",
+      "Nickname": "cranky_goldstine7",
+      "AccumulatedScore": 108,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-48bbea83-30a6-4289-8324-81600d599738",
+      "Nickname": "vibrant_bohr3",
+      "AccumulatedScore": 107,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f41ff895-459a-499c-bac8-6aa1cbaf0059",
+      "Nickname": "mystifying_spence1",
+      "AccumulatedScore": 106,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c0ec4bcd-3922-4d69-b4b0-2e8c9d7f4ece",
+      "Nickname": "lucid_lalande7",
+      "AccumulatedScore": 106,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-28156682-fc81-4e75-bcd2-7cd51ac3f096",
+      "Nickname": "upbeat_jones8",
+      "AccumulatedScore": 106,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-095dbadb-ed7c-49b6-a2ed-b289cbc2b18b",
+      "Nickname": "competent_dubinsky7",
+      "AccumulatedScore": 106,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-20ee8a8f-e370-441a-b9c4-a8c62b4fd988",
+      "Nickname": "sleepy_bartik2",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-35ddae36-2940-43c6-974e-ac96335a774d",
+      "Nickname": "sharp_hellman9",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-21287238-812a-4668-be15-50b274af66de",
+      "Nickname": "distracted_swanson7",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7e8dce15-3811-4589-acb3-a9a9b25ceb81",
+      "Nickname": "laughing_visvesvaraya4",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d025bddd-3cf7-45f3-9be1-528ec5594014",
+      "Nickname": "clever_pike8",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-72d27aaf-8c2e-4058-8bca-7ecf653c4e95",
+      "Nickname": "frosty_lederberg2",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ab93f225-4bae-4f0c-9a73-61bccfd291c8",
+      "Nickname": "stoic_bhabha2",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9c59d525-433a-4483-a4f3-c7a75ae7ac3e",
+      "Nickname": "wonderful_neumann4",
+      "AccumulatedScore": 104,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0c1e5cec-420a-4623-9a25-658a882ad1a7",
+      "Nickname": "quirky_jang7",
+      "AccumulatedScore": 103,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b255fc4b-270c-495d-8698-9972c18c5378",
+      "Nickname": "zealous_feynman9",
+      "AccumulatedScore": 103,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6c8f3d4e-de0f-451b-abe5-0f9f63962866",
+      "Nickname": "magical_keldysh1",
+      "AccumulatedScore": 102,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3d2a180a-9304-4890-bcab-e3c24b4570d4",
+      "Nickname": "jovial_keller7",
+      "AccumulatedScore": 102,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-06e59c41-a8c2-4590-9058-6c848212de37",
+      "Nickname": "sad_black5",
+      "AccumulatedScore": 102,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-12d517c3-23b1-48cb-a71e-5e8c6a27944c",
+      "Nickname": "nostalgic_ptolemy4",
+      "AccumulatedScore": 102,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c9d35bec-767b-45c0-bf5c-ced2194ae78e",
+      "Nickname": "dazzling_spence9",
+      "AccumulatedScore": 101,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9443a4dd-8059-461e-9d08-dd4daf24aa3a",
+      "Nickname": "dazzling_bose6",
+      "AccumulatedScore": 101,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0bfd98fb-ee45-4101-9536-a39d011d5df7",
+      "Nickname": "focused_wiles8",
+      "AccumulatedScore": 100,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-44c2cbbf-4d69-4bc0-8243-b55d404886a2",
+      "Nickname": "elastic_robinson1",
+      "AccumulatedScore": 100,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-897b08ef-fba4-4e43-b835-89b2dd938f05",
+      "Nickname": "clever_visvesvaraya6",
+      "AccumulatedScore": 100,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c749e7c2-7cb3-4f16-8234-94c8f6600a18",
+      "Nickname": "pensive_hofstadter4",
+      "AccumulatedScore": 100,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-61ac4e11-5f60-46a5-96a1-84c633b54a14",
+      "Nickname": "dazzling_diffie5",
+      "AccumulatedScore": 99,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-549c221a-8cd1-43a5-be45-428109a89ee4",
+      "Nickname": "condescending_mclean2",
+      "AccumulatedScore": 98,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cf819d58-2b22-4e5b-a246-4624c4c1d591",
+      "Nickname": "bold_lalande6",
+      "AccumulatedScore": 98,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c7b7936a-c3f5-41c2-ba1c-e18c3d627dc2",
+      "Nickname": "admiring_williamson8",
+      "AccumulatedScore": 98,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ee10b76d-3771-4393-81d6-1b63f7c642d5",
+      "Nickname": "blissful_spence5",
+      "AccumulatedScore": 97,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ef07bd9f-4bc1-4f52-adff-eca3d1fd44f1",
+      "Nickname": "unruffled_lamport6",
+      "AccumulatedScore": 97,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f85a0f63-8e01-48e3-b202-04237a111d1e",
+      "Nickname": "sharp_shtern9",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c905aa4d-72b6-4a24-bb5e-637d5d52a3bc",
+      "Nickname": "wonderful_ishizaka7",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-089564cc-8b8f-4b1a-93ee-caa0424f2c38",
+      "Nickname": "youthful_morse1",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4f29a181-9aff-440a-b173-5bd22d7c01c6",
+      "Nickname": "recursing_noyce9",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1ff474f4-ce20-4eb9-84c1-ef45b47e6585",
+      "Nickname": "gracious_haibt4",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-56ed0adc-cc7b-48a6-bc13-2f169d153775",
+      "Nickname": "eloquent_aryabhata1",
+      "AccumulatedScore": 96,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-06d4decb-41e0-4bd3-b862-db866d73a311",
+      "Nickname": "peaceful_yonath3",
+      "AccumulatedScore": 96,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3aca5afa-f80f-4bb0-89e9-d93ba15c69c7",
+      "Nickname": "mystifying_stonebraker1",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f36d7070-ec80-4392-86c8-9f3dbb338955",
+      "Nickname": "sad_montalcini4",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c1a4dc24-2f79-4c91-bc8c-375cfde4c187",
+      "Nickname": "angry_ritchie5",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c14bf125-6916-4540-bcc3-f92830707bab",
+      "Nickname": "flamboyant_lamport1",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-184cb499-ba9d-4142-991d-dff5654d501b",
+      "Nickname": "suspicious_boyd5",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-622bab22-6b1a-45f2-bf26-6c8f62856e86",
+      "Nickname": "upbeat_kare4",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-75382467-1715-4818-881c-46f446635bff",
+      "Nickname": "hardcore_panini5",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4daf9964-d0fc-4b76-93c7-ca4e8226da33",
+      "Nickname": "infallible_lalande7",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-408712fe-3e12-4b94-b5c8-26df2320afdf",
+      "Nickname": "amazing_hopper8",
+      "AccumulatedScore": 95,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b1423b1b-7f26-421c-985c-81c547ea9f48",
+      "Nickname": "eloquent_dijkstra8",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-59c0927d-5e99-484d-b9b6-9cf353f1ea8b",
+      "Nickname": "quizzical_khorana3",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a8c7178b-6299-4b70-99c8-cd6279372fe7",
+      "Nickname": "nifty_ride2",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-348cfa43-2485-464b-af72-08834b7aa597",
+      "Nickname": "romantic_cerf1",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-aed19bf8-f139-4200-ad10-68a316c3780f",
+      "Nickname": "agitated_wilbur1",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-49ad30b7-c360-457a-a492-9da8e23d31e8",
+      "Nickname": "jovial_snyder5",
+      "AccumulatedScore": 94,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5f6bc4eb-2abc-42f7-8194-8492eda7f958",
+      "Nickname": "musing_kepler2",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f1bb9a59-2ca0-42a5-acd7-0a007df7a47c",
+      "Nickname": "sweet_hopper8",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2667dceb-3af2-46e8-8b33-d5364b26ca72",
+      "Nickname": "awesome_bohr3",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8b816475-d1bc-47e2-9bfb-5685282586af",
+      "Nickname": "determined_lamarr9",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-658ece99-96cf-4444-9e31-0989a0e7b631",
+      "Nickname": "strange_heyrovsky1",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-92d0c61a-2f39-487b-bf26-287426a83f34",
+      "Nickname": "amazing_panini1",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d84a07ea-344b-4f71-ac2b-06bef2167364",
+      "Nickname": "determined_chaum3",
+      "AccumulatedScore": 93,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7b9014cd-32ff-4ffd-a7eb-d20adcb239d9",
+      "Nickname": "goofy_johnson6",
+      "AccumulatedScore": 92,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c79817e5-8268-4147-977f-74a956dc0e26",
+      "Nickname": "elated_bose3",
+      "AccumulatedScore": 92,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-47523899-8ff4-4113-9c6b-7b9c4e74ced1",
+      "Nickname": "vibrant_hypatia4",
+      "AccumulatedScore": 92,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a2094185-7cc2-410c-a2eb-a2947e9ffd6d",
+      "Nickname": "pedantic_greider1",
+      "AccumulatedScore": 92,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-faeee6ab-1948-45c9-a57f-532d77d8b1c2",
+      "Nickname": "elastic_yalow9",
+      "AccumulatedScore": 92,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-74aceff4-917f-49f3-840b-dca4ca62f604",
+      "Nickname": "fervent_taussig4",
+      "AccumulatedScore": 91,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-88601ea5-2189-4f3a-9c29-6c782fca97b9",
+      "Nickname": "confident_snyder8",
+      "AccumulatedScore": 91,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cdf0ac34-c6b5-4318-8968-ef463f476443",
+      "Nickname": "gracious_davinci1",
+      "AccumulatedScore": 91,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fccb67ff-44ea-431b-9fc5-9fe63089799e",
+      "Nickname": "great_cannon1",
+      "AccumulatedScore": 91,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ea03e10f-8622-4f84-91dc-c8eb6a1ec020",
+      "Nickname": "stupefied_dubinsky1",
+      "AccumulatedScore": 91,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-994f4e60-409e-4b58-bad0-d5ed339788a9",
+      "Nickname": "determined_agnesi6",
+      "AccumulatedScore": 90,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4a1d50d5-9302-4d9e-ae15-26c3ccfa48ba",
+      "Nickname": "brave_sutherland7",
+      "AccumulatedScore": 90,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0afb2101-286c-4dca-abea-4cde8ed2ecb3",
+      "Nickname": "condescending_wiles1",
+      "AccumulatedScore": 90,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a9e34c89-218c-41ab-be5a-ba064d99a989",
+      "Nickname": "vigorous_allen6",
+      "AccumulatedScore": 88,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0809e785-f4a5-47ce-9f99-3a5de854b2eb",
+      "Nickname": "wonderful_noyce9",
+      "AccumulatedScore": 88,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8eb0c8ea-0c3f-4c03-b605-f815b590b40c",
+      "Nickname": "epic_edison4",
+      "AccumulatedScore": 88,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-74a0beb6-b87e-4f7c-b23c-79a9562f330a",
+      "Nickname": "brave_carson8",
+      "AccumulatedScore": 88,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-492aad88-996a-4d33-9cfb-183454e9ee29",
+      "Nickname": "lucid_spence1",
+      "AccumulatedScore": 87,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1f78ed8e-2514-413f-a628-333f085b344f",
+      "Nickname": "laughing_mendel4",
+      "AccumulatedScore": 87,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3d267310-b515-4963-9e3b-29b25c9e4648",
+      "Nickname": "brave_boyd7",
+      "AccumulatedScore": 87,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-727e29fc-24af-4cc9-b0b8-0b97ba759222",
+      "Nickname": "elated_mclaren1",
+      "AccumulatedScore": 87,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fe1551d2-dd33-4ca2-ba3b-e1d48284b93c",
+      "Nickname": "priceless_yalow6",
+      "AccumulatedScore": 86,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b06f135a-e494-4401-8f6a-beed02a9309d",
+      "Nickname": "kind_jepsen3",
+      "AccumulatedScore": 86,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-82078d39-51de-49cd-85e6-4b5fbf1f9457",
+      "Nickname": "adoring_cray7",
+      "AccumulatedScore": 86,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-947be9ca-275a-40c9-aaf1-67f75c250d7c",
+      "Nickname": "kind_bell2",
+      "AccumulatedScore": 86,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f56edd97-4749-43fa-bc4f-9fbdc38714f2",
+      "Nickname": "priceless_tesla8",
+      "AccumulatedScore": 85,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9fc8480e-826c-4c16-8588-55d076c0aecd",
+      "Nickname": "frosty_lalande8",
+      "AccumulatedScore": 85,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d4c95031-21b9-482b-aba6-dc8fee492da9",
+      "Nickname": "determined_goldstine1",
+      "AccumulatedScore": 85,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-676fd246-cd45-4f08-a0af-e982b1071b83",
+      "Nickname": "elastic_cerf6",
+      "AccumulatedScore": 84,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-94580a75-51e5-4e3a-8217-ca9ccd410d6e",
+      "Nickname": "cranky_albattani7",
+      "AccumulatedScore": 84,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c0f9778e-290a-40d7-b764-5e961dd9c4aa",
+      "Nickname": "wizardly_gould1",
+      "AccumulatedScore": 84,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ec9d2ac3-1ce0-4ab6-8fe9-3f4776a212d9",
+      "Nickname": "nice_golick6",
+      "AccumulatedScore": 84,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-43a98d25-bed2-4845-bca6-f5a99eb9d22f",
+      "Nickname": "heuristic_franklin4",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f69040f0-003b-4689-9427-e3cbd0524b79",
+      "Nickname": "romantic_tesla1",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-19399cc7-d8a0-4b82-b4a5-fe584dbc4d05",
+      "Nickname": "nifty_kapitsa8",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-815cf8a4-9805-49d8-8d30-a2f5ccd78112",
+      "Nickname": "angry_ride3",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-72cbefec-0859-4349-94b2-cc482dcbb3d7",
+      "Nickname": "xenodochial_fermat4",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ed1d9c45-708a-42d0-8be4-5d33df4c2619",
+      "Nickname": "adoring_euclid2",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2964f018-41cd-4978-ae41-2ce2cc043453",
+      "Nickname": "wonderful_jang1",
+      "AccumulatedScore": 83,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-106c7428-5d78-4044-aabe-94e81b989ca3",
+      "Nickname": "suspicious_allen7",
+      "AccumulatedScore": 82,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-35161c0e-e0a2-4488-b3c6-2f767e3e5404",
+      "Nickname": "pedantic_diffie9",
+      "AccumulatedScore": 82,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1a7c53e7-2522-4372-b7bb-c599c35102b6",
+      "Nickname": "nostalgic_satoshi2",
+      "AccumulatedScore": 82,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-825a7446-acac-4af8-893a-b0fb089d3a80",
+      "Nickname": "angry_jackson1",
+      "AccumulatedScore": 81,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5ec7002e-14e0-46a0-9f53-45fe6c45a84c",
+      "Nickname": "sleepy_moore1",
+      "AccumulatedScore": 81,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c1b75474-c0e7-42da-9bbe-8969ade4d2a3",
+      "Nickname": "vigilant_easley6",
+      "AccumulatedScore": 81,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-73960699-b53d-4316-a502-26f8a28a4626",
+      "Nickname": "busy_lehmann1",
+      "AccumulatedScore": 81,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0697e710-9f56-45c2-aa14-4f14ba4c2be2",
+      "Nickname": "unruffled_ellis4",
+      "AccumulatedScore": 81,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a9d36d60-87b8-4d55-bf59-7d2ac9ce1410",
+      "Nickname": "hungry_burnell9",
+      "AccumulatedScore": 80,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-19e5a516-d2bd-4960-a284-0e37d3a9b0a4",
+      "Nickname": "cool_thompson3",
+      "AccumulatedScore": 80,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4cbb122b-565c-497d-b927-1c1bf4ca9d94",
+      "Nickname": "condescending_lalande8",
+      "AccumulatedScore": 80,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-24cebc0e-f379-4892-b56a-887e2d50ed67",
+      "Nickname": "silly_sammet5",
+      "AccumulatedScore": 80,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f0a47282-045b-4069-9bba-777fd224a6b3",
+      "Nickname": "eloquent_hopper5",
+      "AccumulatedScore": 79,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e66fa8a9-b897-42dc-b11e-e19e5297f27c",
+      "Nickname": "dreamy_banach6",
+      "AccumulatedScore": 79,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ab992c55-3ed3-4f0d-a878-ac3b8240ffe7",
+      "Nickname": "naughty_bardeen7",
+      "AccumulatedScore": 79,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1e2fccd3-ae86-4d26-9185-c28756177311",
+      "Nickname": "goofy_roentgen2",
+      "AccumulatedScore": 78,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-14b6d6f6-ca59-4be6-9b0e-545cdbfbe8a9",
+      "Nickname": "elegant_liskov2",
+      "AccumulatedScore": 78,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-bedf3aac-3452-4acb-832c-eaa6e2ed60bc",
+      "Nickname": "condescending_lovelace3",
+      "AccumulatedScore": 78,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b283aa1a-974e-4462-bc56-9a6106155c0d",
+      "Nickname": "amazing_ritchie6",
+      "AccumulatedScore": 77,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1fb6e153-0282-42a0-b9ad-57a1d72d47e2",
+      "Nickname": "practical_tereshkova6",
+      "AccumulatedScore": 77,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-47dd1ffd-370f-48af-854a-cf54f3bf820a",
+      "Nickname": "objective_tesla2",
+      "AccumulatedScore": 77,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fc4a2d0f-3049-4f36-8633-85d642359834",
+      "Nickname": "jolly_mahavira1",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1c47a3dc-a505-47b7-a5da-9cea5e7a6edf",
+      "Nickname": "optimistic_golick6",
+      "AccumulatedScore": 76,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3f6e0b9b-612e-4fc8-b51d-7f390196d045",
+      "Nickname": "quirky_payne5",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2104c448-3190-4dd6-ab05-f371f694edb2",
+      "Nickname": "stupefied_clarke5",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1b06ee71-b3d8-4670-82fd-2cd55f8d5069",
+      "Nickname": "condescending_cray5",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-60a422c8-74c2-4e61-946a-883189bfa66d",
+      "Nickname": "nifty_pike9",
+      "AccumulatedScore": 76,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1ad08cc0-b331-41e4-bc29-cad86f8738d3",
+      "Nickname": "gifted_galileo2",
+      "AccumulatedScore": 76,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3391c56b-03b4-4b19-beb2-640d28c82182",
+      "Nickname": "stupefied_pare6",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9a4c0c04-84fa-4ecd-a3bd-352add94f560",
+      "Nickname": "gallant_mclaren8",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-478adbe8-9770-484c-86d0-4e3c7b0b6e9f",
+      "Nickname": "angry_ganguly8",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7ea1c324-8092-43f5-9323-d3223581dcb6",
+      "Nickname": "boring_golick8",
+      "AccumulatedScore": 76,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b7399f2c-856c-4c6e-b55f-4b4f4d5bae3a",
+      "Nickname": "elegant_bell8",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e9c07651-0357-46a9-b037-c4352ca637c6",
+      "Nickname": "eloquent_nightingale7",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f9ed9544-7f9e-4c73-a7a8-bc137c6759f0",
+      "Nickname": "trusting_raman3",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b6cf5e84-7800-4ff3-a2c4-e137bb003939",
+      "Nickname": "dreamy_wing9",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6bb3b1d3-082e-4fa7-b391-69d5bbb2e5b9",
+      "Nickname": "stoic_ride7",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9ed9bdf6-7c0e-4af6-82a6-ef68cd1e1f71",
+      "Nickname": "intelligent_blackburn1",
+      "AccumulatedScore": 75,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0fbd0209-208b-4b41-bdb3-89b30653640f",
+      "Nickname": "laughing_engelbart8",
+      "AccumulatedScore": 74,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7978a235-36e0-40dd-b25e-595c91404075",
+      "Nickname": "eager_wing3",
+      "AccumulatedScore": 74,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-981af88d-a6a6-46ac-93f8-7a2a76ae8146",
+      "Nickname": "nice_beaver2",
+      "AccumulatedScore": 73,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e163b0d7-46ad-4020-acb5-b54b5043f6a1",
+      "Nickname": "objective_thompson8",
+      "AccumulatedScore": 73,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7ad6bb92-3616-4cdd-89ae-4de4bf66d05d",
+      "Nickname": "strange_galois1",
+      "AccumulatedScore": 72,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-191ac661-cea5-4650-bf69-18762e9e7296",
+      "Nickname": "trusting_panini3",
+      "AccumulatedScore": 72,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fa32d2e9-523d-4b6c-aab4-af875ed2b24a",
+      "Nickname": "practical_lichterman2",
+      "AccumulatedScore": 72,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-71bf1584-3a33-4249-a7a3-fcbcbabf1c85",
+      "Nickname": "blissful_satoshi1",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a4fd8fd6-4880-450a-a5ec-897f78fb1c04",
+      "Nickname": "vibrant_wozniak1",
+      "AccumulatedScore": 70,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a36fa642-8b3d-4563-8a49-b50a40fd567d",
+      "Nickname": "quizzical_hugle8",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-38467f87-e70a-4f4d-9dfb-24d23a5dadf8",
+      "Nickname": "mystifying_elgamal1",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9cb424db-7927-444a-a866-fd670e0b03e2",
+      "Nickname": "inspiring_davinci2",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-84ffe15a-3473-4ef5-9b34-8849b5cc2502",
+      "Nickname": "infallible_hellman7",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-70a7c126-0d80-4099-b11f-f39d5840c45b",
+      "Nickname": "frosty_satoshi8",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2fae1513-ba22-45bc-b4de-f0a33e5cbc79",
+      "Nickname": "pedantic_bose1",
+      "AccumulatedScore": 70,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d5ab050e-f57a-44dc-9111-2910cab73776",
+      "Nickname": "silly_gauss7",
+      "AccumulatedScore": 69,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-153de116-53a5-448b-a58a-3c906bd55f47",
+      "Nickname": "magical_yalow4",
+      "AccumulatedScore": 69,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-05b54c63-31c6-48d1-a302-0bcbc2063974",
+      "Nickname": "laughing_brattain2",
+      "AccumulatedScore": 69,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7e6fb292-de70-4169-b966-f5d8e87fecfa",
+      "Nickname": "sleepy_ellis4",
+      "AccumulatedScore": 68,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-14af3e0e-3eae-4592-a3f5-88c1cfe272c7",
+      "Nickname": "interesting_chatelet8",
+      "AccumulatedScore": 68,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9f75502d-75f1-42b4-a27e-41e640377df9",
+      "Nickname": "elated_carver7",
+      "AccumulatedScore": 68,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e549f4e2-91f0-4d23-ada8-dd0ebc864ebd",
+      "Nickname": "naughty_almeida4",
+      "AccumulatedScore": 67,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-759bc053-8281-4496-884d-a87632d25b5b",
+      "Nickname": "keen_lalande1",
+      "AccumulatedScore": 67,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-51d52033-b571-4c03-ad79-51d86636ecfb",
+      "Nickname": "bold_williamson9",
+      "AccumulatedScore": 67,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-52471140-9026-4be6-8105-b139d014b394",
+      "Nickname": "stupefied_tereshkova1",
+      "AccumulatedScore": 67,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-98ffd223-a05f-46e4-928b-9e6c6a73fad2",
+      "Nickname": "crazy_wilson5",
+      "AccumulatedScore": 67,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8de4c24a-49d9-4a7c-98d1-219091a8a2d8",
+      "Nickname": "sad_stonebraker4",
+      "AccumulatedScore": 66,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-17b9e1b8-663b-46f3-b44d-68a08fdde297",
+      "Nickname": "silly_kowalevski2",
+      "AccumulatedScore": 66,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8959296f-3687-4b08-9a37-76afc475a9c1",
+      "Nickname": "romantic_blackburn3",
+      "AccumulatedScore": 66,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fc478965-0bd9-43c8-a0f5-52d7e3e9f06f",
+      "Nickname": "practical_einstein5",
+      "AccumulatedScore": 66,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2ac1147a-118e-4e62-9ef9-e5eec580c94c",
+      "Nickname": "jovial_neumann5",
+      "AccumulatedScore": 66,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e7909961-0751-446b-ae64-b08fbe58eabe",
+      "Nickname": "cool_bouman6",
+      "AccumulatedScore": 65,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-431aee06-90de-4164-ae7b-64f7a96f7980",
+      "Nickname": "festive_robinson3",
+      "AccumulatedScore": 65,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2c6b109e-bc85-4a4f-8a2d-88ae6fca0580",
+      "Nickname": "affectionate_gauss6",
+      "AccumulatedScore": 63,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5f8de14c-c97d-41fb-90d9-aa79bbd5a786",
+      "Nickname": "happy_banzai7",
+      "AccumulatedScore": 62,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8ed63fbb-9084-4724-a505-8501917cddbc",
+      "Nickname": "eloquent_lamport1",
+      "AccumulatedScore": 62,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0ef2cd9f-14e1-4e63-93b2-94eef6b04688",
+      "Nickname": "gallant_meitner5",
+      "AccumulatedScore": 60,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-7fd9f227-f07f-4455-b03f-65604fbfa8a7",
+      "Nickname": "affectionate_grothendieck1",
+      "AccumulatedScore": 60,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-4e208d7c-7d27-4126-be0e-7b2ccb2c6b54",
+      "Nickname": "stupefied_hugle9",
+      "AccumulatedScore": 60,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-6d774b7a-9b26-4358-a419-658f9c0de3fb",
+      "Nickname": "frosty_grothendieck7",
+      "AccumulatedScore": 58,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3ab39701-0129-4f5f-a13f-b53235ba92bd",
+      "Nickname": "flamboyant_hoover6",
+      "AccumulatedScore": 58,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b5c87b14-3c77-4bd8-8e68-f8bb731fa754",
+      "Nickname": "heuristic_cannon6",
+      "AccumulatedScore": 58,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b1d85334-80a0-4766-9ea1-b3b0c60ec36e",
+      "Nickname": "sad_euler5",
+      "AccumulatedScore": 58,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-171add00-0812-42a9-8d51-e356eee6ff68",
+      "Nickname": "jolly_buck5",
+      "AccumulatedScore": 57,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-8daa075d-c9cc-460c-a6e2-3af095f895d6",
+      "Nickname": "cranky_allen9",
+      "AccumulatedScore": 57,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-9f1f6ee5-6aaf-44e0-9062-f8850264e364",
+      "Nickname": "fervent_cartwright7",
+      "AccumulatedScore": 56,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-eead98c4-6fb9-401f-b03f-06b251c6defa",
+      "Nickname": "hardcore_dijkstra5",
+      "AccumulatedScore": 56,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-a3e5ff90-747d-4b06-b98d-477c6ec50352",
+      "Nickname": "hardcore_agnesi6",
+      "AccumulatedScore": 55,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-73e812f8-9c77-47f0-992b-54576565acd4",
+      "Nickname": "angry_sammet7",
+      "AccumulatedScore": 55,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-122c81bd-2854-484d-811c-1a01fb44261b",
+      "Nickname": "relaxed_aryabhata2",
+      "AccumulatedScore": 55,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fcb1bcb9-df5d-41d3-ba96-3ea58a4b5c7d",
+      "Nickname": "vigilant_cray9",
+      "AccumulatedScore": 55,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-55b6be4e-0a54-4203-b5dd-26dcdcd90262",
+      "Nickname": "jovial_mirzakhani1",
+      "AccumulatedScore": 54,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-e2033d84-a251-438f-b0a3-5c61998a6719",
+      "Nickname": "condescending_heyrovsky9",
+      "AccumulatedScore": 54,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-fc6c78f9-db2c-48ba-9b70-cf5e1b75d0ae",
+      "Nickname": "frosty_lamarr2",
+      "AccumulatedScore": 54,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-933c9908-319e-472e-893a-2a3feb8b9029",
+      "Nickname": "focused_swirles2",
+      "AccumulatedScore": 53,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f7970859-4e36-456f-a2ed-bcec4415a537",
+      "Nickname": "hungry_lamarr1",
+      "AccumulatedScore": 53,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-015cdd1f-a9ff-44c7-a644-70db6b95171f",
+      "Nickname": "jovial_hugle6",
+      "AccumulatedScore": 52,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-f4143d05-6c7f-463f-88b0-2248ef76a414",
+      "Nickname": "silly_proskuriakova1",
+      "AccumulatedScore": 51,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-be6c7618-f7dc-4e5d-aa6b-c2cc2c5a4242",
+      "Nickname": "happy_faraday6",
+      "AccumulatedScore": 50,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-270d63e4-9c82-457c-9699-0ccd7e329d64",
+      "Nickname": "hopeful_engelbart9",
+      "AccumulatedScore": 50,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-477fa943-461f-402b-868f-2675986d4e2f",
+      "Nickname": "pensive_goldstine7",
+      "AccumulatedScore": 50,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c7992485-d54f-4f35-bb20-a5e181a73588",
+      "Nickname": "pensive_satoshi2",
+      "AccumulatedScore": 50,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b30041fc-60f6-4790-879b-304038ef4dc5",
+      "Nickname": "nervous_poitras7",
+      "AccumulatedScore": 50,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c8f49ae1-74e6-4557-b620-befab742d7ed",
+      "Nickname": "angry_booth4",
+      "AccumulatedScore": 50,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c2dcf1f3-236d-4b5e-8d4b-c91e1dff9fb2",
+      "Nickname": "quizzical_black7",
+      "AccumulatedScore": 49,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3703734d-a7e6-4d42-bf75-fc73355364f1",
+      "Nickname": "vigilant_zhukovsky7",
+      "AccumulatedScore": 48,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-703a5530-bde7-4675-95a2-d9ff7446be33",
+      "Nickname": "flamboyant_mayer8",
+      "AccumulatedScore": 47,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-c00f1191-dd92-448f-9c73-3c9f1b137952",
+      "Nickname": "stupefied_poitras8",
+      "AccumulatedScore": 47,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-21177d31-dd5e-4f01-8604-0b599f3f706a",
+      "Nickname": "jolly_lichterman8",
+      "AccumulatedScore": 44,
+      "LastLevel": "devoxxuk-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ed3a4781-5d1d-42d5-913e-896ac6fc3ca8",
+      "Nickname": "angry_spence7",
+      "AccumulatedScore": 40,
+      "LastLevel": "kubeconeu-question-4",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5ddc8ffb-2399-4dae-b4be-7d363eda5606",
+      "Nickname": "bold_volhard1",
+      "AccumulatedScore": 37,
+      "LastLevel": "kubeconeu-question-3",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b0f81a6c-07d9-4d56-ae95-7aee93d718dc",
+      "Nickname": "brave_greider9",
+      "AccumulatedScore": 37,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d054e146-17f8-49d6-98e3-a40a0d4f9e2f",
+      "Nickname": "tender_margulis1",
+      "AccumulatedScore": 36,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ae0c8f8c-6a99-4af0-8561-bb3fe90e030a",
+      "Nickname": "funny_austin5",
+      "AccumulatedScore": 29,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-73901b6e-5f18-45de-9587-6b937439586a",
+      "Nickname": "sleepy_clarke9",
+      "AccumulatedScore": 26,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-b2f5b470-31e0-4055-a5f7-b710d65c0a16",
+      "Nickname": "quizzical_elgamal2",
+      "AccumulatedScore": 26,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-3197559e-472c-4942-a7ab-7a0c3cd03fad",
+      "Nickname": "silly_wilbur8",
+      "AccumulatedScore": 26,
+      "LastLevel": "kubeconeu-question-5",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ae674162-8d3e-4a84-a452-cd96cbec83b8",
+      "Nickname": "jolly_antonelli1",
+      "AccumulatedScore": 24,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-187ffcda-bfdc-4a2c-975d-ebe417480257",
+      "Nickname": "gracious_keldysh5",
+      "AccumulatedScore": 24,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-5e0ae2fd-f961-49ba-848d-bcda01653e54",
+      "Nickname": "adoring_murdock4",
+      "AccumulatedScore": 23,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-d50fae5d-81f9-4119-9b77-e7f70d338492",
+      "Nickname": "intelligent_villani8",
+      "AccumulatedScore": 18,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-770333da-9498-4f44-96cf-eff5cddb0b97",
+      "Nickname": "infallible_archimedes3",
+      "AccumulatedScore": 15,
+      "LastLevel": "devoxxuk-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-0cd874a1-c0e8-44c8-98e4-b3c34f8c29df",
+      "Nickname": "xenodochial_nash1",
+      "AccumulatedScore": 14,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-22efa20a-09de-4dab-ba1c-20d6b1354cfc",
+      "Nickname": "stupefied_kilby3",
+      "AccumulatedScore": 13,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-28bd3f98-af81-4387-a147-0b42c1f22c31",
+      "Nickname": "zealous_fermat3",
+      "AccumulatedScore": 12,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-1bdaff36-6eef-4a17-a112-a17e06d89962",
+      "Nickname": "sad_hawking1",
+      "AccumulatedScore": 12,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-013f5f75-228b-498f-8ce1-e71476316e97",
+      "Nickname": "priceless_wu1",
+      "AccumulatedScore": 12,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-2aefe70e-1038-4485-8c70-cac2dcf8fb30",
+      "Nickname": "tender_allen4",
+      "AccumulatedScore": 10,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-436c3f32-dd67-4cc5-bbbb-0956e04bee52",
+      "Nickname": "loving_beaver4",
+      "AccumulatedScore": 7,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-37883cd3-36e2-4212-b47c-6b7ca85e6bb4",
+      "Nickname": "admiring_hoover1",
+      "AccumulatedScore": 6,
+      "LastLevel": "kubeconeu-question-2",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-77194386-5453-4e9b-92bc-3b6902fa0ebc",
+      "Nickname": "objective_noyce7",
+      "AccumulatedScore": 2,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-06bd6c54-646b-4a21-8268-af67ac3dceb0",
+      "Nickname": "blissful_wilson8",
+      "AccumulatedScore": 1,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cc14cba4-9894-42ff-8cf9-ac357d0b33a7",
+      "Nickname": "silly_jepsen4",
+      "AccumulatedScore": 1,
+      "LastLevel": "kubeconeu-question-1",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-967b5b2b-da12-4172-89e1-eba8ab32dec1",
+      "Nickname": "upbeat_borg2",
+      "AccumulatedScore": 0,
+      "LastLevel": "",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-ebab24d1-78b0-4004-b941-97c7b84dbdb1",
+      "Nickname": "lucid_heisenberg8",
+      "AccumulatedScore": 0,
+      "LastLevel": "",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-28e0a2b5-a621-4eb2-9371-2092a107eaa9",
+      "Nickname": "condescending_shaw3",
+      "AccumulatedScore": 0,
+      "LastLevel": "",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-dff2f8c7-e925-4db6-9774-c131e711edc0",
+      "Nickname": "zealous_yonath6",
+      "AccumulatedScore": 0,
+      "LastLevel": "",
+      "Selected": false
+    },
+    {
+      "SessionId": "game-cc8907ac-4f9f-491f-93c5-bc02762f0d17",
+      "Nickname": "elastic_curran6",
+      "AccumulatedScore": 0,
+      "LastLevel": "",
+      "Selected": false
+    }
+  ]
+}
