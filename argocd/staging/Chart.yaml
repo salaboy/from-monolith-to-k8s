@@ -8,3 +8,6 @@ dependencies:
 - name: fmtok8s-agenda-service
   version: 0.1.0 
   repository: https://salaboy.github.io/helm/
+- name: fmtok8s-c4p-service
+  version: 0.1.0 
+  repository: https://salaboy.github.io/helm/  
