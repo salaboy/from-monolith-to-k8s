@@ -15,5 +15,5 @@ dependencies:
   version: 0.1.0 
   repository: https://salaboy.github.io/helm/  
 - name: fmtok8s-email-service
-  version: v0.1.0 
+  version: v0.0.1 
   repository: https://salaboy.github.io/helm/  
