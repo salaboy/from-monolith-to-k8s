@@ -1,12 +1,1 @@
-fmtok8s-frontend:
-  image:
-    tag: main-native
-fmtok8s-agenda-service:
-  image:
-    tag: main-native  
-fmtok8s-c4p-service:
-  image:
-    tag: main-native
-fmtok8s-email-service:
-  image:
-    tag: main-native        
+        
