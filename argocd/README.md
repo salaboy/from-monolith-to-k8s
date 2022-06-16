@@ -59,12 +59,21 @@ Hit the "Create Project" button and use the following details to configure your 
 Here are the Create Application inputs that I've used: 
 - Application Name: "conference"
 - Project: "default"
-- Sync Policy: "Automatic"
+- Sync Policy: "Manual"
 - Source Repository: "https://github.com/salaboy/from-monolith-to-k8s" (here you can point to your fork)
 - Revision: "HEAD"
 - Path: "argocd/staging/"
 - Cluster: "https://kubernetes.default.svc" 
 - Namespace: "staging"
+
+Optional: 
+If you are running in a cloud provider you can send this helm parameter to automatically expose the application frontend: 
+- Helm Values: 
+```
+fmtok8s-frontend:
+  service:
+    type: LoadBalancer
+```
 
 
 Finally, depending if you are running in a Cloud Provider or in your local environment you might want to use `kubectl port-forward` or change the `fmtok8s-frontend` Service type to LoadBalancer to access the application from outside the cluster. 
