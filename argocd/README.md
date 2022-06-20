@@ -75,10 +75,15 @@ fmtok8s-frontend:
     type: LoadBalancer
 ```
 
+Notice that this is the same as Patching the Frontend Service: 
 
-Finally, depending if you are running in a Cloud Provider or in your local environment you might want to use `kubectl port-forward` or change the `fmtok8s-frontend` Service type to LoadBalancer to access the application from outside the cluster. 
+```
+kubectl patch svc fmtok8s-frontend -n staging -p '{"spec": {"type": "LoadBalancer"}}'
+```
 
-Using `port-forward`:
+**NOTE**: But if we delegate the sync to ArgoCD everytime that we sync changes in the staging repository, this patching will be overriden, which is exactly what we want! Avoiding this kind configuration drifts is the main reason to use a tool like ArgoCD.
+
+If you are running in a local environment where Service Type: LoadBalancer is not supported, you can always access the application using `port-forward`:
 
 ```
 kubectl port-forward svc/fmtok8s-frontend -n staging 8081:80
@@ -86,11 +91,7 @@ kubectl port-forward svc/fmtok8s-frontend -n staging 8081:80
 
 Then you can access the application pointing your browser to `http://localhost:8081`.
 
-Patching the Frontend Service: 
 
-```
-kubectl patch svc fmtok8s-frontend -n staging -p '{"spec": {"type": "LoadBalancer"}}'
-```
 
 To get the external IP just list the services in the staging environment:
 

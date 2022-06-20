@@ -1,1 +1,3 @@
-        
+fmtok8s-frontend:
+  image: 
+    tag: main
