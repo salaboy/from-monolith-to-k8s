@@ -1,3 +1,5 @@
 fmtok8s-frontend:
   image: 
     tag: main
+  redis: 
+    slaveCount: 1  
