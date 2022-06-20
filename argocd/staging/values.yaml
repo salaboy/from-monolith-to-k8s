@@ -2,7 +2,7 @@ fmtok8s-frontend:
   image: 
     tag: main
 
-
-redis: 
-  replica:
-    replicaCount: 1    
+fmtok8s-agenda-service:
+  redis: 
+    replica:
+      replicaCount: 1    
