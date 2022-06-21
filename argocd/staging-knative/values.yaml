@@ -1,16 +1,20 @@
 fmtok8s-frontend:
-  knativeDeploy: true
+  knative:
+    enabled: true
   image: 
     tag: main
 
 fmtok8s-email-service:
-  knativeDeploy: true
+  knative:
+    enabled: true
 
 fmtok8s-c4p-service:
-  knativeDeploy: true
+  knative:
+    enabled: true
 
 fmtok8s-agenda-service:
-  knativeDeploy: true
+  knative:
+    enabled: true
   redis: 
     replica:
       replicaCount: 1    
