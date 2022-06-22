@@ -10,6 +10,11 @@ fmtok8s-frontend:
 fmtok8s-email-service:
   knative:
     enabled: true
+    traffic: 
+      - percent: 80
+        revisionName: fmtok8s-email-00001
+      - latestRevision: true
+        percent: 20
 
 fmtok8s-c4p-service:
   knative:
