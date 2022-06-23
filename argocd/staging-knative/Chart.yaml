@@ -6,13 +6,13 @@ version: 0.1.1
 appVersion: "1.0"
 dependencies:
 - name: fmtok8s-frontend
-  version: v0.0.1
+  version: v0.1.0
   repository: https://salaboy.github.io/helm/  
 - name: fmtok8s-agenda-service
-  version: v0.0.1
+  version: v0.1.0
   repository: https://salaboy.github.io/helm/
 - name: fmtok8s-c4p-service
-  version: v0.0.1
+  version: v0.1.0
   repository: https://salaboy.github.io/helm/  
 - name: fmtok8s-email-service
   version: v0.2.0 
