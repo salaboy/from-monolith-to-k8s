@@ -66,7 +66,7 @@ Release Name: conference
 
 ```
 
-The application is composed by 4 independent services that can be installed separately, but the `fmtok8s-conference-chart` chart install them all configured to work together. The `fmtok8s-conference-chart` chart also comes with an `Ingress` resource defintion called `frontend`. 
+The application is composed by 4 independent services that can be installed separately (and 2 databases: postgresql and redis), but the `fmtok8s-conference-chart` chart install them all configured to work together. The `fmtok8s-conference-chart` chart also comes with an `Ingress` resource defintion called `frontend`. 
 For this to work you will need to have an NGINX Ingress Controller deployed in the cluster. If you are using KinD you can check how to get the ingress controller installed [here](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kind#installing-nginx-ingress-controller).
 
 You can check that the application is up and running by checking if the Kubernetes Pods have started and are in READY status: 
