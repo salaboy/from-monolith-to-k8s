@@ -33,27 +33,27 @@ You can always do searchs against the added Helm repositories with `helm search 
 For example, you can search the following application, which is hosted in my repository `fmtok8s-app`: 
 
 ```
-helm search repo fmtok8s-app
+helm search repo fmtok8s-conference-chart
 ```
 
 Should return: 
 
 ```
-NAME               	CHART VERSION	APP VERSION	DESCRIPTION                               
-fmtok8s/fmtok8s-app	0.1.0        	0.1.0      	A Helm chart for a Conference Platform App
+NAME                            	CHART VERSION	APP VERSION	DESCRIPTION                               
+fmtok8s/fmtok8s-conference-chart	v0.1.0       	0.1.0      	A Helm chart for a Conference Platform App
 ```
 
 Which now you can install by running: 
 
 ```
-helm install app fmtok8s/fmtok8s-app
+helm install conference fmtok8s/fmtok8s-conference-chart
 
 ```
 
 You should see something like: 
 ```
-NAME: app
-LAST DEPLOYED: Sat Jul  3 14:27:02 2021
+NAME: conference
+LAST DEPLOYED: Thu Jun 23 08:35:15 2022
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
@@ -61,12 +61,13 @@ TEST SUITE: None
 NOTES:
 Cloud-Native Conference Platform V1
 
-Chart Deployed: fmtok8s-app - 0.1.0
-Release Name: app
+Chart Deployed: fmtok8s-conference-chart - v0.1.0
+Release Name: conference
 
 ```
 
-The application is composed by 4 independent services that can be installed separately, but the `fmtok8s-app` chart install them all configured to work together. The `fmtok8s-app` chart also comes with an `Ingress` defintion called `frontend`. For this to work you will need to have an Ingress Controller deployed in the cluster. 
+The application is composed by 4 independent services that can be installed separately, but the `fmtok8s-conference-chart` chart install them all configured to work together. The `fmtok8s-conference-chart` chart also comes with an `Ingress` resource defintion called `frontend`. 
+For this to work you will need to have an NGINX Ingress Controller deployed in the cluster. If you are using KinD you can check how to get the ingress controller installed [here](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kind#installing-nginx-ingress-controller).
 
 You can check that the application is up and running by checking if the Kubernetes Pods have started and are in READY status: 
 
@@ -76,12 +77,20 @@ kubectl get pods
 
 You should see something like: 
 ```
-NAME                                       READY   STATUS      RESTARTS   AGE
-app-fmtok8s-agenda-rest-68bd9c8bcb-8njzf   1/1     Running     0          2m18s
-app-fmtok8s-api-gateway-58d49588b4-4psdh   1/1     Running     0          2m18s
-app-fmtok8s-c4p-rest-7cb8bc4485-2l5h2      1/1     Running     0          2m18s
-app-fmtok8s-email-rest-8f954fbbd-99nkb     1/1     Running     0          2m18s
+NAME                                                 READY   STATUS    RESTARTS   AGE
+conference-fmtok8s-agenda-service-57576cb65c-sl27p   1/1     Running   0          42s
+conference-fmtok8s-c4p-service-6c6f9449b5-j6ksv      1/1     Running   0          42s
+conference-fmtok8s-email-service-6fdf958bdd-4pzww    1/1     Running   0          42s
+conference-fmtok8s-frontend-5bf68cf65-zvlzq          1/1     Running   0          42s
+conference-postgresql-0                              1/1     Running   0          42s
+conference-redis-master-0                            1/1     Running   0          42s
+conference-redis-replicas-0                          1/1     Running   0          42s
 ```
+
+
+Now you are ready to point your browser to your Ingress public IP or if you are using KinD to: [http://localhost](http://localhost)
+
+![Conference Application Main Page](conference-app.png)
 
 
 
@@ -96,8 +105,8 @@ kubectl edit ingress frontend
 And then add and change the following lines: 
 - Add an annotation: `kubernetes.io/ingress.class: "gce"`
 - Special path format, modify the existing one `path: /` to: `path: /*`
-- Special pathType, modify the existing one with `pathType: ImplementationSpecific`
+- Special `pathType`, modify the existing one with `pathType: ImplementationSpecific`
 
-This will instruct Google Cloud to provision a loadbalancer and provide a public IP to access your applications that are running inside the cluster, in this case via the API Gateway Service. 
+This will instruct Google Cloud to provision a LoadBalancer and provide a public IP to access your applications that are running inside the cluster, in this case via the API Gateway Service. 
 
 If you get the ingress resource now, you should be able to see the public IP after the loadbalancer is provisioned and configured. 
