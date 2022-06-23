@@ -2,7 +2,7 @@ apiVersion: v2
 name: conference
 description: Conference Application (with Knative)
 type: application
-version: 0.1.1
+version: 0.1.0
 appVersion: "1.0"
 dependencies:
 - name: fmtok8s-frontend
