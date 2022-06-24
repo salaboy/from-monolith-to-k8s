@@ -75,14 +75,14 @@ helm repo update
 Then run `helm install`: 
 
 ```
-helm install app fmtok8s/fmtok8s-app
+helm install conference fmtok8s/fmtok8s-conference-chart
 ```
 
 You should see the following output: 
 
 ```
-NAME: app
-LAST DEPLOYED: Thu Apr 21 09:04:46 2022
+NAME: conference
+LAST DEPLOYED: Fri Jun 24 08:33:27 2022
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
@@ -90,19 +90,22 @@ TEST SUITE: None
 NOTES:
 Cloud-Native Conference Platform V1
 
-Chart Deployed: fmtok8s-app - 0.1.0
-Release Name: app
+Chart Deployed: fmtok8s-conference-chart - v0.1.0
+Release Name: conference
 
 ```
 
 Now you can check that the pods of the application are being created correctly with: 
 ```
-kubectl get pods
-NAME                                       READY   STATUS      RESTARTS   AGE
-app-fmtok8s-agenda-rest-65d7778fd7-pp4tf   1/1     Running     0          7m22s
-app-fmtok8s-api-gateway-5dfd76594-j5bms    1/1     Running     0          7m22s
-app-fmtok8s-c4p-rest-856c5d584d-9m7wl      1/1     Running     0          7m22s
-app-fmtok8s-email-rest-7c8f54f6d9-s5ztz    1/1     Running     0          7m22s
+> kubectl get pods
+NAME                                                 READY   STATUS    RESTARTS      AGE
+conference-fmtok8s-agenda-service-57576cb65c-mnv4r   1/1     Running   0             38s
+conference-fmtok8s-c4p-service-6c6f9449b5-w9wpf      1/1     Running   1 (24s ago)   38s
+conference-fmtok8s-email-service-6fdf958bdd-zg6wb    1/1     Running   0             38s
+conference-fmtok8s-frontend-5bf68cf65-8rm55          1/1     Running   0             38s
+conference-postgresql-0                              1/1     Running   0             38s
+conference-redis-master-0                            1/1     Running   0             38s
+conference-redis-replicas-0                          1/1     Running   0             38s
 ```
 
 When you  get all the pods up and running, you should be able to access the application pointing your browser to: http://localhost
@@ -110,5 +113,5 @@ When you  get all the pods up and running, you should be able to access the appl
 
 ## Other options
 
-If you don't want to create a Helm release, which gets created when you run `helm install` you can use Helm to produce the all YAML files of your application's services by running `helm template`. 
+If you don't want to create a Helm release, which gets created when you run `helm install` you can use Helm to produce the all YAML files of your application's services by running `helm template .`. 
 
