@@ -5,11 +5,11 @@ metadata:
   namespace: default
   annotations:
     description: |
-      Sync Staging Environment
+      Sync Staging Environment from Git
 spec:
   params:
     - name: gitRepository
-      description: The git repository that hosts context and Dockerfile
+      description: The git repository that hosts the staging environment configuration
       default: https://github.com/salaboy/fmtok8s-staging-env
     - name: gitRevision
       description: The git revision to build

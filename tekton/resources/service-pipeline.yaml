@@ -21,17 +21,13 @@ spec:
       default: Dockerfile
     - name: target
       description: The target container registry and path where to build the image
-      default: grogdj
+      default: salaboy
     - name: target-name
       description: Name of the image to publish
       default: fmtok8s-frontend
     - name: version
       description: the target version to build
       default: 0.1.0-service-pipeline
-    - name: kanikoExtraArgs
-      type: array
-      description: extra args to pass to the kaniko builder
-      default: []
   workspaces:
     - name: sources
       description: Workspace where the git repo is prepared for building
@@ -69,6 +65,8 @@ spec:
         name: maven
         bundle: gcr.io/tekton-releases/catalog/upstream/maven:0.2
       params:
+        - name: MAVEN_IMAGE
+          value: gcr.io/cloud-builders/mvn
         - name: GOALS
           value: 
             - -DskipTests
@@ -93,8 +91,6 @@ spec:
           value: $(params.context)
         - name: DOCKERFILE
           value: $(params.dockerfile)
-        - name: EXTRA_ARGS
-          value: ["$(params.kanikoExtraArgs[*])"]
       workspaces:
         - name: source
           workspace: sources

@@ -1,6 +1,14 @@
 # Pipelines
 
-This document explains how to run a Service and an Environment Pipeline using Tekton. 
+This short tutorial shows how to use Tekton to define and run a Service and an Environment Pipeline. 
+
+[Tekton](https://tekton.dev) is a non-opinionated Pipeline Engine built for the Cloud (specifically for Kubernetes). You can build any kind of pipelines that you want as the engine doesn't impose any restrictions on the kind of Tasks that it can execute. This makes it perfect for building Service Pipelines where you might need to have special requirements that cannot be met by a managed service.  
+
+The Service Pipeline for this example is configured to build the [Conference Application Frontend](https://github.com/salaboy/fmtok8s-frontend) but as you can see in the [Service Pipeline definition](resources/service-pipeline.yaml) you can parameterize the pipeline run to build other services. 
+
+The [Environment Pipeline definition](resources/environment-pipeline.yaml) shows a simple example on how you can use Helm to sync the contents of a repository to a namespace in a Kubernetes Cluster. While this is doable with Tekton, there are other more specialized tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) which do a more complete set of tasks on the continuous deployment space by applying a GitOps approach. You can find a [tutorial with ArgoCD here](../argocd/README.md).
+
+
 
 ## Installing Tekton
 
@@ -20,7 +28,7 @@ kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/
 3. **Install Tekton Dashboard (optional)**
 
 ```
-kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.17.0/tekton-dashboard-release.yaml
+kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.27.0/tekton-dashboard-release.yaml
 ```
 You can access the dashboard by port-forwarding using `kubectl`:
 
@@ -33,7 +41,7 @@ kubectl port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
 Then you can access pointing your browser to [http://localhost:9097](http://localhost:9097)
 
 
-4. **Install Tekton Dashboard (optional)**:
+4. **Install Tekton CLI (optional)**:
 
 You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
 
@@ -42,6 +50,10 @@ You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
 The Tekton pipeline uses some alpha features (Tekton Bundles) which needs to
 be enabled in the config. The `feature-flags` config map in the `tekton-pipelines` namespace
 should look like:
+
+```
+kubectl edit cm -n tekton-pipelines feature-flags
+```
 
 ```yaml
 apiVersion: v1
@@ -86,7 +98,7 @@ The Service Pipeline definition described in [`resources/service-pipeline.yaml`]
 You can start this Service Pipeline by running the following command:
 
 ```
-tkn pipeline start api-gateway-service-pipeline -s dockerconfig -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -w name=dockerconfig,secret=regcred -w name=maven-settings,emptyDir=
+tkn pipeline start frontend-service-pipeline -s dockerconfig -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -w name=dockerconfig,secret=regcred -w name=maven-settings,emptyDir=
 ```
 
 ## Environment Pipeline
@@ -99,11 +111,13 @@ The environment pipeline definition described in [`resources/envionment-pipeline
 You can start this Environment Pipeline by running the following command:
 
 ```
-tkn pipeline start stating-environment-pipeline 
+tkn pipeline start staging-environment-pipeline -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -s gitops
 ```
 
 The environment pipeline is using [`helmfile`](https://github.com/roboll/helmfile) to describe the stating environment. 
 
+
+As mentioned before, while this is doable with Tekton, there are other more specialized tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) which do a more complete set of tasks on the continuous deployment space by applying a GitOps approach. You can find a [tutorial with ArgoCD here](../argocd/README.md).
 
 # References
 - Why [JX uses Helmfile](https://jenkins-x.io/v3/develop/faq/general/#why-does-jenkins-x-use-helmfile-template)?
