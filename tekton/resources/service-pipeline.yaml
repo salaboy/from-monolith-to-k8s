@@ -1,15 +1,15 @@
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: api-gateway-service-pipeline
+  name: frontend-service-pipeline
   annotations:
     description: |
-      Build the artifacts for the API Gateway Service
+      Build the artifacts for the Conference Application Frontend
 spec:
   params:
     - name: gitRepository
       description: The git repository that hosts context and Dockerfile
-      default: https://github.com/salaboy/fmtok8s-api-gateway
+      default: https://github.com/salaboy/fmtok8s-frontend
     - name: gitRevision
       description: The git revision to build
       default: main
@@ -24,10 +24,10 @@ spec:
       default: grogdj
     - name: target-name
       description: Name of the image to publish
-      default: fmtok8s-api-gateway
+      default: fmtok8s-frontend
     - name: version
       description: the target version to build
-      default: 0.1.0-test-pipeline
+      default: 0.1.0-service-pipeline
     - name: kanikoExtraArgs
       type: array
       description: extra args to pass to the kaniko builder
@@ -40,15 +40,15 @@ spec:
     - name: dockerconfig
       description: Docker config secret
   results:
-    - name: cd.artifact.id
+    - name: artifact.id
       value: $(tasks.export-results.results.artifactId)
-    - name: cd.artifact.name
+    - name: artifact.name
       value: $(tasks.export-results.results.artifactName)
-    - name: cd.artifact.version
+    - name: artifact.version
       value: $(tasks.export-results.results.artifactVersion)
-    - name: cd.package.name
+    - name: package.name
       value: $(tasks.export-results.results.packageName)
-    - name: cd.package.version
+    - name: package.version
       value: $(tasks.export-results.results.packageVersion)  
   tasks:
     - name: clone-repo
@@ -115,16 +115,9 @@ spec:
               #!/bin/sh
               set -ex
 
-              cd $(workspaces.sources.path)/charts/fmtok8s-api-gateway
+              cd $(workspaces.sources.path)/helm/fmtok8s-frontend
 
-              helm package .
-
-              # TODO: Need to fetch the chart name and version here
-              
-              echo "fmtok8s-api-gateway-0.1.0.tgz" | tee $(results.cd.package.name.path)
-              echo "0.1.0" | tee $(results.cd.package.version.path)
-
-              # TODO: push the chart to a chart repository
+              helm template .
 
     - name: export-results
       runAfter: [helm-package]
@@ -149,15 +142,15 @@ spec:
             image: alpine
             env:
               - name: ARTIFACT_NAME_RESULT_PATH
-                value: $(results.cd.artifact.name.path)
+                value: $(results.artifact.name.path)
               - name: ARTIFACT_VERSION_RESULT_PATH
-                value: $(results.cd.artifact.version.path)
+                value: $(results.artifact.version.path)
               - name: ARTIFACT_ID_RESULT_PATH
-                value: $(results.cd.artifact.id.path)
+                value: $(results.artifact.id.path)
               - name: PACKAGE_NAME_RESULT_PATH
-                value: $(results.cd.package.name.path)
+                value: $(results.package.name.path)
               - name: PACKAGE_VERSION_RESULT_PATH
-                value: $(results.cd.package.version.path)  
+                value: $(results.package.version.path)  
               - name: ARTIFACT_NAME_RESULT_VALUE
                 value: $(params.name)
               - name: ARTIFACT_VERSION_RESULT_VALUE
