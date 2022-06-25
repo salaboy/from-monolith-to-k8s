@@ -1,46 +1,69 @@
 # Deploying the Conference Platform with Knative
 
-This document explains how to deploy the application Services as Knative Services. It also shows how you can do traffic splitting based on Headers. 
+This short tutorial explain how to use Knative Serving and Eventing in the context of our Conference Platform application. 
 
-Then it goes to add Knative Eventing and enable the application to emit events to a Knative Broker which can be configured to send events to any other configured application. We will use Sockeye for example purposes. 
+First we will look into using Knative Services instead of Kubernetes Deployments/Services/Ingresses and then we will look at how we can use Knative Eventing to route events between different services. 
 
+Naturaly, this tutorial is split into two separate sections: 
+- [Knative Serving for advanced traffic management](#knative-serving-for-advanced-traffic-management)
+  - Installing Knative Serving
+  - Installing the application using Helm
+  - Traffic Splitting Using Percentages
+  - Traffic Splitting Using Headers
+- Knative Eventing
+  - Installing Knative Eventing
+  - Creating a Knative Eventing Broker
+  - Subscribing to Events using Knative Eventing Triggers
+
+
+# Knative Serving for advanced traffic management
+
+Knative Serving is a Kubernetes add on that is commonly associated with Serverless. This association comes from the fact that Knative Serving simplify the way that we deploy our containerized applications to Kubernetes and that out of the box it support scaling our containers down to zero. Knative Serving also provides advanced traffic management features by providing abstractions on top of different gateways implementations.
+
+In the following sections we will se these features in action. 
 
 ## Install Knative Serving
 
-Follow the instructions here: 
-
-https://knative.dev/docs/install/serving/install-serving-with-yaml/ 
+You can follow the instructions provided in the [Knative.dev](https://knative.dev) site for installing Knative Serving latest release: [https://knative.dev/docs/install/serving/install-serving-with-yaml/](https://knative.dev/docs/install/serving/install-serving-with-yaml/). Follow this instructions if you are intalling Knative in a Cloud Provider or in an on-prem Kubernetes installation. 
 
 
-Apply the following patch to support traffic splitting with Headers (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref and  https://knative.dev/docs/serving/samples/tag-header-based-routing/) and Downward API (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref):
+If you are using KinD or Minikube check the [quickstart installation](https://knative.dev/docs/getting-started/quickstart-install/#install-the-knative-quickstart-plugin).
+If you are using KinD or Minikube, this tutorial assumes that you used this quickstart to install Knative. 
+
+Once installed, apply the following patch to support traffic splitting with Headers (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref and  https://knative.dev/docs/serving/samples/tag-header-based-routing/) and Downward API (explained here: https://knative.dev/docs/serving/feature-flags/#kubernetes-fieldref):
 
 ```
 kubectl patch cm config-features -n knative-serving -p '{"data":{"tag-header-based-routing":"Enabled", "kubernetes.podspec-fieldref": "Enabled"}}'
 ```
 
-Note: you can use ModHeader to modify the request headers in your browser: https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en
+It is also recommended to install [`ModHeader`](https://chrome.google.com/webstore/detail/modheader/idgpnmonknjnojddfkpgkljpfnnfcklj?hl=en) to modify the request headers in your browser.
 
 ### Install the application using Knative Services
 
+We will be using the same Helm charts that we used in the KinD and Helm tutorials, but we will enable the Knative Services deployments. 
+
 ```
-cat <<EOF | helm install conference fmtok8s/fmtok8s-app --values=-
-fmtok8s-api-gateway:
-  knativeDeploy: true
+cat <<EOF | helm install conference-knative fmtok8s/fmtok8s-conference-chart --values=-
+fmtok8s-frontend:
+  knative:
+    enabled: true
   env:
     KNATIVE_ENABLED: "true"
-    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
-    C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
-    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
-
-fmtok8s-agenda-rest:
-  knativeDeploy: true
-fmtok8s-c4p-rest:
-  knativeDeploy: true
+    FRONTEND_AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    FRONTEND_C4P_SERVICE: http://fmtok8s-c4p.default.svc.cluster.local
+    FRONTEND_EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local  
+fmtok8s-email-service:
+  knative:
+    enabled: true
+fmtok8s-c4p-service:
+  knative:
+    enabled: true
   env:
-    AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
-    EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local
-fmtok8s-email-rest:
-  knativeDeploy: true
+    C4P_AGENDA_SERVICE: http://fmtok8s-agenda.default.svc.cluster.local
+    C4P_EMAIL_SERVICE: http://fmtok8s-email.default.svc.cluster.local  
+fmtok8s-agenda-service:
+  knative:
+    enabled: true 
 EOF
 ```
 
@@ -51,39 +74,66 @@ kubectl get ksvc
 ```
 You should see something like: 
 ```
-NAME                  URL                                                          LATESTCREATED               LATESTREADY                 READY   REASON
-fmtok8s-agenda        http://fmtok8s-agenda.default.X.X.X.X.sslip.io        fmtok8s-agenda-00001        fmtok8s-agenda-00001        True    
-fmtok8s-api-gateway   http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io   fmtok8s-api-gateway-00001   fmtok8s-api-gateway-00001   True    
-fmtok8s-c4p           http://fmtok8s-c4p.default.X.X.X.X.sslip.io           fmtok8s-c4p-00001           fmtok8s-c4p-00001           True    
-fmtok8s-email         http://fmtok8s-email.default.X.X.X.X.sslip.io         fmtok8s-email-00001         fmtok8s-email-00001         True    
+NAME               URL                                                  LATESTCREATED            LATESTREADY              READY   REASON
+fmtok8s-agenda     http://fmtok8s-agenda.default.127.0.0.1.sslip.io     fmtok8s-agenda-00001     fmtok8s-agenda-00001     True    
+fmtok8s-c4p        http://fmtok8s-c4p.default.127.0.0.1.sslip.io        fmtok8s-c4p-00001        fmtok8s-c4p-00001        True    
+fmtok8s-email      http://fmtok8s-email.default.127.0.0.1.sslip.io      fmtok8s-email-00001      fmtok8s-email-00001      True    
+fmtok8s-frontend   http://fmtok8s-frontend.default.127.0.0.1.sslip.io   fmtok8s-frontend-00001   fmtok8s-frontend-00001   True    
+ 
 
 ```
-Where instead of `X`s you should see your public IP address.  
-You can access the application by pointing your browser to: http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io
+Where instead of `X`s you should see your public IP address or `127.0.0.1` if you are using KinD or minikube.
+
+You can access the application by pointing your browser to: http://fmtok8s-frontend.default.X.X.X.X.sslip.io
 
 You can send the following POST request to generate some talks proposals in the application: 
 ```
-curl -X POST http://fmtok8s-api-gateway.default.X.X.X.X.sslip.io/api/test
+curl -X POST http://fmtok8s-frontend.default.X.X.X.X.sslip.io/api/test
 ```
-Then go to the Back office section of the application and approve all the proposals. You should see them in the Main Site listed in different days. 
+Then go to the Back office section of the application and approve all the proposals. You should see them in the Agenda section listed in different days. 
 
-### Testing Traffic Splitting Using Percentages
 
-You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
+### Traffic Splitting Using Percentages
+
+You can edit the Knative Service (ksvc) of the Frontend and create a new revision by changing the container image that the service is using or any other configuration parameter such as environment variables: 
 
 ```
-kubectl edit ksvc fmtok8s-api-gateway
+kubectl edit ksvc fmtok8s-frontend
 ```
 
-Then modify the `image` name with the following value: 
+Any configuration change of our service will create a new revision. For this example we will add a new Environment Variable called `FEATURE_ALTERNATIVE_HERO_ENABLED`
 
 From:
 ```
-image: salaboy/fmtok8s-api-gateway:0.1.0
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+      creationTimestamp: null
+    spec:
+      containerConcurrency: 0
+      containers:
+      - env:
+        - name: FEATURE_C4P_ENABLED
+          value: "true"  
 ```
 To:
 ```
-image: salaboy/fmtok8s-api-gateway:0.1.0-color
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+      creationTimestamp: null
+    spec:
+      containerConcurrency: 0
+      containers:
+      - env:
+        - name: FEATURE_C4P_ENABLED
+          value: "true" 
+        - name: FEATURE_ALTERNATIVE_HERO_ENABLED
+          value: "true"  
 ```
 
 ```
@@ -95,48 +145,78 @@ This change will create a new revision, which we can use to split traffic. For d
   traffic:
   - latestRevision: false
     percent: 50
-    revisionName: fmtok8s-api-gateway-00001
+    revisionName: fmtok8s-frontend-00001
   - latestRevision: true
     percent: 50
 ```
 
 
-### Testing Traffic Splitting Using Headers
+### Traffic Splitting Using Headers
 
 You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
 
 ```
-kubectl edit ksvc fmtok8s-api-gateway
+kubectl edit ksvc fmtok8s-frontend
 ```
 
-Then modify the `image` name with the following value: 
+
 
 From:
 ```
-image: salaboy/fmtok8s-api-gateway:0.1.0
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+      creationTimestamp: null
+    spec:
+      containerConcurrency: 0
+      containers:
+      - env:
+        - name: FEATURE_C4P_ENABLED
+          value: "true" 
+        - name: FEATURE_ALTERNATIVE_HERO_ENABLED
+          value: "true"    
 ```
 To:
 ```
-image: salaboy/fmtok8s-api-gateway:0.1.0-debug
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+      creationTimestamp: null
+    spec:
+      containerConcurrency: 0
+      containers:
+      - env:
+        - name: FEATURE_C4P_ENABLED
+          value: "true" 
+        - name: FEATURE_ALTERNATIVE_HERO_ENABLED
+          value: "true" 
+        - name: FEATURE_DEBUG_ENABLED  
+          value: "true" 
 ```
-This change will create a new revision, which we can use to split traffic. For doint that we need to add the following values into the `traffic` section:
+
+Before saving this change that will create a new revision, which we can use to split traffic, we need to add the following values into the `traffic` section:
 
 ```
   traffic:
   - latestRevision: false
     percent: 100
-    revisionName: fmtok8s-api-gateway-00001
+    revisionName: fmtok8s-frontend-00001
     tag: current
   - latestRevision: false
     percent: 0
-    revisionName: fmtok8s-api-gateway-00003
+    revisionName: fmtok8s-frontend-00003
     tag: debug
   - latestRevision: true
     percent: 0
     tag: latest
 ```
 
-With something like ModHeader for Chrome you can now specify the `debug` revision by setting the following header: 
+Now with `ModHeader` for Chrome you can now specify the `debug` revision by setting the following header: 
+
 `Knative-Serving-Tag` with value `debug`
 
 
