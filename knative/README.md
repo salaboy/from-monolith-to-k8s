@@ -236,8 +236,69 @@ Now with `ModHeader` for Chrome you can now specify the `alternative-hero` revis
 
 ![ModHeader Tag](imgs/modheader-knative-tag.png)
 
+Now if you refresh the page with the new Header you should see that the application color changed to be orange and the country where the conference is happening is shown (United Kingdom).
+
 ![Frontend Alternative Hero](imgs/frontend-alternative-hero.png)
 
+### Traffic Splitting using URLs with Tags
+
+Let's quickly add another route to our Frontend service to demonstrate that tags can be accessed by setting up HTTP Headers or just accessing a specific URL that Knative Serving creates for each tag. 
+
+For the previous example you can access the following URL: 
+
+```
+http://alternative-hero-fmtok8s-frontend.default.127.0.0.1.sslip.io/
+```
+
+Without adding any HTTP headers, Knative Serving will know that you want to access that speific tag. 
+
+Let's now add a new traffic rule and let's set the `DEBUG` feature enable: 
+
+```
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"
+    spec:
+      containers:
+      - env:
+        ...
+        - name: FEATURE_DEBUG_ENABLED
+          value: "true"
+        ...  
+```
+
+With the following traffic rules: 
+
+```
+traffic:
+  - latestRevision: false
+    percent: 100
+    revisionName: fmtok8s-frontend-00001
+    tag: current
+  - latestRevision: false
+    percent: 0
+    revisionName: fmtok8s-frontend-00002
+    tag: alternative-hero
+  - latestRevision: false
+    percent: 0
+    revisionName: fmtok8s-frontend-00003
+    tag: debug
+  - latestRevision: true
+    percent: 0
+    tag: latest
+```
+
+Now if you access the application by pointing to the following URL: 
+
+```
+http://debug-fmtok8s-frontend.default.127.0.0.1.sslip.io/
+```
+
+You should now see the Frontend with the `Debug` banner on top giving you more information about each application service. Notice that this new configuration still is using the alternative hero feature (as it looks orange and still shows the country), but this is only we just added a new environment variable and we didn't removed it for this last configuration. 
+
+![Debug URL](frontend-debug-and-alternative.png)
 
 
 
