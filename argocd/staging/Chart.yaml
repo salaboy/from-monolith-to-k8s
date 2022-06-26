@@ -18,6 +18,6 @@ dependencies:
   version: v0.0.1 
   repository: https://salaboy.github.io/helm/
 - name: bitnami/kube-prometheus
-  repository: https://charts.bitnami.com/bitnami
+  repository: https://charts.bitnami.com/
   condition: prometheus.enabled
   version: 8.0.8  
