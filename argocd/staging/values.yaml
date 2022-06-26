@@ -1,0 +1,15 @@
+
+prometheus:
+  enabled: true
+fmtok8s-frontend:  
+  prometheus:
+    enabled: true
+fmtok8s-agenda-service:
+  prometheus:
+    enabled: true
+fmtok8s-email-service:
+  prometheus:
+    enabled: true
+fmtok8s-c4p-service:
+  prometheus:
+    enabled: true      
