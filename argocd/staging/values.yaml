@@ -1,6 +1,12 @@
 
 prometheus:
   enabled: true
+kube-prometheus:
+  prometheus:
+    service:
+      type: LoadBalancer
+      ports: 
+        http: 80
 fmtok8s-frontend:  
   prometheus:
     enabled: true
