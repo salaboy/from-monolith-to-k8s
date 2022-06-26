@@ -6,14 +6,14 @@ First we will look into using Knative Services instead of Kubernetes Deployments
 
 Naturaly, this tutorial is split into two separate sections: 
 - [Knative Serving for advanced traffic management](#knative-serving-for-advanced-traffic-management)
-  - Installing Knative Serving
-  - Installing the application using Helm
-  - Traffic Splitting Using Percentages
-  - Traffic Splitting Using Headers
-- Knative Eventing
-  - Installing Knative Eventing
-  - Creating a Knative Eventing Broker
-  - Subscribing to Events using Knative Eventing Triggers
+  - [Installing Knative Serving](#install-knative-serving)
+  - [Installing the application using Helm](#install-the-application-using-knative-services)
+  - [Traffic Splitting Using Percentages](#traffic-splitting-using-percentages)
+  - [Traffic Splitting Using Headers](#traffic-splitting-using-headers)
+- [Knative Eventing]()
+  - [Installing Knative Eventing]()
+  - [Creating a Knative Eventing Broker]()
+  - [Subscribing to Events using Knative Eventing Triggers]()
 
 
 # Knative Serving for advanced traffic management
@@ -95,13 +95,27 @@ Then go to the Back office section of the application and approve all the propos
 
 ### Traffic Splitting Using Percentages
 
-You can edit the Knative Service (ksvc) of the Frontend and create a new revision by changing the container image that the service is using or any other configuration parameter such as environment variables: 
+In this section we will be testing Knative Serving traffic splitting capabilities, but we will not use the Frontend to test, we will use the Email Service. The only reason to do this is the simple fact that when you are hosting an application frontend we are not dealing with a single request (one request for getting html, another for getting Javascript files, another for CSS, one per each image that we want to render, etc) and for this example we want to see where each request is going.
+
+Before changing the service configuration you can hit the `info` endpoint of the email service: 
 
 ```
-kubectl edit ksvc fmtok8s-frontend
+curl http://fmtok8s-email.default.127.0.0.1.sslip.io/info
 ```
 
-Any configuration change of our service will create a new revision. For this example we will add a new Environment Variable called `FEATURE_ALTERNATIVE_HERO_ENABLED`
+You should see something like this: 
+
+```json
+{"name":"Email Service","version":"v0.1.0","source":"https://github.com/salaboy/fmtok8s-email-service/releases/tag/v0.1.0","podId":"fmtok8s-email-00001-deployment-c59948bd4-q828k","podNamepsace":"default","podNodeName":"dev-control-plane"}
+```
+
+You can edit the Knative Service (ksvc) of the Email Service and create a new revision by changing the container image that the service is using or any other configuration parameter such as environment variables: 
+
+```
+kubectl edit ksvc fmtok8s-email
+```
+
+Any configuration change of our service will create a new revision. For this example we will change the `VERSION` Environment Variable and the container `image` that the service is using: 
 
 From:
 ```
@@ -110,13 +124,16 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-      creationTimestamp: null
     spec:
       containerConcurrency: 0
       containers:
       - env:
-        - name: FEATURE_C4P_ENABLED
-          value: "true"  
+        ...
+        - name: VERSION
+          value: v0.1.0
+        ...  
+      image: ghcr.io/salaboy/fmtok8s-email-service:v0.1.0-native    
+      ...
 ```
 To:
 ```
@@ -125,80 +142,78 @@ spec:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-      creationTimestamp: null
     spec:
       containerConcurrency: 0
       containers:
       - env:
-        - name: FEATURE_C4P_ENABLED
-          value: "true" 
-        - name: FEATURE_ALTERNATIVE_HERO_ENABLED
-          value: "true"  
+        ...
+        - name: VERSION
+          value: v0.2.0
+        ...  
+      image: ghcr.io/salaboy/fmtok8s-email-service:v0.2.0-native    
+      ... 
 ```
+Notice that we are updating the container `image` and also an environment variable. This enironment variable is commonly updated automatically when we update the service Helm chart, for this example we are manually editing the service. 
 
-```
-This change will create a new revision, which we can use to split traffic. For doint that we need to add the following values into the `traffic` section:
-
-```
+Before saving this change, that will create a new revision which we can use to split traffic, we need to add the following values into the `traffic` section:
 
 ```
   traffic:
   - latestRevision: false
     percent: 50
-    revisionName: fmtok8s-frontend-00001
+    revisionName: fmtok8s-email-00001
   - latestRevision: true
     percent: 50
 ```
 
+Now if you start hitting the service `info` endpoint again you will see that half of the traffic is being routed to version 1 of our service and the other half to version 2. 
+
+```
+> curl http://fmtok8s-email.default.127.0.0.1.sslip.io/info
+{"name":"Email Service","version":"v0.1.0","source":"https://github.com/salaboy/fmtok8s-email-service/releases/tag/v0.1.0","podId":"fmtok8s-email-00001-deployment-c59948bd4-q828k","podNamepsace":"default","podNodeName":"dev-control-plane"}                                                                                          
+
+> curl http://fmtok8s-email.default.127.0.0.1.sslip.io/info
+{"name":"Email Service - IMPROVED!!","version":"v0.2.0","source":"https://github.com/salaboy/fmtok8s-email-service/releases/tag/v0.2.0","podId":"fmtok8s-email-00002-deployment-6b9bb6959f-wdl8q","podNamepsace":"default","podNodeName":"dev-control-plane"}
+```
+
+This mechanism becomes really useful when you need to test a new version but you are not willing to route all the traffic straightaway to the new version. 
+
 
 ### Traffic Splitting Using Headers
 
-You can edit the Knative Service (ksvc) of the API Gateway and create a new revision by changing the docker image that the service is using: 
+In this case we will use HTTP Headers to route traffic. In contrast with just letting Knative to route based on percentage is that we can now control the routing of all the requests that contains special HTTP Headers. For this reason, we can now use the Frontend Service for the example. 
+
+Before making any changes access the applicaation Frontend by pointing your browser to the Frontend Knative Service URL. If you are running on KinD it should look similar to this: 
+
+```
+http://fmtok8s-frontend.default.127.0.0.1.sslip.io
+```
+
+![Frontend](imgs/frontend.png)
+
+You can edit the Knative Service (ksvc) of the Frontend and create a new revision by changing the service configuration, as we did before we will just change an environment variable, which will trigger the creation of a new revision for the service: 
 
 ```
 kubectl edit ksvc fmtok8s-frontend
 ```
 
-
-
-From:
+Add the `FEATURE_ALTERNATIVE_HERO_ENABLED` environment variable in the `env` section:
 ```
 spec:
   template:
     metadata:
       annotations:
         autoscaling.knative.dev/minScale: "1"
-      creationTimestamp: null
     spec:
-      containerConcurrency: 0
       containers:
       - env:
-        - name: FEATURE_C4P_ENABLED
-          value: "true" 
+        ...
         - name: FEATURE_ALTERNATIVE_HERO_ENABLED
           value: "true"    
-```
-To:
-```
-spec:
-  template:
-    metadata:
-      annotations:
-        autoscaling.knative.dev/minScale: "1"
-      creationTimestamp: null
-    spec:
-      containerConcurrency: 0
-      containers:
-      - env:
-        - name: FEATURE_C4P_ENABLED
-          value: "true" 
-        - name: FEATURE_ALTERNATIVE_HERO_ENABLED
-          value: "true" 
-        - name: FEATURE_DEBUG_ENABLED  
-          value: "true" 
+        ...  
 ```
 
-Before saving this change that will create a new revision, which we can use to split traffic, we need to add the following values into the `traffic` section:
+Before saving this change, we need to add the following values into the `traffic` section:
 
 ```
   traffic:
@@ -208,19 +223,27 @@ Before saving this change that will create a new revision, which we can use to s
     tag: current
   - latestRevision: false
     percent: 0
-    revisionName: fmtok8s-frontend-00003
-    tag: debug
+    revisionName: fmtok8s-frontend-00002
+    tag: alternative-hero
   - latestRevision: true
     percent: 0
     tag: latest
 ```
 
-Now with `ModHeader` for Chrome you can now specify the `debug` revision by setting the following header: 
+Now with `ModHeader` for Chrome you can now specify the `alternative-hero` revision by setting the following header: 
 
-`Knative-Serving-Tag` with value `debug`
+`Knative-Serving-Tag` with value `alternative-hero`
+
+![ModHeader Tag](imgs/modheader-knative-tag.png)
+
+![Frontend Alternative Hero](imgs/frontend-alternative-hero.png)
+
+
 
 
 ## Installing Knative Eventing
+
+@TODO: update this section!
 
 Follow the instructions from here: 
 https://knative.dev/docs/install/eventing/install-eventing-with-yaml/
