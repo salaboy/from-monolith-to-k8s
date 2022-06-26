@@ -17,7 +17,7 @@ dependencies:
 - name: fmtok8s-email-service
   version: v0.0.1 
   repository: https://salaboy.github.io/helm/
-- name: bitnami/kube-prometheus
-  repository: https://charts.bitnami.com/
+- name: kube-prometheus
+  repository: https://charts.bitnami.com/bitnami
   condition: prometheus.enabled
   version: 8.0.8  
