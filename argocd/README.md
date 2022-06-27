@@ -75,6 +75,17 @@ fmtok8s-frontend:
     type: LoadBalancer
 ```
 
+Also if you are using Prometheus into a CloudEnvironment you can expose Prometheus in the same way:
+
+```
+kube-prometheus:
+  prometheus:
+    service:
+      type: LoadBalancer
+      ports: 
+        http: 80
+```
+
 Notice that this is the same as Patching the Frontend Service: 
 
 ```
