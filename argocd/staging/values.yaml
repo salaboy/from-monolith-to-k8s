@@ -1,4 +1,3 @@
-
 prometheus:
   enabled: true
 fmtok8s-frontend:  
@@ -12,4 +11,4 @@ fmtok8s-email-service:
     enabled: true
 fmtok8s-c4p-service:
   prometheus:
-    enabled: true      
+    enabled: true
