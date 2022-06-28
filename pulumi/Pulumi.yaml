@@ -1,0 +1,3 @@
+name: conference
+runtime: go
+description: conference platform pulumi app

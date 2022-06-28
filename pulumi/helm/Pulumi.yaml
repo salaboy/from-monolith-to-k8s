@@ -1,0 +1,3 @@
+name: conference-helm-pulumi
+runtime: go
+description: helm chart deployment with pulumi
