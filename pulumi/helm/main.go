@@ -10,16 +10,19 @@ import (
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 
-		wordpress, err := helm.NewRelease(ctx, "conference-dev", &helm.ReleaseArgs{
+		namespace, err := corev1.NewNamespace(ctx, "pulumi-conference", nil)
+
+		conferenceApp, err := helm.NewRelease(ctx, "conference-dev", &helm.ReleaseArgs{
 			Version: pulumi.String("0.1.0"),
 			Chart:   pulumi.String("fmtok8s-conference-chart"),
+			Namespace: namespace.Metadata.Name(),
 			RepositoryOpts: &helm.RepositoryOptsArgs{
 				Repo: pulumi.String("https://salaboy.github.io/helm/"),
 			},
 		})
 
-		// Export the ingress IP for Wordpress frontend.
-		frontendIp := pulumi.All(wordpress.Status.Namespace(), wordpress.Status.Name()).ApplyT(func(r interface{})(interface{}, error){
+		// Export the ingress IP for Frontend Service frontend.
+		frontendIp := pulumi.All(conferenceApp.Status.Namespace(), conferenceApp.Status.Name()).ApplyT(func(r interface{})(interface{}, error){
 			arr := r.([]interface{})
 			namespace := arr[0].(*string)
 			name := arr[1].(*string)
