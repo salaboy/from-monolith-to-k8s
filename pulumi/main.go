@@ -38,8 +38,8 @@ func main() {
 							},
 						},
 					},
-					"stack":             "<YOUR_ORG>/nginx/dev",
-					"projectRepo":       "https://github.com/salaboy/from-monolith-to-k8s",
+					"stack":             "dev",
+					"projectRepo":       "https://github.com/salaboy/from-monolith-to-k8s/",
 					//"commit":            "2b0889718d3e63feeb6079ccd5e4488d8601e353",
 					"branch":         "refs/heads/main", // Alternatively, track master branch.
 					"repoDir": "pulumi/helm/",

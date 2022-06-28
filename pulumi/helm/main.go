@@ -14,7 +14,7 @@ func main() {
 			Version: pulumi.String("0.1.0"),
 			Chart:   pulumi.String("fmtok8s-conference-chart"),
 			RepositoryOpts: &helm.RepositoryOptsArgs{
-				Repo: pulumi.String("https://github.com/salaboy/helm"),
+				Repo: pulumi.String("https://salaboy.github.io/helm/"),
 			},
 		})
 
