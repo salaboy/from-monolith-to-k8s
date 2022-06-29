@@ -86,6 +86,17 @@ kube-prometheus:
         http: 80
 ```
 
+For grafana: 
+
+```
+grafana: 
+  service:
+    type: LoadBalancer
+    ports:
+      grafana: 80
+```
+
+
 Notice that this is the same as Patching the Frontend Service: 
 
 ```
