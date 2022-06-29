@@ -1,3 +1,5 @@
+grafana:
+  enabled: true
 prometheus:
   enabled: true
 fmtok8s-frontend:  
