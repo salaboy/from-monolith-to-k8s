@@ -1,0 +1,27 @@
+prometheus:
+  enabled: true
+fmtok8s-frontend:
+  service:
+    type: LoadBalancer  
+  prometheus:
+    enabled: true
+fmtok8s-agenda-service:
+  prometheus:
+    enabled: true
+fmtok8s-email-service:
+  prometheus:
+    enabled: true
+fmtok8s-c4p-service:
+  prometheus:
+    enabled: true
+kube-prometheus:
+  prometheus:
+    service:
+      type: LoadBalancer
+      ports: 
+        http: 80
+grafana: 
+  service:
+    type: LoadBalancer
+    ports:
+      grafana: 80
