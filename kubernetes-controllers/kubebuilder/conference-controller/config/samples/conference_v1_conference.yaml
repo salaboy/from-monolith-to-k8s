@@ -1,0 +1,6 @@
+apiVersion: conference.salaboy.com/v1
+kind: Conference
+metadata:
+  name: conference-sample
+spec:
+  # TODO(user): Add fields here

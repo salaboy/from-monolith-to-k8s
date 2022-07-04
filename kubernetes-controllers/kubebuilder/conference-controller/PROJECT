@@ -1,0 +1,16 @@
+domain: salaboy.com
+layout:
+- go.kubebuilder.io/v3
+projectName: conference-controller
+repo: github.com/salaboy/conference-controller
+resources:
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: salaboy.com
+  group: conference
+  kind: Conference
+  path: github.com/salaboy/conference-controller/api/v1
+  version: v1
+version: "3"

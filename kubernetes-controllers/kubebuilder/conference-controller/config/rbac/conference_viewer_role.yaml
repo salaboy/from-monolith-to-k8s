@@ -1,0 +1,20 @@
+# permissions for end users to view conferences.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: conference-viewer-role
+rules:
+- apiGroups:
+  - conference.salaboy.com
+  resources:
+  - conferences
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - conference.salaboy.com
+  resources:
+  - conferences/status
+  verbs:
+  - get
