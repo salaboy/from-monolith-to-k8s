@@ -1,0 +1,6 @@
+apiVersion: conference.salaboy.com/v1
+kind: Conference
+metadata:
+  name: my-metacontroller-conference
+spec:
+  who: Testing Controller

@@ -1,0 +1,13 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: conference-controller
+spec:
+  generateSelector: true
+  parentResource:
+    apiVersion: conference.salaboy.com/v1
+    resource: conferences
+  hooks:
+    sync:
+      webhook:
+        url: http://conference-controller.hello/

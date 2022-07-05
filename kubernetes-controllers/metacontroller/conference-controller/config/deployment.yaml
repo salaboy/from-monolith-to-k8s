@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conference-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conference-controller
+  template:
+    metadata:
+      labels:
+        app: conference-controller
+    spec:
+      containers:
+        - name: controller
+          image: salaboy/conference-controller:metacontroller
+          imagePullPolicy: Always
