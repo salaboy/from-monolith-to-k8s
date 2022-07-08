@@ -8,39 +8,33 @@
 		<version>2.7.1</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.salaboy.javaoperatorsdk</groupId>
-	<artifactId>conference-controller</artifactId>
+	<groupId>com.salaboy</groupId>
+	<artifactId>conferences-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Conference Controller for K8s</description>
+	<name>conferences-service</name>
+	<description>Conference Service</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>io.javaoperatorsdk</groupId>
-			<artifactId>operator-framework-spring-boot-starter</artifactId>
-			<version>3.0.0</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>io.fabric8</groupId>
-			<artifactId>crd-generator-apt</artifactId>
-			<version>5.12.2</version>
-			<scope>provided</scope>
-		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.javaoperatorsdk</groupId>
-			<artifactId>operator-framework-spring-boot-starter-test</artifactId>
-			<version>3.0.0</version>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

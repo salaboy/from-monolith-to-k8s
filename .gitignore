@@ -2,3 +2,4 @@
 *.xpkg
 target/
 .idea/
+kubernetes-controllers/javavsgo/go/conference-service/conference-service

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conference-service-deployment
+  labels:
+    app: conference-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conference-service
+  template:
+    metadata:
+      labels:
+        app: conference-service
+    spec:
+      containers:
+        - name: app
+          image: ko://main.go
+          ports:
+            - containerPort: 8080
