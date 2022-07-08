@@ -2,10 +2,10 @@
 
 Agenda
 - [Intro / Background](#intro--background)
-- [IDEs, Lenguajes y Frameworks]()
-- [Hablemos de Containers y Kubernetes]()
-- [Extendiendo Kubernetes]()
-- [Alternativas]()
+- [IDEs, Lenguajes y Frameworks](#ides-lenguajes-y-frameworks)
+- [Hablemos de Containers y Kubernetes](#hablemos-de-containers-y-kubernetes)
+- [Extendiendo Kubernetes](#extendiendo-kubernetes)
+- [Alternativas más saludables](#alternativas-mas-saludables)
 
 ## Intro / Background
 
@@ -51,6 +51,28 @@ En resumen:
 
 ## Hablemos de Containers y Kubernetes
 
-Como vamos de los proyectos que vimos antes a tener containers creados 
+Como hacemos para que los proyectos que creamos corran dentro de Kubernetes? 
+Vamos de vuelta a los proyectos: 
+
+- [Spring Boot](spring-boot/conference-service/)
+- [Quarkus](quarkus/conference-service/)
+- [Go](go/conference-service/)
+
+En resumen: 
+- Spring Boot y Quarkus proveen integraciones con Jib y Buildpacks para contruir contenedores sin tener que definir Dockerfiles
+  - Ambas integraciones usan la version definida en Maven para taggear el container
+- En Go podemos usar Ko para construir y publicar estos containers a nuestro registry preferido
+- Spring Boot out of the box no provee generacion de YAMLs, se puede usar JKube para esto
+- Quarkus provee generacion de YAMLs con una extension
+- Tanto en Spring Boot y en Quarkus nosotros tenemos que publicar nuestros containers
+- `ko` publica los containers y usa SHA en vez de una version fija. Esto nos permite construir y correr containers con los ultimos cambios
+  - Con `ko` tenemos que crear nuestros propios YAMLs pero `ko resolve` reemplaza las referencias a los builds de los containers
+
+
+## Extendiendo Kubernetes
+
+
+
+## Alternativas más saludables
 
 
