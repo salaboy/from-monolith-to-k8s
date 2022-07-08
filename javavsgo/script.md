@@ -1,11 +1,11 @@
 # JBCNConf 2022 Script (Spanish)
 
 Agenda
-- Intro / Background
-- IDEs, Lenguajes y Frameworks
-- Hablemos de Containers y Kubernetes
-- Extendiendo Kubernetes
-- Alternativas
+- [Intro / Background](#intro--background)
+- [IDEs, Lenguajes y Frameworks]()
+- [Hablemos de Containers y Kubernetes]()
+- [Extendiendo Kubernetes]()
+- [Alternativas]()
 
 ## Intro / Background
 
