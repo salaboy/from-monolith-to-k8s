@@ -8,10 +8,12 @@ Let's start with Java and then move into a more detailed look into Go.
 
 In 2022, it just don't make any sense to start with plain Java, hence you will be looking probably into Spring Boot. Quarkus is included here too as its a newer framework that inherits the way of working with Java EE applications for the the Cloud Native era. 
 
-For Spring Boot, Quarkus and Go we will look at frameworks and tools available to create basic functionality as well as a web server to expose REST endpoints. 
-We will be also looking at dependency management and how they compare from an ecosystem point of view. 
+For Spring Boot, Quarkus and Go we will look at frameworks and tools available to create basic functionality as well as a web server to expose REST endpoints. We will be also looking at dependency management and how they compare from an ecosystem point of view. It is important to notice that both Spring Boot & Quarkus provide support for building Native Images using GraalVM. 
 
 ## Spring Boot
+
+Most of the time it is a good idea to start your project at [start.spring.io](http://start.spring.io). 
+
 
 
 ## Quarkus
