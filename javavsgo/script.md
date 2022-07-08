@@ -5,7 +5,7 @@ Agenda
 - [IDEs, Lenguajes y Frameworks](#ides-lenguajes-y-frameworks)
 - [Hablemos de Containers y Kubernetes](#hablemos-de-containers-y-kubernetes)
 - [Extendiendo Kubernetes](#extendiendo-kubernetes)
-- [Alternativas más saludables](#alternativas-mas-saludables)
+- [Alternativas más saludables](#alternativas-más-saludables)
 
 ## Intro / Background
 
@@ -68,8 +68,24 @@ En resumen:
 - `ko` publica los containers y usa SHA en vez de una version fija. Esto nos permite construir y correr containers con los ultimos cambios
   - Con `ko` tenemos que crear nuestros propios YAMLs pero `ko resolve` reemplaza las referencias a los builds de los containers
 
+Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes y tampoco quiero entrar mucho en detalle pero si estamos en Java hay dos grandes opciones: 
+- [Fabric.io Kubernetes APIs](https://github.com/fabric8io/kubernetes-client)
+  - [Ejemplo](https://github.com/fabric8io/kubernetes-client/blob/master/kubernetes-examples/src/main/java/io/fabric8/kubernetes/examples/DeploymentExamples.java#L46)
+- [Kubernetes Client Java](https://github.com/kubernetes-client/java/)
+  - [Ejemplo](https://github.com/kubernetes-client/java/wiki/3.-Code-Examples)
+
+
 
 ## Extendiendo Kubernetes
+
+En la mayoria de los casos, queremos interactuar con las APIs de Kubernetes porque queremos automatizar o extender las funcionalidades provistas por Kubernetes creando nuestros Custom Controllers y Custom Resources. 
+
+Esto require crear nuevos recursos de Kubernetes y componentes que administren estos recursos interactuando con el API Server de Kubernetes. Ya que este component va a correr dentro del Cluster, crear estos componentes tambien require administrar temas de seguridad y un entendimiento profundo de como Kubernetes funciona. 
+
+Para esto vamos a ver un par de frameworks:
+- [Java Operator SDK]()
+- [KubeBuilder Go]()
+
 
 
 
