@@ -86,11 +86,10 @@ Para esto vamos a ver un par de frameworks:
 - [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
 - [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller)
 
-
 Menciones especiales: 
-- Go Operators SDK
-
-- Knative Sample Controller
+- [Knative Sample Controller](https://github.com/knative-sandbox/sample-controller): Este Sample Controller usa los mismos mecanismos que usan los controllers de Knative. Estos controllers estan probados en escenarios de alta demanda y han madurado por mas de 4 años. Estos controllers pueden correr multiple replicas concurrentes mirando [distintos `buckets` de recursos](https://github.com/knative-sandbox/sample-controller/blob/main/config/config-leader-election.yaml#L51).
+- [Kubernetes Client Java](https://kubernetes.io/blog/2019/11/26/develop-a-kubernetes-controller-in-java/): El cliente oficial de Kubernetes Java contiene hoy en dia una version de Controller Runtime, con objetos como Controllers y Reconcilers. 
+- [Go Operators SDK]()
 
 
 ## Alternativas más saludables
@@ -98,5 +97,5 @@ Menciones especiales:
 Pero en 2022 deberiamos escribir controllers? Mejor sino lo hacemos, veamos algunas alternativas
 
 - [MetaController]()
-- [CloudEvents para intregraciones]
+- [CloudEvents para intregraciones]()
 - Crossplane Providers
