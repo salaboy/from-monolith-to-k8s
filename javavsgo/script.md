@@ -83,12 +83,20 @@ En la mayoria de los casos, queremos interactuar con las APIs de Kubernetes porq
 Esto require crear nuevos recursos de Kubernetes y componentes que administren estos recursos interactuando con el API Server de Kubernetes. Ya que este component va a correr dentro del Cluster, crear estos componentes tambien require administrar temas de seguridad y un entendimiento profundo de como Kubernetes funciona. 
 
 Para esto vamos a ver un par de frameworks:
-- [Java Operator SDK]()
-- [KubeBuilder Go]()
+- [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
+- [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller)
 
 
+Menciones especiales: 
+- Go Operators SDK
+
+- Knative Sample Controller
 
 
 ## Alternativas más saludables
 
+Pero en 2022 deberiamos escribir controllers? Mejor sino lo hacemos, veamos algunas alternativas
 
+- [MetaController]()
+- [CloudEvents para intregraciones]
+- Crossplane Providers
