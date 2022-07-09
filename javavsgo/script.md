@@ -9,8 +9,8 @@ Agenda
 
 ## Intro / Background
 
-[@Salaboy](https://twitter.com/salaboy) / [https://salaboy.com](https://salaboy.com)
-![avatar.png](avatar.png)
+[@Salaboy](https://twitter.com/salaboy)
+<a href="http://salaboy.com"><img src="avatar.png" width="200"></a>
 - Java 
 - J2EE
 - JBoss 
@@ -27,8 +27,9 @@ Agenda
   - Knative
    - Knative Eventing 
    - Knative Functions Working Group co-lead
-- [Continuous Delivery for Kubernetes]()
-![book](book.png)
+
+<a href="http://mng.bz/jjKP"><img src="book.png" width="400"></a>
+
 
 ## IDEs, Lenguajes y Frameworks
 
