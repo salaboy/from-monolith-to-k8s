@@ -7,6 +7,7 @@ import javax.ws.rs.core.MediaType;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Path("/conferences")
@@ -20,3 +21,5 @@ public class ConferenceResource {
                 new Conference("456","KubeCon",  new SimpleDateFormat("dd/MM/yy").parse("24/10/22"), "Detroit, USA" ));
     }
 }
+
+record Conference(String id, String name, Date when, String where){ }

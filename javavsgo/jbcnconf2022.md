@@ -98,7 +98,7 @@ Vamos de vuelta a los proyectos:
 ---
 ## Kubernetes APIs
 Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes y tampoco quiero entrar mucho en detalle pero si estamos en Java hay dos grandes opciones: 
-- [Fabric.io Kubernetes APIs](https://github.com/fabric8io/kubernetes-client)
+- [Fabric8.io Kubernetes APIs](https://github.com/fabric8io/kubernetes-client)
   - [Ejemplo](https://github.com/fabric8io/kubernetes-client/blob/master/kubernetes-examples/src/main/java/io/fabric8/kubernetes/examples/DeploymentExamples.java#L46)
 - [Kubernetes Client Java](https://github.com/kubernetes-client/java/)
   - [Ejemplo](https://github.com/kubernetes-client/java/wiki/3.-Code-Examples)

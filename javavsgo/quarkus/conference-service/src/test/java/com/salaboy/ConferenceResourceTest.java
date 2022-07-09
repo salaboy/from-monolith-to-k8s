@@ -35,8 +35,11 @@ public class ConferenceResourceTest {
                 .body("$.size()", is(2),
                         "[0].id", is("123"),
                         "[0].name", is("JBCNConf"),
-                        //"[0].when", is(jbcnConfDate.toString()),
-                        "[0].where", is("Barcelona, Spain"));
+                        "[0].where", is("Barcelona, Spain"),
+                        "[1].id", is("456"),
+                        "[1].name", is("KubeCon"),
+                        "[1].where", is("Detroit, USA")
+                        );
     }
 
 }

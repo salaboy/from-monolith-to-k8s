@@ -15,8 +15,10 @@ public class ConferenceController {
 
     @GetMapping
     public Flux<Conference> getAllConference() throws ParseException {
-        return Flux.just(new Conference("123","JBCNConf", new SimpleDateFormat("dd/MM/yy").parse("18/07/22"), "Barcelona, Spain" ),
-                new Conference("456","KubeCon", new SimpleDateFormat("dd/MM/yy").parse("24/10/22"), "Detroit, USA" ));
+        return Flux.just(
+                new Conference("123","JBCNConf", new SimpleDateFormat("dd/MM/yy").parse("18/07/22"), "Barcelona, Spain" ),
+                new Conference("456","KubeCon", new SimpleDateFormat("dd/MM/yy").parse("24/10/22"), "Detroit, USA" )
+        );
     }
 }
 
