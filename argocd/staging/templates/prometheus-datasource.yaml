@@ -1,0 +1,21 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDataSource
+metadata:
+  name: prometheus-datasource
+  labels:
+    
+spec:
+  name: middleware.yaml
+  datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: {{ .Values.prometheus.url }}
+      isDefault: true
+      version: 1
+      editable: true
+      jsonData:
+        tlsSkipVerify: true
+        timeInterval: "5s"
+{{- end }}

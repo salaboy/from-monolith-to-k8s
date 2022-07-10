@@ -1,0 +1,10 @@
+{{- if .Values.grafana.enabled }}
+apiVersion: integreatly.org/v1alpha1
+kind: GrafanaDashboard
+metadata:
+  name: gateway
+  labels:
+    app.kubernetes.io/instance: {{ .Release.Name }}
+spec:
+  url: https://raw.githubusercontent.com/salaboy/fmtok8s-conference-chart/main/platform/grafana/dashboards/gateway.json
+{{- end }}

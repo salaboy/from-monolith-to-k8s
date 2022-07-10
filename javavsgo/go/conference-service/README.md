@@ -74,19 +74,27 @@ called `*_test.go` and treat them as tests.
 Here is a simple test to test our `ConferenceBuilder.build()` function:
 
 ```go
-func TestConferenceBuilder(t *testing.T){
-builder := ConferenceBuilder{}
-got := builder.build()
-want := Conference{
-Id:    "123",
-Name:  "JBCNConf",
-Where: "Barcelona, Spain",
-When:  time.Date(2022, time.July, 18, 0, 0, 0, 0, time.UTC),
-}
+func TestConferenceBuilder(t *testing.T) {
+    store := ConferenceStore{}
+    got := store.read()
+    want := []Conference{
+        {
+            Id:    "123",
+            Name:  "JBCNConf",
+            Where: "Barcelona, Spain",
+            When:  time.Date(2022, time.July, 18, 0, 0, 0, 0, time.UTC),
+        },
+        {
+            Id:    "456",
+            Name:  "KubeCon",
+            Where: "Detroit, USA",
+            When:  time.Date(2022, time.October, 24, 0, 0, 0, 0, time.UTC),
+        },
+    }
 
-if got != want {
-t.Errorf("got %q, wanted %q", got, want)
-}
+    if got[0] != want[0] || got[1] != want[1]  {
+        t.Errorf("got %q, wanted %q", got, want)
+    }
 }
 ```
 
@@ -126,24 +134,9 @@ The `http.ListenAndServe` comes built in with Go.
 
 Take a look into the `main_test.go` file to check the test for the endpoint.
 
-## Kubernetes and `ko`
+## Creating and Publishing Container with `ko`
 
-First things first, if we want to run our simple service in Kubernetes we will need to add a `health` endpoint.
-
-The Gorilla Mux doc provides us with a very simple `health` endpoint:
-
-```
-func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	io.WriteString(w, `{"alive": true}`)
-}
-```
-
-Check the `main_test.go` for the unit test for this Handler.
-
-Next, we need to build a container and have some YAML files so we can deploy our service to our Kubernetes Cluster. That
-is where [`google/ko`](https://github.com/google/ko) comes really handy.
+That is where [`google/ko`](https://github.com/google/ko) comes really handy.
 
 Once you install `ko` you might want to setup the docker registry that you want to use by setting the following Env Var:
 
@@ -181,10 +174,29 @@ Do you want a multi-platform container:
 ko build main.go --platform=linux/amd64,linux/arm64
 ```
 
+## Developing in Kubernetes 
+
+First things first, if we want to run our simple service in Kubernetes we will need to add a `health` endpoint.
+
+The Gorilla Mux doc provides us with a very simple `health` endpoint:
+
+```
+func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	io.WriteString(w, `{"alive": true}`)
+}
+```
+
+Check the `main_test.go` for the unit test for this Handler.
+
+Next, we need to build a container and have some YAML files so we can deploy our service to our Kubernetes Cluster. 
+
 Now let's deploy our service to Kubernetes, `ko apply` to the rescue:
 `ko apply` will run `ko build` which will build and push the container image to the configured registry and then
 use `ko resolve` to replace the container image name (and SHA) inside the Kubernetes YAML files inside the `config/`
 directory.
+
 `ko` uses the prefix `ko://` to find and replace the container image and uses the `main.go` to know which image apply.
 
 Notice that I've manually created these YAML files.
@@ -205,9 +217,7 @@ If we make a change in the service, we can just run again:
 ko apply -f config/
 ```
 
-A new pod will be created, as there is a new SHA for the container image. 
-
-
+A new pod will be created, as there is a new SHA for the container image.
 
 
 

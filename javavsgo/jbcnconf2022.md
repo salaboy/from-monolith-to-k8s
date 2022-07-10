@@ -52,87 +52,113 @@ Barcelona, Spain
 
 ## IDEs, Lenguajes y Frameworks
 
-En el contexto de crear un servicio que expone un endpoint REST.
+Vamos crear un servicio que expone un endpoint REST
 
-Goland and Intellij Idea nos hacen la vida muy facil ya que la experiencia es la misma.
-
-Vamos a ver codigo. Empezamos por Spring Boot y Quarkus, pero ya que es una conferencia de Java no vamos a entrar en detalles. 
-
-Las aplicaciones que voy a mostrar esta en este repositorio: 
-- [Spring Boot](spring-boot/conference-service/)
-- [Quarkus](quarkus/conference-service/)
-- [Go](go/conference-service/)
+- Goland and Intellij Idea  
+  - [Spring Boot](spring-boot/conference-service/) & [Quarkus](quarkus/conference-service/)
+  - [Go](go/conference-service/)
 
 ---
 
-## En resumen 
-- Go soluciona depedency management (Go Modules) sin tener que usar una herramienta externa
-- Go require mas conocimiento del ecosistema a la hora de escoger librarias (usamos Gorilla Mux, pero hay muchas mas)
-- Go tiene incluido marshallers para JSON y YAML
-- Go crea binarios que dependenden de la plataform donde hagamos el build
+## Resumen Go 
+- Ventajas
+  - Administracion de dependencias (Go Modules) integrada
+  - Unit Testing integrado
+  - Marshalling de YAML y JSON integrado
+- Desventajas  
+  -  No hay frameworks defacto como Spring Boot, cada uno elige e integra  
+  - Go crea binarios que dependenden de la plataform donde hacemos el build. Similar a los problemas que vamos a tener con GraalVM
 
 --- 
 
 ## Hablemos de Containers y Kubernetes
 
-Como hacemos para que los proyectos que creamos corran dentro de Kubernetes? 
-Vamos de vuelta a los proyectos: 
+Creando containers y YAMLs: 
 
 - [Spring Boot](spring-boot/conference-service/)
+  - [JKube Maven Plugin](https://faun.pub/deploying-spring-boot-application-on-kubernetes-using-kubernetes-maven-plugin-46caf22b03a5)
 - [Quarkus](quarkus/conference-service/)
+  - [Quarkus Kubernetes Extension](https://quarkus.io/guides/deploying-to-kubernetes) 
 - [Go](go/conference-service/)
+  - [`google/ko`](https://github.com/google/ko)
+
+Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/31662  
 
 
 --- 
 
-## En resumen
-- Spring Boot y Quarkus proveen integraciones con Jib y Buildpacks para contruir contenedores sin tener que definir Dockerfiles
+## Resumen Go
+- Spring Boot y Quarkus proveen integraciones con Jib y Buildpacks para contruir containers sin Dockerfiles
   - Ambas integraciones usan la version definida en Maven para taggear el container
 - En Go podemos usar Ko para construir y publicar estos containers a nuestro registry preferido
-- Spring Boot out of the box no provee generacion de YAMLs, se puede usar JKube para esto
-- Quarkus provee generacion de YAMLs con una extension
-- Tanto en Spring Boot y en Quarkus nosotros tenemos que publicar nuestros containers
-- `ko` publica los containers y usa SHA en vez de una version fija. Esto nos permite construir y correr containers con los ultimos cambios
-  - Con `ko` tenemos que crear nuestros propios YAMLs pero `ko resolve` reemplaza las referencias a los builds de los containers
+- `ko` construye y publica containers usando un SHA. Nos permite correr containers siempre los ultimos cambios
+  - `ko` no crea YAMLs pero `ko resolve -f` reemplaza las referencias 
+  - `ko apply -f` construye, publica y despliega nueva versiones
+
+Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/31662 
 
 ---
 ## Kubernetes APIs
-Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes y tampoco quiero entrar mucho en detalle pero si estamos en Java hay dos grandes opciones: 
+Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes: 
 - [Fabric8.io Kubernetes APIs](https://github.com/fabric8io/kubernetes-client)
   - [Ejemplo](https://github.com/fabric8io/kubernetes-client/blob/master/kubernetes-examples/src/main/java/io/fabric8/kubernetes/examples/DeploymentExamples.java#L46)
 - [Kubernetes Client Java](https://github.com/kubernetes-client/java/)
   - [Ejemplo](https://github.com/kubernetes-client/java/wiki/3.-Code-Examples)
+- [Go Client](https://github.com/kubernetes/client-go)  
+  - [Ejemplo](https://github.com/kubernetes/client-go/blob/master/examples/create-update-delete-deployment/main.go#L66)
 
 --- 
 
 ## Extendiendo Kubernetes
 
-En la mayoria de los casos, queremos interactuar con las APIs de Kubernetes porque queremos automatizar o extender las funcionalidades provistas por Kubernetes creando nuestros Custom Controllers y Custom Resources. 
+Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
 
-Esto require crear nuevos recursos de Kubernetes y componentes que administren estos recursos interactuando con el API Server de Kubernetes. Ya que este component va a correr dentro del Cluster, crear estos componentes tambien require administrar temas de seguridad y un entendimiento profundo de como Kubernetes funciona. 
+@TODO: <Diagrama>??
+API Server, Recursos, Controllers Deployment, Pods, y Custom
 
---- 
+---
 
-## Herramientas para extender K8s
+## Cuando extender Kubernetes
 
-Para esto vamos a ver un par de frameworks:
+- Automatizacion de tareas manipulando recursos de Kubernetes (Controlladores que instalan, configuran o monitorean componentes)
+- Necesitamos conceptos de mas alto nivel que Kubernetes no provee
+- Integraciones entre distintos proyectos
+
+
+---
+
+## Veamos algunas herramientas 
+
+- [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller) 
 - [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
-- [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller)
-
-
---- 
+---
 
 ## Menciones especiales
 - [Knative Sample Controller](https://github.com/knative-sandbox/sample-controller): Este Sample Controller usa los mismos mecanismos que usan los controllers de Knative. Estos controllers estan probados en escenarios de alta demanda y han madurado por mas de 4 años. Estos controllers pueden correr multiple replicas concurrentes mirando [distintos `buckets` de recursos](https://github.com/knative-sandbox/sample-controller/blob/main/config/config-leader-election.yaml#L51).
 - [Kubernetes Client Java](https://kubernetes.io/blog/2019/11/26/develop-a-kubernetes-controller-in-java/): El cliente oficial de Kubernetes Java contiene hoy en dia una version de Controller Runtime, con objetos como Controllers y Reconcilers. 
-- [Go Operators SDK]()
+- [Go Operators SDK](https://sdk.operatorframework.io/) Usa Kubebuilder y provee integraciones con Helm
+
+--- 
+## Porque no construir K8s Controllers
+
+Pero en 2022 deberiamos escribir controllers? 
+
+=> **K8sControllers == EdgeCaseFactories**
+
+- Son componentes complejos en un mundo de aplicaciones distribuidas
+- Tienen que poder co-existir otros controlladores
+- Tienen que escalar siguiendo los lineamientos de Kubernetes y siendo un buen ciudadano (leader election , alta disponibilidad)
 
 --- 
 
 ## Alternativas más saludables
 
-Pero en 2022 deberiamos escribir controllers? Mejor sino lo hacemos, veamos algunas alternativas
+- [MetaController](https://metacontroller.github.io/metacontroller/)
+- [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
+- [Crossplane Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
 
-- [MetaController]()
-- [CloudEvents para intregraciones]()
-- [Crossplane Providers]()
+--- 
+
+## Gracias!
+[@Salaboy](https://twitter.com/salaboy)
+[Knative](https://knative.dev)

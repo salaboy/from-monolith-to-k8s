@@ -9,12 +9,15 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.salaboy</groupId>
-	<artifactId>conferences-service</artifactId>
+	<artifactId>conferences-service-spring-boot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>conferences-service</name>
 	<description>Conference Service</description>
 	<properties>
 		<java.version>17</java.version>
+		<spring-boot.build-image.imageName>salaboy/${project.artifactId}:${project.version}</spring-boot.build-image.imageName>
+		<jkube.generator.name>${spring-boot.build-image.imageName}</jkube.generator.name>
+		<jkube.skip.tag>true</jkube.skip.tag>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -43,6 +46,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.jkube</groupId>
+				<artifactId>kubernetes-maven-plugin</artifactId>
+				<version>1.8.0</version>
 			</plugin>
 		</plugins>
 	</build>
