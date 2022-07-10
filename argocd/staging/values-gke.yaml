@@ -22,6 +22,7 @@ kube-prometheus:
         http: 80
 grafana:
   enabled: true
+grafana-operator:
   service:
     type: LoadBalancer
     ports:
