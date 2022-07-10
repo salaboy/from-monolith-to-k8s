@@ -24,5 +24,3 @@ grafana-operator:
   grafana:
     service:
       type: LoadBalancer
-      ports:
-        grafana: 80
