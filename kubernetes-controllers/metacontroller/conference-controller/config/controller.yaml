@@ -7,7 +7,10 @@ spec:
   parentResource:
     apiVersion: metacontroller.conference.salaboy.com/v1
     resource: conferences
+  childResources:
+  - apiVersion: apps/v1
+    resource: deployments
   hooks:
     sync:
       webhook:
-        url: http://metacontroller-conference-controller.hello/
+        url: http://metacontroller-conference-controller.controllers/
