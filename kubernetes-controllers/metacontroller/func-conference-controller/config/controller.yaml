@@ -1,0 +1,16 @@
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: metacontroller-conference-controller
+spec:
+  generateSelector: true
+  parentResource:
+    apiVersion: metacontroller.conference.salaboy.com/v1
+    resource: conferences
+  childResources:
+  - apiVersion: apps/v1
+    resource: deployments
+  hooks:
+    sync:
+      webhook:
+        url: http://func-conference-controller.default.svc.cluster.local/

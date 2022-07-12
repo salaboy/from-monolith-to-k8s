@@ -1,0 +1,91 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: conferences.metacontroller.conference.salaboy.com
+spec:
+  group: metacontroller.conference.salaboy.com
+  names:
+    kind: Conference
+    listKind: ConferenceList
+    plural: conferences
+    singular: conference
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - jsonPath: .status.frontend-ready
+          name: FRONTEND
+          type: string
+        - jsonPath: .status.agenda-service-ready
+          name: AGENDA
+          type: string
+        - jsonPath: .status.email-service-ready
+          name: EMAIL
+          type: string
+        - jsonPath: .status.c4p-service-ready
+          name: C4P
+          type: string
+        - jsonPath: .status.prod-tests
+          name: PROD TESTS
+          type: string
+        - jsonPath: .status.ready
+          name: READY
+          type: boolean
+        - jsonPath: .status.url
+          name: URL
+          type: string
+      name: v1
+      schema:
+        openAPIV3Schema:
+          description: Conference is the Schema for the conferences API
+          properties:
+            apiVersion:
+              description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+              type: string
+            kind:
+              description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: ConferenceSpec defines the desired state of Conference
+              properties:
+                production-test-enabled:
+                  description: Foo is an example field of Conference. Edit conference_types.go
+                    to remove/update
+                  type: boolean
+              type: object
+            status:
+              description: ConferenceStatus defines the observed state of Conference
+              properties:
+                agenda-service-ready:
+                  type: boolean
+                c4p-service-ready:
+                  type: boolean
+                email-service-ready:
+                  type: boolean
+                frontend-ready:
+                  description: 'INSERT ADDITIONAL STATUS FIELD - define observed state
+                  of cluster Important: Run "make" to regenerate code after modifying
+                  this file'
+                  type: boolean
+                prod-tests:
+                  type: boolean
+                ready:
+                  type: boolean
+                url:
+                  type: string
+              required:
+                - prod-tests
+                - ready
+                - url
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}

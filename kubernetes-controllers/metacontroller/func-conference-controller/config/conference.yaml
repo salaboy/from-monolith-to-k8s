@@ -1,0 +1,6 @@
+apiVersion: metacontroller.conference.salaboy.com/v1
+kind: Conference
+metadata:
+  name: my-metacontroller-conference
+spec:
+  production-test-enabled: true
