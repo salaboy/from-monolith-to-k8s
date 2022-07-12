@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: conference-controller
+  name: metacontroller-conference-controller
 spec:
   selector:
-    app: conference-controller
+    app: metacontroller-conference-controller
   ports:
     - port: 80
       targetPort: 8080

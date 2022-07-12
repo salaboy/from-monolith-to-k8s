@@ -3,4 +3,4 @@ kind: Conference
 metadata:
   name: my-metacontroller-conference
 spec:
-  who: Testing Controller
+  prod-test: true

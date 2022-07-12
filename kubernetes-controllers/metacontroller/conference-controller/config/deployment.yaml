@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: conference-controller
+  name: metacontroller-conference-controller
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: conference-controller
+      app: metacontroller-conference-controller
   template:
     metadata:
       labels:
-        app: conference-controller
+        app: metacontroller-conference-controller
     spec:
       containers:
         - name: controller

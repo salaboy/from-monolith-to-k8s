@@ -6,7 +6,25 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
-  - conference.salaboy.com
+  - ""
+  resources:
+  - services
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - get
+  - list
+  - update
+  - watch
+- apiGroups:
+  - kubebuilder.conference.salaboy.com
   resources:
   - conferences
   verbs:
@@ -18,13 +36,13 @@ rules:
   - update
   - watch
 - apiGroups:
-  - conference.salaboy.com
+  - kubebuilder.conference.salaboy.com
   resources:
   - conferences/finalizers
   verbs:
   - update
 - apiGroups:
-  - conference.salaboy.com
+  - kubebuilder.conference.salaboy.com
   resources:
   - conferences/status
   verbs:
