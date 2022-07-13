@@ -1,7 +1,9 @@
 package com.salaboy.controller.conference;
 
-public class ConferenceSpec {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+public class ConferenceSpec {
+    @JsonProperty("production-tests-enabled")
     private Boolean productionTestsEnabled;
 
     public Boolean isProductionTestsEnabled() {

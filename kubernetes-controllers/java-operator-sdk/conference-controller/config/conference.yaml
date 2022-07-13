@@ -1,0 +1,6 @@
+apiVersion: java-operator-sdk.conference.salaboy.com/v1
+kind: Conference
+metadata:
+  name: my-java-operator-sdk-conference
+spec:
+  production-tests-enabled: true

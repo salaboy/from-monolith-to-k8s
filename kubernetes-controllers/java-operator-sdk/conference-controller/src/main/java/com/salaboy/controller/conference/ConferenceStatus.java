@@ -1,15 +1,25 @@
 package com.salaboy.controller.conference;
 
-public class ConferenceStatus {
-    private Boolean ready;
-    private String URL;
-    private Boolean frontendReady;
-    private Boolean agendaServiceReady;
-    private Boolean c4pServiceReady;
-    private Boolean emailServiceReady;
-    private Boolean prodTests;
+import io.fabric8.kubernetes.model.annotation.PrinterColumn;
 
-    public Boolean getReady() {
+public class ConferenceStatus {
+
+    @PrinterColumn(name = "READY")
+    private boolean ready;
+    @PrinterColumn(name = "URL")
+    private String URL;
+    @PrinterColumn(name = "FRONTEND")
+    private boolean frontendReady;
+    @PrinterColumn(name = "AGENDA")
+    private boolean agendaServiceReady;
+    @PrinterColumn(name = "C4P")
+    private boolean c4pServiceReady;
+    @PrinterColumn(name = "EMAIL")
+    private boolean emailServiceReady;
+    @PrinterColumn(name = "PROD TESTS")
+    private boolean prodTests;
+
+    public boolean getReady() {
         return ready;
     }
 
@@ -17,7 +27,7 @@ public class ConferenceStatus {
         return URL;
     }
 
-    public void setReady(Boolean ready) {
+    public void setReady(boolean ready) {
         this.ready = ready;
     }
 
@@ -25,43 +35,43 @@ public class ConferenceStatus {
         this.URL = URL;
     }
 
-    public Boolean getFrontendReady() {
+    public boolean getFrontendReady() {
         return frontendReady;
     }
 
-    public void setFrontendReady(Boolean frontendReady) {
+    public void setFrontendReady(boolean frontendReady) {
         this.frontendReady = frontendReady;
     }
 
-    public Boolean getAgendaServiceReady() {
+    public boolean getAgendaServiceReady() {
         return agendaServiceReady;
     }
 
-    public void setAgendaServiceReady(Boolean agendaServiceReady) {
+    public void setAgendaServiceReady(boolean agendaServiceReady) {
         this.agendaServiceReady = agendaServiceReady;
     }
 
-    public Boolean getC4pServiceReady() {
+    public boolean getC4pServiceReady() {
         return c4pServiceReady;
     }
 
-    public void setC4pServiceReady(Boolean c4pServiceReady) {
+    public void setC4pServiceReady(boolean c4pServiceReady) {
         this.c4pServiceReady = c4pServiceReady;
     }
 
-    public Boolean getEmailServiceReady() {
+    public boolean getEmailServiceReady() {
         return emailServiceReady;
     }
 
-    public void setEmailServiceReady(Boolean emailServiceReady) {
+    public void setEmailServiceReady(boolean emailServiceReady) {
         this.emailServiceReady = emailServiceReady;
     }
 
-    public Boolean getProdTests() {
+    public boolean getProdTests() {
         return prodTests;
     }
 
-    public void setProdTests(Boolean prodTests) {
+    public void setProdTests(boolean prodTests) {
         this.prodTests = prodTests;
     }
 }

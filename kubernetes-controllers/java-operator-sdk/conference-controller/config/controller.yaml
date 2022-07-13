@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: java-operator-sdk
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conference-controller
+  namespace: java-operator-sdk
+spec:
+  selector:
+    matchLabels:
+      app: conference-controller
+  replicas: 1 # we always run a single replica of the operator to avoid duplicate handling of events
+  strategy:
+    type: Recreate # during an upgrade the operator will shut down before the new version comes up to prevent two instances running at the same time
+  template:
+    metadata:
+      labels:
+        app: conference-controller
+    spec:
+      serviceAccountName: java-operator-sdk-conference-controller # specify the ServiceAccount under which's RBAC persmissions the operator will be executed under
+      containers:
+        - name: controller
+          image: salaboy/java-operator-sdk-conference-controller:0.1.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /actuator/health # when this returns 200 the operator is considered up and running
+              port: 8080
+            initialDelaySeconds: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /actuator/health # when this endpoint doesn't return 200 the operator is considered broken and get's restarted
+              port: 8080
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: java-operator-sdk-conference-controller
+  namespace: java-operator-sdk
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: java-operator-sdk-conference-controller
+rules:
+  - apiGroups:
+      - java-operator-sdk.conference.salaboy.com
+    resources:
+      - conferences
+      - conferences/status
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - services
+    verbs:
+      - "get"
+      - "list"
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+    verbs:
+      - "get"
+      - "list"
+      - "create"
+      - "watch"
+      - "patch"
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: java-operator-sdk-conference-controller
+subjects:
+  - kind: ServiceAccount
+    name: java-operator-sdk-conference-controller
+    namespace: java-operator-sdk
+roleRef:
+  kind: ClusterRole
+  name: java-operator-sdk-conference-controller
+  apiGroup: ""

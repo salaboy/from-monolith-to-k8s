@@ -157,6 +157,19 @@ Pero en 2022 deberiamos escribir controllers?
 - [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
 - [Crossplane Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
 
+---
+
+[MetaController](https://metacontroller.github.io/metacontroller/)
+
+<diagrama>
+
+
+---
+
+[CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
+
+<diagrama>
+
 --- 
 
 ## Gracias!
