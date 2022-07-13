@@ -110,15 +110,16 @@ The CRDs can be found in the `target/META-INF/fabric8/` directory after running 
 We need to deal with RBAC configurations for this controller to run inside the cluster, as well as applying the resources to the Cluster. 
 
 
-
-
 ## Building Controllers with Kubernetes Client Java
 
 You can use the Official Kubernetes Client for Java to build controllers, this will follow the Controller Runtime approach which implement different caching strategies to make sure that our controller is effient and only call the Kubernetes API Server when it needs to:
 
 https://github.com/kubernetes-client/java/blob/master/examples/examples-release-15/src/main/java/io/kubernetes/client/examples/SpringControllerExample.java
 
-This is much low-level but it guarantees that you are following best practices for implementing your controller. 
+This is much low-level but it guarantees that you are following best practices for implementing your controller. It also remove the man in the middle (fabric8 in this case).
+
+You can find an example controller and the Spring Boot integration here: 
+- [Spring Boot Kubernetes Controllers Example](https://github.com/building-k8s-operator/kubernetes-java-operator-sample)
 
 ## Metacontroller
 

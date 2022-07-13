@@ -37,22 +37,24 @@ Barcelona, Spain
 ## Background
 
 - Java / J2EE / Java EE 5
-- JBoss 
+- [JBoss](https://jboss.org)
   -  Java EE / Wildfly
   -  Kubernetes
 - Mi primer Kubernetes Controller con Fabric8.io
-- Jenkins X
-- Spring Boot y Spring Cloud 
-  - Spring Cloud Kubernetes
+- [Jenkins X](https://jenkins-x.io)
+- Spring Boot y [Spring Cloud]() 
+  - [Spring Cloud Kubernetes]()
   - Kubernetes Controllers con Spring Cloud Kubernetes
 - Go
   - Kubernetes Controllers con KubeBuilder
-  - Knative Eventing && Knative Functions WG co-lead
+  - [Knative](https://knative.dev) Eventing && [Knative Functions WG co-lead](https://github.com/knative-sandbox/kn-plugin-func)
 ---
 
 ## IDEs, Lenguajes y Frameworks
 
 Vamos crear un servicio que expone un endpoint REST
+
+![rest-endpoint](rest-endpoint.png)
 
 - Goland and Intellij Idea  
   - [Spring Boot](spring-boot/conference-service/) & [Quarkus](quarkus/conference-service/)
@@ -76,11 +78,13 @@ Vamos crear un servicio que expone un endpoint REST
 Creando containers y YAMLs: 
 
 - [Spring Boot](spring-boot/conference-service/)
-  - [JKube Maven Plugin](https://faun.pub/deploying-spring-boot-application-on-kubernetes-using-kubernetes-maven-plugin-46caf22b03a5)
+  - [Eclipse JKube Maven Plugin](https://faun.pub/deploying-spring-boot-application-on-kubernetes-using-kubernetes-maven-plugin-46caf22b03a5) (ex-Fabric8 Maven Plugin)
+    - `mvn k8s:push` / `mvn k8s:resource` / `mvn k8s:apply`
 - [Quarkus](quarkus/conference-service/)
   - [Quarkus Kubernetes Extension](https://quarkus.io/guides/deploying-to-kubernetes) 
 - [Go](go/conference-service/)
   - [`google/ko`](https://github.com/google/ko)
+  - `ko build main.go` / `ko resolve` / `ko apply`
 
 Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/31662  
 
@@ -88,7 +92,7 @@ Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/316
 --- 
 
 ## Resumen Go
-- Spring Boot y Quarkus proveen integraciones con Jib y Buildpacks para contruir containers sin Dockerfiles
+- Spring Boot y Quarkus proveen integraciones con Jib y [**Buildpacks**](https://buildpacks.io) para contruir containers sin Dockerfiles
   - Ambas integraciones usan la version definida en Maven para taggear el container
 - En Go podemos usar Ko para construir y publicar estos containers a nuestro registry preferido
 - `ko` construye y publica containers usando un SHA. Nos permite correr containers siempre los ultimos cambios
@@ -113,8 +117,8 @@ Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes:
 
 Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
 
-@TODO: <Diagrama>??
-API Server, Recursos, Controllers Deployment, Pods, y Custom
+![extending kubernetes](extending-kubernetes.png)
+
 
 ---
 
@@ -122,8 +126,16 @@ API Server, Recursos, Controllers Deployment, Pods, y Custom
 
 - Automatizacion de tareas manipulando recursos de Kubernetes (Controlladores que instalan, configuran o monitorean componentes)
 - Necesitamos conceptos de mas alto nivel que Kubernetes no provee
-- Integraciones entre distintos proyectos
+- Integraciones entre distintos proyectos o con servicios externos a Kubernetes
 
+
+---
+
+## Caso de uso de ejemplo 
+
+Monitorear y correr test de producción
+
+![use-case](use-case.png)
 
 ---
 
@@ -131,6 +143,8 @@ API Server, Recursos, Controllers Deployment, Pods, y Custom
 
 - [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller) 
 - [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
+
+
 ---
 
 ## Menciones especiales
@@ -144,7 +158,7 @@ API Server, Recursos, Controllers Deployment, Pods, y Custom
 Pero en 2022 deberiamos escribir controllers? 
 
 => **K8sControllers == EdgeCaseFactories**
-
+- Requiren permisos especiales para acceder a las APIs de K8s
 - Son componentes complejos en un mundo de aplicaciones distribuidas
 - Tienen que poder co-existir otros controlladores
 - Tienen que escalar siguiendo los lineamientos de Kubernetes y siendo un buen ciudadano (leader election , alta disponibilidad)
@@ -170,8 +184,15 @@ Pero en 2022 deberiamos escribir controllers?
 
 <diagrama>
 
+---
+
+[Crossplane Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
+
+<diagrama>
+
 --- 
 
 ## Gracias!
+Espero haberlos bombardeado con información util! 
 [@Salaboy](https://twitter.com/salaboy)
 [Knative](https://knative.dev)

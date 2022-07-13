@@ -18,14 +18,7 @@ import static org.hamcrest.Matchers.*;
 public class ConferenceResourceTest {
 
     @Test
-    public void testConferenceEndpoint() throws ParseException {
-
-        Date jbcnConfDate = new SimpleDateFormat("dd/MM/yy").parse("18/07/22");
-        Date kubeConDate = new SimpleDateFormat("dd/MM/yy").parse("24/10/22");
-        List<Conference> conferences = Arrays.asList(
-
-                new Conference("123", "JBCNConf",jbcnConfDate , "Barcelona, Spain"),
-                new Conference("456", "KubeCon", kubeConDate, "Detroit, USA"));
+    public void testConferenceEndpoint() {
 
         given()
           .when().get("/conferences")
