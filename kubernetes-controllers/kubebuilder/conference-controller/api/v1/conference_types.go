@@ -28,6 +28,9 @@ type ConferenceSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
+	//+optional
+	Namespace string `json:"namespace,omitempty"`
+
 	// Foo is an example field of Conference. Edit conference_types.go to remove/update
 	//+optional
 	ProductionTestEnabled bool `json:"production-test-enabled,omitempty"`

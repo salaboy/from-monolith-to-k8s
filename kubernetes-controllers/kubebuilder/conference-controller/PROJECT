@@ -9,7 +9,7 @@ resources:
     namespaced: true
   controller: true
   domain: salaboy.com
-  group: conference
+  group: kubebuilder.conference
   kind: Conference
   path: github.com/salaboy/conference-controller/api/v1
   version: v1

@@ -66,7 +66,7 @@ func (r *ConferenceReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	}
 
 	var services v1.ServiceList
-	if err := r.List(ctx, &services, client.InNamespace(req.Namespace), client.MatchingLabels{"draft": "draft-app"}); err != nil {
+	if err := r.List(ctx, &services, client.InNamespace(conference.Spec.Namespace), client.MatchingLabels{"draft": "draft-app"}); err != nil {
 		log.Error(err, "unable to list conference services")
 		return ctrl.Result{}, err
 	}
@@ -74,7 +74,7 @@ func (r *ConferenceReconciler) Reconcile(ctx context.Context, req ctrl.Request) 
 	for _, service := range services.Items {
 		log.V(1).Info("Services", "Service", service.Name)
 		//Call each service and do a test to see if it is operational
-		resp, err := http.Get("http://" + service.Name + "." + req.Namespace + ".svc.cluster.local/info")
+		resp, err := http.Get("http://" + service.Name + "." + conference.Spec.Namespace + ".svc.cluster.local/info")
 		if err != nil {
 			if service.Name == "fmtok8s-frontend" {
 				conference.Status.FrontendReady = false

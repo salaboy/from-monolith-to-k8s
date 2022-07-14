@@ -18,13 +18,13 @@ kubectl apply -f config/samples/
 2. Build and push your image to the location specified by `IMG`:
 	
 ```sh
-make docker-build docker-push IMG=<some-registry>/conference-controller:tag
+make docker-build docker-push IMG=salaboy/kubebuilder-conference-controller:kubebuilder
 ```
 	
 3. Deploy the controller to the cluster with the image specified by `IMG`:
 
 ```sh
-make deploy IMG=<some-registry>/conference-controller:tag
+make deploy IMG=salaboy/kubebuilder-conference-controller:kubebuilder
 ```
 
 ### Uninstall CRDs

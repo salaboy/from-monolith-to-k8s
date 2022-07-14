@@ -3,4 +3,5 @@ kind: Conference
 metadata:
   name: conference-sample
 spec:
+  namespace: jbcnconf
   production-test-enabled: true

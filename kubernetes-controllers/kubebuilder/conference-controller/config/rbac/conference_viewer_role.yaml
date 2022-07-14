@@ -5,7 +5,7 @@ metadata:
   name: conference-viewer-role
 rules:
 - apiGroups:
-  - conference.salaboy.com
+  - kubebuilder.conference.salaboy.com
   resources:
   - conferences
   verbs:
@@ -15,6 +15,6 @@ rules:
 - apiGroups:
   - conference.salaboy.com
   resources:
-  - conferences/status
+  - kubebuilder.conferences/status
   verbs:
   - get
