@@ -17,7 +17,7 @@ public class DeploymentDependentResource extends CRUKubernetesDependentResource<
     protected Deployment desired(Conference conference, Context<Conference> context) {
         Deployment deployment = new DeploymentBuilder()
                 .withNewMetadata()
-                .withName("production-tests")
+                .withName("java-operator-sdk-production-tests")
                 .withNamespace(conference.getMetadata().getNamespace())
                 .endMetadata()
                 .withNewSpec()
@@ -29,7 +29,7 @@ public class DeploymentDependentResource extends CRUKubernetesDependentResource<
                 .withNewSpec()
                 .addNewContainer()
                 .withName("production-tests")
-                .withImage("salaboy/production-tests:java-operator-sdk")
+                .withImage("salaboy/java-operator-sdk-production-tests:java-operator-sdk")
                 .withImagePullPolicy("Always")
                 .addNewPort()
                 .withContainerPort(8080)

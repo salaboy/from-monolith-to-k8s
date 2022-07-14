@@ -23,7 +23,7 @@ spec:
       serviceAccountName: java-operator-sdk-conference-controller # specify the ServiceAccount under which's RBAC persmissions the operator will be executed under
       containers:
         - name: controller
-          image: salaboy/java-operator-sdk-conference-controller:0.1.1
+          image: salaboy/java-operator-sdk-conference-controller:java-operator-sdk
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

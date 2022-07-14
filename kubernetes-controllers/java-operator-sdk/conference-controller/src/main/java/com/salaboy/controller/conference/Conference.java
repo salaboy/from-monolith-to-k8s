@@ -10,7 +10,6 @@ import io.fabric8.kubernetes.model.annotation.Version;
 @Group("java-operator-sdk.conference.salaboy.com")
 @Version("v1")
 @ShortNames("conf")
-
 public class Conference extends CustomResource<ConferenceSpec, ConferenceStatus> implements
         Namespaced {
 

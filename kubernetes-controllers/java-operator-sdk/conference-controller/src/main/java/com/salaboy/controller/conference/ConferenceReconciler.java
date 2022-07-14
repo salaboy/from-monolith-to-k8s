@@ -2,53 +2,52 @@ package com.salaboy.controller.conference;
 
 import io.fabric8.kubernetes.api.model.apps.Deployment;
 import io.fabric8.kubernetes.client.KubernetesClient;
-import io.javaoperatorsdk.operator.api.reconciler.Context;
-import io.javaoperatorsdk.operator.api.reconciler.ControllerConfiguration;
-import io.javaoperatorsdk.operator.api.reconciler.Reconciler;
-import io.javaoperatorsdk.operator.api.reconciler.UpdateControl;
-import io.javaoperatorsdk.operator.api.reconciler.dependent.Dependent;
+import io.javaoperatorsdk.operator.api.reconciler.*;
+import io.javaoperatorsdk.operator.processing.dependent.kubernetes.KubernetesDependentResource;
+import io.javaoperatorsdk.operator.processing.dependent.kubernetes.KubernetesDependentResourceConfig;
+import io.javaoperatorsdk.operator.processing.event.source.EventSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-@ControllerConfiguration(dependents = {
-        @Dependent(type = DeploymentDependentResource.class),
-    })
-public class ConferenceReconciler implements Reconciler<Conference> {
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+@ControllerConfiguration()
+public class ConferenceReconciler implements Reconciler<Conference>,
+        //ErrorStatusHandler<Conference>,
+        EventSourceInitializer<Conference> {
 
     public static final String SELECTOR = "managed";
 
     private static final Logger log = LoggerFactory.getLogger(ConferenceReconciler.class);
 
-    @Autowired
     private KubernetesClient kubernetesClient;
 
-    @Autowired
     private WebClient.Builder webClient;
+
+    private KubernetesDependentResource<Deployment, Conference> deploymentDR;
+
+    public ConferenceReconciler(KubernetesClient kubernetesClient, WebClient.Builder webClient) {
+        this.kubernetesClient = kubernetesClient;
+        this.webClient = webClient;
+        createDependentResources(kubernetesClient);
+    }
 
     @Override
     public UpdateControl<Conference> reconcile(Conference conference, Context<Conference> context) {
         log.info("Reconciling: {}", conference.getMetadata().getName());
-
         conference.setStatus(new ConferenceStatus());
-
-        if (conference.getSpec().isProductionTestsEnabled()) {
-            final var name = context.getSecondaryResource(Deployment.class).orElseThrow().getMetadata().getName();
-            log.info("Deployment Created with name: " + name);
-            conference.getStatus().setProdTests(true);
-        }
-
-        Mono<Conference> conferenceMono = Mono.zip(getServiceInfo("http://fmtok8s-frontend.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-email.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-agenda.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-c4p.staging.svc.cluster.local/info"))
+        String protocol = "http://";
+        String servicePath = "." + conference.getSpec().getNamespace() + ".svc.cluster.local/info";
+        Mono<Conference> conferenceMono = Mono.zip(getServiceInfo(protocol + "fmtok8s-frontend" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-email" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-agenda" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-c4p" + servicePath))
                 .map(serviceInfos -> {
                     log.info("Service Infos: " + serviceInfos);
-
-
                     if (!serviceInfos.getT1().contains("N/A") && !serviceInfos.getT1().isEmpty()) {
                         conference.getStatus().setFrontendReady(true);
                     }
@@ -67,47 +66,34 @@ public class ConferenceReconciler implements Reconciler<Conference> {
                             conference.getStatus().getAgendaServiceReady() &&
                             conference.getStatus().getC4pServiceReady()) {
                         conference.getStatus().setReady(true);
+                        if (conference.getSpec().isProductionTestsEnabled()) {
+                            deploymentDR.reconcile(conference, context);
+                            conference.getStatus().setProdTests(true);
+                        }
                     }
-
                     return conference;
                 });
 
         Conference updatedConference = conferenceMono.block();
-        return UpdateControl.patchStatus(updatedConference);
+        return UpdateControl.patchStatus(updatedConference).rescheduleAfter(5, TimeUnit.SECONDS);
 
     }
 
-//    private void createProductionTestDeployment() {
-//        Deployment deployment = new DeploymentBuilder()
-//                .withNewMetadata()
-//                .withName("production-tests")
-//                .endMetadata()
-//                .withNewSpec()
-//                .withReplicas(1)
-//                .withNewTemplate()
-//                .withNewMetadata()
-//                .addToLabels("app", "production-tests")
-//                .endMetadata()
-//                .withNewSpec()
-//                .addNewContainer()
-//                .withName("production-tests")
-//                .withImage("salaboy/production-tests:java-operator-sdk")
-//                .withImagePullPolicy("Always")
-//                .addNewPort()
-//                .withContainerPort(8080)
-//                .endPort()
-//                .endContainer()
-//                .endSpec()
-//                .endTemplate()
-//                .withNewSelector()
-//                .addToMatchLabels("app", "production-tests")
-//                .endSelector()
-//                .endSpec()
-//                .build();
-//
-//        deployment = kubernetesClient.apps().deployments().inNamespace("default").create(deployment);
-//        log.info("Created deployment: {}", deployment);
-//    }
+    private void createDependentResources(KubernetesClient client) {
+
+        this.deploymentDR = new DeploymentDependentResource();
+        deploymentDR.setKubernetesClient(client);
+        deploymentDR.configureWith(new KubernetesDependentResourceConfig()
+                .setLabelSelector(SELECTOR + "=true"));
+
+    }
+
+
+    @Override
+    public Map<String, EventSource> prepareEventSources(EventSourceContext<Conference> context) {
+        return EventSourceInitializer.nameEventSources(
+                deploymentDR.initEventSource(context));
+    }
 
     public Mono<String> getServiceInfo(String url) {
         return webClient.build()
@@ -119,4 +105,10 @@ public class ConferenceReconciler implements Reconciler<Conference> {
                 .onErrorResume(err -> Mono.just("N/A"));
 
     }
+
+//    @Override
+//    public ErrorStatusUpdateControl<Conference> updateErrorStatus(Conference conference, Context<Conference> context, Exception e) {
+//        conference.getStatus().setErrorMessage("Error: " + e.getMessage());
+//        return ErrorStatusUpdateControl.updateStatus(conference);
+//    }
 }

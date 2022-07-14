@@ -3,4 +3,5 @@ kind: Conference
 metadata:
   name: my-java-operator-sdk-conference
 spec:
+  namespace: jbcnconf #target namespace where the application is running
   production-tests-enabled: true

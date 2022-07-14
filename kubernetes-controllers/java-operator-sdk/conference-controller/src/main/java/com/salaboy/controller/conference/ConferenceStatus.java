@@ -1,8 +1,9 @@
 package com.salaboy.controller.conference;
 
 import io.fabric8.kubernetes.model.annotation.PrinterColumn;
+import io.javaoperatorsdk.operator.api.ObservedGenerationAwareStatus;
 
-public class ConferenceStatus {
+public class ConferenceStatus extends ObservedGenerationAwareStatus {
 
     @PrinterColumn(name = "READY")
     private boolean ready;
