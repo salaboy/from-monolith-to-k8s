@@ -3,4 +3,5 @@ kind: Conference
 metadata:
   name: my-metacontroller-conference
 spec:
+  namespace: jbcnconf
   production-test-enabled: true

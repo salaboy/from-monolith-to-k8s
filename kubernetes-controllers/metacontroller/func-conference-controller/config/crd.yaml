@@ -55,9 +55,11 @@ spec:
               description: ConferenceSpec defines the desired state of Conference
               properties:
                 production-test-enabled:
-                  description: Foo is an example field of Conference. Edit conference_types.go
-                    to remove/update
+                  description: production tests enabled will create a new deployment which runs production test against the application
                   type: boolean
+                namespace:
+                  description: the target namespace where the application services are running
+                  type: string  
               type: object
             status:
               description: ConferenceStatus defines the observed state of Conference

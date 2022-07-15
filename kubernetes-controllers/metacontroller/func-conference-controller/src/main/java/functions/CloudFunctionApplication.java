@@ -29,29 +29,27 @@ public class CloudFunctionApplication {
 
   @Autowired
   private WebClient.Builder webClient;
-  
+
   @Bean
   public Function<Map<String, Object>, Mono<Map<String, Object>>> reconcile() {
     return (resource) -> {
       Map<String, Object> parent = (Map<String, Object>) resource.get("parent");
       Map<String, Object> parentMetadata = (Map<String, Object>) parent.get("metadata");
       Map<String, Object> parentSpec = (Map<String, Object>) parent.get("spec");
-
+      
       log.info("Reconciling Resource: " + parent.get("apiVersion") + "/" + parent.get("Kind") + " > " + parentMetadata.get("name"));
 
       boolean productionTestEnabled = (boolean) parentSpec.get("production-test-enabled");
+      String conferenceNamespace = (String) parentSpec.get("namespace");
 
       Map<String, Object> desiredState = new HashMap<>();
-
-      if (productionTestEnabled) {
-        Map<String, Object> deployment = createProductionTestDeployment();
-        desiredState.put("children", Arrays.asList(deployment));
-      }
-
-      return Mono.zip(getServiceInfo("http://fmtok8s-frontend.staging.svc.cluster.local/info"),
-          getServiceInfo("http://fmtok8s-email.staging.svc.cluster.local/info"),
-          getServiceInfo("http://fmtok8s-agenda.staging.svc.cluster.local/info"),
-          getServiceInfo("http://fmtok8s-c4p.staging.svc.cluster.local/info"))
+      
+      String protocol = "http://";
+      String servicePath = "." + conferenceNamespace + ".svc.cluster.local/info";
+      return Mono.zip(getServiceInfo(protocol + "fmtok8s-frontend" + servicePath),
+          getServiceInfo(protocol + "fmtok8s-email" + servicePath),
+          getServiceInfo(protocol + "fmtok8s-agenda" + servicePath),
+          getServiceInfo(protocol + "fmtok8s-c4p" + servicePath))
         .map(serviceInfos -> {
           log.info("Service Infos: " + serviceInfos);
           Map<String, Object> status = new HashMap<>();
@@ -82,6 +80,10 @@ public class CloudFunctionApplication {
           boolean conferenceReady = false;
           if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
             conferenceReady = true;
+            if (productionTestEnabled) {
+              Map<String, Object> deployment = createProductionTestDeployment();
+              desiredState.put("children", Arrays.asList(deployment));
+            }
           }
           status.put("ready", conferenceReady);
 
@@ -95,7 +97,6 @@ public class CloudFunctionApplication {
   }
 
 
-  
   public Mono<String> getServiceInfo(String url) {
     return webClient.build()
       .get()
@@ -107,12 +108,12 @@ public class CloudFunctionApplication {
 
   }
 
-  public Map<String, Object> createProductionTestDeployment(){
+  public Map<String, Object> createProductionTestDeployment() {
     Yaml yaml = new Yaml();
     String deploymentYaml = "apiVersion: apps/v1\n" +
       "kind: Deployment\n" +
       "metadata:\n" +
-      "  name: production-tests\n" +
+      "  name: metacontroller-production-tests\n" +
       "spec:\n" +
       "  replicas: 1\n" +
       "  selector:\n" +
@@ -125,7 +126,7 @@ public class CloudFunctionApplication {
       "    spec:\n" +
       "      containers:\n" +
       "        - name: production-tests\n" +
-      "          image: salaboy/production-tests:metacontroller\n" +
+      "          image: salaboy/metacontroller-production-tests:metacontroller\n" +
       "          imagePullPolicy: Always\n";
     return yaml.load(deploymentYaml);
   }
