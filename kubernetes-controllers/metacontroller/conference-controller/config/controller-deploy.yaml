@@ -1,7 +1,15 @@
+apiVersion: v1
+kind: namespace
+metadata:
+  name: metacontroller
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: metacontroller-conference-controller
+  namespace: metacontroller
 spec:
   replicas: 1
   selector:
@@ -16,3 +24,17 @@ spec:
         - name: controller
           image: salaboy/metacontroller-conference-controller:0.1.8
           imagePullPolicy: Always
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: metacontroller-conference-controller
+  namespace: metacontroller
+spec:
+  selector:
+    app: metacontroller-conference-controller
+  ports:
+    - port: 80
+      targetPort: 8080

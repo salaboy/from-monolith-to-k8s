@@ -33,25 +33,23 @@ public class ConferenceController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Map<String, Object>> reconcileResource(@RequestBody Map<String, Object> resource) {
-        Map<String, Object> parent = (Map<String, Object>)resource.get("parent");
-        Map<String, Object> parentMetadata = (Map<String, Object>)parent.get("metadata");
-        Map<String, Object> parentSpec = (Map<String, Object>)parent.get("spec");
+        Map<String, Object> parent = (Map<String, Object>) resource.get("parent");
+        Map<String, Object> parentMetadata = (Map<String, Object>) parent.get("metadata");
+        Map<String, Object> parentSpec = (Map<String, Object>) parent.get("spec");
 
         log.info("Reconciling Resource: " + parent.get("apiVersion") + "/" + parent.get("Kind") + " > " + parentMetadata.get("name"));
 
         boolean productionTestEnabled = (boolean) parentSpec.get("production-test-enabled");
+        String conferenceNamespace = (String) parentSpec.get("namespace");
 
         Map<String, Object> desiredState = new HashMap<>();
 
-        if(productionTestEnabled){
-            Map<String, Object> deployment = createProductionTestDeployment();
-            desiredState.put("children", Arrays.asList(deployment));
-        }
-
-        return Mono.zip(getServiceInfo("http://fmtok8s-frontend.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-email.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-agenda.staging.svc.cluster.local/info"),
-                        getServiceInfo("http://fmtok8s-c4p.staging.svc.cluster.local/info"))
+        String protocol = "http://";
+        String servicePath = "." + conferenceNamespace + ".svc.cluster.local/info";
+        return Mono.zip(getServiceInfo(protocol + "fmtok8s-frontend" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-email" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-agenda" + servicePath),
+                        getServiceInfo(protocol + "fmtok8s-c4p" + servicePath))
                 .map(serviceInfos -> {
                     log.info("Service Infos: " + serviceInfos);
                     Map<String, Object> status = new HashMap<>();
@@ -59,16 +57,16 @@ public class ConferenceController {
                     boolean agendaServiceReady = false;
                     boolean emailServiceReady = false;
                     boolean c4pServiceReady = false;
-                    if (!serviceInfos.getT1().contains("N/A") && !serviceInfos.getT1().isEmpty()){
+                    if (!serviceInfos.getT1().contains("N/A") && !serviceInfos.getT1().isEmpty()) {
                         frontendReady = true;
                     }
-                    if (!serviceInfos.getT2().contains("N/A") && !serviceInfos.getT2().isEmpty()){
+                    if (!serviceInfos.getT2().contains("N/A") && !serviceInfos.getT2().isEmpty()) {
                         emailServiceReady = true;
                     }
-                    if (!serviceInfos.getT3().contains("N/A") && !serviceInfos.getT3().isEmpty()){
+                    if (!serviceInfos.getT3().contains("N/A") && !serviceInfos.getT3().isEmpty()) {
                         agendaServiceReady = true;
                     }
-                    if (!serviceInfos.getT4().contains("N/A") && !serviceInfos.getT4().isEmpty()){
+                    if (!serviceInfos.getT4().contains("N/A") && !serviceInfos.getT4().isEmpty()) {
                         c4pServiceReady = true;
                     }
 
@@ -82,6 +80,10 @@ public class ConferenceController {
                     boolean conferenceReady = false;
                     if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
                         conferenceReady = true;
+                        if (productionTestEnabled) {
+                            Map<String, Object> deployment = createProductionTestDeployment();
+                            desiredState.put("children", Arrays.asList(deployment));
+                        }
                     }
                     status.put("ready", conferenceReady);
 

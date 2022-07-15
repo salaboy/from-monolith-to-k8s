@@ -8,9 +8,10 @@ spec:
     apiVersion: metacontroller.conference.salaboy.com/v1
     resource: conferences
   childResources:
-  - apiVersion: apps/v1
-    resource: deployments
+    - apiVersion: apps/v1
+      resource: deployments
+  #resyncPeriodSeconds: 5
   hooks:
     sync:
       webhook:
-        url: http://metacontroller-conference-controller.controllers/
+        url: http://metacontroller-conference-controller.metacontroller.svc.cluster.local/
