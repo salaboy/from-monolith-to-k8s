@@ -175,20 +175,37 @@ Pero en 2022 deberiamos escribir controllers?
 
 [MetaController](https://metacontroller.github.io/metacontroller/)
 
-<diagrama>
+Para no crear y mantener codigo complejo
+
+![metacontroller](metacontroller.png)
+
+
+---
+
+[MetaController Ejemplo](https://metacontroller.github.io/metacontroller/)
+
+![metacontroller-ejemplo](metacontroller-ejemplo.png)
 
 
 ---
 
 [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
 
-<diagrama>
+Para escenarios de integracion donde no queremos que todos los componentes tengan accesso a las APIs de Kubernetes
+
+![cloudevents from kubernetes](apiserver-source-cloudevents.png)
+
+[https://knative.dev/docs/eventing/sources/apiserversource/](https://knative.dev/docs/eventing/sources/apiserversource/)
 
 ---
 
-[Crossplane Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
+[Crossplane.io Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
 
-<diagrama>
+Para situaciones donde queremos integrar servicios externos a Kubernetes
+
+![crossplane-provider](crossplane-provider.png)
+
+[https://crossplane.io](https://crossplane.io)
 
 --- 
 
