@@ -25,7 +25,7 @@ You can deploy the controller into a remote Kubernetes cluster by running the fo
 docker tag java-operator-sdk-conference-controller:0.0.1-SNAPSHOT salaboy/java-operator-sdk-conference-controller:java-operator-sdk
 docker push salaboy/java-operator-sdk-conference-controller:java-operator-sdk
 ```
-- `kubectl apply -f config/controller.yaml` to deploy the controller to the `java-operator-sdk` namespace. 
+- `kubectl apply -f config/controller.yaml -n java-operator-sdk` to deploy the controller to the `java-operator-sdk` namespace. 
 
 Then you can create conferences with:
 - `kubectl apply -f config/conference.yaml -n java-operator-sdk`

@@ -150,7 +150,8 @@ Monitorear y correr test de producción
 
 - [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller) 
 - [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
-
+  - [Bug/Edge Case - FIXED](https://github.com/java-operator-sdk/java-operator-sdk/issues/1337)
+  - [Spring Documentation updated](https://github.com/java-operator-sdk/java-operator-sdk/pull/1313)
 
 ---
 
@@ -170,7 +171,7 @@ Pero en 2022 deberiamos escribir controllers?
 - Requiren permisos especiales para acceder a las APIs de K8s
 - Son componentes complejos en un mundo de aplicaciones distribuidas
 - Tienen que poder co-existir otros controlladores
-- Tienen que escalar siguiendo los lineamientos de Kubernetes y siendo un buen ciudadano (leader election , alta disponibilidad)
+- Tienen que escalar siguiendo los lineamientos de Kubernetes / buenos ciudadanos (leader election , alta disponibilidad)
 
 --- 
 
@@ -180,6 +181,8 @@ Pero en 2022 deberiamos escribir controllers?
 - [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
 - [Crossplane Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
 
+
+
 ---
 
 # [MetaController](https://metacontroller.github.io/metacontroller/)
@@ -188,6 +191,7 @@ Para no crear y mantener codigo complejo
 
 ![metacontroller](imgs/metacontroller.png)
 
+[Spring Boot PR](https://github.com/metacontroller/metacontroller/pull/565)
 
 ---
 

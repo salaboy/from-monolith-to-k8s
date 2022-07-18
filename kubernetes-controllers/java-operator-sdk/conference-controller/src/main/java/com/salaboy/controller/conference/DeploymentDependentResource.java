@@ -6,7 +6,11 @@ import io.javaoperatorsdk.operator.api.reconciler.Context;
 import io.javaoperatorsdk.operator.processing.dependent.kubernetes.CRUKubernetesDependentResource;
 import io.javaoperatorsdk.operator.processing.dependent.kubernetes.KubernetesDependent;
 
-@KubernetesDependent(labelSelector = ConferenceReconciler.SELECTOR)
+import java.util.Map;
+
+import static com.salaboy.controller.conference.ConferenceReconciler.SELECTOR;
+
+@KubernetesDependent(labelSelector = SELECTOR)
 public class DeploymentDependentResource extends CRUKubernetesDependentResource<Deployment, Conference> {
 
     public DeploymentDependentResource() {
@@ -24,6 +28,7 @@ public class DeploymentDependentResource extends CRUKubernetesDependentResource<
                 .withReplicas(1)
                 .withNewTemplate()
                 .withNewMetadata()
+                .withLabels(Map.of(SELECTOR,"true"))
                 .addToLabels("app", "production-tests")
                 .endMetadata()
                 .withNewSpec()
@@ -42,7 +47,6 @@ public class DeploymentDependentResource extends CRUKubernetesDependentResource<
                 .endSelector()
                 .endSpec()
                 .build();
-        deployment.addOwnerReference(conference);
         return deployment;
     }
 }
