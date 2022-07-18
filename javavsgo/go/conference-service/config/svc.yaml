@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: conference-service
+  name: conference-service-go
 spec:
   selector:
-    app: conference-service
+    app: conference-service-go
   ports:
     - protocol: TCP
       port: 80

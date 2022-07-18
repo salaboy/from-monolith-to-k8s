@@ -39,7 +39,7 @@ func (*ConferenceStore) read() []Conference {
 	return []Conference{
 		{
 			Id:    "123",
-			Name:  "JBCNConf2",
+			Name:  "JBCNConf",
 			Where: "Barcelona, Spain",
 			When:  time.Date(2022, time.July, 18, 0, 0, 0, 0, time.UTC),
 		},
@@ -61,7 +61,7 @@ func (*ConferenceStore) read() []Conference {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/conferences", ConferencesHandler).Methods(http.MethodGet)
-	//r.HandleFunc("/health", HealthCheckHandler).Methods(http.MethodGet)
+	r.HandleFunc("/health", HealthCheckHandler).Methods(http.MethodGet)
 	http.Handle("/", r)
 	log.Println("HTTP Server started on Port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))

@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: conference-service-deployment
+  name: conference-service-go-deployment
   labels:
-    app: conference-service
+    app: conference-service-go
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: conference-service
+      app: conference-service-go
   template:
     metadata:
       labels:
-        app: conference-service
+        app: conference-service-go
     spec:
       containers:
         - name: app
