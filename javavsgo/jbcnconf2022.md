@@ -7,14 +7,18 @@ backgroundImage: url('https://marp.app/assets/hero-background.svg')
 ---
 
 # JBCNConf 2022 
+
+# Go vs Java en el contexto de Kubernetes!
+
 Barcelona, Spain
 
-[@Salaboy](https://twitter.com/salaboy)
+Mauricio Salatino - [@Salaboy](https://twitter.com/salaboy)
 [https://github.com/salaboy/from-monolith-to-k8s](https://github.com/salaboy/from-monolith-to-k8s)
 
 ---
 
-## Agenda
+# Agenda
+
 - [Intro / Background](#intro--background)
 - [IDEs, Lenguajes y Frameworks](#ides-lenguajes-y-frameworks)
 - [Hablemos de Containers y Kubernetes](#hablemos-de-containers-y-kubernetes)
@@ -23,18 +27,16 @@ Barcelona, Spain
 
 ---
 
-## Intro 
+# Intro 
 
 [@Salaboy](https://twitter.com/salaboy)
-![avatar.png](https://twitter.com/salaboy)
-![book.png](http://mng.bz/jjKP)
-<a href="http://salaboy.com"><img src="avatar.png" width="200"></a>
-
-<a href="http://mng.bz/jjKP"><img src="book.png" width="400"></a>
+![avatar.png width:200px](imgs/avatar.png)
+![book.png width:200px](imgs/book.png)
+[http://mng.bz/jjKP](http://mng.bz/jjKP)
 
 ---
 
-## Background
+# Background
 
 - Java / J2EE / Java EE 5
 - [JBoss](https://jboss.org)
@@ -50,11 +52,11 @@ Barcelona, Spain
   - [Knative](https://knative.dev) Eventing && [Knative Functions WG co-lead](https://github.com/knative-sandbox/kn-plugin-func)
 ---
 
-## IDEs, Lenguajes y Frameworks
+# IDEs, Lenguajes y Frameworks
 
 Vamos crear un servicio que expone un endpoint REST
 
-![rest-endpoint](rest-endpoint.png)
+![rest-endpoint](imgs/rest-endpoint.png)
 
 - Goland and Intellij Idea  
   - [Spring Boot](spring-boot/conference-service/) & [Quarkus](quarkus/conference-service/)
@@ -62,7 +64,8 @@ Vamos crear un servicio que expone un endpoint REST
 
 ---
 
-## Resumen Go 
+# Resumen Go 
+
 - Ventajas
   - Administracion de dependencias (Go Modules) integrada
   - Unit Testing integrado
@@ -73,7 +76,7 @@ Vamos crear un servicio que expone un endpoint REST
 
 --- 
 
-## Hablemos de Containers y Kubernetes
+# Hablemos de Containers y Kubernetes
 
 Creando containers y YAMLs: 
 
@@ -91,8 +94,9 @@ Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/316
 
 --- 
 
-## Resumen Go
-- Spring Boot y Quarkus proveen integraciones con Jib y [**Buildpacks**](https://buildpacks.io) para contruir containers sin Dockerfiles
+# Resumen Go
+
+- Spring Boot y Quarkus proveen integraciones con Jib y [**Buildpacks**](https://buildpacks.io/) para contruir containers sin Dockerfiles
   - Ambas integraciones usan la version definida en Maven para taggear el container
 - En Go podemos usar Ko para construir y publicar estos containers a nuestro registry preferido
 - `ko` construye y publica containers usando un SHA. Nos permite correr containers siempre los ultimos cambios
@@ -102,7 +106,9 @@ Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/316
 Issue for Spring Boot: https://github.com/spring-projects/spring-boot/issues/31662 
 
 ---
-## Kubernetes APIs
+
+# Kubernetes APIs
+
 Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes: 
 - [Fabric8.io Kubernetes APIs](https://github.com/fabric8io/kubernetes-client)
   - [Ejemplo](https://github.com/fabric8io/kubernetes-client/blob/master/kubernetes-examples/src/main/java/io/fabric8/kubernetes/examples/DeploymentExamples.java#L46)
@@ -113,16 +119,17 @@ Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes:
 
 --- 
 
-## Extendiendo Kubernetes
+# Extendiendo Kubernetes
 
 Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
 
-![extending kubernetes](extending-kubernetes.png)
+![extending kubernetes](imgs/extending-kubernetes.png)
 
+Recomendado [Understanding Kubernetes tools/cache package Blog](https://lairdnelson.wordpress.com/2018/01/07/understanding-kubernetes-tools-cache-package-part-1/)
 
 ---
 
-## Cuando extender Kubernetes
+# Cuando extender Kubernetes
 
 - Automatizacion de tareas manipulando recursos de Kubernetes (Controlladores que instalan, configuran o monitorean componentes)
 - Necesitamos conceptos de mas alto nivel que Kubernetes no provee
@@ -131,15 +138,15 @@ Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
 
 ---
 
-## Caso de uso de ejemplo 
+# Caso de uso de ejemplo 
 
 Monitorear y correr test de producción
 
-![use-case](use-case.png)
+![use-case height:450px](imgs/use-case.png)
 
 ---
 
-## Veamos algunas herramientas 
+# Veamos algunas herramientas 
 
 - [KubeBuilder Go](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/kubebuilder/conference-controller) 
 - [Java Operator SDK](https://github.com/salaboy/from-monolith-to-k8s/tree/main/kubernetes-controllers/java-operator-sdk/conference-controller)
@@ -147,13 +154,15 @@ Monitorear y correr test de producción
 
 ---
 
-## Menciones especiales
+# Menciones especiales
+
 - [Knative Sample Controller](https://github.com/knative-sandbox/sample-controller): Este Sample Controller usa los mismos mecanismos que usan los controllers de Knative. Estos controllers estan probados en escenarios de alta demanda y han madurado por mas de 4 años. Estos controllers pueden correr multiple replicas concurrentes mirando [distintos `buckets` de recursos](https://github.com/knative-sandbox/sample-controller/blob/main/config/config-leader-election.yaml#L51).
 - [Kubernetes Client Java](https://kubernetes.io/blog/2019/11/26/develop-a-kubernetes-controller-in-java/): El cliente oficial de Kubernetes Java contiene hoy en dia una version de Controller Runtime, con objetos como Controllers y Reconcilers. 
 - [Go Operators SDK](https://sdk.operatorframework.io/) Usa Kubebuilder y provee integraciones con Helm
 
 --- 
-## Porque no construir K8s Controllers
+
+# Porque no construir K8s Controllers
 
 Pero en 2022 deberiamos escribir controllers? 
 
@@ -165,7 +174,7 @@ Pero en 2022 deberiamos escribir controllers?
 
 --- 
 
-## Alternativas más saludables
+# Alternativas más saludables
 
 - [MetaController](https://metacontroller.github.io/metacontroller/)
 - [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
@@ -173,43 +182,43 @@ Pero en 2022 deberiamos escribir controllers?
 
 ---
 
-[MetaController](https://metacontroller.github.io/metacontroller/)
+# [MetaController](https://metacontroller.github.io/metacontroller/)
 
 Para no crear y mantener codigo complejo
 
-![metacontroller](metacontroller.png)
+![metacontroller](imgs/metacontroller.png)
 
 
 ---
 
-[MetaController Ejemplo](https://metacontroller.github.io/metacontroller/)
+# [MetaController Ejemplo](https://metacontroller.github.io/metacontroller/)
 
-![metacontroller-ejemplo](metacontroller-ejemplo.png)
+![metacontroller-ejemplo height:450px](imgs/metacontroller-ejemplo.png)
 
 
 ---
 
-[CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
+# [CloudEvents para intregraciones](https://knative.dev/docs/eventing/sources/apiserversource/)
 
 Para escenarios de integracion donde no queremos que todos los componentes tengan accesso a las APIs de Kubernetes
 
-![cloudevents from kubernetes](apiserver-source-cloudevents.png)
+![cloudevents from kubernetes height:400px](imgs/apiserver-source-cloudevents.png)
 
 [https://knative.dev/docs/eventing/sources/apiserversource/](https://knative.dev/docs/eventing/sources/apiserversource/)
 
 ---
 
-[Crossplane.io Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
+# [Crossplane.io Providers](https://blog.crossplane.io/providers-101-ordering-pizza-with-kubernetes-and-crossplane/)
 
 Para situaciones donde queremos integrar servicios externos a Kubernetes
 
-![crossplane-provider](crossplane-provider.png)
+![crossplane-provider](imgs/crossplane-provider.png)
 
 [https://crossplane.io](https://crossplane.io)
 
 --- 
 
-## Gracias!
+# Gracias!
 Espero haberlos bombardeado con información util! 
 [@Salaboy](https://twitter.com/salaboy)
 [Knative](https://knative.dev)
