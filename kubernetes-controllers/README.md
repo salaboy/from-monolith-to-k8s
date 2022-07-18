@@ -18,7 +18,7 @@ The instrutions for creating this controller from scratch are:
 
 - Install the [`kubebuilder` CLI](https://book.kubebuilder.io/quick-start.html)
 - `mkdir conference-controller && cd conference-controller`
-- `kubebuilder init --domain salaboy.com --repo github.com/salaboy/conference-controller`
+- `kubebuilder init --domain salaboy.com --repo github.com/salaboy/kubebuilder-conference-controller`
 - `kubebuilder create api --group conference --version v1 --kind Conference`
 - `make manifests` 
 - `make install` 
