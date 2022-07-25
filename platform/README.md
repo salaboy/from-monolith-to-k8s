@@ -57,6 +57,16 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 - Pulumi allows you to encode these compositions using your favourite programming language. If you are using Java or Go the APIs and logic used to build these compositions can be defined using the tools that your development teams are already using. At the end of the day, a composition can be packaged as just a library that you can manage as any other source code artifact. The drawback of this approach is that it doesn't use the Kubernetes APIs to describe these compositions, hence Kubernetes is not aware of what is available. 
 
 
+## Domain-specific Opinions
+
+- One or multiple clusters, which tools? 
+- Pipelines and supply chain
+- Release strategies
+- Developer Experience
+
+
+## Production is just the beginning
+
 
 
 
