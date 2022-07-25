@@ -37,8 +37,24 @@ In this section we will take a look at two tools which can help you to provide s
 - Crossplane
 - VCluster
 
-With Crossplane we can create a Kubernetes Cluster and other cloud resource in any Cloud Provider by creating Compositions. These compositions allows us to create higher-level constructs to expose only the parameters relevant to our development teams. They don't even need to know that they are creating a Kubernetes Cluster, they only need to know where to connect to deploy their applications. These compositions can also take care of security configurations and 
+With Crossplane we can create a Kubernetes Cluster and other cloud resource in any Cloud Provider by creating Compositions. These compositions allows us to create higher-level constructs to expose only the parameters relevant to our development teams. They don't even need to know that they are creating a Kubernetes Cluster, they only need to know where to connect to deploy their applications. These compositions can also take care of security configurations and creating other cloud resources such as databases or message brokers. 
 
+With VCluster we can create new Virtual Clusters inside a single Kubernetes Cluster. This gives us flexiblity to have isolated API Servers for each Virtual Cluster but always inside the same `host` Kubernetes Cluster. This reduces the management around creating and provisioning clusters, but more importantly, we avoid creating new dedicated Control Planes that we will need to pay for and are not running services that 
+
+
+## APIs and Self-service
+
+As Platform builders, we need to craft a contract between the Platform and its users (Dev teams) and there are several approaches to do this. In this section we will evaluate two different approaches that are becoming quite popular in the Cloud-Native space: 
+- Crossplane Compositions as a way to rely on the Kubernetes APIs
+- Kratix as the API builder
+- Compositions as Code with Pulumi
+
+These 3 approaches try to tackle the same topic give us flexibility at different levels, so it is worth looking at their advantages to contrast these solutions and maybe used them as complimentary technologies. 
+
+
+- Crossplane compositions as they are today doesn't allow conditionals which might be required for complex scenarios. The big advantage with Crossplane is that the language to define these compositions is just Kubernetes resources, hence we can use all the tools available in the Kubernetes ecosystem to manage these definitions. These compositions are also automatically discoverable by users that can interact with the Kubernetes APIs as they are just Kubernetes resources. 
+- Kratix only allows us to define an API by creating new CRDs and Controllers for these new resources, what happens behind these APIs is totally up to you. While this approach is clean and removes the need for creating your custom controllers, as a platform team you will need to choose which tools are you going to use to 
+- Pulumi allows you to encode these compositions using your favourite programming language. If you are using Java or Go the APIs and logic used to build these compositions can be defined using the tools that your development teams are already using. At the end of the day, a composition can be packaged as just a library that you can manage as any other source code artifact. The drawback of this approach is that it doesn't use the Kubernetes APIs to describe these compositions, hence Kubernetes is not aware of what is available. 
 
 
 
