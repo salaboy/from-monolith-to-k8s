@@ -45,7 +45,7 @@ With VCluster we can create new Virtual Clusters inside a single Kubernetes Clus
 
 
 @TODO Demo with Crossplane and VCluster, create VCluster declaratively
-
+ -> Look at this example: https://github.com/janwillies/virtual-k8s-styra-opa
 
 ## APIs and Self-service
 
