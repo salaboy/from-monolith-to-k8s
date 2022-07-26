@@ -2,15 +2,17 @@
 
 With a fast-paced [CNCF landspace](https://landscape.cncf.io/), it is a full time job to understand, pick and glue projects together to enable your teams with a self-service platform to suit their needs. 
 
-In this tutorial we will be using Crossplane, Tekton, Knative Serving, ArgoCD and Knative Functions to demonstrate how a Platform Team can build and curate a set of tools that will enable teams to request using a declarative way. This is just an example of how you can achieve this, and other tools can be used to implement the same behaviours, but some key points that we have tried to cover here are: 
+In this tutorial we will be using Crossplane, Tekton, Knative Serving, ArgoCD, Pulumi, Kratix and Knative Functions to show you different approaches that a Platform Team can use to build and curate a set of tools to compose a Platform. 
+
+These are just examples of how you can achieve this, and other tools can be used to implement the same behaviours, but some key points that I have tried to cover here are: 
 - Self-Service Platform covering two main Personas: Platform Engineers (Platform Team) , Developer Teams (App Team) 
-- Developer experience is key to improve productivity, reducing the cognitive load for teams is key to improve efficiency
 - Platform Teams can collaborate with the teams to create the right platform for them, using exensible mechanism that can be adapted for more complex needs when needed
+- Developer experience is key to improve productivity, reducing the cognitive load for teams is key to improve efficiency
 - You can achieve all of this by using Open Source projects, but you will need to provide your domain-specific glue.  
 
 
 Most of what is covered here revolves around: 
-- Which tools do the Platform Teams use to create a self-service, API-driven platform that developer can use
+- Which tools do the Platform Teams use to create a self-service, API-driven platform that developers can use
 - How do developers consume these APIs in a self-service manner and what practices are promoted by the platform
 
 
@@ -42,6 +44,9 @@ With Crossplane we can create a Kubernetes Cluster and other cloud resource in a
 With VCluster we can create new Virtual Clusters inside a single Kubernetes Cluster. This gives us flexiblity to have isolated API Servers for each Virtual Cluster but always inside the same `host` Kubernetes Cluster. This reduces the management around creating and provisioning clusters, but more importantly, we avoid creating new dedicated Control Planes that we will need to pay for and are not running services that 
 
 
+@TODO Demo with Crossplane and VCluster, create VCluster declaratively
+
+
 ## APIs and Self-service
 
 As Platform builders, we need to craft a contract between the Platform and its users (Dev teams) and there are several approaches to do this. In this section we will evaluate two different approaches that are becoming quite popular in the Cloud-Native space: 
@@ -57,6 +62,10 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 - Kratix only allows us to define an API by creating new CRDs and Controllers for these new resources, what happens behind these APIs is totally up to you. While this approach is clean and removes the need for creating your custom controllers, as a platform team you will need to choose which tools are you going to use to implement the behaviours of these new resources (abstractions). 
 
 
+@TODO: 
+- Demo Pulumi Java composition and library, shows a java program that describe how to create cloud provider resources and install our helm chart for the app
+- Crossplane Composition which includes Applicaton + Infra and abtract away Helm and Cloud Provider specific resources
+- Kratix, define scope: I do see this as creating a new type and then using any of the previous tools to execute what is needed
 
 ## Domain-specific Opinions
 
