@@ -53,8 +53,9 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 
 
 - Crossplane compositions as they are today doesn't allow conditionals which might be required for complex scenarios. The big advantage with Crossplane is that the language to define these compositions is just Kubernetes resources, hence we can use all the tools available in the Kubernetes ecosystem to manage these definitions. These compositions are also automatically discoverable by users that can interact with the Kubernetes APIs as they are just Kubernetes resources. 
-- Kratix only allows us to define an API by creating new CRDs and Controllers for these new resources, what happens behind these APIs is totally up to you. While this approach is clean and removes the need for creating your custom controllers, as a platform team you will need to choose which tools are you going to use to 
 - Pulumi allows you to encode these compositions using your favourite programming language. If you are using Java or Go the APIs and logic used to build these compositions can be defined using the tools that your development teams are already using. At the end of the day, a composition can be packaged as just a library that you can manage as any other source code artifact. The drawback of this approach is that it doesn't use the Kubernetes APIs to describe these compositions, hence Kubernetes is not aware of what is available. 
+- Kratix only allows us to define an API by creating new CRDs and Controllers for these new resources, what happens behind these APIs is totally up to you. While this approach is clean and removes the need for creating your custom controllers, as a platform team you will need to choose which tools are you going to use to implement the behaviours of these new resources (abstractions). 
+
 
 
 ## Domain-specific Opinions
@@ -65,8 +66,11 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 - Developer Experience
 
 
-## Production is just the beginning
 
-
+## TODO:
+- Demo: Crossplane composition as an abstraction for our Conference Application
+- Pulumi APIs to compose configuraitons
+- Kratix API for Supply Chain 
+- Don't forget about: Developer Experience
 
 
