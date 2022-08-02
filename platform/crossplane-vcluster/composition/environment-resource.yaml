@@ -1,0 +1,5 @@
+apiVersion: fmtok8s.salaboy.com/v1alpha1
+kind: Environment
+metadata:
+  name: dev-environment
+spec: {}

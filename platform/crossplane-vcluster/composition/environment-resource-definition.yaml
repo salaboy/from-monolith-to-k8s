@@ -1,0 +1,23 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: environments.fmtok8s.salaboy.com
+spec:
+  group: fmtok8s.salaboy.com
+  names:
+    kind: Environment
+    plural: environments
+  claimNames:
+    kind: Cluster
+    plural: clusters
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties: {}
