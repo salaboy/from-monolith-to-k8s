@@ -117,16 +117,6 @@ Tarde o temprano vamos a querer interactuar con las APIs de Kubernetes:
 - [Go Client](https://github.com/kubernetes/client-go)  
   - [Ejemplo](https://github.com/kubernetes/client-go/blob/master/examples/create-update-delete-deployment/main.go#L66)
 
---- 
-
-# Extendiendo Kubernetes
-
-Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
-
-![extending kubernetes](imgs/extending-kubernetes.png)
-
-Recomendado [Understanding Kubernetes tools/cache package Blog](https://lairdnelson.wordpress.com/2018/01/07/understanding-kubernetes-tools-cache-package-part-1/)
-
 ---
 
 # Cuando extender Kubernetes
@@ -135,6 +125,16 @@ Recomendado [Understanding Kubernetes tools/cache package Blog](https://lairdnel
 - Necesitamos conceptos de mas alto nivel que Kubernetes no provee
 - Integraciones entre distintos proyectos o con servicios externos a Kubernetes
 
+
+---
+
+# Como extender Kubernetes
+
+Creamos nuevos Custom Resource Definitions y Kubernetes Controllers
+
+![extending kubernetes](imgs/extending-kubernetes.png)
+
+Recomendado [Understanding Kubernetes tools/cache package Blog](https://lairdnelson.wordpress.com/2018/01/07/understanding-kubernetes-tools-cache-package-part-1/)
 
 ---
 

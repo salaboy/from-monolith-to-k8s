@@ -4,7 +4,7 @@ namespace: ""
 runtime: springboot
 registry: ""
 image: docker.io/salaboy/func-conference-controller:latest
-imageDigest: sha256:9dac197b79a3ec90a9ed62a14e803f510571ef78dcdce5a6efe9743710820192
+imageDigest: sha256:aaaa9fd4fb6ebb61f865b79a87085a2991f6b6bbbbbaff2aff00ba990d4a01ae
 build: local
 git:
   url: null
