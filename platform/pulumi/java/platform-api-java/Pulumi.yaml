@@ -1,0 +1,3 @@
+name: platform-api-java
+runtime: java
+description: A minimal Kubernetes Java Pulumi program
