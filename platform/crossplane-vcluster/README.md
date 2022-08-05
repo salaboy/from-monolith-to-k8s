@@ -8,6 +8,8 @@ The advantages of using VCluster in contrast with creating a full-blown Kubernet
 
 ![Platform](platform-vcluster-App.png)
 
+For more information and details about this example check this blog post [Building Platforms on top of Kubernetes using VCluster and Crossplane](https://salaboy.com/2022/08/03/building-platforms-on-top-of-kubernetes-vcluster-and-crossplane/)
+
 
 ## Installation on KinD
 
