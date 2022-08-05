@@ -63,9 +63,13 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 
 
 @TODO: 
-- Demo Pulumi Java composition and library, shows a java program that describe how to create cloud provider resources and install our helm chart for the app
-- Crossplane Composition which includes Applicaton + Infra and abtract away Helm and Cloud Provider specific resources
-- Kratix, define scope: I do see this as creating a new type and then using any of the previous tools to execute what is needed
+- Pulumi Platform API: 
+    - Java & Go composition and library, shows a java program that describe how to create cloud provider resources and install our helm chart for the app using VCluster
+- Crossplane Composition (XR):
+   - Environment CRD, with parameters (name, size, kind, gitops enabled?, gitops url)
+   - It uses VCluster and the Helm Provider to create and install the application into the VCluster
+- Kratix for API Building backed up by your favourite Supply Chain
+  - Environment Promise, hooked to your favourite tools, it can be crossplane and pulumi! You can adapt in a Kubernetes-Native way any tools that you already have to work with the Kubernetes Ecosystem (leveraging the Kubernetes APIs and resource model) 
 
 ## Domain-specific Opinions
 
