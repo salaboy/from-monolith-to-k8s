@@ -44,15 +44,13 @@ With Crossplane we can create a Kubernetes Cluster and other cloud resource in a
 With VCluster we can create new Virtual Clusters inside a single Kubernetes Cluster. This gives us flexiblity to have isolated API Servers for each Virtual Cluster but always inside the same `host` Kubernetes Cluster. This reduces the management around creating and provisioning clusters, but more importantly, we avoid creating new dedicated Control Planes that we will need to pay for and are not running services that 
 
 
-@TODO Demo with Crossplane and VCluster, create VCluster declaratively
- -> Look at this example: https://github.com/janwillies/virtual-k8s-styra-opa
 
 ## APIs and Self-service
 
 As Platform builders, we need to craft a contract between the Platform and its users (Dev teams) and there are several approaches to do this. In this section we will evaluate two different approaches that are becoming quite popular in the Cloud-Native space: 
 - Crossplane Compositions as a way to rely on the Kubernetes APIs
-- Kratix as the API builder
 - Compositions as Code with Pulumi
+- Kratix as the API builder
 
 These 3 approaches try to tackle the same topic give us flexibility at different levels, so it is worth looking at their advantages to contrast these solutions and maybe used them as complimentary technologies. 
 
@@ -62,10 +60,9 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 - Kratix only allows us to define an API by creating new CRDs and Controllers for these new resources, what happens behind these APIs is totally up to you. While this approach is clean and removes the need for creating your custom controllers, as a platform team you will need to choose which tools are you going to use to implement the behaviours of these new resources (abstractions). 
 
 
-@TODO: 
 - Pulumi Platform API: 
     - Java & Go composition and library, shows a java program that describe how to create cloud provider resources and install our helm chart for the app using VCluster
-- Crossplane Composition (XR):
+- [Crossplane Composition (XR)](platform-composition/README.md):
    - Environment CRD, with parameters (name, size, kind, gitops enabled?, gitops url)
    - It uses VCluster and the Helm Provider to create and install the application into the VCluster
 - Kratix for API Building backed up by your favourite Supply Chain
@@ -79,11 +76,5 @@ These 3 approaches try to tackle the same topic give us flexibility at different
 - Developer Experience
 
 
-
-## TODO:
-- Demo: Crossplane composition as an abstraction for our Conference Application
-- Pulumi APIs to compose configuraitons
-- Kratix API for Supply Chain 
-- Don't forget about: Developer Experience
 
 
