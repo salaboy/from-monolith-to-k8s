@@ -26,6 +26,10 @@ Then let's install Crossplane into it's own namespace using Helm:
 
 ```
 kubectl create ns crossplane-system
+
+helm repo add crossplane-stable https://charts.crossplane.io/stable
+helm repo update
+
 helm install crossplane --namespace crossplane-system crossplane-stable/crossplane
 ```
 
