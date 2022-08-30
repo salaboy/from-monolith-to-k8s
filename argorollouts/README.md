@@ -103,9 +103,7 @@ kubectl argo rollouts set image email-service-canary \
 kubectl argo rollouts promote email-service-canary
 ```
 
-```
-kubectl port-forward svc/email-service 8080:80
-```
+
 
 ```
 kubectl argo rollouts abort email-service-canary
@@ -128,4 +126,10 @@ kubectl argo rollouts get rollout email-service-bluegreen --watch
 ```
 kubectl argo rollouts set image email-service-bluegreen \
   email-service=ghcr.io/salaboy/fmtok8s-email-service:v0.2.0-native
+```
+
+Promote the rollout
+
+```
+kubectl argo rollouts promote email-service-bluegreen
 ```
