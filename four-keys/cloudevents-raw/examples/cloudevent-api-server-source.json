@@ -1,0 +1,64 @@
+{
+  "specversion": "1.0",
+  "id": "1c62511e-27af-4304-8623-e4a557d1c069",
+  "source": "https://10.16.0.1:443",
+  "type": "dev.knative.apiserver.resource.update",
+  "subject": "/apis/v1/namespaces/api-server-source/events/main-api-server-source.1710714d50c2514f",
+  "datacontenttype": "application/json",
+  "time": "2022-08-31T23:07:56.986476852Z",
+  "data": {
+    "apiVersion": "v1",
+    "count": 12,
+    "eventTime": null,
+    "firstTimestamp": "2022-08-31T13:33:59Z",
+    "involvedObject": {
+      "apiVersion": "sources.knative.dev/v1",
+      "kind": "ApiServerSource",
+      "name": "main-api-server-source",
+      "namespace": "api-server-source",
+      "resourceVersion": "1501190",
+      "uid": "951ec47b-2938-4300-a48e-c31f62cbc862"
+    },
+    "kind": "Event",
+    "lastTimestamp": "2022-08-31T23:07:56Z",
+    "message": "Deployment \"apiserversource-main-api-server0ede9c3cc7b9d38b251946fab7955f36\" updated",
+    "metadata": {
+      "creationTimestamp": "2022-08-31T23:07:56Z",
+      "managedFields": [
+        {
+          "apiVersion": "v1",
+          "fieldsType": "FieldsV1",
+          "fieldsV1": {
+            "f:count": {},
+            "f:firstTimestamp": {},
+            "f:involvedObject": {},
+            "f:lastTimestamp": {},
+            "f:message": {},
+            "f:reason": {},
+            "f:source": {
+              "f:component": {}
+            },
+            "f:type": {}
+          },
+          "manager": "controller",
+          "operation": "Update",
+          "time": "2022-08-31T23:07:56Z"
+        }
+      ],
+      "name": "main-api-server-source.1710714d50c2514f",
+      "namespace": "api-server-source",
+      "resourceVersion": "4791",
+      "uid": "7eda9cee-1ccc-49e1-99b2-63e98e0c799a"
+    },
+    "reason": "ApiServerSourceDeploymentUpdated",
+    "reportingComponent": "",
+    "reportingInstance": "",
+    "source": {
+      "component": "apiserversource-controller"
+    },
+    "type": "Normal"
+  },
+  "name": "main-api-server-source.1710714d50c2514f",
+  "kind": "Event",
+  "namespace": "api-server-source"
+}

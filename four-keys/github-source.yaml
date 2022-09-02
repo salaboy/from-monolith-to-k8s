@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: githubsecret
+type: Opaque
+stringData:
+  accessToken: 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
+  secretToken: ZkL0lJ4Ma5w=
+
+---
+apiVersion: sources.knative.dev/v1alpha1
+kind: GitHubSource
+metadata:
+  name: githubsourcesample
+spec:
+  eventTypes:
+    - pull_request
+  ownerAndRepository: salaboy/cloudevents-knative-test
+  accessToken:
+    secretKeyRef:
+      name: githubsecret
+      key: accessToken
+  secretToken:
+    secretKeyRef:
+      name: githubsecret
+      key: secretToken
+  sink:
+    ref:
+      apiVersion: v1
+      kind: Service
+      name: cloudevents-raw-service
+      namespace: default

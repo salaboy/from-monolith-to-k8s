@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudevents-raw-deployment
+  labels:
+    app: cloudevents-raw
+spec:
+  selector:
+    matchLabels:
+      app: cloudevents-raw
+  template:
+    metadata:
+      labels:
+        app: cloudevents-raw
+    spec:
+      containers:
+        - name: cloudevents-raw
+          image: ko://cloudevents-consumer.go
+          env:
+          - name: POSTGRESQL_HOST
+            value: postgresql
+          - name: POSTGRESQL_PASS
+            valueFrom:
+              secretKeyRef:
+                name: postgresql
+                key: postgres-password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudevents-raw-service
+spec:
+  selector:
+    app: cloudevents-raw
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+---
+
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cdevents-translator-cronjob
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cdevents-translator
+              image: ko://cdevents-translator.go
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: POSTGRESQL_HOST
+                  value: postgresql
+                - name: POSTGRESQL_PASS
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgresql
+                      key: postgres-password
+          restartPolicy: OnFailure

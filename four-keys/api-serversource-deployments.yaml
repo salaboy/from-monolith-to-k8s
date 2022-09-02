@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: api-server-source-sa
+  namespace: api-server-source
+
+--- 
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: api-server-source-role
+  namespace: api-server-source
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - get
+  - list
+  - watch
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: api-server-source-rolebinding
+  namespace: api-server-source
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: api-server-source-role
+subjects:
+- kind: ServiceAccount
+  name: api-server-source-sa
+  namespace: api-server-source
+
+---
+
+apiVersion: sources.knative.dev/v1
+kind: ApiServerSource
+metadata:
+ name: main-api-server-source
+ namespace: api-server-source
+spec:
+ serviceAccountName: api-server-source-sa
+ mode: Resource
+ resources:
+   - apiVersion: v1
+     kind: Event
+ sink:
+   ref:
+     apiVersion: v1
+     kind: Service
+     name: cloudevents-raw-service
+     namespace: default
