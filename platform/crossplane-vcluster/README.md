@@ -19,7 +19,6 @@ First let's create a KinD Cluster to work on:
 kind create cluster
 ```
 
-[![asciicast](https://asciinema.org/a/VldhoqqnU2BRXKihK1GJ6EHkH.svg)](https://asciinema.org/a/VldhoqqnU2BRXKihK1GJ6EHkH)
 
 Then let's install Crossplane into it's own namespace using Helm: 
 
@@ -36,8 +35,6 @@ helm install crossplane --namespace crossplane-system crossplane-stable/crosspla
 ```
 kubectl crossplane install provider crossplane/provider-helm:v0.10.0
 ```
-
-[![asciicast](https://asciinema.org/a/bG69V2xkcPMiJdGLeoLq79eEp.svg)](https://asciinema.org/a/bG69V2xkcPMiJdGLeoLq79eEp)
 
 
 We need to get the correct ServiceAccount to create a new ClusterRoleBinding so the Helm Provider can install Charts on our behalf. 
@@ -67,7 +64,6 @@ The composition looks like this:
 
 Notice that we haven't installed anything VCluster specific, but the composition defines that a VCluster will be created for each Environment resource by installing the VCluster Helm chart. 
 
-[![asciicast](https://asciinema.org/a/2RnKV13gTQI1i4w1FwxSBvho7.svg)](https://asciinema.org/a/2RnKV13gTQI1i4w1FwxSBvho7)
 
 Let's apply the Crossplane Composition and the CRD into the KinD Cluster (host cluster in Vcluster terms):
 ```
