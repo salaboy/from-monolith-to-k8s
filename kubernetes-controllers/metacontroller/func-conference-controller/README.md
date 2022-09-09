@@ -13,19 +13,47 @@ To run this project you need:
 - `helm` version 3.8+ installed 
 - MetaController installed
   - to install with helm you can run the following commands
-  - `HELM_EXPERIMENTAL_OCI=1 helm pull oci://ghcr.io/metacontroller/metacontroller-helm --version=v2.2.5` to fetch the metacontroller chart
+  - `HELM_EXPERIMENTAL_OCI=1 helm pull oci://ghcr.io/metacontroller/metacontroller-helm --version=v4.3.7` to fetch the metacontroller chart
   - `kubectl create ns metacontroller` Create a namespace
-  - `helm install metacontroller metacontroller-helm-v2.2.5.tgz --namespace metacontroller` install the metacontroller chart
+  - `helm install metacontroller metacontroller-helm-v4.3.7.tgz --namespace metacontroller` install the metacontroller chart
 - Knative Serving installed
   - Follow the instructions at https://knative.dev
 - `func` CLI installed
+  - Follow the instructions at https://github.com/knative-sandbox/kn-plugin-func/blob/main/docs/installing_cli.md
 
-Once you have this setup, there are two main things to do
-- Deploy the function, and you can do this by running `func deploy` at the root of this directory, this will build, publish and deploy the container image as a Knative Service
-- Configure the metacontroller to monitor a CRD and then notify our function when a new resource is created. This requires two things: 
+Once you have this setup, there are two main things to do.
+- Deploy the function:
+  - At the terminal, change to the root of this directory (i.e. `cd kubernetes-controllers/metacontroller/func-conference-controller/`)
+  - In the file `func.yaml`, edit the image name to point to your docker registry.   
+  - Run `func deploy -v`. This will build, publish and deploy the container image as a Knative Service. Enter your Docker registry credentials at the prompt.
+  - Optionally, you can verify that the function has been deployed by running `kubectl get kservice func-conference-controller`.
+
+- Configure the metacontroller to monitor a CRD and then notify our function when a new resource is created. This requires two things:
   - Create a CRD with the type that we want to reconcile, for this example is the `Conference` resource which lives inside the group `metacontroller.conference.salaboy.com` and that we can apply by running `kubectl apply -f config/crd.yaml`
   - Define a MetaController CompositeController where we define that we want to monitor `Conference` resources, we specify which kind of children these resources can have (in this case Deployments) and where (URL) is the function that will do the reconciliation is. You can create these CompositeController by running `kubectl apply -f config/controller.yaml`
+  - > Note: If you did not deploy the function to the default namespace, update the url to the function in `config/controller.yaml`.
 
+To test:
+- In one terminal window, run `kubectl get pods -w` to watch for pods.
+- In a separate terminal window, run `kubectl apply -f config/conference.yaml` to create a resource of type Conference. (Note that you must be in the root of this directory in this window).
+- Watch the output in the first window. You should see that a pod is created (the name should be `func-conference-controller-00001-deployment-<UUID>`). Eventually the pod will be terminated. The output may look something like this:
+```shell
+$ kubectl get pods -w
+NAME                              READY   STATUS    RESTARTS   AGE
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Pending   0          0s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Pending   0          0s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     ContainerCreating   0          0s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   1/2     Running             0          2s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   2/2     Running             0          5s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   2/2     Terminating         0          66s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
+func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
+```
+
+**What happened?**
+
+The metacontroller you created (CompositeController named `metacontroller-conference-controller`) detected the new Conference type resource and sent a request to the function `func-conference-controller`. Knative launched a pod for the function to handle the request and then scaled pod instances back down to zero.
 
 
 
