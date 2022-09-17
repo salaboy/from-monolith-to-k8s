@@ -1,0 +1,39 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: devenvs.fmtok8s.salaboy.com
+spec:
+  group: fmtok8s.salaboy.com
+  names:
+    kind: DevEnv
+    plural: devenvs
+    shortNames:
+      - "dev"
+  claimNames:
+    kind: Env
+    plural: envs
+  versions:
+  - name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties: 
+              parameters: 
+                type: object
+                properties:
+                  teamName:
+                    type: string
+                  databaseSize:
+                    type: integer
+                required: 
+                - teamName    
+            required: 
+            - parameters          
+
+     
+            

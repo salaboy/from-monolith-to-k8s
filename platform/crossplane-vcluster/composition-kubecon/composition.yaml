@@ -1,0 +1,155 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: devenvs.fmtok8s.salaboy.com
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: fmtok8s.salaboy.com/v1alpha1
+    kind: DevEnv
+  resources:
+    - name: vcluster-helm-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations:
+            crossplane.io/external-name: # patched
+        spec:
+          rollbackLimit: 3
+          forProvider:
+            namespace: # patched
+            chart:
+              name: vcluster
+              repository: https://charts.loft.sh
+              version: "0.10.2"
+            values:
+              plugin:
+                knative-serving-plugin:
+                  image: salaboy/vcluster-knative-plugin
+                  imagePullPolicy: Always
+                  rbac:
+                    role:
+                      extraRules:
+                        - apiGroups: ["serving.knative.dev"]
+                          resources: ["services", "configurations", "revisions", "routes"]
+                          verbs: ["create", "delete", "patch", "update", "get", "list", "watch"]
+                    clusterRole:
+                      extraRules:
+                        - apiGroups: ["apiextensions.k8s.io"]
+                          resources: ["customresourcedefinitions"]
+                          verbs: ["get", "list", "watch"] 
+              syncer:
+                extraArgs: [] # patched
+              #     - --out-kube-config-server=https://cluster-1.cluster-1.svc
+          providerConfigRef:
+            name: default
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.namespace
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-secret=%s-secret"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[0]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-server=https://%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[1]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--tls-san=%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[2]    
+    - name: helm-providerconfig
+      base:
+        apiVersion: helm.crossplane.io/v1alpha1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              name: # patched
+              namespace: # patched
+              key: config
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: vc-%s
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.namespace
+        - fromFieldPath: metadata.uid
+          toFieldPath: metadata.name     
+    - name: helm-provider-vcluster
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              namespace: #patched
+              key: config
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.namespace
+          policy:
+            fromFieldPath: Required  
+        # This ProviderConfig uses the above VCluster's connection secret as
+        # its credentials secret.
+        - fromFieldPath: "metadata.name"
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-secret"
+      readinessChecks:
+        - type: None      
+    - name: argo-cd-chart-vcluster
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations: 
+            crossplane.io/external-name: argo-cd
+        spec:
+          forProvider:
+            chart:
+              name: argo-cd
+              repository: https://argoproj.github.io/argo-helm
+              version: "5.4.2"
+            namespace: argo-cd
+          providerConfigRef: 
+            name: #patched
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.providerConfigRef.name
