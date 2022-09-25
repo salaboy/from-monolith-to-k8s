@@ -1,8 +1,7 @@
 # KubeCon Keynote - Demo
 
-
-
-
+In this step by step tutorial we will install a set of projects to be able to create Development Environments on demand by just creating simple Kubernetes Resources. 
+The tutorial uses Crossplane, the Crossplane Helm Provider, VCluster and Knative Serving to enable developers to create and deploy functions using their language of choice
 
 ## Installation 
 
@@ -153,7 +152,7 @@ vcluster connect devenv --server https://localhost:8443 -- ksh
 
 Now you are interacting with the VCluster, so you can use `kubectl` as usual. Check that the application was installed in the `conference` namespace.
 
-Finally let's create a function and deploy it
+Finally let's create a function and deploy it.
 
 ## Creating a function using Knative Functions
 

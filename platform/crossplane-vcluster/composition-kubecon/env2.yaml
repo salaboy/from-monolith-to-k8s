@@ -1,0 +1,9 @@
+apiVersion: fmtok8s.salaboy.com/v1alpha1
+kind: DevEnv
+metadata:
+  name: team-b-devenv 
+spec:
+  parameters: 
+    teamName: team-b
+    databaseSize: 20
+    

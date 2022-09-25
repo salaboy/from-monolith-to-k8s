@@ -1,0 +1,12 @@
+apiVersion: fmtok8s.salaboy.com/v1alpha1
+kind: Environment
+metadata:
+  name: devenv-kubecon
+spec:
+  compositionSelector:
+    matchLabels:
+      type: development
+  parameters: 
+    teamName: team-kubecon
+    databaseSize: 10
+    
