@@ -34,6 +34,34 @@ Once you have this setup, there are two main things to do.
   - > Note: If you did not deploy the function to the default namespace, update the url to the function in `config/controller.yaml`.
 
 To test:
+- First, you need to install the Conference Application. This application is provided as a helm repository. Add the helm repository to your Helm installation:
+```
+helm repo add fmtok8s https://salaboy.github.io/helm/
+```
+Install the application:
+```
+kubectl create ns jbcnconf
+helm install conference fmtok8s/fmtok8s-conference-chart --namespace jbcnconf
+```
+
+You can check that the application is up and running:
+```
+kubectl get pods -n jbcnconf
+```
+
+You should see something 4 pods corresponding to services and a frontend app, as well as postgresql and redis data stores:
+```
+NAME                                                 READY   STATUS    RESTARTS   AGE
+conference-fmtok8s-agenda-service-57576cb65c-sl27p   1/1     Running   0          42s
+conference-fmtok8s-c4p-service-6c6f9449b5-j6ksv      1/1     Running   0          42s
+conference-fmtok8s-email-service-6fdf958bdd-4pzww    1/1     Running   0          42s
+conference-fmtok8s-frontend-5bf68cf65-zvlzq          1/1     Running   0          42s
+conference-postgresql-0                              1/1     Running   0          42s
+conference-redis-master-0                            1/1     Running   0          42s
+conference-redis-replicas-0                          1/1     Running   0          42s
+```
+
+- Next, deploy a conference resource:
 - In one terminal window, run `kubectl get pods -w` to watch for pods.
 - In a separate terminal window, run `kubectl apply -f config/conference.yaml` to create a resource of type Conference. (Note that you must be in the root of this directory in this window).
 - Watch the output in the first window. You should see that a pod is created (the name should be `func-conference-controller-00001-deployment-<UUID>`). Eventually the pod will be terminated. The output may look something like this:
@@ -50,12 +78,11 @@ func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminati
 func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
 func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
 ```
+- Run `kubectl get deployments` and verify that you see a new deployment called `metacontroller-production-tests`.
 
 **What happened?**
 
-The metacontroller you created (CompositeController named `metacontroller-conference-controller`) detected the new Conference type resource and sent a request to the function `func-conference-controller`. Knative launched a pod for the function to handle the request and then scaled pod instances back down to zero.
-
-
+The metacontroller you created (CompositeController named `metacontroller-conference-controller`) detected the new Conference type resource and sent a request to the function `func-conference-controller`. Knative launched the function to handle the request. The function checked the status of the services in the `jbcnconf` namespace and it created a Deployment to handle testing.
 
 
 # Generic Function project
