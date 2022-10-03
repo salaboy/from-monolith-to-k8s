@@ -18,6 +18,8 @@ volumes: []
 buildEnvs:
 - name: BP_NATIVE_IMAGE
   value: "false"
+- name: BP_JVM_VERSION
+  value: "17"
 envs: []
 annotations: {}
 options: {}
