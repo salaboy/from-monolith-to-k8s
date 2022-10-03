@@ -52,7 +52,7 @@ public class CloudFunctionApplication {
       boolean productionTestEnabled = parentSpec.productionTestEnabled();
       String conferenceNamespace = parentSpec.namespace();
       
-      List<Child> children = new ArrayList<Child>();
+      List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
       
       return Mono.zip(
           getServiceInfo(http, "fmtok8s-frontend", conferenceNamespace),
@@ -83,12 +83,12 @@ public class CloudFunctionApplication {
             conferenceReady = true;
             if (productionTestEnabled) {
               Map<String, Object> deployment = createProductionTestDeployment();
-              children.add(new Child(deployment));
+              children.add(deployment);
             }
           }
           
           String url = "Impossible to know without access to the K8s API";
-          Status status = new Status(frontendReady, emailServiceReady, agendaServiceReady, c4pServiceReady, productionTestEnabled, conferenceReady, url);
+          Status status = new Status(productionTestEnabled, conferenceReady, url);
 
           DesiredState desiredState = new DesiredState(children, status);
 
@@ -167,20 +167,16 @@ public class CloudFunctionApplication {
   record ControllerInput(Parent parent) {
   }
 
-  record Child(@JsonProperty("Deployment.apps/v1") Map<String, Object> productionTestDeployment){}
+//  record Child(Map<String, Object> productionTestDeployment){}
 
   record Status(
-    @JsonProperty("frontend-ready") boolean frontendReady, 
-    @JsonProperty("email-service-ready") boolean emailServiceReady, 
-    @JsonProperty("agenda-service-ready") boolean agendaServiceReady, 
-    @JsonProperty("c4p-service-ready") boolean c4pServiceReady, 
     @JsonProperty("prod-tests") boolean productionTestEnabled,
     @JsonProperty("ready") boolean conferenceReady,
     String url){
   }
 
   // Output object. Should contain desired state with children and status
-  record DesiredState(List<Child> children, Status status) {
+  record DesiredState(List<Map<String, Object>> children, Status status) {
   }
   
 }
