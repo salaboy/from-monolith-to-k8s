@@ -3,3 +3,9 @@
 target/
 .idea/
 kubernetes-controllers/javavsgo/go/conference-service/conference-service
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
