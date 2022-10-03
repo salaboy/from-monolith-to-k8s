@@ -1,10 +1,9 @@
 package functions;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,32 +26,41 @@ public class CloudFunctionApplication {
     SpringApplication.run(CloudFunctionApplication.class, args);
   }
 
-  @Autowired
-  private WebClient.Builder webClient;
+//  @Autowired
+//  private WebClient.Builder webClient;
 
   @Bean
-  public Function<Map<String, Object>, Mono<Map<String, Object>>> reconcile() {
+  WebClient webClient(WebClient.Builder b) {
+    return b.build();
+  }
+
+  @Bean
+  public Function<ControllerInput, Mono<DesiredState>> reconcile(WebClient http) {
+    // Input: A controller JSON object that contains a CompositeController, 
+    // a Parent and Child, where the Parent describes the user input that triggered the function call
+    // - The CompositeController is controller responsible for the webhook
+    // - The parent is the triggering input - the resource that needs to be reconciled
+    // - The children are the resources that can be modified as part of the reconciliation loop
+    // See CompositeController.Spec for a summary of the triggering resource, the hook, and the children (the resources that can be changed)
     return (resource) -> {
-      Map<String, Object> parent = (Map<String, Object>) resource.get("parent");
-      Map<String, Object> parentMetadata = (Map<String, Object>) parent.get("metadata");
-      Map<String, Object> parentSpec = (Map<String, Object>) parent.get("spec");
+      Parent parent = resource.parent();
+      ParentMetadata parentMetadata = parent.metadata();
+      ParentSpec parentSpec = parent.spec();
       
-      log.info("Reconciling Resource: " + parent.get("apiVersion") + "/" + parent.get("Kind") + " > " + parentMetadata.get("name"));
+      log.info("Reconciling Resource: " + parent.apiVersion() + "/" + parent.kind() + " > " + parentMetadata.name());
 
-      boolean productionTestEnabled = (boolean) parentSpec.get("production-test-enabled");
-      String conferenceNamespace = (String) parentSpec.get("namespace");
-
-      Map<String, Object> desiredState = new HashMap<>();
+      boolean productionTestEnabled = parentSpec.productionTestEnabled();
+      String conferenceNamespace = parentSpec.namespace();
       
-      String protocol = "http://";
-      String servicePath = "." + conferenceNamespace + ".svc.cluster.local/info";
-      return Mono.zip(getServiceInfo(protocol + "fmtok8s-frontend" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-email" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-agenda" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-c4p" + servicePath))
-        .map(serviceInfos -> {
+      List<Child> children = new ArrayList<Child>();
+      
+      return Mono.zip(
+          getServiceInfo(http, "fmtok8s-frontend", conferenceNamespace),
+          getServiceInfo(http, "fmtok8s-email", conferenceNamespace),
+          getServiceInfo(http, "fmtok8s-agenda", conferenceNamespace),
+          getServiceInfo(http, "fmtok8s-c4p", conferenceNamespace)
+      ).map(serviceInfos -> {
           log.info("Service Infos: " + serviceInfos);
-          Map<String, Object> status = new HashMap<>();
           boolean frontendReady = false;
           boolean agendaServiceReady = false;
           boolean emailServiceReady = false;
@@ -69,36 +77,44 @@ public class CloudFunctionApplication {
           if (!serviceInfos.getT4().contains("N/A") && !serviceInfos.getT4().isEmpty()) {
             c4pServiceReady = true;
           }
-
-          status.put("frontend-ready", frontendReady);
-          status.put("email-service-ready", emailServiceReady);
-          status.put("agenda-service-ready", agendaServiceReady);
-          status.put("c4p-service-ready", c4pServiceReady);
-
-          status.put("prod-tests", productionTestEnabled);
-
+          
           boolean conferenceReady = false;
           if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
             conferenceReady = true;
             if (productionTestEnabled) {
               Map<String, Object> deployment = createProductionTestDeployment();
-              desiredState.put("children", Arrays.asList(deployment));
+              children.add(new Child(deployment));
             }
           }
-          status.put("ready", conferenceReady);
+          
+          String url = "Impossible to know without access to the K8s API";
+          Status status = new Status(frontendReady, emailServiceReady, agendaServiceReady, c4pServiceReady, productionTestEnabled, conferenceReady, url);
 
-          desiredState.put("status", status);
-          status.put("url", "Impossible to know without access to the K8s API");
+          DesiredState desiredState = new DesiredState(children, status);
 
           log.info("> Desired State: " + desiredState);
           return desiredState;
         });
     };
   }
+  
+//  public Mono<String> getServiceInfo(String url) {
+//    return webClient.build()
+//      .get()
+//      .uri(url)
+//      .accept(MediaType.APPLICATION_JSON)
+//      .retrieve()
+//      .bodyToMono(String.class)
+//      .onErrorResume(err -> Mono.just("N/A"));
+//
+//  }
 
-
-  public Mono<String> getServiceInfo(String url) {
-    return webClient.build()
+  public Mono<String> getServiceInfo(WebClient http, String name, String namespace) {
+    return getServiceInfo(http, "http://" + name + "." + namespace + ".svc.cluster.local/info");
+  }
+  
+  public Mono<String> getServiceInfo(WebClient http, String url) {
+    return http
       .get()
       .uri(url)
       .accept(MediaType.APPLICATION_JSON)
@@ -130,4 +146,41 @@ public class CloudFunctionApplication {
       "          imagePullPolicy: Always\n";
     return yaml.load(deploymentYaml);
   }
+
+  // ControllerInput: A controller JSON object that contains a CompositeController, 
+  // a Parent and Child, where the Parent describes the user input that triggered the function call
+  // 1. The CompositeController is controller responsible for the webhook
+  // The parent is the triggering input - the resource that needs to be reconciled
+  // The children are the resources that can be modified as part of the reconciliation loop
+  // See CompositeController.Spec for a summary of the triggering resource, the hook, and the children (the resources that can be changed)
+  
+  record ParentMetadata(String name){}
+
+  record ParentSpec(String namespace, @JsonProperty("production-test-enabled") boolean productionTestEnabled) {
+  }
+
+  record Parent(String apiVersion, String kind, @JsonProperty("metadata") ParentMetadata metadata,
+                @JsonProperty("spec") ParentSpec spec) {
+  }
+
+  // Input object. Only Parent (and Children?) are needed for the purposes of the demo
+  record ControllerInput(Parent parent) {
+  }
+
+  record Child(@JsonProperty("Deployment.apps/v1") Map<String, Object> productionTestDeployment){}
+
+  record Status(
+    @JsonProperty("frontend-ready") boolean frontendReady, 
+    @JsonProperty("email-service-ready") boolean emailServiceReady, 
+    @JsonProperty("agenda-service-ready") boolean agendaServiceReady, 
+    @JsonProperty("c4p-service-ready") boolean c4pServiceReady, 
+    @JsonProperty("prod-tests") boolean productionTestEnabled,
+    @JsonProperty("ready") boolean conferenceReady,
+    String url){
+  }
+
+  // Output object. Should contain desired state with children and status
+  record DesiredState(List<Child> children, Status status) {
+  }
+  
 }

@@ -17,14 +17,14 @@
   <description>A Spring Cloud Function, Http Example</description>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <spring-cloud.version>2021.0.1</spring-cloud.version>
     <spring-cloud-function.version>3.2.3</spring-cloud-function.version>
     <spring-native.version>0.11.3</spring-native.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
