@@ -1,12 +1,12 @@
 apiVersion: fmtok8s.salaboy.com/v1alpha1
 kind: Environment
 metadata:
-  name: devenv-kubecon
+  name: my-devenv
 spec:
   compositionSelector:
     matchLabels:
       type: development
   parameters: 
-    teamName: team-kubecon
-    databaseSize: 10
+    teamName: kubecon
+    observabilityEnabled: false
     

@@ -9,8 +9,19 @@ spec:
     plural: environments
     shortNames:
       - "env"
+      - "envs"
   versions:
-  - name: v1alpha1
+  - additionalPrinterColumns:
+    - jsonPath: .spec.parameters.teamName
+      name: TEAM
+      type: string
+    - jsonPath: .spec.parameters.observabilityEnabled
+      name: OBS
+      type: boolean
+    - jsonPath: .spec.parameters.gitOpsUrl
+      name: GITOPS
+      type: string
+    name: v1alpha1
     served: true
     referenceable: true
     schema:
@@ -25,10 +36,17 @@ spec:
                 properties:
                   teamName:
                     type: string
-                  databaseSize:
-                    type: integer
+                  gitOpsUrl:
+                    type: string  
+                  observabilityEnabled: 
+                    type: boolean  
+                  mockData:
+                    type: boolean
+                  mockUsers:
+                    type: boolean  
                 required: 
-                - teamName    
+                - teamName 
+                - observabilityEnabled   
             required: 
             - parameters          
 
