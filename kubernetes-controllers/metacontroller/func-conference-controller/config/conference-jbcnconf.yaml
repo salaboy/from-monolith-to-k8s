@@ -1,7 +1,7 @@
 apiVersion: metacontroller.conference.salaboy.com/v1
 kind: Conference
 metadata:
-  name: my-metacontroller-conference
+  name: jbcnconf
 spec:
-  namespace: jbcnconf
+  namespace: conf-jbcnconf
   production-test-enabled: true

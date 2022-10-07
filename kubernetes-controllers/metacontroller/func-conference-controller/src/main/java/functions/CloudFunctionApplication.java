@@ -1,21 +1,27 @@
 package functions;
 
-import java.util.*;
-import java.util.function.Function;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import domain.controllerinput.ControllerInput;
+import domain.controllerinput.Parent;
+import domain.controllerinput.ParentMetadata;
+import domain.controllerinput.ParentSpec;
+import domain.controlleroutput.ControllerOutput;
+import domain.controlleroutput.Status;
+import io.kubernetes.client.common.KubernetesObject;
+import io.kubernetes.client.openapi.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.yaml.snakeyaml.Yaml;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 @SpringBootApplication
 public class CloudFunctionApplication {
@@ -26,16 +32,13 @@ public class CloudFunctionApplication {
     SpringApplication.run(CloudFunctionApplication.class, args);
   }
 
-//  @Autowired
-//  private WebClient.Builder webClient;
-
   @Bean
   WebClient webClient(WebClient.Builder b) {
     return b.build();
   }
 
   @Bean
-  public Function<ControllerInput, Mono<DesiredState>> reconcile(WebClient http) {
+  public Function<ControllerInput, Mono<ControllerOutput>> reconcile(WebClient http) {
     // Input: A controller JSON object that contains a CompositeController, 
     // a Parent and Child, where the Parent describes the user input that triggered the function call
     // - The CompositeController is controller responsible for the webhook
@@ -52,7 +55,7 @@ public class CloudFunctionApplication {
       boolean productionTestEnabled = parentSpec.productionTestEnabled();
       String conferenceNamespace = parentSpec.namespace();
       
-      List<Map<String, Object>> children = new ArrayList<Map<String, Object>>();
+      List<KubernetesObject> children = new ArrayList<>();
       
       return Mono.zip(
           getServiceInfo(http, "fmtok8s-frontend", conferenceNamespace),
@@ -82,32 +85,20 @@ public class CloudFunctionApplication {
           if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
             conferenceReady = true;
             if (productionTestEnabled) {
-              Map<String, Object> deployment = createProductionTestDeployment();
-              children.add(deployment);
+              children.add(createProductionTestDeployment());
             }
           }
           
           String url = "Impossible to know without access to the K8s API";
           Status status = new Status(productionTestEnabled, conferenceReady, url);
 
-          DesiredState desiredState = new DesiredState(children, status);
+          ControllerOutput desiredState = new ControllerOutput(children, status);
 
           log.info("> Desired State: " + desiredState);
           return desiredState;
         });
     };
   }
-  
-//  public Mono<String> getServiceInfo(String url) {
-//    return webClient.build()
-//      .get()
-//      .uri(url)
-//      .accept(MediaType.APPLICATION_JSON)
-//      .retrieve()
-//      .bodyToMono(String.class)
-//      .onErrorResume(err -> Mono.just("N/A"));
-//
-//  }
 
   public Mono<String> getServiceInfo(WebClient http, String name, String namespace) {
     return getServiceInfo(http, "http://" + name + "." + namespace + ".svc.cluster.local/info");
@@ -124,59 +115,36 @@ public class CloudFunctionApplication {
 
   }
 
-  public Map<String, Object> createProductionTestDeployment() {
-    Yaml yaml = new Yaml();
-    String deploymentYaml = "apiVersion: apps/v1\n" +
-      "kind: Deployment\n" +
-      "metadata:\n" +
-      "  name: metacontroller-production-tests\n" +
-      "spec:\n" +
-      "  replicas: 1\n" +
-      "  selector:\n" +
-      "    matchLabels:\n" +
-      "      app: production-tests\n" +
-      "  template:\n" +
-      "    metadata:\n" +
-      "      labels:\n" +
-      "        app: production-tests\n" +
-      "    spec:\n" +
-      "      containers:\n" +
-      "        - name: production-tests\n" +
-      "          image: salaboy/metacontroller-production-tests:metacontroller\n" +
-      "          imagePullPolicy: Always\n";
-    return yaml.load(deploymentYaml);
-  }
+  public KubernetesObject createProductionTestDeployment() {
+    
+    // https://github.com/kubernetes-client/java/blob/master/fluent/src/main/java/io/kubernetes/client/openapi/models/V1DeploymentBuilder.java
+    
+    Map<String, String> labels = new HashMap<String, String>();
+    labels.put("app", "production-tests");
+    
+    List<V1Container> containers = new ArrayList<V1Container>();
+    containers.add(new V1Container().name("production-tests")
+      .image("salaboy/metacontroller-production-tests:metacontroller")
+      .imagePullPolicy("Always"));
 
-  // ControllerInput: A controller JSON object that contains a CompositeController, 
-  // a Parent and Child, where the Parent describes the user input that triggered the function call
-  // 1. The CompositeController is controller responsible for the webhook
-  // The parent is the triggering input - the resource that needs to be reconciled
-  // The children are the resources that can be modified as part of the reconciliation loop
-  // See CompositeController.Spec for a summary of the triggering resource, the hook, and the children (the resources that can be changed)
-  
-  record ParentMetadata(String name){}
+    KubernetesObject deployment = 
+      new V1Deployment()
+        .apiVersion("apps/v1")
+        .kind("Deployment")
+        .metadata(new V1ObjectMeta()
+          .name("metacontroller-production-tests")
+          .labels(labels))
+        .spec(new V1DeploymentSpec()
+          .replicas(1)
+          .selector(new V1LabelSelector()
+            .matchLabels(labels))
+          .template(new V1PodTemplateSpec()
+            .metadata(new V1ObjectMeta().labels(labels))
+            .spec(new V1PodSpec()
+              .containers(containers))));
+    
+    return deployment;
 
-  record ParentSpec(String namespace, @JsonProperty("production-test-enabled") boolean productionTestEnabled) {
-  }
-
-  record Parent(String apiVersion, String kind, @JsonProperty("metadata") ParentMetadata metadata,
-                @JsonProperty("spec") ParentSpec spec) {
-  }
-
-  // Input object. Only Parent (and Children?) are needed for the purposes of the demo
-  record ControllerInput(Parent parent) {
-  }
-
-//  record Child(Map<String, Object> productionTestDeployment){}
-
-  record Status(
-    @JsonProperty("prod-tests") boolean productionTestEnabled,
-    @JsonProperty("ready") boolean conferenceReady,
-    String url){
-  }
-
-  // Output object. Should contain desired state with children and status
-  record DesiredState(List<Map<String, Object>> children, Status status) {
   }
   
 }
