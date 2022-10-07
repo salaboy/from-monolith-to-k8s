@@ -19,8 +19,8 @@ spec:
             routingConfig:
               routingMode: REGIONAL
     - base:
-        apiVersion: container.gcp.crossplane.io/v1beta1
-        kind: GKECluster
+        apiVersion: container.gcp.crossplane.io/v1beta2
+        kind: Cluster
         spec:
           forProvider:
             addonsConfig:
@@ -78,7 +78,7 @@ spec:
       connectionDetails:
         - fromConnectionSecretKey: kubeconfig
     - base:
-        apiVersion: container.gcp.crossplane.io/v1alpha1
+        apiVersion: container.gcp.crossplane.io/v1beta1
         kind: NodePool
         spec:
           forProvider:
