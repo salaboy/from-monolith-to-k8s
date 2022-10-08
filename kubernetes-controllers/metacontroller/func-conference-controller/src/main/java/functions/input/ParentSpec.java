@@ -1,4 +1,4 @@
-package domain.controllerinput;
+package functions.input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -12,20 +12,18 @@ import org.springframework.http.ResponseEntity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-@SpringBootTest(classes = CloudFunctionApplication.class,
-  webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = CloudFunctionApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class UpperCaseFunctionTest {
 
-  @Autowired
-  private TestRestTemplate rest;
+	@Autowired
+	private TestRestTemplate rest;
 
-  @Test
-  public void testUpperCase() throws Exception {
-    ResponseEntity<String> response = this.rest.exchange(
-      RequestEntity.post(new URI("/uppercase"))
-                   .body("hello"), String.class);
-    assertThat(response.getStatusCode()
-                       .value(), equalTo(200));
-    assertThat(response.getBody(), equalTo("HELLO"));
-  }
+	@Test
+	public void testUpperCase() throws Exception {
+		ResponseEntity<String> response = this.rest.exchange(RequestEntity.post(new URI("/uppercase")).body("hello"),
+				String.class);
+		assertThat(response.getStatusCode().value(), equalTo(200));
+		assertThat(response.getBody(), equalTo("HELLO"));
+	}
+
 }

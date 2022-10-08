@@ -1,4 +1,4 @@
-package domain.controlleroutput;
+package functions.output;
 
 import io.kubernetes.client.common.KubernetesObject;
 

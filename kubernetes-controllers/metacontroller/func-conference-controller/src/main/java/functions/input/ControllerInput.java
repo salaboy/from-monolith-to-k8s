@@ -1,4 +1,4 @@
-package domain.controllerinput;
+package functions.input;
 
 public record ControllerInput(Parent parent) {
 }
