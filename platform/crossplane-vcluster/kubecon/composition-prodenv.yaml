@@ -1,13 +1,13 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: prodenvs.fmtok8s.salaboy.com
+  name: prodenvs.salaboy.com
   labels:
     type: production
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: fmtok8s.salaboy.com/v1alpha1
+    apiVersion: salaboy.com/v1alpha1
     kind: Environment
   resources:
     - base:
