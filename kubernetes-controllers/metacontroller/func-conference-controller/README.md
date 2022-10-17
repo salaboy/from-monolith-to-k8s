@@ -293,7 +293,7 @@ Check for a new production tests Deployment.
 kubectl get deployments
 ```
 
-If you see that a Deployment named `metacontroller-production-tests-conf-jbcnconf` was created, then it worked!
+If you see that a Deployment named `metacontroller-production-tests-jbcnconf` was created, then it worked!
 
 ### Recap
 
@@ -324,7 +324,7 @@ kubectl apply -f config/conference-springone.yaml
 kubectl get deployments
 ```
 
-You should see a second Deployment for production tests (`metacontroller-production-tests-conf-springone`).
+You should see a second Deployment for production tests (`metacontroller-production-tests-springone`).
 
 ##### Clean up
 
