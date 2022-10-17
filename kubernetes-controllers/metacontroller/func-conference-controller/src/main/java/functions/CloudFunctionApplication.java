@@ -15,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.function.Function;
 
@@ -71,7 +72,7 @@ public class CloudFunctionApplication {
 						if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
 							conferenceReady = true;
 							if (productionTestEnabled) {
-								children.add(createProductionTestDeployment());
+								children.add(createProductionTestDeployment(conferenceNamespace));
 							}
 						}
 						var url = "Impossible to know without access to the K8s API";
@@ -93,23 +94,27 @@ public class CloudFunctionApplication {
 
 	}
 
-	public KubernetesObject createProductionTestDeployment() {
+	public KubernetesObject createProductionTestDeployment(String name) {
 
 		// https://github.com/kubernetes-client/java/blob/master/fluent/src/main/java/io/kubernetes/client/openapi/models/V1DeploymentBuilder.java
 
 		var labels = new HashMap<String, String>();
-		labels.put("app", "production-tests");
+		labels.put("app", "production-tests-" + name);
 
 		var containers = new ArrayList<V1Container>();
-		containers.add(new V1Container().name("production-tests")
-				.image("salaboy/metacontroller-production-tests:metacontroller").imagePullPolicy("Always"));
+		containers.add(new V1Container().name("production-tests").image("alpine")
+				.command(Arrays.asList(new String[] { "sh" }))
+				.args(Arrays.asList(new String[] { "-c",
+						"i=1; while true; do echo \"Running production tests $i\"; ((i=i+1)); sleep 10; done" }))
+				.imagePullPolicy("Always"));
+
 	// @formatter:off
     var deploymentKubernetesObject =
       new V1Deployment()
         .apiVersion("apps/v1")
         .kind("Deployment")
         .metadata(new V1ObjectMeta()
-          .name("metacontroller-production-tests")
+          .name("metacontroller-production-tests-" + name)
           .labels(labels))
         .spec(new V1DeploymentSpec()
           .replicas(1)
