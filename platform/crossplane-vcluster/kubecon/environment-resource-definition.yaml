@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: environments.fmtok8s.salaboy.com
+  name: environments.salaboy.com
 spec:
-  group: fmtok8s.salaboy.com
+  group: salaboy.com
   names:
     kind: Environment
     plural: environments
@@ -18,9 +18,9 @@ spec:
     - jsonPath: .spec.parameters.observabilityEnabled
       name: OBS
       type: boolean
-    - jsonPath: .spec.parameters.gitOpsUrl
-      name: GITOPS
-      type: string
+    # - jsonPath: .spec.parameters.gitOpsUrl
+    #   name: GITOPS
+    #   type: string
     name: v1alpha1
     served: true
     referenceable: true

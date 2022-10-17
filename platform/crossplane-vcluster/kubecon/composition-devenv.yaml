@@ -1,13 +1,13 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: devenvs.fmtok8s.salaboy.com
+  name: devenvs.salaboy.com
   labels:
     type: development
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: fmtok8s.salaboy.com/v1alpha1
+    apiVersion: salaboy.com/v1alpha1
     kind: Environment
   resources:
     - name: vcluster-helm-release
@@ -87,6 +87,10 @@ spec:
             string:
               fmt: "--tls-san=%s.%s.svc"
           toFieldPath: spec.forProvider.values.syncer.extraArgs[2]    
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed
     - name: helm-providerconfig
       base:
         apiVersion: helm.crossplane.io/v1alpha1
@@ -108,4 +112,6 @@ spec:
         - fromFieldPath: metadata.name
           toFieldPath: spec.credentials.secretRef.namespace
         - fromFieldPath: metadata.uid
-          toFieldPath: metadata.name     
+          toFieldPath: metadata.name 
+      readinessChecks:
+      - type: None        

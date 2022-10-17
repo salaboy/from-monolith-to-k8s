@@ -1,7 +1,7 @@
-apiVersion: fmtok8s.salaboy.com/v1alpha1
+apiVersion: salaboy.com/v1alpha1
 kind: Environment
 metadata:
-  name: my-devenv
+  name: devenv
 spec:
   compositionSelector:
     matchLabels:

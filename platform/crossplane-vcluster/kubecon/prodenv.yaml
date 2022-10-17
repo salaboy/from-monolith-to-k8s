@@ -1,0 +1,15 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Environment
+metadata:
+  name: prod-kubecon
+spec:
+  compositionSelector:
+    matchLabels:
+      type: production
+  parameters: 
+    teamName: infra
+    observabilityEnabled: true
+    mockUsers: false
+    mockData: false
+    gitOpsUrl: https://github.com/salaboy/kubecon-production
+    
