@@ -72,7 +72,7 @@ public class CloudFunctionApplication {
 						if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
 							conferenceReady = true;
 							if (productionTestEnabled) {
-								children.add(createProductionTestDeployment(conferenceNamespace));
+								children.add(createProductionTestDeployment(parentMetadata.name()));
 							}
 						}
 						var url = "Impossible to know without access to the K8s API";
