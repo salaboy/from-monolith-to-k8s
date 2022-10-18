@@ -287,7 +287,8 @@ func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminati
 func-conference-controller-00001-deployment-589ffbc679-q57j8   0/2     Terminating         0          98s
 ```
 
-**Did it work?**
+##### Check results
+
 Check for a new production tests Deployment.
 ```shell
 kubectl get deployments
@@ -297,7 +298,7 @@ If you see that a Deployment named `metacontroller-production-tests-jbcnconf` wa
 
 ##### Recap
 
-**What happened?**
+What happened?
 
 The metacontroller you created (CompositeController named `metacontroller-conference-controller`) detected the new Conference type resource and sent a request to the function `func-conference-controller`.
 Knative launched the function to handle the request.
