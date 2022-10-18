@@ -150,7 +150,7 @@ conference-redis-master-0                            1/1     Running   0        
 conference-redis-replicas-0                          1/1     Running   0          42s
 ```
 
-### Deploy the Conference controller and register it with Metacontroller
+### Create the custom controller and register it with Metacontroller
 
 For the following steps, make sure you are running commands from the root of this directory.
 If you are at the root of the GitHub repository directory, change as follows:
