@@ -295,7 +295,7 @@ kubectl get deployments
 
 If you see that a Deployment named `metacontroller-production-tests-jbcnconf` was created, then it worked!
 
-### Recap
+##### Recap
 
 **What happened?**
 
@@ -303,7 +303,7 @@ The metacontroller you created (CompositeController named `metacontroller-confer
 Knative launched the function to handle the request.
 The function checked the status of the services in the `jbcnconf` namespace, and it created a Deployment to handle testing.
 
-### Try it again!
+##### Try it again!
 
 For fun, try it again for a second Conference Application.
 
