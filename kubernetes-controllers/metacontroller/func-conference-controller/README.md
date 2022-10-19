@@ -294,14 +294,22 @@ Check for a new production tests Deployment.
 kubectl get deployments
 ```
 
+The output should look something like this.
 If you see that a Deployment named `metacontroller-production-tests-jbcnconf` was created, then it worked!
+(The `func-conference-controller-00001-deployment` was created by Knative for the controller function itself when you ran `func deploy -v`).
+```
+$ kubectl get deployments
+NAME                                          READY   UP-TO-DATE   AVAILABLE   AGE
+func-conference-controller-00001-deployment   1/1     1            1           5m46s
+metacontroller-production-tests-jbcnconf      1/1     1            1           10s
+```
 
 ##### Recap
 
 What happened?
 
-The metacontroller you created (CompositeController named `metacontroller-conference-controller`) detected the new Conference type resource and sent a request to the function `func-conference-controller`.
-Knative launched the function to handle the request.
+Metacontroller used the configuration in the CompositeController you created (`metacontroller-conference-controller`) to detect the new Conference resource request (`jbcnconf`) and to forward the request to the controller function `func-conference-controller`.
+Knative launched a pod for the function to handle the request.
 The function checked the status of the services in the `jbcnconf` namespace, and it created a Deployment to handle testing.
 
 ##### Try it again!
@@ -327,7 +335,7 @@ kubectl get deployments
 
 You should see a second Deployment for production tests (`metacontroller-production-tests-springone`).
 
-##### Clean up
+##### Test cascading deletion
 
 Since the _production tests_ Deployments are children of the Conference resources, deleting the Conferences will cause the Deployments to be deleted, too.
 
