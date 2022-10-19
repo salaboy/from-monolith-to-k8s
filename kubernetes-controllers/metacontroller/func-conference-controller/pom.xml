@@ -60,6 +60,18 @@
       <version>${spring-cloud-function.version}</version>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>io.kubernetes</groupId>
+      <artifactId>client-java</artifactId>
+      <version>16.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.ciberkleid</groupId>
+      <artifactId>metacontroller-spring-boot-starter</artifactId>
+<!--      <version>v0.0.1</version>-->
+      <version>2369f1e80e</version>
+    </dependency>
     
     <dependency>
       <groupId>org.springframework.experimental</groupId>
@@ -70,12 +82,6 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.kubernetes</groupId>
-      <artifactId>client-java</artifactId>
-      <version>16.0.0</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 
@@ -138,6 +144,10 @@
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
     </repository>
   </repositories>
   <pluginRepositories>

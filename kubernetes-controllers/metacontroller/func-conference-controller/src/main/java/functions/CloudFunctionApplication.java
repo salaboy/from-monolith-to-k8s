@@ -1,8 +1,8 @@
 package functions;
 
-import functions.input.ControllerInput;
-import functions.output.ControllerOutput;
-import functions.output.Status;
+import com.metacontrollerjava.api.input.ControllerInput;
+import com.metacontrollerjava.api.output.ControllerOutput;
+import com.metacontrollerjava.api.output.Status;
 import io.kubernetes.client.common.KubernetesObject;
 import io.kubernetes.client.openapi.models.*;
 import org.slf4j.Logger;
@@ -105,7 +105,7 @@ public class CloudFunctionApplication {
 		containers.add(new V1Container().name("production-tests").image("alpine")
 				.command(Arrays.asList(new String[] { "sh" }))
 				.args(Arrays.asList(new String[] { "-c",
-						"i=1; while true; do echo \"Running production tests $i\"; ((i=i+1)); sleep 10; done" }))
+						"while true; do echo \"Running production tests @ \" `date`; sleep 10; done" }))
 				.imagePullPolicy("Always"));
 
 	// @formatter:off
