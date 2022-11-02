@@ -12,6 +12,8 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 
 - 
 
+![imgs/four-keys-architecture.png](imgs/four-keys-architecture.png)
+
 ## Installation
 
 This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".
@@ -26,7 +28,7 @@ We will install the following components in an existing Kubernetes Cluster:
   - Create Tables (on default database `postgres`): 
     
     - `CREATE TABLE IF NOT EXISTS cloudevents_raw ( event_id serial NOT NULL PRIMARY KEY, content json NOT NULL, event_timestamp TIMESTAMP NOT NULL);`
-    - 
+    - `CREATE TABLE IF NOT EXISTS cdevents_raw ( cd_source varchar(255) NOT NULL, cd_id varchar(255) NOT NULL, cd_type varchar(255) NOT NULL, cd_subject_id varchar(255) NOT NULL,cd_subject_type varchar(255), cd_subject_source varchar(255), content json NOT NULL, PRIMARY KEY (cd_source, cd_id));`
 - Sockeye: `kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml`
 
 Cloud Event Sources: 
@@ -36,7 +38,6 @@ Cloud Event Sources:
   - Cloud Events Controller: `kubectl apply -f https://storage.cloud.google.com/tekton-releases-nightly/cloudevents/latest/release.yaml`
   - ConfigMap: `config-defaults` for SINK URL
 - Github Source: https://github.com/knative/docs/tree/main/code-samples/eventing/github-source
-
 
 - Kubernetes API Server Source: https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object
 
