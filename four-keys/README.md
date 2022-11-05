@@ -23,7 +23,9 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 
 This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".
 
-We will install the following components in an existing Kubernetes Cluster: 
+
+
+We will install the following components in an existing Kubernetes Cluster (you can use KinD): 
 - [Install Knative Serving](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/) 
 - [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
 
@@ -43,14 +45,8 @@ We will install the following components in an existing Kubernetes Cluster:
 
 Cloud Event Sources: 
 
-- [Install Tekton](https://github.com/cdfoundation/sig-events/tree/main/poc/tekton)
-  - Tekton dashboard: `k port-forward svc/tekton-dashboard 9097:9097 -n tekton-pipelines`
-  - Cloud Events Controller: `kubectl apply -f https://storage.cloud.google.com/tekton-releases-nightly/cloudevents/latest/release.yaml`
-  - ConfigMap: `config-defaults` for <SINK URL>
-  
-- Github Source: https://github.com/knative/docs/tree/main/code-samples/eventing/github-source
-
 - Kubernetes API Server Source: https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object
+  - Apply the APIServerSource resource with: `kubectl apply -f api-serversource-deployments.yaml`
 
 
 # Metrics
@@ -61,9 +57,11 @@ From [https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md](http
 
 We look for new or updated deployment resources. This us done by using the APIServerSource. The flow should look like: 
 
-API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CDEvent Transformation (cdevents_raw) -> Deployment Frequency Function (writes to deployments) 
+API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CDEvent Transformation (cdevents_raw) -> Deployment Frequency Function (writes to `deployments` table) 
 
-Deployment Frequency Function: look at the cdevents_raw table and count Deployment CDEvents from different services. Calculate buckets: Daily, Weekly, Monthly, Yearly.
+Deployment Frequency Function: look at the cdevents_raw table and count Deployment CDEvents from different services. 
+
+Calculate buckets: Daily, Weekly, Monthly, Yearly.
 
 
 This counts the number of deployments per day: 
@@ -79,3 +77,16 @@ GROUP BY day;
 
 @TODO: we should filter by "deployment name", as this is currently all deployments
 
+Create a new Deployment in the `default` namespace to test that your configuration is working.
+
+
+
+
+## Other sources and extensions
+
+- [Install Tekton](https://github.com/cdfoundation/sig-events/tree/main/poc/tekton)
+  - Tekton dashboard: `k port-forward svc/tekton-dashboard 9097:9097 -n tekton-pipelines`
+  - Cloud Events Controller: `kubectl apply -f https://storage.cloud.google.com/tekton-releases-nightly/cloudevents/latest/release.yaml`
+  - ConfigMap: `config-defaults` for <SINK URL>
+  
+- Github Source: https://github.com/knative/docs/tree/main/code-samples/eventing/github-source
