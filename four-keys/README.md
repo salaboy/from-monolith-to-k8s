@@ -77,6 +77,14 @@ GROUP BY day;
 
 @TODO: we should filter by "deployment name", as this is currently all deployments
 
+Deploy the `four-keys` components using `ko` for development:
+
+```
+cd four-keys/
+ko apply -f config/
+```
+
+
 Create a new Deployment in the `default` namespace to test that your configuration is working.
 
 
