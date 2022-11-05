@@ -24,26 +24,58 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".
 
 We will install the following components in an existing Kubernetes Cluster: 
-- Knative Serving: https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/  
+- [Install Knative Serving](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/) 
+- [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
+
 - PostgreSQL: 
-  - `helm install postgresql bitnami/postgresql`
-  - `kubectl port-forward --namespace default svc/postgresql 5432:5432`
-  - `export POSTGRES_PASSWORD=$(kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
+  - `helm install postgresql bitnami/postgresql --namespace four-keys`
+  - `kubectl port-forward --namespace four-keys svc/postgresql 5432:5432`
+  - `export POSTGRES_PASSWORD=$(kubectl get secret --namespace four-keys postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
   - To connect from outside the cluster: `PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432`
   - Create Tables (on default database `postgres`): 
     
     - `CREATE TABLE IF NOT EXISTS cloudevents_raw ( event_id serial NOT NULL PRIMARY KEY, content json NOT NULL, event_timestamp TIMESTAMP NOT NULL);`
-    - `CREATE TABLE IF NOT EXISTS cdevents_raw ( cd_source varchar(255) NOT NULL, cd_id varchar(255) NOT NULL, cd_type varchar(255) NOT NULL, cd_subject_id varchar(255) NOT NULL,cd_subject_type varchar(255), cd_subject_source varchar(255), content json NOT NULL, PRIMARY KEY (cd_source, cd_id));`
+
+    - `CREATE TABLE IF NOT EXISTS cdevents_raw ( cd_source varchar(255) NOT NULL, cd_id varchar(255) NOT NULL, cd_timestamp TIMESTAMP NOT NULL, cd_type varchar(255) NOT NULL, cd_subject_id varchar(255) NOT NULL, cd_subject_source varchar(255), content json NOT NULL, PRIMARY KEY (cd_source, cd_id));`
+
+    - `CREATE TABLE IF NOT EXISTS deployments ( deploy_id varchar(255) NOT NULL, time_created TIMESTAMP NOT NULL, deploy_name varchar(255) NOT NULL, PRIMARY KEY (deploy_id, deploy_name));`
 - Sockeye: `kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml`
 
 Cloud Event Sources: 
 
-- Tekton: https://github.com/cdfoundation/sig-events/tree/main/poc/tekton
+- [Install Tekton](https://github.com/cdfoundation/sig-events/tree/main/poc/tekton)
   - Tekton dashboard: `k port-forward svc/tekton-dashboard 9097:9097 -n tekton-pipelines`
   - Cloud Events Controller: `kubectl apply -f https://storage.cloud.google.com/tekton-releases-nightly/cloudevents/latest/release.yaml`
-  - ConfigMap: `config-defaults` for SINK URL
+  - ConfigMap: `config-defaults` for <SINK URL>
+  
 - Github Source: https://github.com/knative/docs/tree/main/code-samples/eventing/github-source
 
 - Kubernetes API Server Source: https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object
 
+
+# Metrics
+
+From [https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md](https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md)
+
+## Deployment Frequency
+
+We look for new or updated deployment resources. This us done by using the APIServerSource. The flow should look like: 
+
+API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CDEvent Transformation (cdevents_raw) -> Deployment Frequency Function (writes to deployments) 
+
+Deployment Frequency Function: look at the cdevents_raw table and count Deployment CDEvents from different services. Calculate buckets: Daily, Weekly, Monthly, Yearly.
+
+
+This counts the number of deployments per day: 
+
+```
+SELECT
+DATE_TRUNC('day', time_created) AS day,
+COUNT(distinct deploy_id) AS deployments
+FROM
+deployments
+GROUP BY day;
+```
+
+@TODO: we should filter by "deployment name", as this is currently all deployments
 

@@ -30,3 +30,27 @@ spec:
       kind: Service
       name: cloudevents-raw-service
       namespace: default
+
+---
+apiVersion: sources.knative.dev/v1alpha1
+kind: GitHubSource
+metadata:
+  name: githubsourcesample
+spec:
+  eventTypes:
+    - pull_request
+  ownerAndRepository: salaboy/cloudevents-knative-test
+  accessToken:
+    secretKeyRef:
+      name: githubsecret
+      key: accessToken
+  secretToken:
+    secretKeyRef:
+      name: githubsecret
+      key: secretToken
+  sink:
+    ref:
+      apiVersion: serving.knative.dev/v1
+      kind: Service
+      name: sockeye
+      namespace: default      

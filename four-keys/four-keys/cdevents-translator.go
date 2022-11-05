@@ -3,15 +3,31 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
-	cdevents "github.com/cdevents/sdk-go/pkg/api"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
 	"log"
 
+	cdevents "github.com/cdevents/sdk-go/pkg/api"
+	cloudevents "github.com/cloudevents/sdk-go/v2"
+
 	"fmt"
+
 	_ "github.com/lib/pq"
 
 	"os"
 )
+
+type InvolvedObject struct {
+	ApiVersion string
+	Kind       string
+	Name       string
+	Namespace  string
+	Uid        string
+}
+
+type APIServerSourceEventData struct {
+	Kind           string
+	Message        string
+	InvolvedObject InvolvedObject
+}
 
 const (
 	port   = 5432
@@ -64,15 +80,16 @@ func main() {
 		// cdevents.IsACDevent(event) -> true then insert
 
 		cdEvent, err := mapToCDEvents(event)
-		if err != nil {
+		if err != nil || cdEvent == nil {
 			fmt.Println("There is no mapping for this type of event", event.Type(), " - Ignoring id ", id)
 			continue
 		}
 
-
+		jsonCDEvent, err := json.Marshal(cdEvent)
+		CheckError(err)
 		// insert
-		insertStmt := `insert into "cdevents_raw"("cd_source", "cd_id", "cd_type", "cd_subject_id", "content") values($1, $2, $3, $4, $5 )`
-		_, e := db.Exec(insertStmt, cdEvent.GetSource(), cdEvent.GetId(), cdEvent.GetType(), cdEvent.GetSubjectId(), content)
+		insertStmt := `insert into "cdevents_raw"("cd_source", "cd_id", "cd_timestamp", "cd_type", "cd_subject_id", "cd_subject_source", "content") values($1, $2, $3, $4, $5 , $6, $7)`
+		_, e := db.Exec(insertStmt, cdEvent.GetSource(), cdEvent.GetId(), cdEvent.GetTimestamp(), cdEvent.GetType(), cdEvent.GetSubjectId(), cdEvent.GetSubjectSource(), jsonCDEvent)
 
 		if e != nil {
 			fmt.Println("Inserting failed for event ", e)
@@ -85,10 +102,11 @@ func main() {
 }
 
 // This can be splitted into functions, so one function Mapping
-///   Where mapping means CloudEvent -> CDEvent,
-//      this can be done by looking for certain Cloud Event types and creating a CDEvent or even by parsing the CloudEvent boyd and selecting which proerties to use to create a CDEvent
+// /   Where mapping means CloudEvent -> CDEvent,
+//
+//	this can be done by looking for certain Cloud Event types and creating a CDEvent or even by parsing the CloudEvent boyd and selecting which proerties to use to create a CDEvent
 func mapToCDEvents(event cloudevents.Event) (cdevents.CDEvent, error) {
-    // Define mappings for use case
+	// Define mappings for use case
 
 	// CloudEvents to CDEvents Mapping goes here
 	if event.Type() == cdevents.ArtifactPackagedEventV1.String() {
@@ -106,6 +124,40 @@ func mapToCDEvents(event cloudevents.Event) (cdevents.CDEvent, error) {
 		event.SetSubjectUrl("https://example.com/myPipeline")
 		return event, nil
 	}
+
+	// Deal with Cloud Events coming from APIServer Source
+	if event.Type() == "dev.knative.apiserver.resource.add" {
+
+		// Deal with Deployments
+
+		// First parse the APIServerSourceEventData to find the involved object
+		data := APIServerSourceEventData{}
+
+		err := json.Unmarshal(event.Data(), &data)
+		if err != nil {
+			fmt.Println("Failed to parse APIServerSourceEventData ", err)
+		}
+
+		// Only transform deployment events
+		if data.InvolvedObject.Kind == "Deployment" {
+
+			cdevent, _ := cdevents.NewServiceDeployedEvent()
+			cdevent.SetTimestamp(event.Time())
+			cdevent.SetSubjectSource("ApiServerSource")
+			cdevent.SetSubjectId(data.InvolvedObject.Name + "@" + data.InvolvedObject.Uid)
+			cdevent.SetSource(event.Source())
+			environment := cdevents.Reference{}
+			environment.Id = data.InvolvedObject.Namespace
+			environment.Source = event.Source()
+			cdevent.SetSubjectEnvironment(environment)
+			cdevent.SetCustomData("application/json", event)
+			cdevent.SetSubjectArtifactId("deployment:" + data.InvolvedObject.Namespace + "/" + data.InvolvedObject.Name + "@" + data.InvolvedObject.Uid)
+
+			return cdevent, nil
+		}
+
+	}
+
 	return nil, nil
 }
 

@@ -1,9 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata: 
+  name: four-keys
+
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloudevents-raw-deployment
+  name: cloudevents-raw-endpoint-deployment
   labels:
     app: cloudevents-raw
+  namespace: four-keys
 spec:
   selector:
     matchLabels:
@@ -14,8 +22,8 @@ spec:
         app: cloudevents-raw
     spec:
       containers:
-        - name: cloudevents-raw
-          image: ko://cloudevents-consumer.go
+        - name: cloudevents-endpoint
+          image: ko://cloudevents-endpoint.go
           env:
           - name: POSTGRESQL_HOST
             value: postgresql
@@ -31,6 +39,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cloudevents-raw-service
+  namespace: four-keys
 spec:
   selector:
     app: cloudevents-raw
@@ -38,12 +47,14 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 8080
+
 ---
 
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: cdevents-translator-cronjob
+  namespace: four-keys
 spec:
   schedule: "* * * * *"
   jobTemplate:
@@ -63,3 +74,30 @@ spec:
                       name: postgresql
                       key: postgres-password
           restartPolicy: OnFailure
+
+---
+
+ apiVersion: batch/v1
+ kind: CronJob
+ metadata:
+   name: cdevents-deployment-frequency-cronjob
+   namespace: four-keys
+ spec:
+   schedule: "* * * * *"
+   jobTemplate:
+     spec:
+       template:
+         spec:
+           containers:
+             - name: cdevents-deployment-frequency
+               image: ko://cdevents-deployment-frequency.go
+               imagePullPolicy: IfNotPresent
+               env:
+                 - name: POSTGRESQL_HOST
+                   value: postgresql
+                 - name: POSTGRESQL_PASS
+                   valueFrom:
+                     secretKeyRef:
+                       name: postgresql
+                       key: postgres-password
+           restartPolicy: OnFailure
