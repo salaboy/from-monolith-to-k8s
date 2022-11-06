@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 	"os"
-
+	"github.com/gorilla/mux"
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	_ "github.com/lib/pq"
+	"time"
 )
 
 const (
@@ -24,22 +26,15 @@ type Deployment struct{
 
 func main() {
 
-	// The default client is HTTP.
-	c, err := cloudevents.NewClientHTTP()
-	if err != nil {
-		log.Fatalf("failed to create client, %v", err)
-	}
-	log.Fatal(c.StartReceiver(context.Background(), receive))
+	r := mux.NewRouter()
+	r.HandleFunc("/deploy-frequency/day", DeploymentsByDayHandler).Methods("GET")
+	log.Printf("Four Keys Metrics Server Started in 8080!")
+	http.Handle("/", r)
+	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-// Normal Endpoint to return deployment frequency per service
-
-func receive(event cloudevents.Event) {
-
-	// do something with event.
-	fmt.Printf("%s", event)
-	jsonEvent, err := json.Marshal(event)
-	CheckError(err)
+// Returns the deployments frequency per day
+func DeploymentsByDayHandler(writer http.ResponseWriter, request *http.Request) {
 
 	// connection string
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", os.Getenv("POSTGRESQL_HOST"), port, user, os.Getenv("POSTGRESQL_PASS"), dbname)
@@ -58,9 +53,35 @@ func receive(event cloudevents.Event) {
 	fmt.Println("Connected!")
 
 	rows, err := db.Query(`SELECT DATE_TRUNC('day', time_created) AS day, COUNT(distinct deploy_id) AS deployments FROM deployments GROUP BY day;`)
-
 	CheckError(err)
 
+	defer rows.Close()
+
+	for rows.Next() {
+		var count int
+		var time time.Time
+
+		err = rows.Scan(&time, &count)
+		CheckError(err)
+
+		fmt.Println("Deployment: ",time, string(count))
+	}
+
+
+	respondWithJSON(writer, http.StatusOK, "working")
+}
+
+
+func respondWithError(w http.ResponseWriter, code int, message string) {
+	respondWithJSON(w, code, map[string]string{"error": message})
+}
+
+func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+	response, _ := json.Marshal(payload)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	w.Write(response)
 }
 
 func CheckError(err error) {

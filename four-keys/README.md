@@ -40,7 +40,8 @@ We will install the following components in an existing Kubernetes Cluster (you 
 
     - `CREATE TABLE IF NOT EXISTS cdevents_raw ( cd_source varchar(255) NOT NULL, cd_id varchar(255) NOT NULL, cd_timestamp TIMESTAMP NOT NULL, cd_type varchar(255) NOT NULL, cd_subject_id varchar(255) NOT NULL, cd_subject_source varchar(255), content json NOT NULL, PRIMARY KEY (cd_source, cd_id));`
 
-    - `CREATE TABLE IF NOT EXISTS deployments ( deploy_id varchar(255) NOT NULL, time_created TIMESTAMP NOT NULL, deploy_name varchar(255) NOT NULL, PRIMARY KEY (deploy_id, deploy_name));`
+    - `CREATE TABLE IF NOT EXISTS deployments ( deploy_id varchar(255) NOT NULL, time_created TIMESTAMP NOT NULL, deploy_name varchar(255) NOT NULL, PRIMARY KEY (deploy_id, time_created, deploy_name));`
+
 - Sockeye: `kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml`
 
 Cloud Event Sources: 
@@ -68,11 +69,12 @@ This counts the number of deployments per day:
 
 ```
 SELECT
+distinct deploy_name AS NAME,
 DATE_TRUNC('day', time_created) AS day,
 COUNT(distinct deploy_id) AS deployments
 FROM
 deployments
-GROUP BY day;
+GROUP BY deploy_name, day;
 ```
 
 @TODO: we should filter by "deployment name", as this is currently all deployments

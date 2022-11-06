@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/cdevents/sdk-go v0.1.0
 	github.com/cloudevents/sdk-go/v2 v2.12.0
+	github.com/gorilla/mux v1.8.0
 	github.com/lib/pq v1.10.7
 )
 

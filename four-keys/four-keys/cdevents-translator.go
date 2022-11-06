@@ -144,7 +144,7 @@ func mapToCDEvents(event cloudevents.Event) (cdevents.CDEvent, error) {
 			cdevent, _ := cdevents.NewServiceDeployedEvent()
 			cdevent.SetTimestamp(event.Time())
 			cdevent.SetSubjectSource("ApiServerSource")
-			cdevent.SetSubjectId(data.InvolvedObject.Name + "@" + data.InvolvedObject.Uid)
+			cdevent.SetSubjectId(data.InvolvedObject.Name)
 			cdevent.SetSource(event.Source())
 			environment := cdevents.Reference{}
 			environment.Id = data.InvolvedObject.Namespace
