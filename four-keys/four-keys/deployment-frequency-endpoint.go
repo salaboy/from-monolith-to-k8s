@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"database/sql"
 	"encoding/json"
 	"fmt"
@@ -9,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"github.com/gorilla/mux"
-	cloudevents "github.com/cloudevents/sdk-go/v2"
 	_ "github.com/lib/pq"
 	"time"
 )
@@ -20,8 +18,10 @@ const (
 	dbname = "postgres"
 )
 
-type Deployment struct{
-
+type DeploymentFrequency struct{
+	DeployName string
+	Deployments int
+	Time time.Time
 }
 
 func main() {
@@ -52,23 +52,30 @@ func DeploymentsByDayHandler(writer http.ResponseWriter, request *http.Request) 
 
 	fmt.Println("Connected!")
 
-	rows, err := db.Query(`SELECT DATE_TRUNC('day', time_created) AS day, COUNT(distinct deploy_id) AS deployments FROM deployments GROUP BY day;`)
+	rows, err := db.Query(`SELECT distinct deploy_name AS NAME, DATE_TRUNC('day', time_created) AS day, 
+						COUNT(distinct deploy_id) AS deployments FROM deployments GROUP BY deploy_name, day`)
 	CheckError(err)
 
 	defer rows.Close()
-
+	deployments  := make([]DeploymentFrequency, 0)
 	for rows.Next() {
+		var deployName string
 		var count int
 		var time time.Time
 
-		err = rows.Scan(&time, &count)
+		err = rows.Scan(&deployName, &time, &count)
 		CheckError(err)
 
-		fmt.Println("Deployment: ",time, string(count))
+	    deploy :=  DeploymentFrequency{
+			DeployName:  deployName,
+			Deployments: count,
+			Time:        time,
+		}
+
+	    deployments = append(deployments, deploy)
 	}
 
-
-	respondWithJSON(writer, http.StatusOK, "working")
+	respondWithJSON(writer, http.StatusOK, deployments)
 }
 
 

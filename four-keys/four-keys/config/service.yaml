@@ -35,6 +35,36 @@ spec:
 
 ---
 
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fourkeys-frequency-endpoint-deployment
+  labels:
+    app: fourkeys-frequency
+  namespace: four-keys
+spec:
+  selector:
+    matchLabels:
+      app: fourkeys-frequency
+  template:
+    metadata:
+      labels:
+        app: fourkeys-frequency
+    spec:
+      containers:
+        - name: frequency-endpoint
+          image: ko://deployment-frequency-endpoint.go
+          env:
+            - name: POSTGRESQL_HOST
+              value: postgresql
+            - name: POSTGRESQL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: postgres-password
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -43,6 +73,21 @@ metadata:
 spec:
   selector:
     app: cloudevents-raw
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: fourkeys-frequency-service
+  namespace: four-keys
+spec:
+  selector:
+    app: fourkeys-frequency
   ports:
     - protocol: TCP
       port: 80
@@ -90,7 +135,7 @@ spec:
          spec:
            containers:
              - name: cdevents-deployment-frequency
-               image: ko://cdevents-deployment-frequency.go
+               image: ko://deployment-frequency.go
                imagePullPolicy: IfNotPresent
                env:
                  - name: POSTGRESQL_HOST
