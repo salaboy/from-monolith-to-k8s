@@ -1,0 +1,500 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.9">
+    
+    
+      
+        <title>Four keys by From Monolith to K8S</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.20d9efc8.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.08040f6c.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#four-keys-cdevents-for-kubernetes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="Four keys by From Monolith to K8S" class="md-header__button md-logo" aria-label="Four keys by From Monolith to K8S" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Four keys by From Monolith to K8S
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Four Keys + CDEvents for Kubernetes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Four keys by From Monolith to K8S" class="md-nav__button md-logo" aria-label="Four keys by From Monolith to K8S" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Four keys by From Monolith to K8S
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Four Keys + CDEvents for Kubernetes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Four Keys + CDEvents for Kubernetes
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    Components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    Metrics
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-frequency" class="md-nav__link">
+    Deployment Frequency
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-sources-and-extensions" class="md-nav__link">
+    Other sources and extensions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    Components
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    Metrics
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#deployment-frequency" class="md-nav__link">
+    Deployment Frequency
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other-sources-and-extensions" class="md-nav__link">
+    Other sources and extensions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="four-keys-cdevents-for-kubernetes">Four Keys + CDEvents for Kubernetes</h1>
+<blockquote>
+<p>This repo is based on <a href="https://github.com/GoogleCloudPlatform/fourkeys">GCP fourkeys</a> and <a href="https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance">Using the four keys to measure DevOps performance</a>.</p>
+</blockquote>
+<p>This project was designed to consume Cloud Events and allow you to track the Four Keys from the DORA report all based on Kubernetes making it portable accross cloud providers.</p>
+<h2 id="components">Components</h2>
+<ul>
+<li>
+<p><code>CloudEvents Endpoint</code>: endpoint to send all CloudEvents, these CloudEvents will be stored in the SQL database to the <code>cloudevents-raw</code> table. </p>
+</li>
+<li>
+<p>(Optional) <code>CDEvents Endpoint</code>: endpoint to send CDEvents, these CloudEvents will be stored in the SQL database to the <code>cdevents-raw</code> table, as they do not need any transformation. This endpoint validates that the CloudEvent received is a CD CloudEvent. </p>
+</li>
+<li>
+<p><code>CDEvents tranformers</code>: These functions will read from the <code>cloudevents-raw</code> table and tranform the CloudEvents to CDEvents only when apply based on the function's mapping. The results needs to be stored into the <code>cdevents-raw</code> table for further processing.</p>
+</li>
+<li>
+<p><code>Metrics functions</code>: These functions are in charge of calculating different metrics and store them into special tables, probably one per table. To calculate metrics these functions read from <code>cdevents-raw</code>.</p>
+</li>
+<li>
+<p>(Optional) <code>Metrics Endpoint</code>: allows you to query the metrics by name and add some filters. This is an optional component, as you can build a dashboard from the metrics tables without using the endpoints.</p>
+</li>
+</ul>
+<p><img alt="imgs/four-keys-architecture.png" src="imgs/four-keys-architecture.png" /></p>
+<h2 id="installation">Installation</h2>
+<p>This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".</p>
+<p>We will install the following components in an existing Kubernetes Cluster (you can use KinD): </p>
+<ol>
+<li><a href="https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/">Install Knative Serving</a> </li>
+<li>
+<p><a href="https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/">Install Knative Eventing</a></p>
+</li>
+<li>
+<p>Install PostgreSQL: </p>
+</li>
+</ol>
+<p>We use <a href="https://helm.sh/">Helm</a> to install postgresql on Kubernetes cluster.</p>
+<p>After, install <code>Helm</code> add Bitnami helm repo:</p>
+<div class="highlight"><pre><span></span><code>helm repo add bitnami https://charts.bitnami.com/bitnami
+</code></pre></div>
+<p>Create a namespace in your cluster called <code>four-keys</code>:
+<div class="highlight"><pre><span></span><code>kubectl create namespace four-keys
+</code></pre></div></p>
+<p>Install <code>bitnami/postgresql</code> helm chart on namespace <code>four-keys</code>.
+<div class="highlight"><pre><span></span><code>helm install postgresql bitnami/postgresql --namespace four-keys
+</code></pre></div></p>
+<p>Use a port forwarding to access the application:
+<div class="highlight"><pre><span></span><code>kubectl port-forward --namespace four-keys svc/postgresql <span class="m">5432</span>:5432
+</code></pre></div></p>
+<p>By default, the <code>bitnami/postgresql</code> chart creates a password, run this command to get it:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span> <span class="nv">POSTGRES_PASSWORD</span><span class="o">=</span><span class="k">$(</span>kubectl get secret --namespace four-keys postgresql -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.postgres-password}&quot;</span> <span class="p">|</span> base64 -d<span class="k">)</span>
+</code></pre></div>
+<p>To connect from outside the cluster: 
+<div class="highlight"><pre><span></span><code><span class="nv">PGPASSWORD</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$POSTGRES_PASSWORD</span><span class="s2">&quot;</span> psql --host <span class="m">127</span>.0.0.1 -U postgres -d postgres -p <span class="m">5432</span>
+</code></pre></div></p>
+<p>Creating all necessary tables (on default database <code>postgres</code>):</p>
+<p><code>cloudevents_raw</code>:
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">cloudevents_raw</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">event_id</span><span class="w"> </span><span class="nb">serial</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">event_timestamp</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">);</span><span class="w"></span>
+</code></pre></div></p>
+<p><code>cdevents_raw</code>:
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">cdevents_raw</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">cd_source</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">cd_id</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">cd_timestamp</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">cd_type</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">cd_subject_id</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">cd_subject_source</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">),</span><span class="w"> </span><span class="n">content</span><span class="w"> </span><span class="n">json</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">cd_source</span><span class="p">,</span><span class="w"> </span><span class="n">cd_id</span><span class="p">));</span><span class="w"></span>
+</code></pre></div></p>
+<p><code>deployments</code>
+<div class="highlight"><pre><span></span><code><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">deployments</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">deploy_id</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">time_created</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="n">deploy_name</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">deploy_id</span><span class="p">,</span><span class="w"> </span><span class="n">time_created</span><span class="p">,</span><span class="w"> </span><span class="n">deploy_name</span><span class="p">));</span><span class="w"></span>
+</code></pre></div></p>
+<p>Install <a href="https://github.com/n3wscott/sockeye">Sockeye</a>:</p>
+<blockquote>
+<p>Sockeye is a "Websocket based CloudEvents viewer."</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml
+</code></pre></div>
+<p>Add Cloud Event Sources with <a href="https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object">Kubernetes API Server Source</a>:</p>
+<div class="highlight"><pre><span></span><code>  kubectl apply -f api-serversource-deployments.yaml
+</code></pre></div>
+<h2 id="metrics">Metrics</h2>
+<p>To get more info about metrics see <a href="https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md">GCP fourkeys metrics</a>.</p>
+<h2 id="deployment-frequency">Deployment Frequency</h2>
+<p>We look for new or updated deployment resources. This us done by using the APIServerSource. The flow should look like: </p>
+<!-- TODO: add a image tha represents this flow -->
+<p><code>API Server Source</code> -&gt; <code>CloudEvent Endpoint (cloudevents_raw)</code> -&gt; <code>CDEvent Transformation (cdevents_raw)</code> -&gt; <code>Deployment Frequency Function (writes to</code>deployments<code>table)</code></p>
+<p><strong>Deployment Frequency Function</strong>: looks at the cdevents_raw table and counts Deployment CDEvents from different services. </p>
+<p>Calculate buckets: <strong>Daily</strong>, <strong>Weekly</strong>, <strong>Monthly</strong>, <strong>Yearly</strong>.</p>
+<p>This counts the number of deployments per day: </p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"></span>
+<span class="k">distinct</span><span class="w"> </span><span class="n">deploy_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">NAME</span><span class="p">,</span><span class="w"></span>
+<span class="n">DATE_TRUNC</span><span class="p">(</span><span class="s1">&#39;day&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">time_created</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">day</span><span class="p">,</span><span class="w"></span>
+<span class="k">COUNT</span><span class="p">(</span><span class="k">distinct</span><span class="w"> </span><span class="n">deploy_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">deployments</span><span class="w"></span>
+<span class="k">FROM</span><span class="w"></span>
+<span class="n">deployments</span><span class="w"></span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">deploy_name</span><span class="p">,</span><span class="w"> </span><span class="k">day</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
+<!-- @TODO: we should filter by "deployment name", as this is currently all deployments -->
+
+<p>Deploy the <code>four-keys</code> components using <a href="https://ko.build/install/">ko</a> for development:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span> four-keys/
+ko apply -f config/
+</code></pre></div>
+<p>Create a new Deployment in the <code>default</code> namespace to test that your configuration is working.</p>
+<h2 id="other-sources-and-extensions">Other sources and extensions</h2>
+<ul>
+<li>
+<p><a href="https://github.com/cdfoundation/sig-events/tree/main/poc/tekton">Install Tekton</a></p>
+</li>
+<li>
+<p>Accessing Tekton dashboard: 
+<div class="highlight"><pre><span></span><code>    kubernetes port-forward svc/tekton-dashboard <span class="m">9097</span>:9097 -n tekton-pipelines
+</code></pre></div></p>
+</li>
+<li>
+<p>Creating Cloud Events Controller: 
+<div class="highlight"><pre><span></span><code>    kubectl apply -f https://storage.cloud.google.com/tekton-releases-nightly/cloudevents/latest/release.yaml
+</code></pre></div></p>
+</li>
+<li>
+<p>ConfigMap: <code>config-defaults</code> for <SINK URL></p>
+</li>
+<li>
+<p>Github Source: <a href="https://github.com/knative/docs/tree/main/code-samples/eventing/github-source">https://github.com/knative/docs/tree/main/code-samples/eventing/github-source</a></p>
+</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.d6c3db9e.min.js"></script>
+      
+    
+  </body>
+</html>
