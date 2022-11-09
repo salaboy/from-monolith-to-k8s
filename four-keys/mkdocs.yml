@@ -1,0 +1,5 @@
+site_name: Four keys by From Monolith to K8S
+theme:
+  name: material
+markdown_extensions:
+  - pymdownx.superfences
