@@ -360,15 +360,9 @@
 <h2 id="installation">Installation</h2>
 <p>This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".</p>
 <p>We will install the following components in an existing Kubernetes Cluster (you can use KinD): </p>
-<ol>
-<li><a href="https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/">Install Knative Serving</a> </li>
-<li>
-<p><a href="https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/">Install Knative Eventing</a></p>
-</li>
-<li>
+<p><a href="https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/">Install Knative Serving</a> 
+<a href="https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/">Install Knative Eventing</a></p>
 <p>Install PostgreSQL: </p>
-</li>
-</ol>
 <p>We use <a href="https://helm.sh/">Helm</a> to install postgresql on Kubernetes cluster.</p>
 <p>After, install <code>Helm</code> add Bitnami helm repo:</p>
 <div class="highlight"><pre><span></span><code>helm repo add bitnami https://charts.bitnami.com/bitnami
