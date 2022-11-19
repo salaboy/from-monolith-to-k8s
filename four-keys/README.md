@@ -6,15 +6,19 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 
 ## Components
 
-- `CloudEvents Endpoint`: endpoint to send all CloudEvents, these CloudEvents will be stored in the SQL database to the `cloudevents-raw` table. 
+- **CloudEvents Endpoint**: endpoint to send all CloudEvents, these CloudEvents will be stored in the SQL database to the `cloudevents-raw` table. 
 
-- `CDEvents Endpoint`: endpoint to send CDEvents, these CloudEvents will be stored in the SQL database to the `cdevents-raw` table, as they do not need any transformation. This endpoint validates that the CloudEvent received is a CD CloudEvent. 
+- **CloudEvents Router**: this component, using a routing table, know where to route events to be transformed to `CDEvents`. This mechanism allows the same event type to be transformed into multiple `CDevents` if needed. This component reads from `cloudevents-raw` table and process events. This component is triggerd on a configurable fixed period of time. 
 
-- `CDEvents tranformers`: These functions will read from the `cloudevents-raw` table and tranform the CloudEvents to CDEvents only when apply based on the function's mapping. The results needs to be stored into the `cdevents-raw` table for further processing.
+- **CDEvents tranformers**: These functions receive events from the `CloudEvents Router`  and tranform the CloudEvents to CDEvents, the result is sent to the `CDEvents Endpoint`. 
 
-- `Metrics functions`: These functions are in charge of calculating different metrics and store them into special tables, probably one per table. To calculate metrics these functions read from `cdevents-raw`.
 
-- (Optional) `Metrics Endpoint`: allows you to query the metrics by name and add some filters. This is an optional component, as you can build a dashboard from the metrics tables without using the endpoints.
+- **CDEvents Endpoint**`: endpoint to send [`CDEvents`](https://cdevents.dev), these CloudEvents will be stored in the SQL database to the `cdevents-raw` table, as they do not need any transformation. This endpoint validates that the CloudEvent received is a CD CloudEvent. 
+
+
+- **Metrics functions**: These functions are in charge of calculating different metrics and store them into special tables, probably one per table. To calculate metrics these functions read from `cdevents-raw`. An example on how to calculate the **Deployment Frequency** metric is explained below. 
+
+- (Optional) **Metrics Endpoint**: allows you to query the metrics by name and add some filters. This is an optional component, as you can build a dashboard from the metrics tables without using these endpoints.
 
 
 ![imgs/four-keys-architecture.png](imgs/four-keys-architecture.png)
@@ -22,7 +26,6 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 ## Installation
 
 This project was created to consume any CloudEvent available and store it into a SQL database for further processing. Once the CloudEvents are into the system a function based approach can be used to translate to CDEvents which will be used to calculate the "four keys".
-
 
 
 We will install the following components in an existing Kubernetes Cluster (you can use KinD): 
@@ -107,11 +110,14 @@ From [https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md](http
 
 ## Deployment Frequency
 
-We look for new or updated deployment resources. This us done by using the APIServerSource. The flow should look like: 
 
-API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CDEvent Transformation (cdevents_raw) -> Deployment Frequency Function (writes to `deployments` table) 
 
-Deployment Frequency Function: look at the cdevents_raw table and count Deployment CDEvents from different services. 
+We look for new or updated deployment resources. This us done by using the `APIServerSource` configured before. 
+
+The flow should look like: 
+
+API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CloudEvents Router -> CDEvent Transformation Function -> CDEvents Endpoint (cdevents_raw) -> Deployment Frequency Function (writes to `deployments` table) -> Metrics Endpoint (reads from `deployments` table)
+
 
 Calculate buckets: Daily, Weekly, Monthly, Yearly.
 
@@ -128,7 +134,6 @@ deployments
 GROUP BY deploy_name, day;
 ```
 
-@TODO: we should filter by "deployment name", as this is currently all deployments
 
 Deploy the `four-keys` components using `ko` for development:
 
