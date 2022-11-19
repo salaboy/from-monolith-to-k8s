@@ -4,11 +4,12 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
-	"net/http"
-	"os"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
+	"net/http"
+	"os"
 	"time"
 )
 
@@ -17,6 +18,15 @@ const (
 	user   = "postgres"
 	dbname = "postgres"
 )
+
+var logger = log.NewLogfmtLogger(os.Stdout)
+
+func CheckError(err error) {
+	if err != nil {
+		level.Error(logger).Log("error", err)
+		panic(err)
+	}
+}
 
 type DeploymentFrequency struct{
 	DeployName string
@@ -28,9 +38,9 @@ func main() {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/deploy-frequency/day", DeploymentsByDayHandler).Methods("GET")
-	log.Printf("Four Keys Metrics Server Started in 8080!")
+	level.Info(logger).Log("Four Keys Metrics Server Started in 8080!")
 	http.Handle("/", r)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	level.Error(logger).Log(http.ListenAndServe(":8080", nil))
 }
 
 // Returns the deployments frequency per day
@@ -50,7 +60,7 @@ func DeploymentsByDayHandler(writer http.ResponseWriter, request *http.Request) 
 	err = db.Ping()
 	CheckError(err)
 
-	fmt.Println("Connected!")
+	level.Info(logger).Log("DB", "Connected!")
 
 	rows, err := db.Query(`SELECT distinct deploy_name AS NAME, DATE_TRUNC('day', time_created) AS day, 
 						COUNT(distinct deploy_id) AS deployments FROM deployments GROUP BY deploy_name, day`)
@@ -91,8 +101,3 @@ func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	w.Write(response)
 }
 
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}

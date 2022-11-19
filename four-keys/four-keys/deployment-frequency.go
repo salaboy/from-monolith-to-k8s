@@ -3,6 +3,8 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 
 	cdevents "github.com/cdevents/sdk-go/pkg/api"
 
@@ -18,6 +20,15 @@ const (
 	user   = "postgres"
 	dbname = "postgres"
 )
+
+var logger = log.NewLogfmtLogger(os.Stdout)
+
+func CheckError(err error) {
+	if err != nil {
+		level.Error(logger).Log("error", err)
+		panic(err)
+	}
+}
 
 // reads from CDEvents and look for Deployments to count them
 func main() {
@@ -36,7 +47,7 @@ func main() {
 	err = db.Ping()
 	CheckError(err)
 
-	fmt.Println("Connected!")
+	level.Info(logger).Log("DB", "Connected!")
 
 	// select
 	// @TODO: add a way to keep track of which ones were processed
@@ -56,7 +67,7 @@ func main() {
 
 		err := json.Unmarshal(content, &event)
 		if err != nil {
-			fmt.Println("Ignoring id ", id, err)
+			level.Debug(logger).Log("Ignoring id ", id)
 			continue
 		}
 
@@ -65,7 +76,7 @@ func main() {
 		_, e := db.Exec(insertStmt, event.Subject.Content.ArtifactId, event.GetSubjectId(), event.GetTimestamp())
 
 		if e != nil {
-			fmt.Println("Inserting failed for event ", e)
+			level.Error(logger).Log("Inserting failed for event ", e)
 		}
 
 	}
@@ -74,8 +85,3 @@ func main() {
 
 }
 
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}

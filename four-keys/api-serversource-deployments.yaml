@@ -48,9 +48,9 @@ spec:
      kind: Event
  sink:
    ref:
-     apiVersion: v1
+     apiVersion: serving.knative.dev/v1
      kind: Service
-     name: cloudevents-raw-service
+     name: cloudevents-raw-endpoint
      namespace: four-keys
 
 

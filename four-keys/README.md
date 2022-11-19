@@ -26,13 +26,64 @@ This project was created to consume any CloudEvent available and store it into a
 
 
 We will install the following components in an existing Kubernetes Cluster (you can use KinD): 
+- Create Cluster: 
+```
+cat <<EOF | kind create cluster --name platform --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 31080 # expose port 31380 of the node to port 80 on the host, later to be use by kourier or contour ingress
+    listenAddress: 127.0.0.1
+    hostPort: 80
+EOF
+```
 - [Install Knative Serving](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/) 
-- [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
+  - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-crds.yaml`
+  - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-core.yaml`
+  - `kubectl apply -f https://github.com/knative/net-kourier/releases/download/knative-v1.8.0/kourier.yaml`
+```
+kubectl patch configmap/config-network \
+--namespace knative-serving \
+--type merge \
+--patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+```
+  - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-default-domain.yaml`
 
+  - `kubectl patch configmap -n knative-serving config-domain -p "{\"data\": {\"127.0.0.1.sslip.io\": \"\"}}"`
+
+```
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: kourier-ingress
+  namespace: kourier-system
+  labels:
+    networking.knative.dev/ingress-provider: kourier
+spec:
+  type: NodePort
+  selector:
+    app: 3scale-kourier-gateway
+  ports:
+    - name: http2
+      nodePort: 31080
+      port: 80
+      targetPort: 8080
+EOF
+```
+
+- [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
+  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-crds.yaml`
+  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-core.yaml`
+  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/in-memory-channel.yaml`
+  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/mt-channel-broker.yaml`
 - PostgreSQL: 
+  - `kubectl create ns four-keys`
   - `helm install postgresql bitnami/postgresql --namespace four-keys`
-  - `kubectl port-forward --namespace four-keys svc/postgresql 5432:5432`
-  - `export POSTGRES_PASSWORD=$(kubectl get secret --namespace four-keys postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
+  - In a separate terminal: `kubectl port-forward --namespace four-keys svc/postgresql 5432:5432`
+  - In another terminal: `export POSTGRES_PASSWORD=$(kubectl get secret --namespace four-keys postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
   - To connect from outside the cluster: `PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432`
   - Create Tables (on default database `postgres`): 
     

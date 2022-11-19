@@ -1,29 +1,30 @@
-apiVersion: v1
-kind: Namespace
-metadata: 
-  name: four-keys
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: api-server-to-service-deployment-function
+  namespace: four-keys
+spec:
+  template:
+    spec:
+      containers:
+        - image: ko://function-api-server-to-service-deployment.go
+          env:
+            - name: CDEVENTS_ENDPOINT_URL
+              value: http://cdevents-raw-endpoint.four-keys.svc.cluster.local
 
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: serving.knative.dev/v1
+kind: Service
 metadata:
-  name: cloudevents-raw-endpoint-deployment
-  labels:
-    app: cloudevents-raw
+  name: cloudevents-raw-endpoint
   namespace: four-keys
 spec:
-  selector:
-    matchLabels:
-      app: cloudevents-raw
   template:
-    metadata:
-      labels:
-        app: cloudevents-raw
     spec:
       containers:
-        - name: cloudevents-endpoint
-          image: ko://cloudevents-endpoint.go
+        - image: ko://cloudevents-endpoint.go
           env:
           - name: POSTGRESQL_HOST
             value: postgresql
@@ -33,27 +34,19 @@ spec:
                 name: postgresql
                 key: postgres-password
 
+
 ---
 
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: serving.knative.dev/v1
+kind: Service
 metadata:
-  name: fourkeys-frequency-endpoint-deployment
-  labels:
-    app: fourkeys-frequency
+  name: cdevents-raw-endpoint
   namespace: four-keys
 spec:
-  selector:
-    matchLabels:
-      app: fourkeys-frequency
   template:
-    metadata:
-      labels:
-        app: fourkeys-frequency
     spec:
       containers:
-        - name: frequency-endpoint
-          image: ko://deployment-frequency-endpoint.go
+        - image: ko://cdevents-endpoint.go
           env:
             - name: POSTGRESQL_HOST
               value: postgresql
@@ -63,42 +56,36 @@ spec:
                   name: postgresql
                   key: postgres-password
 
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: cloudevents-raw-service
-  namespace: four-keys
-spec:
-  selector:
-    app: cloudevents-raw
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
 
 ---
 
-apiVersion: v1
+apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: fourkeys-frequency-service
+  name: fourkeys-frequency-endpoint
   namespace: four-keys
 spec:
-  selector:
-    app: fourkeys-frequency
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 8080
+  template:
+    spec:
+      containers:
+        - image: ko://deployment-frequency-endpoint.go
+          env:
+            - name: POSTGRESQL_HOST
+              value: postgresql
+            - name: POSTGRESQL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: postgresql
+                  key: postgres-password
+
+
 
 ---
 
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: cdevents-translator-cronjob
+  name: cloudevents-router-cronjob
   namespace: four-keys
 spec:
   schedule: "* * * * *"
@@ -107,8 +94,8 @@ spec:
       template:
         spec:
           containers:
-            - name: cdevents-translator
-              image: ko://cdevents-translator.go
+            - name: cloudevents-router
+              image: ko://cloudevents-router.go
               imagePullPolicy: IfNotPresent
               env:
                 - name: POSTGRESQL_HOST

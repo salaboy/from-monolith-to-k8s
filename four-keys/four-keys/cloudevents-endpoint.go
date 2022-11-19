@@ -5,7 +5,8 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
-	"log"
+	"github.com/go-kit/log"
+	"github.com/go-kit/log/level"
 	"os"
 
 	cloudevents "github.com/cloudevents/sdk-go/v2"
@@ -18,21 +19,30 @@ const (
 	dbname = "postgres"
 )
 
+var logger = log.NewLogfmtLogger(os.Stdout)
+
+func CheckError(err error) {
+	if err != nil {
+		level.Error(logger).Log("error", err)
+		panic(err)
+	}
+}
+
 // cloudevents_raw table `CREATE TABLE IF NOT EXISTS cloudevents_raw ( event_id serial NOT NULL PRIMARY KEY, content json NOT NULL, event_timestamp TIMESTAMP NOT NULL);`
 func main() {
 
 	// The default client is HTTP.
 	c, err := cloudevents.NewClientHTTP()
 	if err != nil {
-		log.Fatalf("failed to create client, %v", err)
+		level.Error(logger).Log("failed to create client, %v", err)
 	}
-	log.Fatal(c.StartReceiver(context.Background(), receive))
+	level.Error(logger).Log(c.StartReceiver(context.Background(), receiveCloudEvent))
 }
 
-func receive(event cloudevents.Event) {
+func receiveCloudEvent(event cloudevents.Event) {
 
 	// do something with event.
-	fmt.Printf("%s", event)
+	level.Debug(logger).Log("event", event)
 	jsonEvent, err := json.Marshal(event)
 	CheckError(err)
 
@@ -50,17 +60,16 @@ func receive(event cloudevents.Event) {
 	err = db.Ping()
 	CheckError(err)
 
-	fmt.Println("Connected!")
+	level.Info(logger).Log("DB", "Connected!")
 
 	// insert
 	insertStmt := `insert into "cloudevents_raw"("content", "event_timestamp") values($1, current_timestamp)`
 	_, e := db.Exec(insertStmt, string(jsonEvent))
+	if e != nil {
+		level.Error(logger).Log("Inserting failed for event ", e)
+	}
 	CheckError(e)
 
 }
 
-func CheckError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
+

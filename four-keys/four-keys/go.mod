@@ -5,11 +5,13 @@ go 1.18
 require (
 	github.com/cdevents/sdk-go v0.1.0
 	github.com/cloudevents/sdk-go/v2 v2.12.0
+	github.com/go-kit/log v0.2.1
 	github.com/gorilla/mux v1.8.0
 	github.com/lib/pq v1.10.7
 )
 
 require (
+	github.com/go-logfmt/logfmt v0.5.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect
 	github.com/go-playground/validator/v10 v10.11.1 // indirect
