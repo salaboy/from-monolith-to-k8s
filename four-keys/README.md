@@ -110,7 +110,7 @@ From [https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md](http
 
 ## Deployment Frequency
 
-
+![deployment frequency](imgs/deployment-frequency-metric.png)
 
 We look for new or updated deployment resources. This us done by using the `APIServerSource` configured before. 
 
