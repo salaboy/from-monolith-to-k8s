@@ -8,7 +8,7 @@ This project was designed to consume Cloud Events and allow you to track the Fou
 
 - `CloudEvents Endpoint`: endpoint to send all CloudEvents, these CloudEvents will be stored in the SQL database to the `cloudevents-raw` table. 
 
-- (Optional) `CDEvents Endpoint`: endpoint to send CDEvents, these CloudEvents will be stored in the SQL database to the `cdevents-raw` table, as they do not need any transformation. This endpoint validates that the CloudEvent received is a CD CloudEvent. 
+- `CDEvents Endpoint`: endpoint to send CDEvents, these CloudEvents will be stored in the SQL database to the `cdevents-raw` table, as they do not need any transformation. This endpoint validates that the CloudEvent received is a CD CloudEvent. 
 
 - `CDEvents tranformers`: These functions will read from the `cloudevents-raw` table and tranform the CloudEvents to CDEvents only when apply based on the function's mapping. The results needs to be stored into the `cdevents-raw` table for further processing.
 
