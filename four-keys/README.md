@@ -2,7 +2,7 @@
 
 Based on https://github.com/GoogleCloudPlatform/fourkeys and https://cloud.google.com/blog/products/devops-sre/using-the-four-keys-to-measure-your-devops-performance
 
-This project was designed to consume Cloud Events and allow you to track the Four Keys from the DORA report all based on Kubernetes making it portable accross cloud providers.
+This project was designed to consume Cloud Events from multiple sources and allow you to track the Four Keys from the DORA report all based on Kubernetes making it portable accross cloud providers. 
 
 ## Components
 
@@ -80,10 +80,8 @@ EOF
 - [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
   - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-crds.yaml`
   - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-core.yaml`
-  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/in-memory-channel.yaml`
-  - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/mt-channel-broker.yaml`
+- `kubectl create ns four-keys`
 - PostgreSQL: 
-  - `kubectl create ns four-keys`
   - `helm install postgresql bitnami/postgresql --namespace four-keys`
   - In a separate terminal: `kubectl port-forward --namespace four-keys svc/postgresql 5432:5432`
   - In another terminal: `export POSTGRES_PASSWORD=$(kubectl get secret --namespace four-keys postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
@@ -102,6 +100,19 @@ Cloud Event Sources:
 
 - Kubernetes API Server Source: https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object
   - Apply the APIServerSource resource with: `kubectl apply -f api-serversource-deployments.yaml`
+
+
+## Development 
+
+Deploy the `four-keys` components using `ko` for development:
+
+```
+cd four-keys/
+ko apply -f config/
+```
+
+
+Create a new Deployment in the `default` namespace to test that your configuration is working.
 
 
 # Metrics
@@ -135,16 +146,9 @@ GROUP BY deploy_name, day;
 ```
 
 
-Deploy the `four-keys` components using `ko` for development:
-
-```
-cd four-keys/
-ko apply -f config/
-```
 
 
-Create a new Deployment in the `default` namespace to test that your configuration is working.
-
+## TODOs and extensions
 
 
 
