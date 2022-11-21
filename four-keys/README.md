@@ -114,6 +114,10 @@ ko apply -f config/
 
 Create a new Deployment in the `default` namespace to test that your configuration is working.
 
+```
+kubectl apply -f test/example-deployment.yaml
+```
+
 
 # Metrics
 
