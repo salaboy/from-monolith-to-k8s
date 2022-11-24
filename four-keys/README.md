@@ -31,59 +31,63 @@ This project was created to consume any CloudEvent available and store it into a
 
 
 We will install the following components in an existing Kubernetes Cluster (you can use KinD): 
-- Create Cluster: 
-```
-cat <<EOF | kind create cluster --name platform --config=-
-kind: Cluster
-apiVersion: kind.x-k8s.io/v1alpha4
-nodes:
-- role: control-plane
-  extraPortMappings:
-  - containerPort: 31080 # expose port 31380 of the node to port 80 on the host, later to be use by kourier or contour ingress
-    listenAddress: 127.0.0.1
-    hostPort: 80
-EOF
-```
-- [Install Knative Serving](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/) 
+
+1) Create a KinD Cluster
+    ```
+    cat <<EOF | kind create cluster --name platform --config=-
+    kind: Cluster
+    apiVersion: kind.x-k8s.io/v1alpha4
+    nodes:
+    - role: control-plane
+      extraPortMappings:
+      - containerPort: 31080 # expose port 31380 of the node to port 80 on the host, later to be use by kourier or contour ingress
+        listenAddress: 127.0.0.1
+        hostPort: 80
+    EOF
+    ```
+2) Install [Knative Serving](https://knative.dev/docs/install/yaml-install/serving/install-serving-with-yaml/)
   - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-crds.yaml`
   - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-core.yaml`
   - `kubectl apply -f https://github.com/knative/net-kourier/releases/download/knative-v1.8.0/kourier.yaml`
-```
-kubectl patch configmap/config-network \
---namespace knative-serving \
---type merge \
---patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
-```
+  - Patch your `configmap/config-network`:
+    ```
+    kubectl patch configmap/config-network \
+    --namespace knative-serving \
+    --type merge \
+    --patch '{"data":{"ingress-class":"kourier.ingress.networking.knative.dev"}}'
+    ```
   - `kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.8.0/serving-default-domain.yaml`
 
   - `kubectl patch configmap -n knative-serving config-domain -p "{\"data\": {\"127.0.0.1.sslip.io\": \"\"}}"`
+  - Apply the Kourier Service
+    ```
+    cat <<EOF | kubectl apply -f -
+    apiVersion: v1
+    kind: Service
+    metadata:
+      name: kourier-ingress
+      namespace: kourier-system
+      labels:
+        networking.knative.dev/ingress-provider: kourier
+    spec:
+      type: NodePort
+      selector:
+        app: 3scale-kourier-gateway
+      ports:
+        - name: http2
+          nodePort: 31080
+          port: 80
+          targetPort: 8080
+    EOF
+    ```
 
-```
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: kourier-ingress
-  namespace: kourier-system
-  labels:
-    networking.knative.dev/ingress-provider: kourier
-spec:
-  type: NodePort
-  selector:
-    app: 3scale-kourier-gateway
-  ports:
-    - name: http2
-      nodePort: 31080
-      port: 80
-      targetPort: 8080
-EOF
-```
-
-- [Install Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
+3) Install [Knative Eventing](https://knative.dev/docs/install/yaml-install/eventing/install-eventing-with-yaml/)
   - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-crds.yaml`
   - `kubectl apply -f https://github.com/knative/eventing/releases/download/knative-v1.8.1/eventing-core.yaml`
-- `kubectl create ns four-keys`
-- PostgreSQL: 
+
+4) Create your "Four Keys" namespace: `kubectl create ns four-keys`
+5) Install PostgreSQL
+  - `helm repo add bitnami https://charts.bitnami.com/bitnami`
   - `helm install postgresql bitnami/postgresql --namespace four-keys`
   - In a separate terminal: `kubectl port-forward --namespace four-keys svc/postgresql 5432:5432`
   - In another terminal: `export POSTGRES_PASSWORD=$(kubectl get secret --namespace four-keys postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)`
@@ -96,12 +100,10 @@ EOF
 
     - `CREATE TABLE IF NOT EXISTS deployments ( deploy_id varchar(255) NOT NULL, time_created TIMESTAMP NOT NULL, deploy_name varchar(255) NOT NULL, PRIMARY KEY (deploy_id, time_created, deploy_name));`
 
-- Sockeye: `kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml`
+6) Install Sockeye: `kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/release.yaml`
 
-Cloud Event Sources: 
-
-- Kubernetes API Server Source: https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object
-  - Apply the APIServerSource resource with: `kubectl apply -f api-serversource-deployments.yaml`
+7) Add Cloud Event Sources: 
+  - Using the [Kubernetes API Server Source file](https://knative.dev/docs/eventing/sources/apiserversource/getting-started/#create-an-apiserversource-object) already in the root directory, apply the APIServerSource resource with: `kubectl apply -f api-serversource-deployments.yaml`
 
 
 ## Development 
