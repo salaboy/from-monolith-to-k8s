@@ -146,7 +146,6 @@ graph TD
     E --> F(Deployment Frequency Function)
     F --> |writes to `deployments` table| G[Deployments Table]
     G --> |read from `deployments` table| H[Metrics Endpoint]
-  
 ```
 
 
