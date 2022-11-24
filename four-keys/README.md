@@ -115,8 +115,7 @@ We will install the following components in an existing Kubernetes Cluster (you 
 Deploy the `four-keys` components using `ko` for development:
 
 ```
-cd four-keys/
-ko apply -f config/
+ko apply -f four-keys/config/
 ```
 
 
@@ -138,8 +137,15 @@ From [https://github.com/GoogleCloudPlatform/fourkeys/blob/main/METRICS.md](http
 We look for new or updated deployment resources. This is done by using the `APIServerSource` that we configured earlier. 
 
 The flow should look like: 
-
-API Server Source -> CloudEvent Endpoint (cloudevents_raw) -> CloudEvents Router -> CDEvent Transformation Function -> CDEvents Endpoint (cdevents_raw) -> Deployment Frequency Function (writes to `deployments` table) -> Metrics Endpoint (reads from `deployments` table)
+```mermaid
+graph TD;
+    API Server Source-->CloudEvent Endpoint (cloudevents_raw);
+    CloudEvent Endpoint (cloudevents_raw)-->CloudEvents Router;
+    CloudEvents Router-->CDEvent Transformation Function;
+    CDEvent Transformation Function-->CDEvents Endpoint (cdevents_raw);
+    CDEvents Endpoint (cdevents_raw)-->Deployment Frequency Function (writes to `deployments` table);
+    Deployment Frequency Function (writes to `deployments` table)-->Metrics Endpoint (reads from `deployments` table);
+```
 
 
 Calculate buckets: Daily, Weekly, Monthly, Yearly.
