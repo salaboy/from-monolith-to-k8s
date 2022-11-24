@@ -138,13 +138,15 @@ We look for new or updated deployment resources. This is done by using the `APIS
 
 The flow should look like: 
 ```mermaid
-graph TD;
-    API Server Source-->CloudEvent Endpoint (cloudevents_raw);
-    CloudEvent Endpoint (cloudevents_raw)-->CloudEvents Router;
-    CloudEvents Router-->CDEvent Transformation Function;
-    CDEvent Transformation Function-->CDEvents Endpoint (cdevents_raw);
-    CDEvents Endpoint (cdevents_raw)-->Deployment Frequency Function (writes to `deployments` table);
-    Deployment Frequency Function (writes to `deployments` table)-->Metrics Endpoint (reads from `deployments` table);
+graph TD
+    A[API Server Source] -->B[CloudEvent Endpoint: cloudevents_raw]
+    B --> C[CloudEvents Router]
+    C --> D(CDEvent Transformation Function)
+    D --> E[CDEvents Endpoint: cdevents_raw]
+    E --> F(Deployment Frequency Function)
+    F --> |writes to `deployments` table| G[Deployments Table]
+    G --> |read from `deployments` table| H[Metrics Endpoint]
+  
 ```
 
 
