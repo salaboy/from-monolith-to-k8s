@@ -78,7 +78,20 @@ spec:
                   name: postgresql
                   key: postgres-password
 
-
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: routes
+  namespace: four-keys
+data:
+  ce-routes.yaml: |
+    routes:
+      "dev.knative.apiserver.resource.add":
+      - http://api-server-to-service-deployment-function.four-keys.svc.cluster.local
+      - http://sockeye.default.svc.cluster.local
+      "dev.knative.github.pr.new":
+      - http://sockeye.default.svc.cluster.local
 
 ---
 
@@ -98,6 +111,11 @@ spec:
               image: ko://cloudevents-router.go
               imagePullPolicy: IfNotPresent
               env:
+                - name: CE_ROUTES
+                  valueFrom:
+                    configMapKeyRef:
+                      name: routes
+                      key: ce-routes.yaml
                 - name: POSTGRESQL_HOST
                   value: postgresql
                 - name: POSTGRESQL_PASS

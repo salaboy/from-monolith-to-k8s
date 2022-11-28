@@ -8,6 +8,8 @@ require (
 	github.com/go-kit/log v0.2.1
 	github.com/gorilla/mux v1.8.0
 	github.com/lib/pq v1.10.7
+	github.com/package-url/packageurl-go v0.1.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -22,7 +24,6 @@ require (
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
-	github.com/package-url/packageurl-go v0.1.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v5 v5.0.2 // indirect
 	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
