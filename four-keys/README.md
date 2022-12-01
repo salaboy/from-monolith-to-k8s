@@ -115,14 +115,15 @@ We will install the following components in an existing Kubernetes Cluster (you 
 Deploy the `four-keys` components using `ko` for development:
 
 ```
-ko apply -f four-keys/config/
+cd four-keys/
+ko apply -f config/
 ```
 
 
 Create a new Deployment in the `default` namespace to test that your configuration is working.
 
 ```
-kubectl apply -f test/example-deployment.yaml
+kubectl apply -f ../test/example-deployment.yaml
 ```
 
 If the Deployment Frequency functions (transformation and calculation) are installed you should be able to query the deployment frequency endpoint and see the metric: 
@@ -152,10 +153,10 @@ We look for new or updated deployment resources. This is done by using the `APIS
 The flow should look like: 
 ```mermaid
 graph TD
-    A[API Server Source] -->B[CloudEvent Endpoint: cloudevents_raw]
-    B --> C[CloudEvents Router]
+    A[API Server Source] --> |writes to `cloudevents_raw` table| B[CloudEvent Endpoint]
+    B --> |read from `cloudevents_raw` table| C[CloudEvents Router]
     C --> D(CDEvent Transformation Function)
-    D --> E[CDEvents Endpoint: cdevents_raw]
+    D --> |writes to `cdevents_raw` table| E[CDEvents Endpoint]
     E --> F(Deployment Frequency Function)
     F --> |writes to `deployments` table| G[Deployments Table]
     G --> |read from `deployments` table| H[Metrics Endpoint]
