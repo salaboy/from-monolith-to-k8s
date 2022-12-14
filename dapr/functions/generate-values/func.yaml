@@ -1,0 +1,31 @@
+specVersion: 0.34.0
+name: generate-values
+runtime: go
+registry: docker.io/salaboy
+image: docker.io/salaboy/generate-values:latest
+imageDigest: sha256:3be569eeb3b4f4cda37b8ff881eba0636abd7b113c2171582df266b7e88b91dd
+created: 2022-12-14T08:46:03.752015Z
+invocation:
+  format: http
+build:
+  buildpacks:
+  - paketo-buildpacks/go-dist
+  - ghcr.io/boson-project/go-function-buildpack:tip
+  builder: pack
+  buildEnvs: []
+run:
+  volumes: []
+  envs: []
+deploy:
+  namespace: default
+  annotations:
+    dapr.io/app-id: generate-values
+    dapr.io/app-port: "8080"
+    dapr.io/enable-api-logging: "true"
+    dapr.io/enabled: "true"
+    dapr.io/metrics-port: "9099"
+  options: {}
+  labels: []
+  healthEndpoints:
+    liveness: /health/liveness
+    readiness: /health/readiness
