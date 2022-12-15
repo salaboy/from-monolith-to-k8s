@@ -219,6 +219,12 @@ curl http://generate-values.default.127.0.0.1.sslip.io
 
 A random value was generated and stored into redis. 
 
+First we need to obtain the REDIS_PASSWORD for the redis instance that we installed in our cluster:
+
+```
+export REDIS_PASSWORD=$(kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d)
+```
+
 To check this, we can connect to the redis instance and run some queries:
 First we port-forward the Redis Service port: 
 
