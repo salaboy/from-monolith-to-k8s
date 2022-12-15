@@ -259,8 +259,10 @@ keys *
 And then review the values by selecting a key with:
 
 ```
-hgetall "generate-values||random-XX"
+hgetall "generate-values||<UUID>"
 ```
+Replace UUID for one of the UUIDs listed with the `keys *` query.
+
 
 ## Let's add tracing
 
