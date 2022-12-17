@@ -35,7 +35,7 @@ We will install the following components in an existing Kubernetes Cluster (you 
 
 1. Create a KinD Cluster
     ```
-    cat <<EOF | kind create cluster --name platform --config=-
+    cat <<EOF | kind create cluster --config=-
     kind: Cluster
     apiVersion: kind.x-k8s.io/v1alpha4
     nodes:
