@@ -1,0 +1,40 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+  name: app
+spec:
+  template:
+    metadata:
+      dapr.io/app-id: app
+      dapr.io/app-port: "8080"
+      dapr.io/enabled: "true"
+      dapr.io/metrics-port: "9099"
+    spec:
+      containerConcurrency: 0
+      containers:
+        - env:
+            - name: REDIS_HOST
+              value: {{ .Release.Name }}-redis-master-x-default-x-{{ .Values.teamName }}:6379
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-redis-x-default-x-{{ .Values.teamName }}
+                  key: redis-password
+                  optional: false
+          image: salaboy/app-c863bf8a26a07de0524697b6de429c8c@sha256:ed0f4d543ae7dc5b68b3df0862e929768f75228af92192317ff7aa21ad485d06
+          livenessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          name: user-container
+          readinessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          resources: {}
+      enableServiceLinks: false
+      timeoutSeconds: 300
+  traffic:
+    - latestRevision: true
+      percent: 100

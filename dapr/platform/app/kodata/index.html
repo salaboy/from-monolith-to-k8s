@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <title>KubeDay Japan App</title>
+    <style>
+        :root {
+            --background-color: #FFFFFF;
+            --secondary-background-color: #d3d5d9;
+            --text-color: #212326;
+            --main-color: #326be3;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html, body {
+            background-color: var(--main-color);
+            font-family: sans-serif;
+            color: var(--text-color);
+            font-size: 20px;
+            line-height: 1.5;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        .background {
+            position: fixed;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+
+        }
+        .background img{
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            opacity: .2;
+        }
+        .layout {
+            display: flex;
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 10;
+        }
+        .layout .header {
+            display: flex;
+            justify-content: space-between;
+            padding: 40px 40px 0;
+        }
+        .layout .header .info {
+            color: var(--background-color);
+        }
+        .layout .header .info h1 {
+            font-size: 25px;
+        }
+        .layout .header .info h2 {
+            font-size: 18px;
+        }
+        .layout .header .info a {
+            color: var(--background-color);
+            text-decoration: underline;
+            font-weight: normal;
+        }
+        .layout .header img{
+            height: 20vh;
+        }
+        h1, h2 {
+            font-weight: bold;
+        }
+        h3 {
+            font-size: 25px;
+            text-transform: uppercase;
+            line-height: 86px;
+            padding: 0;
+            margin: 0;
+        }
+
+        button {
+            font-size: 40px;
+            padding: 20px;
+            border-radius: 10px;
+            color: var(--background-color);
+            background-color: var(--main-color);
+            border: none;
+            width: 100%;
+        }
+        button:hover {
+            color: white;
+            background-color: #001524;
+        }
+        button:disabled {
+            color: white;
+            background-color: var(--secondary-background-color);
+        }
+
+        .content {
+
+            padding: 40px;
+            height: 100%;
+
+        }
+        .content .container {
+            background-color: var(--background-color);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 20px;
+            height: 100%;
+        }
+        .content .container .row {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 40px;
+        }
+        .content .container .row.main {
+            height: 100%;
+        }
+        .content .container .row .column {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+        }
+        .content .container .row .column .last {
+            margin-bottom: 20px;
+        }
+        .content .container .row.content-header {
+            text-align: center;
+        }
+        .content .container .row.content-header h1{
+            font-size: 20px;
+            margin: 0 auto 20px;
+        }
+
+        .content .container .row.new-version {
+            background-color: var(--secondary-background-color);
+            margin-left: -10px;
+            margin-right: -10px;
+            margin-bottom: -10px;
+            margin-top: 10px;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .image img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
+        }
+
+        .inputField {
+            margin: 20px 0;
+            border: 2px dashed var(--text-color);
+            padding: 20px;
+            font-family: monospace;
+            border-radius: 10px;
+            background-color: var(--background-color);
+            height: 100%;
+            max-height: 25vh;
+
+        }
+        .inputField.textArea {
+            height: 100%;
+            
+            overflow-y: scroll;
+            word-break: break-all;
+        }
+        @media only screen and (max-width: 800px) {
+            body {
+                font-size: 16px;
+            }
+            h3 {
+                font-size: 15px;
+                text-transform: uppercase;
+                line-height: 20px;
+                padding: 0;
+                margin: 0;
+            }
+            .layout .header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 10px 0;
+            }
+            .layout .header .qr{
+                display: none; 
+            }
+            .layout .header .info{
+                text-align: left;
+                margin-left: 20px;
+            }
+            .layout .header .info h1 {
+                font-size: 15px;
+            }
+            .layout .header .info h2 {
+                font-size: 12px;
+            }
+            .layout .header .logo img{
+                width: 150px;
+            }
+            .content {
+
+                padding: 10px;
+                margin-bottom: 10px;
+                height: auto;
+            }
+            .content .container {
+                
+                padding: 10px;
+                
+            }
+            .content .container .row {
+                gap: 20px;
+                flex-direction: column;
+            }
+            .content .container .row .column {
+                width: 100%;
+            }
+            button {
+                font-size: 25px;
+                padding: 15px ;
+                border-radius: 10px;
+               text-transform: uppercase;
+               font-weight: bold;
+            }
+            
+             
+
+        }
+    </style>
+    <script>
+
+
+        function getValue() {
+
+            console.log("generating random value");
+            const color = ["#FFCFD2", "#F1C0E8","#CFBAF0","#A3C4F3", "#90DBF4", "#98F5E1", "#8EECF5", "#98F5E1" , "#FFCFD2", "#F1C0E8" ];
+            document.getElementById("inputText").style.backgroundColor = color[Math.floor(Math.random() * 10)];
+            document.getElementById("inputText").innerHTML = Math.floor(Math.random() * 10000);
+            document.getElementById("storeBtn").disabled = false
+
+        }
+
+        function storeValue() {
+            console.log("storing value..");
+
+            var valueToStore = document.getElementById("inputText").innerHTML;
+            console.log("value to store: " + valueToStore);
+
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("POST", "/store?value="+valueToStore, false);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState === 4) {
+                    document.getElementById("storeBtn").disabled = true
+                    getStoredValues();
+                    Toastify({
+                        text: "The value "+valueToStore+" was stored in the database!",
+                        duration: 3000,
+                        destination: "https://salaboy.com",
+                        newWindow: true,
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
+                }};
+
+            xmlHttp.send(null);
+
+        }
+
+        function init(){
+            document.getElementById("storeBtn").disabled = true;
+            getStoredValues();
+        }
+
+        function getCurrentURL () {
+            console.log(window.location.href)
+            return window.location.href
+        }
+
+        function hasQueryParams(url) {
+            console.log(url.indexOf('?'))
+            return url.indexOf('?') !== -1;
+        }
+
+        function getAverage() {
+            console.log("calculating average...")
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", "/avg", false);
+            xmlHttp.onreadystatechange = function () {
+                if (xmlHttp.readyState === 4) {
+                    const color = ["#FFCFD2", "#F1C0E8","#CFBAF0","#A3C4F3", "#90DBF4", "#98F5E1", "#8EECF5", "#98F5E1" , "#FFCFD2", "#F1C0E8" ];
+                    document.getElementById("averageText").style.backgroundColor = color[Math.floor(Math.random() * 10)];
+                    document.getElementById("averageText").innerHTML = xmlHttp.responseText;
+                    console.log("average=" + xmlHttp.responseText)
+                    Toastify({
+                        text: "The current average is "+xmlHttp.responseText+".",
+                        duration: 3000,
+                        destination: "https://salaboy.com",
+                        newWindow: true,
+                        close: true,
+                        gravity: "top", // `top` or `bottom`
+                        position: "center", // `left`, `center` or `right`
+                        stopOnFocus: true, // Prevents dismissing of toast on hover
+                        style: {
+                            background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        },
+                        onClick: function(){} // Callback after click
+                    }).showToast();
+                }};
+            xmlHttp.send(null);
+
+        }
+
+        function getStoredValues() {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", "/values", false);
+            xmlHttp.send(null);
+            document.getElementById("storedValuesText").innerHTML = xmlHttp.responseText;
+            document.getElementById("inputText").innerHTML = "Click the button to generate a new value."
+            document.getElementById("storeBtn").disabled = true
+        }
+
+        function clearStoredValues() {
+            console.log("Clearing old values");
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("DELETE", "/clear", false);
+            xmlHttp.send(null);
+            getStoredValues();
+        }
+
+
+    </script>
+</head>
+<body onload="init();">
+<div class="background">
+    <img src="background.jpg" alt="background">
+</div>
+<div class="layout">
+    <div class="header">
+        <div class="logo">
+            <img src="logo.svg" alt="Kubecon">
+        </div>
+        <div class="info">
+            <h1>KubeDay Japan Version 2 .0</h1>
+                <h2><a href="https://via.vmw.com/kubeday-japan">via.vmw.com/kubeday-japan</a></h2>
+                <h2><a href="http://mng.bz/jjKP">Continuous Delivery for Kubernetes Book</a></h2>
+                <h2><a href="https://github.com/salaboy/kubeday-japan-2022">Step-by-step tutorial: github.com/salaboy/kubeday-japan-2022</a></h2>
+        </div>
+        <div class="qr">
+            <img src="qr.png" alt="Kubecon">
+        </div>
+    </div>
+    <div class="content">
+        <div class="container">
+            <div class="row content-header">
+                
+            </div>
+            <div class="row main">
+                <div class="column">
+                    <button id="getValueBtn" onclick="getValue()">Generate Value</button>
+
+
+                    <div id="inputText" class="inputField">
+                        Click the button to generate a new value.
+                    </div>
+
+                    <div class="last">
+                        <button id="storeBtn" disabled onclick="storeValue()">Store Value</button>
+
+                    </div>
+                </div>
+
+                <div class="column">
+                    <h3>Values in the Database</h3>
+                    <div id="storedValuesText" class="inputField textArea">
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="row new-version">
+
+                <div class="column">
+                    <div id="averageDiv">
+                        <button id="avgBtn" onclick="getAverage()" >Calculate Average</button>
+                    </div>
+                </div>
+                <div class="column">
+                    <h3>Calculated Average</h3>
+                    <div id="averageText" class="inputField">Click the button to calculate the average. </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

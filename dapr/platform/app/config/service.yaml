@@ -1,0 +1,38 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  annotations:
+  name: app
+spec:
+  template:
+    metadata:
+    spec:
+      containerConcurrency: 0
+      containers:
+        - env:
+            - name: BUILT
+              value: 20220924T112015
+            - name: REDIS_HOST
+              value: my-redis-master:6379
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: my-redis
+                  key: redis-password
+                  optional: false
+          image: ko://github.com/salaboy/kubeday-japan-2022/app
+          livenessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          name: user-container
+          readinessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          resources: {}
+      enableServiceLinks: false
+      timeoutSeconds: 300
+  traffic:
+    - latestRevision: true
+      percent: 100

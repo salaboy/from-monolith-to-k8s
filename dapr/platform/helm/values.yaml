@@ -1,0 +1,4 @@
+teamName: team-a-env
+domainName: 35.200.223.12.sslip.io
+redis:
+  architecture: standalone

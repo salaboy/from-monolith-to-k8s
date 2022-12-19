@@ -3,7 +3,7 @@ name: generate-values
 runtime: go
 registry: docker.io/salaboy
 image: docker.io/salaboy/generate-values:latest
-imageDigest: sha256:3be569eeb3b4f4cda37b8ff881eba0636abd7b113c2171582df266b7e88b91dd
+imageDigest: sha256:a47e467dfefcd43e57560582e59668e57ab7a1ec4f260e22e6a1c4130d689494
 created: 2022-12-14T08:46:03.752015Z
 invocation:
   format: http
@@ -21,9 +21,15 @@ deploy:
   annotations:
     dapr.io/app-id: generate-values
     dapr.io/app-port: "8080"
+    dapr.io/config: tracing
     dapr.io/enable-api-logging: "true"
+    dapr.io/enable-metrics: "true"
     dapr.io/enabled: "true"
+    dapr.io/log-as-json: "true"
     dapr.io/metrics-port: "9099"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9099"
+    prometheus.io/scrape: "true"
   options: {}
   labels: []
   healthEndpoints:

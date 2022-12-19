@@ -290,6 +290,30 @@ kubectl create deployment zipkin --image openzipkin/zipkin
 kubectl expose deployment zipkin --type ClusterIP --port 9411
 ```
 
+Now you can apply the Dapr COonfiguration for tracing by running: 
+
+```
+kubectl apply -f tracing.yaml
+```
+
+```
+kubectl port-forward svc/zipkin 19411:9411
+```
+
+
+Now in order to make tracing to work, we need to add one more annotation to our function:
+
+```
+deploy:
+  namespace: default
+  annotations:
+    ...
+    dapr.io/config: tracing
+    ...
+```
+
+Where `tracing` is the name of our Dapr Configuration resource that we created before.
+
 ## Let's enable and check metrics
 
 ```
@@ -299,7 +323,102 @@ kubectl create namespace dapr-monitoring
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install dapr-prom prometheus-community/prometheus -n dapr-monitoring
+helm install dapr-prom prometheus-community/prometheus -n dapr-monitoring --set alertmanager.persistentVolume.enable=false --set pushgateway.persistentVolume.enabled=false --set server.persistentVolume.enabled=false
 
 ```
+Notice that we are disabling all the `persistentVolume` configs for local development.
+
+Check that all pods are up
+```
+kubectl get pods -n dapr-monitoring
+```
+
+We need to modify the configurations by default from prometheus to scrape from port `9099` which we changed in our `func.yaml` configuration.
+
+To do this we can add some more annotations for Prometheus to scrape metrics in a special port: 
+
+```
+deploy:
+  namespace: default
+  annotations:
+    ...
+    dapr.io/enable-metrics: "true"
+    dapr.io/metrics-port: "9099"
+    prometheus.io/path: /metrics
+    prometheus.io/port: "9099"
+    prometheus.io/scrape: "true"
+    ...
+```
+
+
+Next we will install grafana: 
+
+```
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana grafana/grafana -n dapr-monitoring --set persistence.enabled=false
+
+```
+
+Get the grafana password
+```
+kubectl get secret --namespace dapr-monitoring grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+
+```
+
+Now we can port-forward to access the grafana dashboard:
+
+```
+kubectl port-forward svc/grafana 8080:80 -n dapr-monitoring
+```
+
+Now you need to Configure the prometheus [data source in grafana as explained here](https://docs.dapr.io/operations/monitoring/metrics/grafana/#configure-prometheus-as-data-source). Then import the Dapr dashboards that can be found within the files of your Dapr release here: [https://github.com/dapr/dapr/releases](https://github.com/dapr/dapr/releases). Look for the `-dashboard.json` files. 
+
+The problem with functions is that they might be downscaled to zero, so promethues might not be able to query them to get the metrics. We might need to look for another approach for collecting metrics (for example using the prometheus push gateway).
+
+
+## Let's configure distributed logging with FluentD
+
+https://docs.dapr.io/operations/monitoring/logging/fluentd/
+
+
+```
+helm repo add elastic https://helm.elastic.co
+helm repo update
+```
+
+```
+helm install elasticsearch elastic/elasticsearch --version 7.17.3 -n dapr-monitoring --set persistence.enabled=false,replicas=1
+
+```
+
+
+Install Kibana
+
+```
+helm install kibana elastic/kibana --version 7.17.3 -n dapr-monitoring
+
+```
+
+Then install FluentD
+
+```
+kubectl apply -f fluentd-config-map.yaml
+kubectl apply -f fluentd-dapr-with-rbac.yaml
+
+```
+
+Then port-forward to kibana:
+
+```
+kubectl port-forward svc/kibana-kibana 5601 -n dapr-monitoring
+```
+
+On Kibana, after setting it up, you can create a filter: 
+
+```
+kubernetes.container_image_id : "generate-values" 
+```
+
+To filter all the logs coming from our function.
 

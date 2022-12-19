@@ -1,0 +1,22 @@
+apiVersion: v2
+description: A Helm chart for the KubeDay Japan application
+name: kubeday-japan-app
+version: v0.1.1
+type: application
+icon: https://salaboy.files.wordpress.com/2019/07/avatar.png
+appVersion: v0.1.1
+maintainers: 
+  - name: salaboy
+    email: salaboy@gmail.com
+    url: http://salaboy.com
+home: http://github.com/salaboy/from-monolith-to-k8s    
+keywords:
+  - cloudnative
+  - example
+  - cd
+  - kubernetes
+  - tutorial
+dependencies:
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 17.3.6
