@@ -120,6 +120,16 @@ We will start by creating a function using the Go programming language that stor
 
 To use the Dapr state store abstraction, first we need to define a Dapr component. For this example I've chosen Redis to be the implementation used to store state, but the idea here is that you can swap it to another state store if you need to without changing the code that is storing state.
 
+Before applying this resource to our cluster, we need to install Redis, and we will do this using Helm:
+
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm install redis bitnami/redis --set image.tag=6.2 --set architecture=standalone
+```
+
+Then we can apply the `statestore.yaml` resource: 
+
 ```statestore.yaml
 apiVersion: dapr.io/v1alpha1
 kind: Component
@@ -129,6 +139,8 @@ spec:
   type: state.redis
   version: v1
   metadata:
+  - name: keyPrefix
+    value: name
   # These settings will work out of the box if you use `helm install
   # bitnami/redis`.  If you have your own setup, replace
   # `redis-master:6379` with your own Redis master address, and the
@@ -144,13 +156,7 @@ auth:
   secretStore: kubernetes
 ```
 
-Before applying this resource to our cluster, we need to install Redis, and we will do this using Helm:
 
-```
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm repo update
-helm install redis bitnami/redis --set image.tag=6.2 --set architecture=standalone
-```
 
 Now we have a redis instance and a secret called `redis` which contains a key called `redis-password` that our `statestore` component will use to connect to it. Now you can go ahead and apply our `statestore` component into our cluster: 
 
