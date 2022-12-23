@@ -1,0 +1,31 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: app
+spec:
+  template:
+    metadata:
+      annotations: 
+        autoscaling.knative.dev/min-scale: "1"
+        dapr.io/app-id: webapp
+        dapr.io/app-port: "8080"
+        dapr.io/enabled: "true"
+        dapr.io/metrics-port: "9099"
+    spec:
+      containers:
+        - image: ko://github.com/salaboy/from-monolith-to-k8s/dapr/webapp
+          livenessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          name: user-container
+          readinessProbe:
+            httpGet:
+              path: /info
+              port: 0
+          resources: {}
+      enableServiceLinks: false
+      timeoutSeconds: 300
+  traffic:
+    - latestRevision: true
+      percent: 100

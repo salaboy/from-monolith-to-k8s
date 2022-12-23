@@ -1,0 +1,30 @@
+specVersion: 0.34.0
+name: avg
+runtime: go
+registry: docker.io/salaboy
+image: docker.io/salaboy/avg:latest
+imageDigest: sha256:4cc8d0d4f6496968fa9535d364426254bf367449630d1e7c836c3633a5427e2b
+created: 2022-12-21T17:36:17.524989Z
+invocation:
+  format: http
+build:
+  buildpacks:
+  - paketo-buildpacks/go-dist
+  - ghcr.io/boson-project/go-function-buildpack:tip
+  builder: pack
+  buildEnvs: []
+run:
+  volumes: []
+  envs: []
+deploy:
+  namespace: default
+  annotations:
+    dapr.io/app-id: avg
+    dapr.io/app-port: "8080"
+    dapr.io/enabled: "true"
+    dapr.io/metrics-port: "9099"
+  options: {}
+  labels: []
+  healthEndpoints:
+    liveness: /health/liveness
+    readiness: /health/readiness
