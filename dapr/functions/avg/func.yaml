@@ -3,7 +3,7 @@ name: avg
 runtime: go
 registry: docker.io/salaboy
 image: docker.io/salaboy/avg:latest
-imageDigest: sha256:e118267c64823bcec5c058ff4635eaed820af1baf84b598012f9c8730d13c13e
+imageDigest: sha256:b675788882b1f6102fe849bd4c63fd1ab83ad1baabf98c6e75febcf1e3789bd1
 created: 2022-12-21T17:36:17.524989Z
 invocation:
   format: http
@@ -21,6 +21,7 @@ deploy:
   annotations:
     dapr.io/app-id: avg
     dapr.io/app-port: "8080"
+    dapr.io/config: tracing
     dapr.io/enabled: "true"
     dapr.io/metrics-port: "9099"
   options: {}

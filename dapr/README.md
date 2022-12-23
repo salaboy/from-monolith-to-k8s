@@ -296,12 +296,34 @@ keys *
 And then review the values by selecting a key with:
 
 ```
-hgetall "generate-values||<UUID>"
+hgetall "statestore||values"
 ```
-Replace UUID for one of the UUIDs listed with the `keys *` query.
+
+You should see an output like this: 
+
+```
+redis-master:6379> hgetall "statestore||values"
+1) "data"
+2) "{\"Values\":[\"3053\",\"5432\",\"1962\",\"292\",\"2669\",\"1808\",\"6254\",\"5964\"]}"
+3) "version"
+4) "8"
+```
 
 
 ## Let's add tracing
+
+
+Once again we need to choose an implementation, for this example we will install and use Zipkin, but you can change the underlaying implementation without the need to change any application code. 
+
+```
+kubectl create deployment zipkin --image openzipkin/zipkin
+```
+
+```
+kubectl expose deployment zipkin --type ClusterIP --port 9411
+```
+
+Now you can apply the Dapr COonfiguration for tracing by running: 
 
 ```tracing.yaml
 apiVersion: dapr.io/v1alpha1
@@ -317,21 +339,13 @@ spec:
 
 ```
 
-Once again we need to choose an implementation, for this example we will install and use Zipkin, but you can change the underlaying implementation without the need to change any application code. 
-
-```
-kubectl create deployment zipkin --image openzipkin/zipkin
-```
-
-```
-kubectl expose deployment zipkin --type ClusterIP --port 9411
-```
-
-Now you can apply the Dapr COonfiguration for tracing by running: 
+By running: 
 
 ```
 kubectl apply -f tracing.yaml
 ```
+
+
 
 ```
 kubectl port-forward svc/zipkin 19411:9411
@@ -350,6 +364,12 @@ deploy:
 ```
 
 Where `tracing` is the name of our Dapr Configuration resource that we created before.
+Now you can open the Zipkin dashboard and check which traces are being observed: [http://localhost:19411]
+
+![traces](tracing-traces.png)
+![traces deps](tracing-dependencies.png)
+
+
 
 ## Let's enable and check metrics
 
