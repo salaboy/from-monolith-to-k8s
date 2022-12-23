@@ -428,3 +428,26 @@ kubernetes.container_image_id : "generate-values"
 
 To filter all the logs coming from our function.
 
+
+## Let's add some timer based actions
+
+
+## Load test our function for autoscaling
+
+spec.template.metadata.annotations
+
+```
+autoscaling.knative.dev/target: "10"
+```
+
+```
+hey -z 10s -c 50 \                 
+  "http://avg.default.127.0.0.1.sslip.io" \
+  && kubectl get pods
+```
+
+
+```
+hey -z 10s -c 50 "http://avg.default.34.132.150.167.sslip.io" \
+  && kubectl get pods
+```
