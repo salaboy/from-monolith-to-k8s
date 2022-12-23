@@ -13,7 +13,7 @@ spec:
         dapr.io/metrics-port: "9099"
     spec:
       containers:
-        - image: docker.io/salaboy/webapp-5dd817b6438eb2b7aec9bd0d6b49d12b@sha256:827e3a56a2aaf5237919cb8963388344718af2cb4cb21a6997ee9a14a2c83846
+        - image: docker.io/salaboy/webapp-5dd817b6438eb2b7aec9bd0d6b49d12b@sha256:271e22ccdecd562b003c44dec5654a43cd8151f6ead5d33b8f9d7bcf8922da6d
           livenessProbe:
             httpGet:
               path: /info

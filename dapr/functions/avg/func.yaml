@@ -3,7 +3,7 @@ name: avg
 runtime: go
 registry: docker.io/salaboy
 image: docker.io/salaboy/avg:latest
-imageDigest: sha256:4cc8d0d4f6496968fa9535d364426254bf367449630d1e7c836c3633a5427e2b
+imageDigest: sha256:e118267c64823bcec5c058ff4635eaed820af1baf84b598012f9c8730d13c13e
 created: 2022-12-21T17:36:17.524989Z
 invocation:
   format: http

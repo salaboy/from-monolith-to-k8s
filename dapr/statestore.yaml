@@ -19,5 +19,8 @@ spec:
     secretKeyRef:
       name: redis
       key: redis-password
+scopes:
+  - "webapp"
+  - "avg"
 auth:
   secretStore: kubernetes
