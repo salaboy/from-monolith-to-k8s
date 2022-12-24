@@ -436,28 +436,24 @@ The problem with functions is that they might be downscaled to zero, so promethu
 
 ## Let's configure distributed logging with FluentD
 
-https://docs.dapr.io/operations/monitoring/logging/fluentd/
-
+First we need to configure our [logging stack](https://docs.dapr.io/operations/monitoring/logging/fluentd/), for that we will use FluentD, ElasticSearch and Kibana.
 
 ```
 helm repo add elastic https://helm.elastic.co
 helm repo update
-```
-
-```
 helm install elasticsearch elastic/elasticsearch --version 7.17.3 -n dapr-monitoring --set persistence.enabled=false,replicas=1
 
 ```
 
 
-Install Kibana
+Then install Kibana:
 
 ```
 helm install kibana elastic/kibana --version 7.17.3 -n dapr-monitoring
 
 ```
 
-Then install FluentD
+Finally install FluentD: 
 
 ```
 kubectl apply -f fluentd-config-map.yaml
@@ -465,7 +461,7 @@ kubectl apply -f fluentd-dapr-with-rbac.yaml
 
 ```
 
-Then port-forward to kibana:
+Then port-forward to Kibana:
 
 ```
 kubectl port-forward svc/kibana-kibana 5601 -n dapr-monitoring
@@ -474,10 +470,11 @@ kubectl port-forward svc/kibana-kibana 5601 -n dapr-monitoring
 On Kibana, after setting it up, you can create a filter: 
 
 ```
-kubernetes.container_image_id : "generate-values" 
+kubernetes.container_image_id : "avg" 
 ```
 
-To filter all the logs coming from our function.
+To filter all the logs coming from our function that is annotated with `dapr.io/log-as-json: "true"`
+
 
 
 ## Let's add some timer based actions
