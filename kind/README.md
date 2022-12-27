@@ -158,7 +158,7 @@ You should be able to see and interact with the Conference Application:
 
 ![conference-application](imgs/conference-application.png)
 
-I recommend you to check the [Conference Application introduction](../conference-application.md) to understand how the application works. Feel free to explore around and try to break the application.  
+I recommend you to check the [Conference Application introduction](../scenario.md) to understand how the application works. Feel free to explore around and try to break the application.  
 
 
 ## Other options
