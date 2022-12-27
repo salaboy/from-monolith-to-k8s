@@ -1,13 +1,13 @@
-# Creating a KinD (Kubernetes in Docker) Cluster and installing the app
+# Creating a Kubernetes Cluster and installing a Cloud-Native Application
 
-In this short tutorial we will be installing the Conference Application using Helm into a Kubernetes Cluster provisioned using KinD. This Kubernetes Cluster will run in our local machine, using our Docker Deamon and its configurations (CPUs and RAM allocations). 
+In this short tutorial we will be installing the Conference Application using [Helm](https://helm.sh/) into a Kubernetes Cluster provisioned using [KinD](https://kind.sigs.k8s.io/). This Kubernetes Cluster will run in our local machine, using our Docker Deamon and its configurations (CPUs and RAM allocations). 
 
 ## Pre Requisites
-- Docker (check docker configurations for CPU and RAM allowences) 
-- KinD
-- Helm
+- [Install Docker](https://docs.docker.com/get-docker/): **check docker configurations for CPU and RAM allowences**
+- [Install KinD](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+- [Install Helm](https://helm.sh/docs/helm/helm_install/)
 
-## Creating our KinD Cluster
+## Creating our Kubernetes (KinD) Cluster
 
 Create a KinD Cluster with 3 worker nodes and 1 Control Plane
 
@@ -37,7 +37,42 @@ EOF
 
 ```
 
+You should see something like this: 
+```
+Creating cluster "dev" ...
+ ✓ Ensuring node image (kindest/node:v1.25.3) 🖼 
+ ✓ Preparing nodes 📦 📦 📦 📦  
+ ✓ Writing configuration 📜 
+ ✓ Starting control-plane 🕹️ 
+ ✓ Installing CNI 🔌 
+ ✓ Installing StorageClass 💾 
+ ✓ Joining worker nodes 🚜 
+Set kubectl context to "kind-dev"
+You can now use your cluster with:
+
+kubectl cluster-info --context kind-dev
+
+Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/
+```
+
+You just created a Kubernetes cluster called "dev".
+
+Run the following command to check that you can see the nodes of your freshly created cluster:
+```
+kubectl get nodes
+```
+You should see an output like this: 
+
+```
+NAME                STATUS   ROLES           AGE     VERSION
+dev-control-plane   Ready    control-plane   4m5s    v1.25.3
+dev-worker          Ready    <none>          3m45s   v1.25.3
+dev-worker2         Ready    <none>          3m45s   v1.25.3
+dev-worker3         Ready    <none>          3m45s   v1.25.3
+```
+
 ## Installing NGINX Ingress Controller
+
 We need NGINGX Ingress Controller to route traffic from our laptop to the services that are running inside the cluster. NGINX Ingress Controller act as a router that is running inside the cluster, but exposed to the outside world. 
 
 ```
@@ -63,9 +98,10 @@ nodes:
     protocol: TCP
 ```
 
+Once we have our cluster and our Ingress Controller installed and configured we can move ahead and install our application.
 
 ## Installing the Application using Helm
-Finally, we can install the application by adding a Helm chart repository. To achieve this, first we need to add a custom Helm Chart Repository for this application: 
+Finally, we can install the application by adding a Helm chart repository. To achieve this, first we need to add a custom (for the book) Helm Chart Repository for this application: 
 
 ```
 helm repo add fmtok8s https://salaboy.github.io/helm/
@@ -90,14 +126,19 @@ TEST SUITE: None
 NOTES:
 Cloud-Native Conference Platform V1
 
-Chart Deployed: fmtok8s-conference-chart - v0.1.0
+Chart Deployed: fmtok8s-conference-chart - v0.1.1
 Release Name: conference
 
 ```
+Notice that the first time that you run this command in your cluster, all the container images for the application services needs to be downloaded for the first time, hence the amount of time required to have all the services up and running will depend on your internet connection.
 
 Now you can check that the pods of the application are being created correctly with: 
 ```
-> kubectl get pods
+kubectl get pods
+```
+
+The output should look like this: 
+```
 NAME                                                 READY   STATUS    RESTARTS      AGE
 conference-fmtok8s-agenda-service-57576cb65c-mnv4r   1/1     Running   0             38s
 conference-fmtok8s-c4p-service-6c6f9449b5-w9wpf      1/1     Running   1 (24s ago)   38s
