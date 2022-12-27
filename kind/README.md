@@ -5,7 +5,7 @@ In this short tutorial we will be installing the Conference Application using [H
 ## Pre Requisites
 - [Install Docker](https://docs.docker.com/get-docker/): **check docker configurations for CPU and RAM allowences**
 - [Install KinD](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
-- [Install Helm](https://helm.sh/docs/helm/helm_install/)
+- [Install Helm](https://helm.sh/docs/intro/install/)
 
 ## Creating our Kubernetes (KinD) Cluster
 
