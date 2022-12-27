@@ -118,7 +118,7 @@ You should see the following output:
 
 ```
 NAME: conference
-LAST DEPLOYED: Fri Jun 24 08:33:27 2022
+LAST DEPLOYED: Tue Dec 27 10:36:46 2022
 NAMESPACE: default
 STATUS: deployed
 REVISION: 1
@@ -130,6 +130,9 @@ Chart Deployed: fmtok8s-conference-chart - v0.1.1
 Release Name: conference
 
 ```
+
+By running `helm install` we created a Helm Release called `conference` that you can list by running `helm list`. You can also uninstall the app by running `helm delete conference`
+
 Notice that the first time that you run this command in your cluster, all the container images for the application services needs to be downloaded for the first time, hence the amount of time required to have all the services up and running will depend on your internet connection.
 
 Now you can check that the pods of the application are being created correctly with: 
@@ -151,8 +154,21 @@ conference-redis-replicas-0                          1/1     Running   0        
 
 When you  get all the pods up and running, you should be able to access the application pointing your browser to: http://localhost
 
+You should be able to see and interact with the Conference Application:
+
+![conference-application](imgs/conference-application.png)
+
+I recommend you to check the [Conference Application introduction](../conference-application.md) to understand how the application works. Feel free to explore around and try to break the application.  
+
 
 ## Other options
 
-If you don't want to create a Helm release, which gets created when you run `helm install` you can use Helm to produce the all YAML files of your application's services by running `helm template .`. 
+If you don't want to create a Helm release, which gets created when you run `helm install` you can use Helm to produce the all YAML files of your application's services by running `helm template`. Run the following command to check all the Kubernetes resources applied to our cluster: 
 
+```
+helm template fmtok8s/fmtok8s-conference-chart
+```
+
+Check the output and notice that this also produce all the resources to deploy PostgreSQL and Redis into our cluster.
+
+Using `helm template` is very useful for when we want to modify what gets generated and we don't own the chart so we cannot change it. 
