@@ -19,13 +19,8 @@ Follow the next steps in order to install and setup Tekton in your Kubernetes Cl
 ```
   kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.42.0/release.yaml
 ```
-2. **Install Tekton Triggers**
 
-```
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.22.0/release.yaml
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.22.0/interceptors.yaml
-```
-3. **Install Tekton Dashboard (optional)**
+1. **Install Tekton Dashboard (optional)**
 
 ```
 kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.31.0/tekton-dashboard-release.yaml
@@ -41,9 +36,10 @@ kubectl port-forward svc/tekton-dashboard  -n tekton-pipelines 9097:9097
 Then you can access pointing your browser to [http://localhost:9097](http://localhost:9097)
 
 
-4. **Install Tekton CLI (optional)**:
+1. **Install Tekton CLI (optional)**:
 
 You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
+
 
 ### Configure Tekton Pipeline
 
