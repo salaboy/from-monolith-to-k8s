@@ -28,7 +28,7 @@ kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/
 3. **Install Tekton Dashboard (optional)**
 
 ```
-kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.27.0/tekton-dashboard-release.yaml
+kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.31.0/tekton-dashboard-release.yaml
 ```
 You can access the dashboard by port-forwarding using `kubectl`:
 
