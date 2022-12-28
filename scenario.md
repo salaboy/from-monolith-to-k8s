@@ -1,33 +1,47 @@
 # Scenario (Conference Platform)
 
-Their current application is a Monolith and it looks like this: 
-![Monolith Main Site](/imgs/monolith-mainsite.png)
-![Monolith Main Backoffice](/imgs/monolith-backoffice.png)
+On the following sections we will be looking at an application developed for conference organizers (stakeholders). We will look at the requirements behind the application and some of the early use cases that conference organizers want to tackle with it. 
 
-The source code for this application can be [found here](https://github.com/salaboy/fmtok8s-monolith)
+The application, as every software, is in constant evolution. Teams will work on adding and delivering new features for conference organizers. 
 
-The workshop aims to provide the tools, steps, and practices that can facilitate the migration from this application to a Cloud-Native architecture that runs on Kubernetes. In that Journey, we can enable teams to work independently and release their software in small increments while applying some of the principles outlined by the [Accelerate book](https://www.amazon.co.uk/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339/ref=asc_df_1942788339/?tag=googshopuk-21&linkCode=df0&hvadid=311000051962&hvpos=&hvnetw=g&hvrand=13136118265667582563&hvpone=&hvptwo=&hvqmt=&hvdev=c&hvdvcmdl=&hvlocint=&hvlocphy=9072501&hvtargid=pla-446149606248&psc=1&th=1&psc=1). 
+Let's take a look at a couple of use cases that are vital for conference organizers:
+- Home and about page
+- Call for Proposals
 
-![Accelerate](/imgs/accelerate.png)
+## Home and about Page
 
-### Challenges 
-In the real world, applications are not that simple. These are some challenges that you might face while doing shift and lift for your Monolith applications:
+The Home page is quite basic, but it need to show three main pieces of information: 
+- Where the conference is happening
+- When the conference is happening
+- In which phase the conference is (being organized, selling tickets, finished)
 
-- **Infrastructure**: if your application has a lot of infrastructure dependencies, such as databases, message brokers, other services, you will need to move them all or find a way to route traffic from your Kubernetes Cluster to this existing infrastructure. If your Kubernetes Cluster is remote, you will introduce latency and security risks which can be mitigated by creating a tunnel (VPN) back to your services. This experience might vary or might be impossible if the latency between the cluster and the services is to high. 
+Depending on the conference phase, the Home page can show more information such as deadlines for submitting proposals, some highlights from the conference agenda and the conference sponsors.
 
-- **More than one process**: your monolith was more than just one application, and that is pushing you to create multiple containers that will have strong dependencies between them. This can be done and most of the time these containers can run inside a Kubernetes Pod if sharing the same context is required.
+The About page should cover who the organizers are and how to get in touch with them if you are interested in helping out.
 
-- **Scaling the application is hard**: if the application hold any kind of state, having multiple replicas becomes complicated and it might require a big refactorings to make it work with multiple replicas of the same running at the same time. 
+For the initial phase of the conference, when it is being organized, a static site will do, but the moment that we want to ask for potential speakers, we need to provide some functionality for organizers to be able to receive proposals, review them and add the approved ones to the conference agenda. 
 
-## Splitting our Monolith into a set of Microservices
+## Call for Proposals
 
-Now that we have our Monolith application running in Kubernetes it is time to start splitting it into a set of Microservices. The main reasons to do this are: 
-- Enable different teams to work on different parts of this large application
-- Enable different services to evolve independently
-- Enable different services to be released and deployed independently
-- Independently scale services as needed
-- Build resiliency into your application, if one service fails not all the application goes down
+When the conference organizers are ready to accept proposals, they should be able to enable the Call for Proposals feature. Because this step happens after defining where and when the confernece will happen, this feature should be implemented first in our Conference application.
 
-![Microservices Split](/imgs/microservices-architecture.png)
+The Call for Proposals flow should work like this:
+- Conference organizers enable the Call for Proposals flow in the application 
+- Potential speakers fill out a form with a session proposal for the conference and submit it for the conference organizers to review
+- Conference organizers are in charge of reviewing the submitted proposals and accept or reject them as they see fit. 
+- An email is sent to notify the acceptance or rejection of proposals
+- Accepted proposals must be added to the conference agenda
 
-In order, to achieve all these benefits we need to start simple. The first thing that we will do is add a reverse-proxy which will serve as the main entry point for all our new services. 
+This flow requires the conference organizers to have a private page where they can review the submitted proposals. This flow also requires the application to send emails.
+
+When conference organizers are done with selecting proposals (or when the deadline is due), they should be able to close the Call for Proposals feature and publish the conference agenda with all the selected speakers.
+
+## Current state
+
+The team has build a very basic application to host the Home and the About page, and decided that separate services will be created to serve the Call for Proposals functionality and the Conference agenda page.
+
+You can install the current version of the application on a local Kubernetes Cluster by following the [KinD tutorial here](kind/README.md).
+
+
+
+

@@ -115,6 +115,8 @@ The environment pipeline definition described in [`resources/envionment-pipeline
 
 ![Environment Pipeline](environment-pipeline.png)
 
+The objective of this Environment Pipeline is to deploy the conference application services into the Staging Environment (represented as a Kubernetes namespace) by applying the configuration located in this repository [https://github.com/salaboy/fmtok8s-staging-env](https://github.com/salaboy/fmtok8s-staging-env) to the cluster.
+
 
 You can start this Environment Pipeline by running the following command:
 
