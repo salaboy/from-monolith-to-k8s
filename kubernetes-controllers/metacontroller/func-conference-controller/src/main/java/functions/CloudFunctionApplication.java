@@ -1,133 +1,133 @@
 package functions;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
+import com.metacontrollerjava.api.input.ControllerInput;
+import com.metacontrollerjava.api.output.ControllerOutput;
+import com.metacontrollerjava.api.output.Status;
+import io.kubernetes.client.common.KubernetesObject;
+import io.kubernetes.client.openapi.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.yaml.snakeyaml.Yaml;
 import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.function.Function;
 
 @SpringBootApplication
 public class CloudFunctionApplication {
 
-  private static final Logger log = LoggerFactory.getLogger(CloudFunctionApplication.class);
+	private static final Logger log = LoggerFactory.getLogger(CloudFunctionApplication.class);
 
-  public static void main(String[] args) {
-    SpringApplication.run(CloudFunctionApplication.class, args);
-  }
+	public static void main(String[] args) {
+		SpringApplication.run(CloudFunctionApplication.class, args);
+	}
 
-  @Autowired
-  private WebClient.Builder webClient;
+	@Bean
+	WebClient webClient(WebClient.Builder b) {
+		return b.build();
+	}
 
-  @Bean
-  public Function<Map<String, Object>, Mono<Map<String, Object>>> reconcile() {
-    return (resource) -> {
-      Map<String, Object> parent = (Map<String, Object>) resource.get("parent");
-      Map<String, Object> parentMetadata = (Map<String, Object>) parent.get("metadata");
-      Map<String, Object> parentSpec = (Map<String, Object>) parent.get("spec");
-      
-      log.info("Reconciling Resource: " + parent.get("apiVersion") + "/" + parent.get("Kind") + " > " + parentMetadata.get("name"));
+	private static boolean isServiceReady(String input) {
+		return !input.contains("N/A") && !input.isEmpty();
+	}
 
-      boolean productionTestEnabled = (boolean) parentSpec.get("production-test-enabled");
-      String conferenceNamespace = (String) parentSpec.get("namespace");
+	@Bean
+	public Function<ControllerInput, Mono<ControllerOutput>> reconcile(WebClient http) {
+		// Input: A controller JSON object that contains a CompositeController,
+		// a Parent and Child, where the Parent describes the user input that triggered
+		// the function call
+		// - The CompositeController is controller responsible for the webhook
+		// - The parent is the triggering input - the resource that needs to be reconciled
+		// - The children are the resources that can be modified as part of the
+		// reconciliation loop
+		// See CompositeController.Spec for a summary of the triggering resource, the
+		// hook, and the children (the resources that can be changed)
+		return (resource) -> {
+			var parent = resource.parent();
+			var parentMetadata = parent.metadata();
+			var parentSpec = parent.spec();
+			log.info("Reconciling Resource: " + parent.apiVersion() + "/" + parent.kind() + " > "
+					+ parentMetadata.name());
+			var productionTestEnabled = parentSpec.productionTestEnabled();
+			var conferenceNamespace = parentSpec.namespace();
+			var children = new ArrayList<KubernetesObject>();
+			return Mono
+					.zip(getServiceInfo(http, "fmtok8s-frontend", conferenceNamespace),
+							getServiceInfo(http, "fmtok8s-email", conferenceNamespace),
+							getServiceInfo(http, "fmtok8s-agenda", conferenceNamespace),
+							getServiceInfo(http, "fmtok8s-c4p", conferenceNamespace)) //
+					.map(serviceInfos -> {
+						log.info("Service Infos: " + serviceInfos);
+						var frontendReady = isServiceReady(serviceInfos.getT1());
+						var agendaServiceReady = isServiceReady(serviceInfos.getT2());
+						var emailServiceReady = isServiceReady(serviceInfos.getT3());
+						var c4pServiceReady = isServiceReady(serviceInfos.getT4());
+						var conferenceReady = false;
+						if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
+							conferenceReady = true;
+							if (productionTestEnabled) {
+								children.add(createProductionTestDeployment(parentMetadata.name()));
+							}
+						}
+						var url = "Impossible to know without access to the K8s API";
+						var status = new Status(productionTestEnabled, conferenceReady, url);
+						var desiredState = new ControllerOutput(children, status);
+						log.info("> Desired State: " + desiredState);
+						return desiredState;
+					});
+		};
+	}
 
-      Map<String, Object> desiredState = new HashMap<>();
-      
-      String protocol = "http://";
-      String servicePath = "." + conferenceNamespace + ".svc.cluster.local/info";
-      return Mono.zip(getServiceInfo(protocol + "fmtok8s-frontend" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-email" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-agenda" + servicePath),
-          getServiceInfo(protocol + "fmtok8s-c4p" + servicePath))
-        .map(serviceInfos -> {
-          log.info("Service Infos: " + serviceInfos);
-          Map<String, Object> status = new HashMap<>();
-          boolean frontendReady = false;
-          boolean agendaServiceReady = false;
-          boolean emailServiceReady = false;
-          boolean c4pServiceReady = false;
-          if (!serviceInfos.getT1().contains("N/A") && !serviceInfos.getT1().isEmpty()) {
-            frontendReady = true;
-          }
-          if (!serviceInfos.getT2().contains("N/A") && !serviceInfos.getT2().isEmpty()) {
-            emailServiceReady = true;
-          }
-          if (!serviceInfos.getT3().contains("N/A") && !serviceInfos.getT3().isEmpty()) {
-            agendaServiceReady = true;
-          }
-          if (!serviceInfos.getT4().contains("N/A") && !serviceInfos.getT4().isEmpty()) {
-            c4pServiceReady = true;
-          }
+	public Mono<String> getServiceInfo(WebClient http, String name, String namespace) {
+		return getServiceInfo(http, "http://" + name + "." + namespace + ".svc.cluster.local/info");
+	}
 
-          status.put("frontend-ready", frontendReady);
-          status.put("email-service-ready", emailServiceReady);
-          status.put("agenda-service-ready", agendaServiceReady);
-          status.put("c4p-service-ready", c4pServiceReady);
+	public Mono<String> getServiceInfo(WebClient http, String url) {
+		return http.get().uri(url).accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(String.class)
+				.onErrorResume(err -> Mono.just("N/A"));
 
-          status.put("prod-tests", productionTestEnabled);
+	}
 
-          boolean conferenceReady = false;
-          if (frontendReady && emailServiceReady && agendaServiceReady && c4pServiceReady) {
-            conferenceReady = true;
-            if (productionTestEnabled) {
-              Map<String, Object> deployment = createProductionTestDeployment();
-              desiredState.put("children", Arrays.asList(deployment));
-            }
-          }
-          status.put("ready", conferenceReady);
+	public KubernetesObject createProductionTestDeployment(String name) {
 
-          desiredState.put("status", status);
-          status.put("url", "Impossible to know without access to the K8s API");
+		// https://github.com/kubernetes-client/java/blob/master/fluent/src/main/java/io/kubernetes/client/openapi/models/V1DeploymentBuilder.java
 
-          log.info("> Desired State: " + desiredState);
-          return desiredState;
-        });
-    };
-  }
+		var labels = new HashMap<String, String>();
+		labels.put("app", "production-tests-" + name);
 
+		var containers = new ArrayList<V1Container>();
+		containers.add(new V1Container().name("production-tests").image("alpine")
+				.command(Arrays.asList(new String[] { "sh" }))
+				.args(Arrays.asList(new String[] { "-c",
+						"while true; do echo \"Running production tests @ \" `date`; sleep 10; done" }))
+				.imagePullPolicy("Always"));
 
-  public Mono<String> getServiceInfo(String url) {
-    return webClient.build()
-      .get()
-      .uri(url)
-      .accept(MediaType.APPLICATION_JSON)
-      .retrieve()
-      .bodyToMono(String.class)
-      .onErrorResume(err -> Mono.just("N/A"));
+	// @formatter:off
+    var deploymentKubernetesObject =
+      new V1Deployment()
+        .apiVersion("apps/v1")
+        .kind("Deployment")
+        .metadata(new V1ObjectMeta()
+          .name("metacontroller-production-tests-" + name)
+          .labels(labels))
+        .spec(new V1DeploymentSpec()
+          .replicas(1)
+          .selector(new V1LabelSelector()
+            .matchLabels(labels))
+          .template(new V1PodTemplateSpec()
+            .metadata(new V1ObjectMeta().labels(labels))
+            .spec(new V1PodSpec()
+              .containers(containers))));
+    // @formatter:on
 
-  }
+		return deploymentKubernetesObject;
 
-  public Map<String, Object> createProductionTestDeployment() {
-    Yaml yaml = new Yaml();
-    String deploymentYaml = "apiVersion: apps/v1\n" +
-      "kind: Deployment\n" +
-      "metadata:\n" +
-      "  name: metacontroller-production-tests\n" +
-      "spec:\n" +
-      "  replicas: 1\n" +
-      "  selector:\n" +
-      "    matchLabels:\n" +
-      "      app: production-tests\n" +
-      "  template:\n" +
-      "    metadata:\n" +
-      "      labels:\n" +
-      "        app: production-tests\n" +
-      "    spec:\n" +
-      "      containers:\n" +
-      "        - name: production-tests\n" +
-      "          image: salaboy/metacontroller-production-tests:metacontroller\n" +
-      "          imagePullPolicy: Always\n";
-    return yaml.load(deploymentYaml);
-  }
+	}
+
 }

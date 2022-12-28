@@ -1,0 +1,7 @@
+apiVersion: metacontroller.conference.salaboy.com/v1
+kind: Conference
+metadata:
+  name: springone
+spec:
+  namespace: conf-springone
+  production-test-enabled: true

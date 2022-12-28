@@ -17,14 +17,14 @@
   <description>A Spring Cloud Function, Http Example</description>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>17</java.version>
     <spring-cloud.version>2021.0.1</spring-cloud.version>
     <spring-cloud-function.version>3.2.3</spring-cloud-function.version>
     <spring-native.version>0.11.3</spring-native.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
@@ -61,6 +61,19 @@
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>io.kubernetes</groupId>
+      <artifactId>client-java</artifactId>
+      <version>16.0.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.github.ciberkleid</groupId>
+      <artifactId>metacontroller-spring-boot-starter</artifactId>
+<!--      <version>v0.0.1</version>-->
+      <version>2369f1e80e</version>
+    </dependency>
+    
+    <dependency>
       <groupId>org.springframework.experimental</groupId>
       <artifactId>spring-native</artifactId>
       <version>${spring-native.version}</version>
@@ -74,6 +87,20 @@
 
   <build>
     <plugins>
+<!--      <plugin>-->
+<!--        <groupId>io.spring.javaformat</groupId>-->
+<!--        <artifactId>spring-javaformat-maven-plugin</artifactId>-->
+<!--        <version>0.0.35</version>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <phase>validate</phase>-->
+<!--            <inherited>true</inherited>-->
+<!--            <goals>-->
+<!--              <goal>validate</goal>-->
+<!--            </goals>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -118,6 +145,10 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+    <repository>
+      <id>jitpack.io</id>
+      <url>https://jitpack.io</url>
+    </repository>
   </repositories>
   <pluginRepositories>
     <pluginRepository>
@@ -129,7 +160,6 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
-
   <profiles>
     <profile>
       <id>native</id>
