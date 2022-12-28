@@ -93,10 +93,20 @@ The Service Pipeline definition described in [`resources/service-pipeline.yaml`]
 
 ![Service Pipeline](service-pipeline.png)
 
+The objective of this Service Pipeline is to clone the source code in the main branch of the GitHub repository where the [Frontend Service](https://github.com/salaboy/fmtok8s-frontend) is stored and produce a container image that can be deployed into a Kubernetes cluster. 
+
+**Notice that the Frontend Service is a Java/Maven application with a NodeJS React Frontend, so the pipeline will take quite a while downloading dependencies. **
+
 You can start this Service Pipeline by running the following command:
 
 ```
 tkn pipeline start frontend-service-pipeline -s dockerconfig -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -w name=dockerconfig,secret=regcred -w name=maven-settings,emptyDir=
+```
+
+Alternatively, you can apply the [service-pipeline-run.yaml](service-pipeline-run.yaml) resource into your cluster to create a `PipelineRun` in the same way that `tkn` is creating one.
+
+```
+kubectl apply -f service-pipeline-run.yaml
 ```
 
 ## Environment Pipeline
@@ -112,8 +122,13 @@ You can start this Environment Pipeline by running the following command:
 tkn pipeline start staging-environment-pipeline -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -s gitops
 ```
 
-The environment pipeline is using [`helmfile`](https://github.com/roboll/helmfile) to describe the stating environment. 
+Alternatively, you can apply the [env-pipeline-run.yaml](env-pipeline-run.yaml) resource into your cluster to create a `PipelineRun` in the same way that `tkn` is creating one.
 
+```
+kubectl apply -f env-pipeline-run.yaml
+```
+
+The environment pipeline is using [`helmfile`](https://github.com/roboll/helmfile) to describe the stating environment. 
 
 As mentioned before, while this is doable with Tekton, there are other more specialized tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) which do a more complete set of tasks on the continuous deployment space by applying a GitOps approach. You can find a [tutorial with ArgoCD here](../argocd/README.md).
 
