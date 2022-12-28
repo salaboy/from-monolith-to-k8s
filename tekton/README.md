@@ -17,13 +17,13 @@ Follow the next steps in order to install and setup Tekton in your Kubernetes Cl
 1. **Install Tekton Pipelines**
 
 ```
-kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+  kubectl apply -f https://storage.googleapis.com/tekton-releases/pipeline/previous/v0.42.0/release.yaml
 ```
 2. **Install Tekton Triggers**
 
 ```
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/release.yaml
-kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/latest/interceptors.yaml
+kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.22.0/release.yaml
+kubectl apply -f https://storage.googleapis.com/tekton-releases/triggers/previous/v0.22.0/interceptors.yaml
 ```
 3. **Install Tekton Dashboard (optional)**
 
@@ -47,7 +47,7 @@ You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
 
 ### Configure Tekton Pipeline
 
-The Tekton pipeline uses some alpha features (Tekton Bundles) which needs to
+The Tekton pipeline definition uses Tekton Bundles which needs to
 be enabled in the config. The `feature-flags` config map in the `tekton-pipelines` namespace
 should look like:
 
@@ -58,18 +58,20 @@ kubectl edit cm -n tekton-pipelines feature-flags
 ```yaml
 apiVersion: v1
 data:
-  enable-api-fields: alpha # <------- 
+  enable-api-fields: stable 
   disable-affinity-assistant: "false"
   disable-creds-init: "false"
   disable-home-env-overwrite: "true"
   disable-working-directory-overwrite: "true"
   enable-custom-tasks: "false"
-  enable-tekton-oci-bundles: "false"
+  enable-tekton-oci-bundles: "true" # <------- 
   require-git-ssh-secret-known-hosts: "false"
   running-in-environment-with-injected-sidecars: "true"
 kind: ConfigMap
 (...)
 ```
+
+Check the [official documentation](https://github.com/tektoncd/pipeline/blob/release-v0.18.x/docs/install.md#customizing-the-pipelines-controller-behavior) for more information.
 
 ## RBAC
 
