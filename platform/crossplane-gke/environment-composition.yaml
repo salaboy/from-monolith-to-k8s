@@ -1,0 +1,152 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: cluster-google
+  labels:
+    type: development
+    #provider: google
+    #cluster: gke
+spec:
+  compositeTypeRef:
+    apiVersion: environments.salaboy.com
+    kind: Environment
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - fromFieldPath: metadata.labels
+  resources:
+  - name: gkecluster
+    base:
+      apiVersion: container.gcp.crossplane.io/v1beta2
+      kind: Cluster
+      spec:
+        forProvider:
+          location: us-east1
+          initialClusterVersion: latest
+    patches:
+    - fromFieldPath: spec.id
+      toFieldPath: metadata.name
+    - fromFieldPath: spec.id
+      toFieldPath: spec.writeConnectionSecretToRef.name
+      transforms:
+      - type: string
+        string:
+          fmt: '%s-cluster'
+    - fromFieldPath: spec.writeConnectionSecretToRef.namespace
+      toFieldPath: spec.writeConnectionSecretToRef.namespace
+    - fromFieldPath: spec.parameters.version
+      toFieldPath: spec.forProvider.initialClusterVersion
+    - type: ToCompositeFieldPath
+      fromFieldPath: metadata.name
+      toFieldPath: status.clusterName
+    - type: ToCompositeFieldPath
+      fromFieldPath: status.atProvider.status
+      toFieldPath: status.controlPlaneStatus
+    connectionDetails:
+    - fromConnectionSecretKey: kubeconfig
+    - fromConnectionSecretKey: kubeconfig
+      name: value
+    readinessChecks:
+    - type: MatchString
+      fieldPath: status.atProvider.status
+      matchString: RUNNING
+  - name: nodepool
+    base:
+      apiVersion: container.gcp.crossplane.io/v1beta1
+      kind: NodePool
+      spec:
+        forProvider:
+          locations:
+          - us-east1-b
+          - us-east1-c
+          - us-east1-d
+          clusterSelector:
+            matchControllerRef: true
+          config:
+            preemptible: true
+            oauthScopes:
+            - https://www.googleapis.com/auth/cloud-platform
+          initialNodeCount: 1
+          autoscaling:
+            enabled: true
+            maxNodeCount: 3
+            minNodeCount: 1
+          management:
+            autoRepair: true
+            autoUpgrade: false
+    patches:
+    - fromFieldPath: spec.id
+      toFieldPath: metadata.name
+    - fromFieldPath: spec.writeConnectionSecretToRef.namespace
+      toFieldPath: spec.credentials.secretRef.namespace
+    # - fromFieldPath: spec.parameters.minNodeCount
+    #   toFieldPath: spec.forProvider.initialNodeCount
+    # - fromFieldPath: spec.parameters.minNodeCount
+    #   toFieldPath: spec.forProvider.autoscaling.minNodeCount
+    - fromFieldPath: spec.parameters.size
+      toFieldPath: spec.forProvider.config.machineType
+      transforms:
+      - type: map
+        map:
+          small: n1-standard-2
+          medium: n1-standard-4
+          large: n1-standard-16
+    - type: ToCompositeFieldPath
+      fromFieldPath: status.atProvider.status
+      toFieldPath: status.nodePoolStatus
+    readinessChecks:
+    - type: MatchString
+      fieldPath: status.atProvider.status
+      matchString: RUNNING
+  - name: helm
+    base:
+      apiVersion: helm.crossplane.io/v1beta1
+      kind: ProviderConfig
+      spec:
+        credentials:
+          source: Secret
+          secretRef:
+            key: kubeconfig
+        identity:
+          type: GoogleApplicationCredentials
+          source: Secret
+          secretRef:
+            name: gcp-creds
+            namespace: crossplane-system
+            key: creds
+    patches:
+    - fromFieldPath: spec.id
+      toFieldPath: metadata.name
+    - fromFieldPath: spec.writeConnectionSecretToRef.namespace
+      toFieldPath: spec.credentials.secretRef.namespace
+    - fromFieldPath: spec.id
+      toFieldPath: spec.credentials.secretRef.name
+      transforms:
+      - type: string
+        string:
+          fmt: '%s-cluster'
+    readinessChecks:
+    - type: None
+  - name: dapr
+    base:
+      apiVersion: helm.crossplane.io/v1beta1
+      kind: Release
+      spec:
+        rollbackLimit: 3
+        forProvider:
+          namespace: dapr-system
+          chart:
+            name: dapr
+            repository: https://dapr.github.io/helm-charts/
+            version: 1.9
+          values:
+    patches:
+    - fromFieldPath: spec.id
+      toFieldPath: metadata.name
+      transforms:
+      - type: string
+        string:
+          fmt: '%s-dapr'
+    - fromFieldPath: spec.id
+      toFieldPath: spec.providerConfigRef.name

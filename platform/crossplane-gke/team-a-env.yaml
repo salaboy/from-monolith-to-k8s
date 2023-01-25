@@ -1,0 +1,11 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Environment
+metadata:
+  name: team-a-env
+spec:
+  compositionSelector:
+    matchLabels:
+      type: development
+  parameters: 
+    database: true
+    
