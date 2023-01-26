@@ -22,7 +22,7 @@ spec:
       kind: Cluster
       spec:
         writeConnectionSecretToRef:
-          name: team-a-secret
+          name: #team-a-secret
           namespace: #patched
         forProvider:
           location: europe-west4
@@ -30,9 +30,9 @@ spec:
           network: "salaboy-vpc"
           subnetwork: "salaboy-subnet"
     patches:
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: metadata.name
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: spec.writeConnectionSecretToRef.name
       transforms:
       - type: string
@@ -110,7 +110,7 @@ spec:
         credentials:
           source: Secret
           secretRef:
-            name: team-a-secret
+            name: #team-a-secret
             key: kubeconfig
         identity:
           type: GoogleApplicationCredentials
@@ -120,11 +120,11 @@ spec:
             namespace: crossplane-system
             key: creds
     patches:
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: metadata.name
     - fromFieldPath: spec.writeConnectionSecretToRef.namespace
       toFieldPath: spec.credentials.secretRef.namespace
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: spec.credentials.secretRef.name
       transforms:
       - type: string
@@ -137,7 +137,6 @@ spec:
       apiVersion: helm.crossplane.io/v1beta1
       kind: Release
       spec:
-        rollbackLimit: 3
         forProvider:
           namespace: dapr-system
           chart:
@@ -148,11 +147,15 @@ spec:
           providerConfigRef: 
             name: #patched
     patches:
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: metadata.name
       transforms:
       - type: string
         string:
           fmt: '%s-dapr'
-    - fromFieldPath: spec.id
+    - fromFieldPath: metadata.name
       toFieldPath: spec.providerConfigRef.name
+    readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed
