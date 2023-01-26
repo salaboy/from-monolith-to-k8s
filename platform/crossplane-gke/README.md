@@ -169,6 +169,26 @@ Now that the composition is ready, you can provision a new environment for `team
 kubectl apply -f team-b-env-vcluster.yaml
 ```
 
+When the environment is ready you can connect using the `vcluster` CLI: 
+
+```
+vcluster connect team-b-env --server https://localhost:8443 -- zsh
+```
+
+Now you are in your VCluster provisioned by Crossplane! Check that there are some pods in the default namespace for the helm chart that the composition installed: 
+
+```
+kubectl get pods 
+```
+
+
 Notice that `team-b-env-vcluster.yaml` and `team-a-env-gke.yaml` are exactly the same besides the `matchLabels` that allows Crossplane to pick the right composition depending which provider do we want to use.
 
 
+Now you can list all envs no matter which provider they were using: 
+
+```
+kubectl get env
+```
+
+You should see `team-a` and `team-b` environments! :metal:
