@@ -139,3 +139,17 @@ This can be packaged as an OCI image using the crossplane `kubectl` plugin.
 kubectl apply -f team-a-env.yaml
 ```
 
+
+You can check the environment status using:
+
+```
+kubectl get env
+```
+
+Once the cluster is created you can connect to it using `gcloud connect...` from the GCP dashboard and check that the `dapr-system` is installed and working. 
+
+```
+gcloud connect ..
+kubectl get pods -n dapr-system
+```
+
