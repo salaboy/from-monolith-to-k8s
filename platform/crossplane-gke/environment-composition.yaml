@@ -4,8 +4,7 @@ metadata:
   name: gke.salaboy.com
   labels:
     type: development
-    #provider: google
-    #cluster: gke
+    provider: gke
 spec:
   compositeTypeRef:
     apiVersion: salaboy.com/v1alpha1

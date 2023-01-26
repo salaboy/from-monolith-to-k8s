@@ -3,9 +3,10 @@ kind: Environment
 metadata:
   name: team-a-env
 spec:
-  #compositionSelector:
-  #  matchLabels:
-  #    type: development
+  compositionSelector:
+    matchLabels:
+      provider: gke
+      type: development
   parameters: 
-    size: medium
+    size: small
     

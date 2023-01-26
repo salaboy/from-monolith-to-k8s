@@ -11,6 +11,8 @@ This Crossplane Composite resource creates the following resources:
 
 ## Installation
 
+In a GCP Kubernetes Cluster install the following components.
+
 
 Let's install [Crossplane](https://crossplane.io) into its own namespace using Helm: 
 
