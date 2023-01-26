@@ -1,14 +1,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: cluster-google
+  name: gke.salaboy.com
   labels:
     type: development
     #provider: google
     #cluster: gke
 spec:
   compositeTypeRef:
-    apiVersion: environments.salaboy.com
+    apiVersion: salaboy.com/v1alpha1
     kind: Environment
   writeConnectionSecretsToNamespace: crossplane-system
   patchSets:
@@ -21,9 +21,14 @@ spec:
       apiVersion: container.gcp.crossplane.io/v1beta2
       kind: Cluster
       spec:
+        writeConnectionSecretToRef:
+          name: team-a-secret
+          namespace: #patched
         forProvider:
-          location: us-east1
+          location: europe-west4
           initialClusterVersion: latest
+          network: "salaboy-vpc"
+          subnetwork: "salaboy-subnet"
     patches:
     - fromFieldPath: spec.id
       toFieldPath: metadata.name
@@ -58,9 +63,7 @@ spec:
       spec:
         forProvider:
           locations:
-          - us-east1-b
-          - us-east1-c
-          - us-east1-d
+          - europe-west4
           clusterSelector:
             matchControllerRef: true
           config:
@@ -107,6 +110,7 @@ spec:
         credentials:
           source: Secret
           secretRef:
+            name: team-a-secret
             key: kubeconfig
         identity:
           type: GoogleApplicationCredentials
@@ -139,8 +143,10 @@ spec:
           chart:
             name: dapr
             repository: https://dapr.github.io/helm-charts/
-            version: 1.9
+            version: "1.9.5"
           values:
+          providerConfigRef: 
+            name: #patched
     patches:
     - fromFieldPath: spec.id
       toFieldPath: metadata.name
