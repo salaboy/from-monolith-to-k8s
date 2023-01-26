@@ -27,6 +27,9 @@ spec:
               repository: https://charts.loft.sh
               version: "0.10.2"
             values:
+              syncer:
+                extraArgs: [] # patched
+              #     - --out-kube-config-server=https://cluster-1.cluster-1.svc
           providerConfigRef:
             name: default
       patches:
@@ -43,7 +46,33 @@ spec:
           transforms:
             - type: string
               string:
-                fmt: "%s-vcluster"   
+                fmt: "%s-vcluster"
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-secret=%s-secret"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[0]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-server=https://%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[1]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--tls-san=%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[2]           
       readinessChecks:
       - type: MatchString
         fieldPath: status.atProvider.state
@@ -82,7 +111,7 @@ spec:
         spec:
           forProvider:
             chart:
-              name: kubeday-japan-app
+              name: fmtok8s-conference-chart
               repository: https://salaboy.github.io/helm/
               version: "v0.1.1"
             namespace: default
