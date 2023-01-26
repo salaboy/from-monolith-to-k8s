@@ -8,5 +8,6 @@ spec:
       provider: vcluster
       type: development
   parameters: 
+    size: small
     database: true
     
