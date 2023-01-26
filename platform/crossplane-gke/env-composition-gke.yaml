@@ -21,7 +21,7 @@ spec:
       kind: Cluster
       spec:
         writeConnectionSecretToRef:
-          name: #team-a-secret
+          name: #patched
           namespace: #patched
         forProvider:
           location: europe-west4
@@ -62,7 +62,9 @@ spec:
       spec:
         forProvider:
           locations:
-          - europe-west4
+          - europe-west4-b
+          - europe-west4-c
+          - europe-west4-a
           clusterSelector:
             matchControllerRef: true
           config:
@@ -109,7 +111,7 @@ spec:
         credentials:
           source: Secret
           secretRef:
-            name: #team-a-secret
+            name: #patched
             key: kubeconfig
         identity:
           type: GoogleApplicationCredentials

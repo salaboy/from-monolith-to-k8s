@@ -1,0 +1,97 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: vcluster.salaboy.com
+  labels:
+    type: development
+    provider: vcluster
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: salaboy.com/v1alpha1
+    kind: Environment
+  resources:
+    - name: vcluster-helm-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations:
+            crossplane.io/external-name: # patched
+        spec:
+          rollbackLimit: 3
+          forProvider:
+            namespace: # patched
+            chart:
+              name: vcluster
+              repository: https://charts.loft.sh
+              version: "0.10.2"
+            values:
+          providerConfigRef:
+            name: default
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.namespace
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"   
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed
+    - name: helm-providerconfig
+      base:
+        apiVersion: helm.crossplane.io/v1alpha1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              name: # patched
+              namespace: # patched
+              key: config
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: vc-%s
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.namespace
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+      readinessChecks:
+      - type: None
+    - name: kubeday-japan-app-chart-vcluster
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations: 
+            crossplane.io/external-name: kubeday-japan-app
+        spec:
+          forProvider:
+            chart:
+              name: kubeday-japan-app
+              repository: https://salaboy.github.io/helm/
+              version: "v0.1.1"
+            namespace: default
+          providerConfigRef: 
+            name: #patched
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.providerConfigRef.name
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed    

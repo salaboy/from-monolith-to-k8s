@@ -29,7 +29,9 @@ spec:
                 type: object
                 properties:
                   size:
-                    type: string   
+                    type: string 
+                  database:
+                    type: boolean    
                 required:   
             required: 
             - parameters          

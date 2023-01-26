@@ -1,0 +1,12 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Environment
+metadata:
+  name: team-b-env
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: vcluster
+      type: development
+  parameters: 
+    database: true
+    

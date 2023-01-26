@@ -1,7 +1,7 @@
 # Crossplane Environment Composition for platform building
 
 
-This tutorial focus on GCP, but new resources can be created for AKS and EKS. 
+This tutorial focus on GCP and VCluster, but new resources can be created for AKS and EKS. 
 
 This Crossplane Composite resource creates the following resources:
 - Kubernetes Cluster (GCP Cluster)
@@ -127,8 +127,8 @@ spec:
 ## Install Environment Composite Resource (XRD)
 
 ```
-kubectl apply -f environment-composition.yaml
-kubectl apply -f environment-resource-definition.yaml
+kubectl apply -f env-composition-gke.yaml
+kubectl apply -f env-resource.yaml
 ```
 
 This can be packaged as an OCI image using the crossplane `kubectl` plugin.
@@ -136,7 +136,7 @@ This can be packaged as an OCI image using the crossplane `kubectl` plugin.
 # Let's provision new Environments
 
 ```
-kubectl apply -f team-a-env.yaml
+kubectl apply -f team-a-env-gke.yaml
 ```
 
 
@@ -152,4 +152,23 @@ Once the cluster is created you can connect to it using `gcloud connect...` from
 gcloud connect ..
 kubectl get pods -n dapr-system
 ```
+
+
+# VCluster 
+
+Without installing anything else, you can provision a new environment using VCluster instead of GKE. 
+
+For this you only need the VCluster composition: 
+
+```
+kubectl apply -f env-composition-vcluster.yaml
+```
+
+Now that the composition is ready, you can provision a new environment for `team-b`
+```
+kubectl apply -f team-b-env-vcluster.yaml
+```
+
+Notice that `team-b-env-vcluster.yaml` and `team-a-env-gke.yaml` are exactly the same besides the `matchLabels` that allows Crossplane to pick the right composition depending which provider do we want to use.
+
 
