@@ -345,6 +345,7 @@ kubectl apply -f https://github.com/n3wscott/sockeye/releases/download/v0.7.0/re
 Finally, you just need to create a trigger (subscription) to connect the consumer, in this case Sockeye to the Broker. Notice that the producer only knows where the Broker is. 
 
 ```
+kubectl create -f - <<EOF
 apiVersion: eventing.knative.dev/v1
 kind: Trigger
 metadata:
@@ -354,6 +355,7 @@ spec:
   broker: default
   subscriber:
     uri: http://sockeye.default.svc.cluster.local
+EOF    
 ```
 
 ## Configuring the project to use the Knative Eventing RabbitMQ Broker
