@@ -298,13 +298,12 @@ http://debug-fmtok8s-frontend.default.127.0.0.1.sslip.io/
 
 You should now see the Frontend with the `Debug` banner on top giving you more information about each application service. Notice that this new configuration still is using the alternative hero feature (as it looks orange and still shows the country), but this is only we just added a new environment variable and we didn't removed it for this last configuration. 
 
-![Debug URL](frontend-debug-and-alternative.png)
+![Debug URL](imgs/frontend-debug-and-alternative.png)
 
 
 
 ## Installing Knative Eventing
 
-@TODO: update this section!
 
 Follow the instructions from here: 
 https://knative.dev/docs/install/eventing/install-eventing-with-yaml/
