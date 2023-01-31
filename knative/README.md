@@ -355,7 +355,7 @@ spec:
   broker: default
   subscriber:
     uri: http://sockeye.default.svc.cluster.local
-EOF    
+EOF
 ```
 
 ## Configuring the project to use the Knative Eventing RabbitMQ Broker
