@@ -1,0 +1,13 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: local
+      type: development
+  parameters: 
+    size: small
+   # createDatabase: true
+     
