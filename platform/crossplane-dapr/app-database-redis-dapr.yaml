@@ -1,0 +1,157 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: dapr.db.local.salaboy.com
+  labels:
+    type: dapr-development
+    provider: local
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: salaboy.com/v1alpha1
+    kind: Database
+  resources:
+    - name: redis-helm-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations:
+            crossplane.io/external-name: # patched
+        spec:
+          rollbackLimit: 3
+          forProvider:
+            namespace: # patched
+            chart:
+              name: redis
+              repository: https://charts.bitnami.com/bitnami
+              version: "17.8.0"
+            values:
+              architecture: standalone
+              serviceBindings:
+                enabled: "true"
+          providerConfigRef:
+            name: default
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.namespace
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-redis"         
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed
+    - name: redis-secret
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef: 
+            name: default
+          references:
+          - patchesFrom:
+              apiVersion: v1
+              kind: Secret
+              namespace: #patched
+              fieldPath: data.redis-password
+            toFieldPath: data.password  
+          forProvider:
+            manifest:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                namespace: #patched
+                name: #patched
+              data:
+                password: #patched
+                url: #patched
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+          - type: string
+            string:
+              fmt: '%s-redis-dapr'
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.references[0].patchesFrom.namespace
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.references[0].patchesFrom.name
+          transforms:
+          - type: string
+            string:
+              fmt: '%s-redis'
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "%s-master.%s.svc.cluster.local:6439"  
+          toFieldPath: spec.forProvider.manifest.data.url  
+          transforms:
+          - type: string
+            string:
+              type: Convert
+              convert: ToBase64
+    - name: dapr-statestore
+      base:
+        apiVersion: kubernetes.crossplane.io/v1alpha1
+        kind: Object
+        spec:
+          providerConfigRef: 
+            name: default
+          forProvider:
+            manifest:
+              apiVersion: dapr.io/v1alpha1
+              kind: Component
+              metadata:
+                name: #patched
+                namespace: #patched
+              spec:
+                type: state.redis
+                version: v1
+                metadata:
+                - name: redisHost
+                  secretKeyRef:
+                    name: #patched
+                    key:  url
+                - name: redisPassword
+                  secretKeyRef:
+                    name: #patched
+                    key:  password
+                - name: keyPrefix
+                  value: name
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.namespace
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.metadata.name
+          transforms:
+          - type: string
+            string:
+              fmt: '%s-statestore'
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.spec.metadata[0].secretKeyRef.name
+          transforms:
+          - type: string
+            string:
+              fmt: '%s-redis-dapr'
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.manifest.spec.metadata[1].secretKeyRef.name
+          transforms:
+          - type: string
+            string:
+              fmt: '%s-redis-dapr'      

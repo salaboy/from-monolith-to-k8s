@@ -1,0 +1,13 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db-dapr
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: local
+      type: dapr-development
+  parameters: 
+    size: small
+   # createDatabase: true
+     
