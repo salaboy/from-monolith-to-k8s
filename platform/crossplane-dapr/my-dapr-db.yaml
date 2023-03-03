@@ -6,8 +6,7 @@ spec:
   compositionSelector:
     matchLabels:
       provider: local
-      type: dapr-development
+      type: dapr-dev
   parameters: 
     size: small
-   # createDatabase: true
      

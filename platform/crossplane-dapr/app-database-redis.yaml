@@ -3,7 +3,7 @@ kind: Composition
 metadata:
   name: db.local.salaboy.com
   labels:
-    type: development
+    type: dev
     provider: local
 spec:
   writeConnectionSecretsToNamespace: crossplane-system

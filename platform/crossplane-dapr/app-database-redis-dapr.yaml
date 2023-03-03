@@ -3,7 +3,7 @@ kind: Composition
 metadata:
   name: dapr.db.local.salaboy.com
   labels:
-    type: dapr-development
+    type: dapr-dev
     provider: local
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
@@ -99,7 +99,7 @@ spec:
             - fromFieldPath: metadata.name
             strategy: string
             string:
-              fmt: "%s-master.%s.svc.cluster.local:6439"  
+              fmt: "%s-redis-master.%s.svc:6379"  
           toFieldPath: spec.forProvider.manifest.data.url  
           transforms:
           - type: string
