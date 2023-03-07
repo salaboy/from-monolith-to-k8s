@@ -24,8 +24,42 @@ The following tasks are defined for all the services:
 - `helm-package` creates the Helm Chart ready to be distributed. 
 - `publish-helm` uploads the Helm Chart to a Chart Repository. This require you to have the right credentials to connect and push to a Chart repository. 
 
-
 If you run `go run pipeline.go full` all the tasks will be executed. Before being able to run all the tasks you will need to make sure that you have all the pre-requisites set, as for pushing to a Container Registry you will need to provide appropriate credentials. 
 
+Now, for development purposes, this is quite convinient, because you can now build your service code in the same way that your CI (Continupis Integration) system will do. But you don't want to run in production container images that were created in your developer's laptop right? 
+The next section shows a simple setup of running Dagger pipelines remotely inside a Kubernetes Cluster. 
 
+## Running your pipelines remotely on Kubernetes
 
+The Dagger Pipeline Engine can be run anywhere where you can run containers, that means that it can runs in Kubernetes without the need of complicated setups. 
+In this short tutorial we will run the pipelines that we were running locally with our local container runtime, now remotely against a Dagger Pipeline Engine that runs inside a Kuberneets Pod. This is an experimental feature, and not a recommended way to run Dagger, but it help us to prove the point. 
+
+Let's run the Dagger Pipeline Engine inside Kubernetes by creating a Pod with Dagger: 
+
+```
+kubectl run dagger image=registry.dagger.io/engine:v0.3.13 --privileged=true
+```
+
+Alternatively, you can apply the `k8s/pod.yaml` manifest using `kubectl apply -f k8s/pod.yaml`.
+
+**Note**: this is far from ideal because we are not setting any persistence or replication mechanism for Dagger itself, all the caching mechanism are volatile in this case. Check the official documentation for more about this. 
+
+Now to run the projects pipelines against this remote service you only need to export the following environment variable: 
+```
+export _EXPERIMENTAL_DAGGER_RUNNER_HOST=kube-pod://<podname>?context=<context>&namespace=<namespace>&container=<container>
+```
+
+Where `<podname>` is `dagger` (because we created the pod manually), `<context>` is your Kubernetes Cluster context, if you are running against a KinD Cluster this might be `kind-kind`. You can find your current context name by running `kubectl config current-context`. Finally `<namespace>` is the namespace where you run the Dagger Container, and `<container>` is once again `dagger`. For my setup against KinD, this would look like this: 
+
+```
+export _EXPERIMENTAL_DAGGER_RUNNER_HOST="kube-pod://dagger?context=kind-kind&namespace=default&container=dagger"
+```
+
+Notice also that my KinD cluster didn't had anything related to Pipelines. 
+
+Now if you run in any of the projects: 
+```
+go run pipeline.go build 
+```
+
+The build will happen remotely inside the Cluster. If you were running this against a remote Kubernetes Cluster (not KinD), there will not be need for you to have a local Container Runtime to build your services and their containers. 
