@@ -5,10 +5,10 @@ These pipelines are implemented in Go using the Dagger Go SDK and take care of b
 
 You can find each pipeline at each of the services repository's in a file called `pipeline.go`: 
 
-- [Agenda Service]()
-- [Email Service]()
-- [Call for Proposals Service]()
-- [User Interface]()
+- [Agenda Service](https://github.com/salaboy/fmtok8s-agenda-service/blob/main/pipelene.go)
+- [Email Service](https://github.com/salaboy/fmtok8s-email-service/blob/main/pipelene.go)
+- [Call for Proposals Service](https://github.com/salaboy/fmtok8s-c4p-service/blob/main/pipelene.go)
+- [User Interface](https://github.com/salaboy/fmtok8s-frontend/blob/main/pipelene.go)
 
 
 To run these pipelines you need to have Go installed and run: 
