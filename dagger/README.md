@@ -3,6 +3,16 @@
 In this short tutorial we will be looking at the Dagger Service Pipelines included with each applicaation service. 
 These pipelines are implemented in Go using the Dagger Go SDK and take care of building each service, creating a container, publishing it and creating a Helm chart that can be distributed for other teams to use. 
 
+## Requirements
+
+For running these pipelines locally you will need: 
+- [Go installed](https://go.dev/doc/install)
+- [A container runtime (such as Docker running locally)](https://docs.docker.com/get-docker/)
+
+To run the pipelines remotely on a Kubernetes Cluster you can use [KinD](https://kind.sigs.k8s.io/) or any Kubernetes Cluster that you have available. 
+
+## Let's run some pipelines
+
 You can find each pipeline at each of the services repository's in a file called `pipeline.go`: 
 
 - [Agenda Service](https://github.com/salaboy/fmtok8s-agenda-service/blob/main/pipelene.go)
@@ -10,8 +20,14 @@ You can find each pipeline at each of the services repository's in a file called
 - [Call for Proposals Service](https://github.com/salaboy/fmtok8s-c4p-service/blob/main/pipeline.go)
 - [User Interface](https://github.com/salaboy/fmtok8s-frontend/blob/main/pipelene.go)
 
+Feel free to clone any of these repositories locally by running for example: 
 
-To run these pipelines you need to have Go installed and run: 
+```
+git clone https://github.com/salaboy/fmtok8s-email-service.git
+cd fmtok8s-email-service/
+```
+
+You can run any defined task inside the `pipeline.go` file:
 
 ```
 go mod tidy
@@ -25,6 +41,8 @@ The following tasks are defined for all the services:
 - `publish-helm` uploads the Helm Chart to a Chart Repository. This require you to have the right credentials to connect and push to a Chart repository. 
 
 If you run `go run pipeline.go full` all the tasks will be executed. Before being able to run all the tasks you will need to make sure that you have all the pre-requisites set, as for pushing to a Container Registry you will need to provide appropriate credentials. 
+
+You can safely run `go run pipeline.go build` which doesn't require you to set any credentials. 
 
 Now, for development purposes, this is quite convinient, because you can now build your service code in the same way that your CI (Continupis Integration) system will do. But you don't want to run in production container images that were created in your developer's laptop right? 
 The next section shows a simple setup of running Dagger pipelines remotely inside a Kubernetes Cluster. 
