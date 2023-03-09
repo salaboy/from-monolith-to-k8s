@@ -21,14 +21,13 @@ spec:
         spec:
           rollbackLimit: 3
           forProvider:
+            namespace: default
             chart:
               name: redis
               repository: https://charts.bitnami.com/bitnami
               version: "17.8.0"
             values:
               architecture: standalone
-              serviceBindings:
-                enabled: "true"
           providerConfigRef:
             name: default
       patches:
@@ -57,7 +56,7 @@ spec:
           - patchesFrom:
               apiVersion: v1
               kind: Secret
-              namespace: #patched
+              namespace: default
               fieldPath: data.redis-password
             toFieldPath: data.password  
           forProvider:
@@ -66,6 +65,7 @@ spec:
               kind: Secret
               metadata:
                 name: #patched
+                namespace: default
               data:
                 password: #patched
                 url: #patched
@@ -77,8 +77,6 @@ spec:
             string:
               fmt: '%s-redis-dapr'
         - fromFieldPath: metadata.name
-          toFieldPath: spec.references[0].patchesFrom.namespace
-        - fromFieldPath: metadata.name
           toFieldPath: spec.references[0].patchesFrom.name
           transforms:
           - type: string
@@ -88,10 +86,9 @@ spec:
           combine:
             variables:
             - fromFieldPath: metadata.name
-            - fromFieldPath: metadata.name
             strategy: string
             string:
-              fmt: "%s-redis-master.%s.svc:6379"  
+              fmt: "%s-redis-master.default.svc:6379"  
           toFieldPath: spec.forProvider.manifest.data.url  
           transforms:
           - type: string
@@ -111,6 +108,7 @@ spec:
               kind: Component
               metadata:
                 name: #patched
+                namespace: default
               spec:
                 type: state.redis
                 version: v1

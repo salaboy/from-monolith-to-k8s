@@ -21,6 +21,7 @@ spec:
         spec:
           rollbackLimit: 3
           forProvider:
+            namespace: default
             chart:
               name: redis
               repository: https://charts.bitnami.com/bitnami

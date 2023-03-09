@@ -82,7 +82,7 @@ spec:
       - type: CombineFromComposite
         combine:
           variables:
-          - fromFieldPath: metadata.name
+          - fromFieldPath: data.endpoint
           strategy: string
           string:
             fmt: "%s:6379"  
