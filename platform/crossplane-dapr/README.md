@@ -139,6 +139,8 @@ As you can notice, both the `url` and the `password` to connect to the Redis ins
 
 In this section we will deploy two simple application. One in Java that writes data to the statestore and one in Go that reads the data from it. 
 
+You can find the source code for these two simple applications in this repository [Dapr Example Apps](https://github.com/salaboy/dapr-example-apps). Notice that you don't need the source code to run this applications. 
+
 The goal of this section is to highlight the polyglot appraoch of Dapr and show how without adding any Redis specific dependency to our applications, we can connect and use it. As this approach applies also to Pub/Sub, secret stores, workflows, actors, etc. 
 
 Let's deploy our applications: 
@@ -149,11 +151,11 @@ To interact with these two applications you will need to use `port-forward` to b
 
 To access the Java Application using port 8080:
 ```
-kubectl port-forward svc/java-app-service 8080:80 -n my-db-dapr
+kubectl port-forward svc/java-app-service 8080:80 
 ```
 To access the Go Application using port 8081:
 ```
-kubectl port-forward svc/go-app-service 8081:80 -n my-db-dapr
+kubectl port-forward svc/go-app-service 8081:80
 ```
 
 Now you can send request to both services. If you send first a request to the Go service that reads data from Redis you will see an empty array back. 

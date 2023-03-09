@@ -1,0 +1,45 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: db.gke.salaboy.com
+  labels:
+    type: dev
+    provider: gke
+spec:
+  compositeTypeRef:
+    apiVersion: salaboy.com/v1alpha1
+    kind: Database
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - fromFieldPath: metadata.labels
+  resources:
+  - name: cloudmemorystoreinstance
+    base:
+      apiVersion: cache.gcp.crossplane.io/v1beta1
+      kind: CloudMemorystoreInstance
+      spec:
+        forProvider:
+          authorizedNetwork: "projects/strong-harbor-338418/global/networks/salaboy-vpc"
+          region: europe-west2
+          tier: BASIC
+          memorySizeGb: 1
+        writeConnectionSecretToRef:
+          namespace: crossplane-system
+    patches:
+      - fromFieldPath: "metadata.uid"
+        toFieldPath: "spec.writeConnectionSecretToRef.name"
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-redis"
+      - fromFieldPath: "spec.parameters.memorySizeGb"
+        toFieldPath: "spec.forProvider.settings.memorySizeGb"
+    connectionDetails:
+      - fromConnectionSecretKey: username
+      - fromConnectionSecretKey: password
+      - fromConnectionSecretKey: endpoint
+      - type: FromValue
+        name: port
+        value: "6379"

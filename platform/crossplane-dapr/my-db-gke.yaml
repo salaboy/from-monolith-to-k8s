@@ -1,12 +1,12 @@
 apiVersion: salaboy.com/v1alpha1
 kind: Database
 metadata:
-  name: my-dapr-db
+  name: my-db-gke
 spec:
   compositionSelector:
     matchLabels:
-      provider: local
-      type: dapr-dev
+      provider: gke
+      type: dev
   parameters: 
     size: small
      

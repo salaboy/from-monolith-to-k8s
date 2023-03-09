@@ -42,6 +42,7 @@ kind: Service
 metadata:
   name: java-app-service
 spec:
+  type: NodePort
   selector:
     app.kubernetes.io/name: java-app
   ports:
@@ -96,6 +97,7 @@ kind: Service
 metadata:
   name: go-app-service
 spec:
+  type: NodePort
   selector:
     app.kubernetes.io/name: go-app
   ports:
@@ -103,3 +105,31 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 8080
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    # If the class annotation is not specified it defaults to "gce".
+    kubernetes.io/ingress.class: "gce"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /read/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: go-app-service
+            port:
+              number: 80
+      - path: /write/*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: java-app-service
+            port:
+              number: 80

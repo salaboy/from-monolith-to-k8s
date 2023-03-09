@@ -15,6 +15,9 @@ spec:
     - jsonPath: .spec.parameters.size
       name: SIZE
       type: string
+    - jsonPath: .spec.parameters.mockData
+      name: MOCKDATA
+      type: boolean  
     name: v1alpha1
     served: true
     referenceable: true
@@ -30,9 +33,10 @@ spec:
                 properties:
                   size:
                     type: string 
-                  database:
-                    type: boolean    
+                  mockData: 
+                    type: boolean
                 required:   
+                - size
             required: 
             - parameters          
 

@@ -21,7 +21,6 @@ spec:
         spec:
           rollbackLimit: 3
           forProvider:
-            namespace: # patched
             chart:
               name: redis
               repository: https://charts.bitnami.com/bitnami
@@ -31,10 +30,6 @@ spec:
           providerConfigRef:
             name: default
       patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.namespace
-          policy:
-            fromFieldPath: Required
         - fromFieldPath: metadata.name
           toFieldPath: metadata.annotations[crossplane.io/external-name]
           policy:

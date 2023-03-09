@@ -21,7 +21,6 @@ spec:
         spec:
           rollbackLimit: 3
           forProvider:
-            namespace: # patched
             chart:
               name: redis
               repository: https://charts.bitnami.com/bitnami
@@ -33,10 +32,6 @@ spec:
           providerConfigRef:
             name: default
       patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.namespace
-          policy:
-            fromFieldPath: Required
         - fromFieldPath: metadata.name
           toFieldPath: metadata.annotations[crossplane.io/external-name]
           policy:
@@ -70,14 +65,11 @@ spec:
               apiVersion: v1
               kind: Secret
               metadata:
-                namespace: #patched
                 name: #patched
               data:
                 password: #patched
                 url: #patched
       patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
         - fromFieldPath: metadata.name
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
@@ -119,7 +111,6 @@ spec:
               kind: Component
               metadata:
                 name: #patched
-                namespace: #patched
               spec:
                 type: state.redis
                 version: v1
@@ -135,8 +126,6 @@ spec:
                 - name: keyPrefix
                   value: name
       patches:
-        - fromFieldPath: metadata.name
-          toFieldPath: spec.forProvider.manifest.metadata.namespace
         - fromFieldPath: metadata.name
           toFieldPath: spec.forProvider.manifest.metadata.name
           transforms:
