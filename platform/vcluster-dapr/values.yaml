@@ -1,0 +1,24 @@
+multiNamespaceMode:
+  enabled: true
+
+sync:
+  generic:
+    clusterRole:
+      extraRules:
+        - apiGroups: [ "apiextensions.k8s.io" ]
+          resources: [ "customresourcedefinitions" ]
+          verbs: [ "get", "list", "watch" ]
+        - apiGroups: ["dapr.io"]
+          resources: ["component", "subscription", "configurations"]
+          verbs: ["create", "delete", "patch", "update", "get", "list", "watch"]
+    config: |-
+      version: v1beta1 
+      export:
+      - kind: Component
+        apiVersion: dapr.io/v1alpha1
+      import:
+      - kind: Pod
+        apiVersion: v1
+        replaceOnConflict: true
+      - kind: Component
+        apiVersion: dapr.io/v1alpha1  
