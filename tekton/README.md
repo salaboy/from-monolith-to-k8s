@@ -1,18 +1,16 @@
 # Pipelines
 
-This short tutorial shows how to use Tekton to define and run a Service and an Environment Pipeline. 
+This short tutorial covers how to install Tekton and how to create a very simple Task and Pipeline. 
 
 [Tekton](https://tekton.dev) is a non-opinionated Pipeline Engine built for the Cloud (specifically for Kubernetes). You can build any kind of pipelines that you want as the engine doesn't impose any restrictions on the kind of Tasks that it can execute. This makes it perfect for building Service Pipelines where you might need to have special requirements that cannot be met by a managed service.  
 
-The Service Pipeline for this example is configured to build the [Conference Application Frontend](https://github.com/salaboy/fmtok8s-frontend) but as you can see in the [Service Pipeline definition](resources/service-pipeline.yaml) you can parameterize the pipeline run to build other services. 
-
-The [Environment Pipeline definition](resources/environment-pipeline.yaml) shows a simple example on how you can use Helm to sync the contents of a repository to a namespace in a Kubernetes Cluster. While this is doable with Tekton, there are other more specialized tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) which do a more complete set of tasks on the continuous deployment space by applying a GitOps approach. You can find a [tutorial with ArgoCD here](../argocd/README.md).
-
+After running our first Tekton Pipeline this tutorial also includes a links to more complex Service Pipelines used to build the Conference Application Services. 
 
 
 ## Installing Tekton
 
 Follow the next steps in order to install and setup Tekton in your Kubernetes Cluster.
+You can follow this steps in your local KinD cluster. 
 
 1. **Install Tekton Pipelines**
 
@@ -23,7 +21,7 @@ Follow the next steps in order to install and setup Tekton in your Kubernetes Cl
 1. **Install Tekton Dashboard (optional)**
 
 ```
-kubectl apply -f kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.33.0/release.yaml
+kubectl apply -f https://github.com/tektoncd/dashboard/releases/download/v0.33.0/release.yaml
 ```
 You can access the dashboard by port-forwarding using `kubectl`:
 
@@ -38,10 +36,230 @@ Then you can access pointing your browser to [http://localhost:9097](http://loca
 
 1. **Install Tekton CLI (optional)**:
 
-You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli)
+You can also install [Tekton `tkn` CLI tool](https://github.com/tektoncd/cli). 
+If you are in Mac OSX you can run: 
+
+```
+brew install tektoncd-cli
+```
 
 
-### Configure Tekton Pipeline
+## Getting started with Tekton Tasks
+
+This section aims to get you started creating Tasks and a Simple Pipeline, so you can then look into the Service Pipelines used to build the artifacts for the Conference Application. 
+
+With Tekton we can define what our tasks do by create Tekton Task definitions. The following is the most simple example of a task: 
+
+```
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: hello-world-task
+spec:
+  params:
+  - name: name
+    type: string
+    description: who do you want to welcome?
+    default: tekton user
+  steps:
+    - name: echo
+      image: ubuntu
+      command:
+        - echo
+      args:
+        - "Hello World: $(params.name)" 
+```
+
+This Tekton `Task` uses the `ubuntu` image and the `echo` command located inside that image. This `Task` also accept a parameter called `name` that will be used to print a message. Let's apply this `Task` definition to our cluster by running: 
+
+```
+kubectl apply -f resources/hello-world-task.yaml
+```
+
+When we apply this resource to Kubernertes we are not executing the task, we are only making the Task definition available for other to use. This task can now be referenced in multiple pipelines or being executed independently by different users. 
+
+You can now list the available tasks in the cluster by running: 
+```
+> kubectl get tasks
+NAME               AGE
+hello-world-task   88s
+```
+
+Now let's run our Task. We do this by creating a `TaskRun` resource, which represent a single run for our task. Notice that this concrete run will have a fixed resource name (`hello-world-task-run-1`) and a concrete value for the task parameter called `name`. 
+
+```
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: hello-world-task-run-1
+spec:
+  params: 
+  - name: name
+    value: "Building Platforms on top of Kubernetes reader!"
+  taskRef:
+    name: hello-world-task
+```
+
+Let's apply this `TaskRun` resource to our cluster to create our first Task Run (execution):
+```
+kubectl apply -f task-run.yaml
+taskrun.tekton.dev/hello-world-task-run-1 created
+```
+
+As soon as the `TaskRun` is created, the Tekton Pipeline Engine is in charge of scheduling the tasks and create the Kubernetes Pod needed to execute it. If you list the pods in the default namespace you should see something like this: 
+
+```
+kubectl get pods
+NAME                         READY   STATUS     RESTARTS   AGE
+hello-world-task-run-1-pod   0/1     Init:0/1   0          2s
+```
+
+You can also list `TaskRun`s to check for status: 
+
+```
+kubectl get taskrun
+NAME                     SUCCEEDED   REASON      STARTTIME   COMPLETIONTIME
+hello-world-task-run-1   True        Succeeded   66s         7s
+```
+
+Finally, because we were executing a single task you can see the logs of the TaskRun execition by tailing the logs of the pod that was created:
+
+```
+kubectl logs -f hello-world-task-run-1-pod 
+Defaulted container "step-echo" out of: step-echo, prepare (init)
+Hello World: Building Platforms on top of Kubernetes reader!
+```
+
+Let's now look into how to sequence multiple tasks together using a Tekton Pipeline.
+
+## Getting Started with Tekton Pipelines
+
+Now we can use Pipelines to coordinate multiple tasks like the one that we defined before. We can also reuse Task definitions created by the Tekton community from the [Tekton Hub](https://hub.tekton.dev/).
+
+![](tekton-hub.png)
+
+
+Before creating the Pipeline we will install the `curl` Tekton task from the Tekton Hub by running: 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/wget/0.1/wget.yaml
+```
+
+You should see: 
+
+```
+task.tekton.dev/wget created
+```
+
+Now let's use our `Hello World` task and the `wget` task that we just installed together into a simple pipeline. Let's create the following pipeline definition:
+
+```
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: hello-world-pipeline
+  annotations:
+    description: |
+      Fetch resource from internet, cat content and then say hello
+spec:
+  results: 
+  - name: message
+    type: string
+    value: $(tasks.cat.results.messageFromFile)
+  params:
+  - name: url
+    description: resource that we want to fetch
+    type: string
+    default: ""
+  workspaces:
+  - name: files
+  tasks:
+  - name: wget
+    taskRef:
+      name: wget
+    params:
+    - name: url
+      value: "$(params.url)"
+    - name: diroptions
+      value:
+        - "-P"  
+    workspaces:
+    - name: wget-workspace
+      workspace: files
+  - name: cat
+    runAfter: [wget]
+    workspaces:
+    - name: wget-workspace
+      workspace: files
+    taskSpec: 
+      workspaces:
+      - name: wget-workspace
+      results: 
+        - name: messageFromFile
+          description: the message obtained from the file
+      steps:
+      - name: cat
+        image: bash:latest
+        script: |
+          #!/usr/bin/env bash
+          cat $(workspaces.wget-workspace.path)/welcome.md | tee /tekton/results/messageFromFile
+  - name: hello-world
+    runAfter: [cat]
+    taskRef:
+      name: hello-world-task
+    params:
+      - name: name
+        value: "$(tasks.cat.results.messageFromFile)"
+```
+
+It end ups not being that easy to fetch a file, read its content and then use our previously defined hello-world taks to print the content of the file that we have fetched. 
+With pipelines we have the flexiblity to add new tasks if needed to do transformations or further processing of the inputs and outputs of each individual tasks. 
+
+For this example, we are using the `wget` Task that we installed from the Tekton Hub, a task that is defined inline called `cat` that basically fetch the content of the downloaded file and store it into a Tekton Result that can be referenced later into our `hello-world-task`. 
+
+Go ahead and install this pipeline definition by running: 
+
+```
+kubectl apply -f resources/hello-world-pipeline.yaml
+```
+
+Then we can create a new `PipelineRun` everytime that we want to execute this pipeline:
+
+```
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: hello-world-pipeline-run-1
+spec:
+  workspaces:
+    - name: files
+      volumeClaimTemplate: 
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1M 
+  params:
+  - name: url
+    value: "https://raw.githubusercontent.com/salaboy/salaboy/main/welcome.md"
+  pipelineRef:
+    name: hello-world-pipeline
+  
+```
+
+Because our tasks needs to download and store files in the filesystem, we are using Tekton workspaces as abstractions to provide storage for our `PipelineRun`s. As we did before with our `TaskRun` we can also provide parameters for the `PipelineRun` allowing us to parameterize each run to use different configurations, or in this case different files. 
+
+Both with `PipelineRuns` and `TaskRuns` you will need to generate a new resource name for each run. As if you try to reapply the same resource twice, the Kubernetes API server will not allow you to mutate the existing resource with the same name. 
+
+Make sure you check the pipeline and task executions in the Tekton Dashboard if you installed it.
+![](tekton-dashboard-hello-world-pipeline.png)
+
+
+
+## Tekton for Service Pipelines
+
+
 
 The Tekton pipeline definition uses Tekton Bundles which needs to
 be enabled in the config. The `feature-flags` config map in the `tekton-pipelines` namespace
@@ -68,6 +286,9 @@ kind: ConfigMap
 ```
 
 Check the [official documentation](https://github.com/tektoncd/pipeline/blob/release-v0.18.x/docs/install.md#customizing-the-pipelines-controller-behavior) for more information.
+
+
+
 
 ## RBAC
 
@@ -109,31 +330,5 @@ Alternatively, you can apply the [service-pipeline-run.yaml](service-pipeline-ru
 kubectl apply -f service-pipeline-run.yaml
 ```
 
-## Environment Pipeline
 
-The environment pipeline definition described in [`resources/envionment-pipeline.yaml`](resources/envionment-pipeline.yaml) implements the following tasks:
-
-![Environment Pipeline](environment-pipeline.png)
-
-The objective of this Environment Pipeline is to deploy the conference application services into the Staging Environment (represented as a Kubernetes namespace) by applying the configuration located in this repository [https://github.com/salaboy/fmtok8s-staging-env](https://github.com/salaboy/fmtok8s-staging-env) to the cluster.
-
-
-You can start this Environment Pipeline by running the following command:
-
-```
-tkn pipeline start staging-environment-pipeline -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -s gitops
-```
-
-Alternatively, you can apply the [env-pipeline-run.yaml](env-pipeline-run.yaml) resource into your cluster to create a `PipelineRun` in the same way that `tkn` is creating one.
-
-```
-kubectl apply -f env-pipeline-run.yaml
-```
-
-The environment pipeline is using [`helmfile`](https://github.com/roboll/helmfile) to describe the stating environment. 
-
-As mentioned before, while this is doable with Tekton, there are other more specialized tools like [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) which do a more complete set of tasks on the continuous deployment space by applying a GitOps approach. You can find a [tutorial with ArgoCD here](../argocd/README.md).
-
-# References
-- Why [JX uses Helmfile](https://jenkins-x.io/v3/develop/faq/general/#why-does-jenkins-x-use-helmfile-template)?
 

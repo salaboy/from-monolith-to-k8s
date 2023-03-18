@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1
+kind: TaskRun
+metadata:
+  name: hello-world-task-run-1
+spec:
+  params: 
+  - name: name
+    value: "Building Platforms on top of Kubernetes reader!"
+  taskRef:
+    name: hello-world-task

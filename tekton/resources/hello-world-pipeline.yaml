@@ -1,0 +1,56 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: hello-world-pipeline
+  annotations:
+    description: |
+      Fetch resource from internet, cat content and then say hello
+spec:
+  results: 
+  - name: message
+    type: string
+    value: $(tasks.cat.results.messageFromFile)
+  params:
+  - name: url
+    description: resource that we want to fetch
+    type: string
+    default: ""
+  workspaces:
+  - name: files
+  tasks:
+  - name: wget
+    taskRef:
+      name: wget
+    params:
+    - name: url
+      value: "$(params.url)"
+    - name: diroptions
+      value:
+        - "-P"  
+    workspaces:
+    - name: wget-workspace
+      workspace: files
+  - name: cat
+    runAfter: [wget]
+    workspaces:
+    - name: wget-workspace
+      workspace: files
+    taskSpec: 
+      workspaces:
+      - name: wget-workspace
+      results: 
+        - name: messageFromFile
+          description: the message obtained from the file
+      steps:
+      - name: cat
+        image: bash:latest
+        script: |
+          #!/usr/bin/env bash
+          cat $(workspaces.wget-workspace.path)/welcome.md | tee /tekton/results/messageFromFile
+  - name: hello-world
+    runAfter: [cat]
+    taskRef:
+      name: hello-world-task
+    params:
+      - name: name
+        value: "$(tasks.cat.results.messageFromFile)"

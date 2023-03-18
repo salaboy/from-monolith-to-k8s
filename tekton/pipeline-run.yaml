@@ -1,0 +1,20 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: hello-world-pipeline-run-1
+spec:
+  workspaces:
+    - name: files
+      volumeClaimTemplate: 
+        spec:
+          accessModes:
+          - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1M 
+  params:
+  - name: url
+    value: "https://raw.githubusercontent.com/salaboy/salaboy/main/welcome.md"
+  pipelineRef:
+    name: hello-world-pipeline
+  
