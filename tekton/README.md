@@ -256,79 +256,30 @@ Make sure you check the pipeline and task executions in the Tekton Dashboard if 
 ![](tekton-dashboard-hello-world-pipeline.png)
 
 
-
 ## Tekton for Service Pipelines
 
+Service Pipelines in real life are much more complex that the previous simple examples. This is mostly because the pipeline tasks will need to have special configurations and credentials to access external systems. 
 
+The Service Pipeline definition for each of the Conference Application services can be found in the Service repository. But they all implement the following steps:
 
-The Tekton pipeline definition uses Tekton Bundles which needs to
-be enabled in the config. The `feature-flags` config map in the `tekton-pipelines` namespace
-should look like:
-
-```
-kubectl edit cm -n tekton-pipelines feature-flags
-```
-
-```yaml
-apiVersion: v1
-data:
-  enable-api-fields: stable 
-  disable-affinity-assistant: "false"
-  disable-creds-init: "false"
-  disable-home-env-overwrite: "true"
-  disable-working-directory-overwrite: "true"
-  enable-custom-tasks: "false"
-  enable-tekton-oci-bundles: "true" # <------- 
-  require-git-ssh-secret-known-hosts: "false"
-  running-in-environment-with-injected-sidecars: "true"
-kind: ConfigMap
-(...)
-```
-
-Check the [official documentation](https://github.com/tektoncd/pipeline/blob/release-v0.18.x/docs/install.md#customizing-the-pipelines-controller-behavior) for more information.
-
-
-
-
-## RBAC
-
-If the pipeline is going to push docker images to DockerHub you need the following steps: 
-
-Create Docker Hub secret: 
-
-```
-kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=DOCKER_USERNAME --docker-password=DOCKER_PASSWORD --docker-email DOCKER_EMAIL
-```
-
-To create this, in my Mac OSX laptop I need to access the `Keychain Access` app and then look at my `Docker Credentials`. This are generated when doing `docker login`. The DOCKER_PASSWORD is this hash, instead of my textual password for Docker Hub.
-
-Then apply all the RBAC configurations and the pipelines: 
-
-```
-kubectl apply -f tekton/resources/
-```
-
-## Service Pipeline
-
-The Service Pipeline definition described in [`resources/service-pipeline.yaml`](resources/service-pipeline.yaml) implements the following tasks:
 
 ![Service Pipeline](service-pipeline.png)
 
-The objective of this Service Pipeline is to clone the source code in the main branch of the GitHub repository where the [Frontend Service](https://github.com/salaboy/fmtok8s-frontend) is stored and produce a container image that can be deployed into a Kubernetes cluster. 
 
-**Notice that the Frontend Service is a Java/Maven application with a NodeJS React Frontend, so the pipeline will take quite a while downloading dependencies. **
+You can find the Service Pipeline definitions in the following links:
+- [Agenda Service - Service Pipeline](https://github.com/salaboy/fmtok8s-agenda-service/blob/main/tekton/README.md)
+- [C4p Service - Service Pipeline](https://github.com/salaboy/fmtok8s-c4p-service/blob/main/tekton/README.md)
+- [Email Service - Service Pipeline](https://github.com/salaboy/fmtok8s-email-service/blob/main/tekton/README.md)
+- [Frontend - Service Pipeline](https://github.com/salaboy/fmtok8s-frontend/blob/main/tekton/README.md)
 
-You can start this Service Pipeline by running the following command:
+To be able to run these pipelines you will need the following credentials to be configured:
+- A workpsace with enough space to host the application source code and all the dependencies that will be downloaded
+- Container Registry credentials to be used by the Kaniko Task that builds and push the container to a registry
+- Credentials for the Helm Chart Repository where the Charts will be hosted
+- Credentials (tokens) from GitHub to connect and trigger pipelines using webhooks
 
-```
-tkn pipeline start frontend-service-pipeline -s dockerconfig -w name=sources,volumeClaimTemplateFile=workspace-template.yaml -w name=dockerconfig,secret=regcred -w name=maven-settings,emptyDir=
-```
+**Note**: These pipelines are just examples to illustrate the work required to configure Tekton to build Services.
 
-Alternatively, you can apply the [service-pipeline-run.yaml](service-pipeline-run.yaml) resource into your cluster to create a `PipelineRun` in the same way that `tkn` is creating one.
-
-```
-kubectl apply -f service-pipeline-run.yaml
-```
 
 
 
