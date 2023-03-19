@@ -151,7 +151,13 @@ You should see:
 task.tekton.dev/wget created
 ```
 
-Now let's use our `Hello World` task and the `wget` task that we just installed together into a simple pipeline. Let's create the following pipeline definition:
+Now let's use our `Hello World` task and the `wget` task that we just installed together into a simple pipeline. 
+
+We will be creating this simple Pipeline Definition, that fetch a file, read its content and then uses the previously defined `Hello World` Task.
+
+![](hello-world-pipeline.png)
+
+Let's create the following pipeline definition:
 
 ```
 apiVersion: tekton.dev/v1
@@ -212,7 +218,7 @@ spec:
         value: "$(tasks.cat.results.messageFromFile)"
 ```
 
-It end ups not being that easy to fetch a file, read its content and then use our previously defined hello-world taks to print the content of the file that we have fetched. 
+It end up not being that easy to fetch a file, read its content and then use our previously defined hello-world taks to print the content of the file that we have fetched. 
 With pipelines we have the flexiblity to add new tasks if needed to do transformations or further processing of the inputs and outputs of each individual tasks. 
 
 For this example, we are using the `wget` Task that we installed from the Tekton Hub, a task that is defined inline called `cat` that basically fetch the content of the downloaded file and store it into a Tekton Result that can be referenced later into our `hello-world-task`. 
@@ -251,6 +257,45 @@ spec:
 Because our tasks needs to download and store files in the filesystem, we are using Tekton workspaces as abstractions to provide storage for our `PipelineRun`s. As we did before with our `TaskRun` we can also provide parameters for the `PipelineRun` allowing us to parameterize each run to use different configurations, or in this case different files. 
 
 Both with `PipelineRuns` and `TaskRuns` you will need to generate a new resource name for each run. As if you try to reapply the same resource twice, the Kubernetes API server will not allow you to mutate the existing resource with the same name. 
+
+Run this pipeline by running: 
+
+```
+kubectl apply -f pipeline-run.yaml
+```
+
+Check the pods that are created: 
+
+```
+> kubectl get pods
+NAME                                         READY   STATUS        RESTARTS   AGE
+affinity-assistant-ca1de9eb35-0              1/1     Terminating   0          19s
+hello-world-pipeline-run-1-cat-pod           0/1     Completed     0          11s
+hello-world-pipeline-run-1-hello-world-pod   0/1     Completed     0          5s
+hello-world-pipeline-run-1-wget-pod          0/1     Completed     0          19s
+```
+
+Notice that there is one Pod per Task and a pod called `affinity-assistant-ca1de9eb35-0` which is making sure that the Pods are created in the correct node (where the volume was bound).
+
+Check the TaskRuns too: 
+
+```
+> kubectl get taskrun
+NAME                                     SUCCEEDED   REASON      STARTTIME   COMPLETIONTIME
+hello-world-pipeline-run-1-cat           True        Succeeded   109s        104s
+hello-world-pipeline-run-1-hello-world   True        Succeeded   103s        98s
+hello-world-pipeline-run-1-wget          True        Succeeded   117s        109s
+
+```
+
+And of course, if all the tasks are successful, the PipelineRun will be too: 
+
+```
+kubectl get pipelinerun
+NAME                         SUCCEEDED   REASON      STARTTIME   COMPLETIONTIME
+hello-world-pipeline-run-1   True        Succeeded   2m13s       114s
+```
+
 
 Make sure you check the pipeline and task executions in the Tekton Dashboard if you installed it.
 ![](tekton-dashboard-hello-world-pipeline.png)
