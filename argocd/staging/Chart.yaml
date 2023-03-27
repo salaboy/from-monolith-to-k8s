@@ -16,12 +16,4 @@ dependencies:
   repository: https://salaboy.github.io/helm/  
 - name: fmtok8s-email-service
   version: v0.0.1 
-  repository: https://salaboy.github.io/helm/
-- name: kube-prometheus
-  repository: https://charts.bitnami.com/bitnami
-  condition: prometheus.enabled
-  version: 8.0.8
-- name: grafana-operator
-  repository: https://charts.bitnami.com/bitnami
-  version: 2.6.4
-  condition: grafana.enabled  
+  repository: https://salaboy.github.io/helm/ 

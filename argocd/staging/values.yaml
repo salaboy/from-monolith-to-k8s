@@ -1,16 +1,16 @@
 grafana:
-  enabled: true
+  enabled: false
 prometheus:
-  enabled: true
+  enabled: false
 fmtok8s-frontend:  
   prometheus:
-    enabled: true
+    enabled: false
 fmtok8s-agenda-service:
   prometheus:
-    enabled: true
+    enabled: false
 fmtok8s-email-service:
   prometheus:
-    enabled: true
+    enabled: false
 fmtok8s-c4p-service:
   prometheus:
-    enabled: true
+    enabled: false
