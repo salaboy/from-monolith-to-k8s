@@ -6,6 +6,8 @@ fmtok8s-frontend:
   prometheus:
     enabled: false
 fmtok8s-agenda-service:
+  redis: 
+    architecture: standalone
   prometheus:
     enabled: false
 fmtok8s-email-service:

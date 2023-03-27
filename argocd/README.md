@@ -50,7 +50,7 @@ As an exercise before getting things installed with ArgoCD you can install each 
 helm repo add fmtok8s https://salaboy.github.io/helm/
 helm repo update
 helm install c4p fmtok8s/fmtok8s-c4p-service 
-helm install agenda fmtok8s/fmtok8s-agenda-service
+helm install agenda fmtok8s/fmtok8s-agenda-service --set redis.architecture=standalone
 helm install email fmtok8s/fmtok8s-email-service --version v0.0.1
 helm install frontend fmtok8s/fmtok8s-frontend
 ```
