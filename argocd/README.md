@@ -158,7 +158,7 @@ Once you have ArgoCD installed you can access to the user interface to set up th
 
 <img src="imgs/argocd-dashboard.png" width="600">
 
-Hit the "Create" button and use the following details to configure your project: 
+Hit the **"+ New App"** button and use the following details to configure your project: 
 
 Here are the Create Application inputs that I've used: 
 - Application Name: "staging-environment"
@@ -170,13 +170,16 @@ Here are the Create Application inputs that I've used:
 - Cluster: "https://kubernetes.default.svc" 
 - Namespace: "staging"
 
-<img src="imgs/app-parameters.png" width="600">
+<img src="imgs/argocd-app-creation.png" width="600">
 
 And left the other values to their default ones, hit **Create** on the top 
 
 Once the App is created, you need to manually syncronize the changes, hit the **Sync** button on the Application box. We selected this option (`Sync Policy: Manual`), so we can manually decide when to apply the changes.
 
-<img src="imgs/argocd-syncronize.png" width="600">
+<img src="imgs/argocd-sync.png" width="400">
+
+In the side panel hit **Synchronize**.
+
 
 If you are running in a local environment, you can always access the application using `port-forward`, in a **new terminal** run:
 
@@ -195,6 +198,21 @@ As usual, you can monitor the status of the pods and services using `kubectl`. T
 kubectl get pods -n staging
 ```
 
+You should see something like this: 
+
+```
+> kubectl get pods -n staging
+NAME                                                          READY   STATUS    RESTARTS        AGE
+staging-environment-fmtok8s-agenda-service-5fcdd586cc-xqxgw   1/1     Running   1 (62s ago)     3m6s
+staging-environment-fmtok8s-c4p-service-5db567999f-lzv49      1/1     Running   1 (2m42s ago)   3m6s
+staging-environment-fmtok8s-email-service-6cd4576f5b-7568c    1/1     Running   0               3m6s
+staging-environment-fmtok8s-frontend-55dd7f7b67-wflr7         1/1     Running   0               3m6s
+staging-environment-postgresql-0                              1/1     Running   0               3m5s
+staging-environment-redis-master-0                            1/1     Running   0               3m5s
+```
+
+**Note**: a few restarts are OK (RESTARTS column), as some services needs to wait for the databases (Redis and PostgreSQL) to be up before them being healthy.
+
 To update version of configurations of your services, you can update the files located in the [Chart.yaml](staging/Chart.yaml) file or [values.yaml](staging/values.yaml) file located inside the [staging](staging/) directory. 
 
 ## Changing the Application's configuration in the Staging Environment
@@ -204,8 +222,13 @@ While you will not do this for your applications, here we are simulating a chang
 
 Go ahead and edit the Application Details / Parameters and select `values-debug-enabled.yaml` for the values file that we want to use for this application. This file sets the debug flag into the frontend service and it simulates us changing the original `values.yaml` file that was used for the first installation.
 
-Save and then Sync the application. Because we were using port-forwarding, you might need to run this command again: 
+<img src="imgs/argocd-change-parameters.png" width="600">
 
+Save and then Sync the application. 
+
+<img src="imgs/argocd-syncronize.png" width="600">
+
+Because we were using port-forwarding, you might need to run this command again: 
 
 ```
 kubectl port-forward svc/fmtok8s-frontend -n staging 8081:80
