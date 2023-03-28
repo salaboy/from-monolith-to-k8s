@@ -4,7 +4,7 @@ prometheus:
   enabled: false
 fmtok8s-frontend:
   debug:
-    enabled: true  
+    enabled: "true"
   prometheus:
     enabled: false
 fmtok8s-agenda-service:
