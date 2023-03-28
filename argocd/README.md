@@ -132,7 +132,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 Once in, you should see the empty home screen: 
 
-<img src="imgs/argocd-dashboard-home.png" width="600">
+<img src="imgs/argocd-dashboard.png" width="600">
 
 Let's now set up our Staging Environment.
 
@@ -186,7 +186,8 @@ kubectl port-forward svc/fmtok8s-frontend -n staging 8081:80
 
 Wait for the applicatons pod to be up and running and then you can access the application pointing your browser to [http://localhost:8081](http://localhost:8081).
 
-![](imgs/app.png)
+<img src="imgs/app-home.png" width="600">
+
 
 As usual, you can monitor the status of the pods and services using `kubectl`. To check if the application pods are ready you can run: 
 
