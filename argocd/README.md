@@ -213,9 +213,10 @@ staging-environment-redis-master-0                            1/1     Running   
 
 **Note**: a few restarts are OK (RESTARTS column), as some services needs to wait for the databases (Redis and PostgreSQL) to be up before them being healthy.
 
-To update version of configurations of your services, you can update the files located in the [Chart.yaml](staging/Chart.yaml) file or [values.yaml](staging/values.yaml) file located inside the [staging](staging/) directory. 
-
 ## Changing the Application's configuration in the Staging Environment
+
+To update version of configurations of your services, you can update the files located in the [Chart.yaml](staging/Chart.yaml) file or [values.yaml](staging/values.yaml) file located inside the [staging](staging/) directory.
+
 For the sake of this example, you can change the application configuration by updating the ArgoCD application details and its parameters. 
 
 While you will not do this for your applications, here we are simulating a change in the GitHub repository where the staging environment is defined. 
@@ -239,3 +240,9 @@ This is due, the Frontend Service Pod is going to be replaced by the newly confi
 Once the application is up and running you should see the new version of the up showing the Debug Banner on top: 
 
 ![](imgs/app-debug.png)
+
+# Recap
+
+In this tutorial we created our **Staging Environment** using an Argo CD application. This allowed us to sync the configuration located inside a GitHub repository to our running Kubernetes Cluster in KinD. If you make changes to the content of the GitHub repository and refresh the ArgoCD application, ArgoCD will notice that our Environment is out of sync. If we use an automated sync strategy, ArgoCD will run the sync step automatically for us everytime it notices that there has been changes in the configuration. For more information check the [project website](https://argo-cd.readthedocs.io/en/stable/) or [my blog](https://www.salaboy.com). 
+
+Do you want to improve this tutorial? Create an issue, drop me a message on [Twitter](https://twitter.com/salaboy) or send a Pull Request.
