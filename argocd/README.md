@@ -118,11 +118,11 @@ You can access the user interface by pointing your browser to [http://localhost:
 
 **Note**: by default the installation works using HTTP and not HTTPS, hence you need to accept the warning (hit the "Advanced Button" on Chrome) and proceed (Process to localhost unsafe). 
 
-![](imgs/argocd-warning.png?width=300)
+![](imgs/argocd-warning.png | width=300)
 
 That should take you to the Login Page:
 
-![](imgs/argocd-login.png?width=300)
+![](imgs/argocd-login.png | width=300)
 
 
 The user is `admin`, and to get the password for the ArgoCD Dashboard by running: 
@@ -133,7 +133,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 Once in, you should see the empty home screen: 
 
-![](imgs/argocd-dashboard-home.png)
+![](imgs/argocd-dashboard-home.png | width=300)
 
 Let's now set up our Staging Environment.
 
