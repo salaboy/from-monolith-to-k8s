@@ -118,11 +118,11 @@ You can access the user interface by pointing your browser to [http://localhost:
 
 **Note**: by default the installation works using HTTP and not HTTPS, hence you need to accept the warning (hit the "Advanced Button" on Chrome) and proceed (Process to localhost unsafe). 
 
-<img src="imgs/argocd-warning.png" width="300">
+<img src="imgs/argocd-warning.png" width="600">
 
 That should take you to the Login Page:
 
-<img src="imgs/argocd-login.png" width="300">
+<img src="imgs/argocd-login.png" width="600">
 
 The user is `admin`, and to get the password for the ArgoCD Dashboard by running: 
 
@@ -132,7 +132,7 @@ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.pas
 
 Once in, you should see the empty home screen: 
 
-<img src="imgs/argocd-dashboard-home.png" width="300">
+<img src="imgs/argocd-dashboard-home.png" width="600">
 
 Let's now set up our Staging Environment.
 
@@ -156,7 +156,7 @@ namespace/staging created
 
 Once you have ArgoCD installed you can access to the user interface to set up the project. 
 
-![](imgs/argocd-dashboard.png)
+<img src="imgs/argocd-dashboard.png" width="600">
 
 Hit the "Create" button and use the following details to configure your project: 
 
@@ -170,13 +170,13 @@ Here are the Create Application inputs that I've used:
 - Cluster: "https://kubernetes.default.svc" 
 - Namespace: "staging"
 
-![](imgs/app-parameters.png)
+<img src="imgs/app-parameters.png" width="600">
 
 And left the other values to their default ones, hit **Create** on the top 
 
 Once the App is created, you need to manually syncronize the changes, hit the **Sync** button on the Application box. We selected this option (`Sync Policy: Manual`), so we can manually decide when to apply the changes.
 
-![](imgs/argocd-syncronize.png)
+<img src="imgs/argocd-syncronize.png" width="600">
 
 If you are running in a local environment, you can always access the application using `port-forward`, in a **new terminal** run:
 
