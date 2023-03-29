@@ -1,0 +1,10 @@
+apiVersion: marketplace.kratix.io/v1alpha1
+kind: env
+metadata:
+  name: my-dev-env
+  namespace: default
+spec:
+  deployApp: true
+  database:   
+    enabled: true
+    statestoreName: "statestore"

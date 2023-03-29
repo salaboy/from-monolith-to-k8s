@@ -1,0 +1,58 @@
+#!/usr/bin/env sh
+
+set -x
+
+# Read current values from the provided resource request
+export name="$(yq eval '.metadata.name' /input/object.yaml)"
+export statestore="$(yq eval '.spec.database.statestoreName' /input/object.yaml)"
+export databaseEnabled="$(yq eval '.spec.database.enabled' /input/object.yaml)"
+export deployApp="$(yq eval '.spec.deployApp' /input/object.yaml)"
+
+if [ "$deployApp" = true ] ; then
+  sed "s/statestore/${statestore}/g" /tmp/transfer/apps.yaml > /output/apps.yaml
+fi 
+
+if [ "$databaseEnabled" = false ] ; then
+  exit 0
+fi 
+
+# Replace defaults with user provided values
+cat /tmp/transfer/redis-instance.yaml |  \
+  yq eval '.metadata.name = env(name)' - \
+  > /output/redis-instance.yaml
+
+
+cat > /output/component.yaml <<EOF
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: ${statestore}
+  namespace: default
+spec:
+  type: state.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: redis-${name}.default.svc.cluster.local:6379
+  - name: redisPassword
+    value: ""
+EOF
+
+cat > /output/service.yaml <<EOF
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-${name}
+  namespace: default
+spec:
+  ports:
+  - name: redis
+    port: 6379
+    protocol: TCP
+    targetPort: 6379
+  selector:
+    app.kubernetes.io/component: redis
+    app.kubernetes.io/name: ${name}
+    app.kubernetes.io/part-of: redis-failover
+  type: ClusterIP
+EOF
