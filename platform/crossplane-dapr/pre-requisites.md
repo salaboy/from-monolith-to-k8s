@@ -157,7 +157,7 @@ spec:
 Once you have the GCP provider configured you can deploy the compositions that create GKE resources, and use the `gke` level for matching selectors.
 
 ```
-kubectl apply -f app-datahase-redis-gke.yaml
-kubectl apply -f app-datahase-redis-gke-dapr.yaml
+kubectl apply -f app-database-redis-gke.yaml
+kubectl apply -f app-database-redis-gke-dapr.yaml
 ```
 
