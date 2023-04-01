@@ -134,6 +134,21 @@ the components configurated in Dapr:
 kubectl get pods
 ```
 
+You should see something like this: 
+```
+> kubectl get pods
+NAME                                   READY   STATUS      RESTARTS       AGE
+go-app-deployment-66cd766-hcdgr        1/1     Running     0              33m
+java-app-deployment-6764db7874-xfp5x   1/1     Running     8 (6m9s ago)   33m
+redisoperator-6fcfc5f4fb-j6794         1/1     Running     0              33m
+request-pipeline-env-default-12806     0/1     Completed   0              33m
+request-pipeline-redis-default-2fbe4   0/1     Completed   0              33m
+rfr-my-dev-env-0                       1/1     Running     0              32m
+rfs-my-dev-env-7d8bd497f5-vnpjh        1/1     Running     0              32m
+```
+
+You can also see that there is a new Dapr component deployed:
+
 ```
 kubectl get components
 ```
@@ -141,7 +156,12 @@ kubectl get components
 You should see something like this: 
 
 ```
+> kubectl get components
+NAME         AGE
+statestore   34m
 ```
+
+When we requested a new Development Environment you can see that two pipelines were executed to provision the redis instance and the applications inside the environment. 
 
 # Interacting with the deployed applications
 
@@ -149,13 +169,13 @@ Now that the applications are running we can use `kubect port-forward` to intera
 
 In a separate terminal run: 
 ```
-kubectl port-forward svc/java-app 8080:80
+kubectl port-forward svc/java-app-service 8080:80
 ```
 
 In another terminal run: 
 
 ```
-kubectl port-forward svc/go-app 8081:80
+kubectl port-forward svc/go-app-service 8081:80
 ```
 
 Let's send an HTTP POST request to the Java App that writes to the Dapr Statestore component which is backed up by the Redis instance that the Kratix promise created and configured.
@@ -163,9 +183,28 @@ Let's send an HTTP POST request to the Java App that writes to the Dapr Statesto
 ```
 curl -X POST localhost:8080/?value=42
 ```
+or with [httpie](https://github.com/httpie/httpie):
+
+```
+http POST ":8080/?value=42"
+```
 
 You should see something like this: 
 ```
+> http POST ":8080/?value=42"
+HTTP/1.1 200 
+Connection: keep-alive
+Content-Type: application/json
+Date: Sat, 01 Apr 2023 05:57:22 GMT
+Keep-Alive: timeout=60
+Transfer-Encoding: chunked
+
+{
+    "values": [
+        "42"
+    ]
+}
+
 ```
 
 Let's now send a GET request to the Go App which reads from the same Dapr Statestore component: 
@@ -173,15 +212,26 @@ Let's now send a GET request to the Go App which reads from the same Dapr States
 ```
 curl localhost:8081
 ```
-
-You should see something like this: 
+or with [httpie](https://github.com/httpie/httpie). You should see something like this: 
 
 ```
+> http :8081                 
+HTTP/1.1 200 OK
+Content-Length: 17
+Content-Type: application/json
+Date: Sat, 01 Apr 2023 05:57:24 GMT
+
+{
+    "Values": [
+        "45"
+    ]
+}
+
 ```
 
 You can find the source code of this application here: 
-- Java App: check [here]() to see how the Dapr Java SDK is being used to connect to the Statestore by just using the statestore name. Notice that the name used is the same as the name of the Dapr component listed by running `kubectl get components`
-- Go App: check [here]() to see how the Dapr Go SDK is being used to connect to the Dapr Statestore component.
+- Java App: check [here](apps/java-app/) to see how the Dapr Java SDK is being used to connect to the Statestore by just using the statestore name. Notice that the name used is the same as the name of the Dapr component listed by running `kubectl get components`
+- Go App: check [here](apps/go-app/) to see how the Dapr Go SDK is being used to connect to the Dapr Statestore component.
 
 The same principles can be used to expand this demo to use the Pub/Sub component to exchange message between applciations written in different languages, without pushing the applications to know which backing implementation is being used. This allow the application code to work across different implementaitons and even across cloud providers.
 
