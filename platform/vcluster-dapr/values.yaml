@@ -9,7 +9,7 @@ sync:
           resources: [ "customresourcedefinitions" ]
           verbs: [ "get", "list", "watch" ]
         - apiGroups: ["dapr.io"]
-          resources: ["component", "subscription", "configurations"]
+          resources: ["components", "subscriptions", "configurations"]
           verbs: ["create", "delete", "patch", "update", "get", "list", "watch"]
     config: |-
       version: v1beta1 

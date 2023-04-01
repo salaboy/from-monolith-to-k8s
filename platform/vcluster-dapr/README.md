@@ -12,6 +12,7 @@ This uses the `multiNamespaceMode` and the `syncer` extension mechanism to impor
 - Install Redis on Host Cluster
 
 Create a KinD Cluster:
+
 ```
 kind create cluster
 ```

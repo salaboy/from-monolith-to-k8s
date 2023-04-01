@@ -154,6 +154,8 @@ You should see something like this:
 namespace/staging created
 ```
 
+Note: Alternatively, you can use the "Auto Create Namespace" option in the ArgoCD application creation. 
+
 Once you have ArgoCD installed you can access to the user interface to set up the project. 
 
 <img src="imgs/argocd-dashboard.png" width="600">
