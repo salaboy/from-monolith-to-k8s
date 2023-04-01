@@ -7,7 +7,7 @@ Then we will create a Crossplane composition that uses the Crossplane Helm Provi
 
 Once we have all our application needs to work, we want to make the life of our developers easier, no matter which programming language they are using. For that we will use Dapr and the StateStore component to connect to the provisioned database. To simplify the whole journey we will add the Dapr Component configuration to the Crossplane composition, so whenever a developer request a new application context, they don't need to worry about where the Redis database is running or how to connect to it. 
 
-You can read more about this tutorial in this blog post: <LINK>
+You can read more about this tutorial in this blog post: [https://blog.crossplane.io/crossplane-and-dapr/](https://blog.crossplane.io/crossplane-and-dapr/)
 
 Make sure that you follow the [pre-requisites installation first](pre-requisites.md)
 
