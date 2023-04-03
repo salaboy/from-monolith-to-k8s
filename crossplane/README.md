@@ -1,16 +1,62 @@
-# Crossplane
+# Infrastructure for our Conference Application
 
-This directory contains a set of different use cases that you can implement using [Crossplane.io](http://crossplane.io). Crossplane provides you a way to declaratively define how to provision resources in different Cloud Providers using Kubernetes Resources. 
+In this step by step tutorial we will be using Crossplane to Provision the Redis and PostgreSQL instance for our application. 
 
-These tutorials uses GCP, but the same approach and concepts apply for Azure and AWS. There is no particular reason behind using GCP and the aim of Crossplane is to enable users to choose any Cloud Provider they want. 
+By using Crossplane and Crossplane Compositions we are aiming to unify how these components are provisioned, hiding away where these components are for the end users (applicaiton teams).
 
-There are currently 5 different tutorials:
-- [Installing & configuring Crossplane for the Conference Platform Scenario using the GCP Provider](installing/README.md)
-- [Creating a Crossplane Configuration package with Application Infrastructure](config-pkg/README.md)
-- [Using the Crossplane Helm Provider to install our Conference Platform Application](helm/README.md)
-- [Creating a Crossplane Composition for our Conferences](conference-composition/README.md)
-- [WIP Multi-Cluster Provisioning Composition](conference-cluster-composition/README.md)
+Application teams should be able to request these resources using a declarative approach as with any other Kubernetes Resource. This enable teams to use Environment Pipelines to configure both the application services and the application infrastructure components needed by the application.
 
- 
+Make sure that you follow the [pre-requisites & installation](prerequisites.md) first.
+
+
+## Databases on demand with Crossplane Compositions
+
+First we will install a  Crossplane composition that uses the Crossplane Helm Provider to allow teams to request Databases on demand. 
+
+```
+kubectl apply -f databases/app-database-redis.yaml
+kubectl apply -f databases/app-database-postgresql.yaml
+kubectl apply -f databases/app-database-resource.yaml
+```
+
+The Crossplane Composition resource (`app-database-redis.yaml`) defines which cloud resources needs to be created and how they need to be configured together. The Crossplane Composite Resource Definition (XRD) defines a simplified interface that enable application development teams to easily request new databases by creating resources of this type.
+
+# Let's provision a new Database
+
+We can provision a new Database for our team to use by executing the following command: 
+
+```
+kubectl apply -f my-db.yaml
+```
+
+The `my-db-keyvalue.yaml` resource looks like this: 
+
+```
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db-keyvalue
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: local
+      type: dev
+      kind: keyvalue
+  parameters: 
+    size: small
+```
+
+Notice that we are using the labels `provider: local`, `type: dev` and `kind: keyvalue`. This allows Crossplane to find the right composition based on the labels. In this case a local Redis instance created by the Helm Provider.
+
+You can check the database status using:
+
+```
+> kubectl get dbs
+NAME    SIZE    MOCKDATA   KIND       SYNCED   READY   COMPOSITION            AGE
+my-db   small              keyvalue   True     True    db.local.salaboy.com   5s
+```
+
+You can check that a new Redis instance was created in the `my-db` namespace. 
+
 
 

@@ -1,0 +1,12 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db-gke
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: cloud
+      type: dev
+  parameters: 
+    size: small
+     

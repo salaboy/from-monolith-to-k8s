@@ -1,0 +1,51 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: db.gke.salaboy.com
+  labels:
+    type: dev
+    provider: cloud
+    kind: sql
+spec:
+  compositeTypeRef:
+    apiVersion: salaboy.com/v1alpha1
+    kind: Database
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - fromFieldPath: metadata.labels
+  resources:
+  - name: cloudsqlinstance
+    base:
+      apiVersion: database.gcp.crossplane.io/v1beta1
+      kind: CloudSQLInstance
+      spec:
+        forProvider:
+          databaseVersion: POSTGRES_9_6
+          region: europe-west2
+          settings:
+            tier: db-custom-1-3840
+            dataDiskType: PD_SSD
+            ipConfiguration:
+              ipv4Enabled: true
+              authorizedNetworks:
+                - value: "0.0.0.0/0"
+        writeConnectionSecretToRef:
+          namespace: crossplane-system
+    patches:
+      - fromFieldPath: "metadata.uid"
+        toFieldPath: "spec.writeConnectionSecretToRef.name"
+        transforms:
+          - type: string
+            string:
+              fmt: "%s-postgresql"
+      - fromFieldPath: "spec.parameters.memorySizeGb"
+        toFieldPath: "spec.forProvider.settings.memorySizeGb"
+    connectionDetails:
+      - fromConnectionSecretKey: username
+      - fromConnectionSecretKey: password
+      - fromConnectionSecretKey: endpoint
+      - type: FromValue
+        name: port
+        value: "5432"

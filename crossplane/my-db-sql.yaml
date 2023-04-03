@@ -1,0 +1,14 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db-sql
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: local
+      type: dev
+      kind: sql
+  parameters: 
+    size: small
+    mockData: false
+     

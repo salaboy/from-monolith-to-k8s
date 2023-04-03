@@ -1,0 +1,14 @@
+apiVersion: salaboy.com/v1alpha1
+kind: Database
+metadata:
+  name: my-db-keyavalue
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: local
+      type: dev
+      kind: keyvalue
+  parameters: 
+    size: small
+    mockData: false
+     
