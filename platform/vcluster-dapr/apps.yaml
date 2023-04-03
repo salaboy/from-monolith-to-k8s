@@ -15,6 +15,7 @@ spec:
         app.kubernetes.io/name: java-app
       annotations:  
         dapr.io/app-id: my-example-app
+        dapr.io/disable-builtin-k8s-secret-store: "true"
         dapr.io/app-port: "8080"
         dapr.io/enabled: "true"
     spec:
@@ -69,6 +70,7 @@ spec:
         app.kubernetes.io/name: go-app
       annotations:  
         dapr.io/app-id: my-example-app
+        dapr.io/disable-builtin-k8s-secret-store: "true"
         dapr.io/app-port: "8080"
         dapr.io/enabled: "true"
     spec:
