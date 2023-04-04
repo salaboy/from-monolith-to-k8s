@@ -1,0 +1,27 @@
+fmtok8s-agenda-service: 
+  redis:
+    enabled: false
+  env: 
+    - name: SPRING_REDIS_HOST
+      value: my-db-keyavalue-redis-master
+    - name: SPRING_REDIS_PORT
+      value: "6379" 
+    - name: SPRING_REDIS_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: my-db-keyavalue-redis
+          key: redis-password
+    
+fmtok8s-c4p-service: 
+  postgresql:
+    enabled: false
+  env: 
+  - name: DB_ENDPOINT
+    value: my-db-sql-postgresql
+  - name: DB_PORT
+    value: "5432"
+  - name: SPRING_R2DBC_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: my-db-sql-postgresql
+        key: postgres-password
