@@ -14,13 +14,19 @@ This section covers the installation of the following components:
 
 First let's create a Kubernetes Cluster to work on:
 
-```bash
-civo kubernetes create kubecon \
-    --size g4s.kube.medium \
-    --nodes 3 \
-    --region NYC1 \
-    --save --merge --yes --wait
 ```
+cat <<EOF | kind create cluster --name dev --config=-
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  extraPortMappings:
+  - containerPort: 31080 # expose port 31380 of the node to port 80 on the host, later to be use by kourier or contour ingress
+    listenAddress: 127.0.0.1
+    hostPort: 80
+EOF
+```bash
+
 
 
 Then let's install Crossplane into it's own namespace using Helm: 
