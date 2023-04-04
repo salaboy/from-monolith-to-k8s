@@ -26,7 +26,7 @@ The Crossplane Composition resource (`app-database-redis.yaml`) defines which cl
 We can provision a new Database for our team to use by executing the following command: 
 
 ```
-kubectl apply -f my-db.yaml
+kubectl apply -f my-db-keyvalue.yaml
 ```
 
 The `my-db-keyvalue.yaml` resource looks like this: 
@@ -53,10 +53,23 @@ You can check the database status using:
 ```
 > kubectl get dbs
 NAME    SIZE    MOCKDATA   KIND       SYNCED   READY   COMPOSITION            AGE
-my-db   small              keyvalue   True     True    db.local.salaboy.com   5s
+my-db-keyvalue   small     false        keyvalue   True     True    db.local.salaboy.com   5s
 ```
 
-You can check that a new Redis instance was created in the `my-db` namespace. 
+You can check that a new Redis instance was created in the `my-db-keyvalue` namespace. 
 
 
+You can follow the same steps to provision a PostgreSQL database by running: 
+
+```
+kubectl apply -f my-db-sql.yaml
+```
+
+You should see now two `dbs`
+
+```
+> kubectl get db
+
+
+```
 

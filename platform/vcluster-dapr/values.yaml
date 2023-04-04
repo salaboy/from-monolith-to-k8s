@@ -1,3 +1,5 @@
+fallbackHostDns: true
+
 multiNamespaceMode:
   enabled: true
 
@@ -20,5 +22,3 @@ sync:
       - kind: Pod
         apiVersion: v1
         replaceOnConflict: true
-      - kind: Component
-        apiVersion: dapr.io/v1alpha1  

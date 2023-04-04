@@ -17,6 +17,7 @@ spec:
         dapr.io/app-id: my-example-app
         dapr.io/app-port: "8080"
         dapr.io/enabled: "true"
+        dapr.io/disable-builtin-k8s-secret-store: "true"
     spec:
       containers:
       - name: java-app
@@ -71,6 +72,7 @@ spec:
         dapr.io/app-id: my-example-app
         dapr.io/app-port: "8080"
         dapr.io/enabled: "true"
+        dapr.io/disable-builtin-k8s-secret-store: "true"
     spec:
       containers:
       - name: go-app
