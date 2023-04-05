@@ -39,30 +39,17 @@ kubectl edit deploy -n dapr-system dapr-sidecar-injector
 Make the following changes: 
 
 ```
-image: image: daprio/injector:nightly-2023-03-15-linux-amd64
+image: daprio/injector:nightly-2023-03-15-linux-amd64
 ```
 
 and: 
 
-```
-env: 
-- name: ALLOWED_SERVICE_ACCOUNTS_PREFIX_NAMES
-  value: vcluster-dapr-enabled:vc-dapr-enabled
-```
-
-**Notice that `dapr-enabled` is the name of the vcluster that we will be creating**. 
-
-or
 
 ```
 env: 
 - name: ALLOWED_SERVICE_ACCOUNTS_PREFIX_NAMES
   value: vcluster-*:vc-*
 ```
-
-This second option uses wildcards, so other vclusters with different names can be created.
-
-
 
 Let's install Redis to be used as our Statestore implementation:
 
