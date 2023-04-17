@@ -1,0 +1,12 @@
+apiVersion: asarenkansah.com/v1alpha1
+kind: Database
+metadata:
+  name: my-dapr-db-aws
+spec:
+  compositionSelector:
+    matchLabels:
+      provider: aws
+      type: dapr-dev
+  parameters: 
+    size: small
+     

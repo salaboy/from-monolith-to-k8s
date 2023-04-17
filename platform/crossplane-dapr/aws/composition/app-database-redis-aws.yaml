@@ -1,0 +1,41 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: db.aws.asarenkansah.com
+  labels:
+    type: dev
+    provider: aws
+spec:
+  compositeTypeRef:
+    apiVersion: asarenkansah.com/v1alpha1
+    kind: Database
+  writeConnectionSecretsToNamespace: crossplane-system
+  patchSets:
+  - name: metadata
+    patches:
+    - fromFieldPath: metadata.labels
+  resources:      
+  - name: CacheClusterGroup
+    base:
+      apiVersion: cache.aws.crossplane.io/v1beta1
+      kind: ReplicationGroup
+      spec:
+        forProvider:
+          applyModificationsImmediately: true
+          cacheNodeType: "cache.t2.micro"
+          numCacheClusters: 1
+          replicationGroupDescription: An example replication group
+          engine: "redis"
+          region: us-east-1
+          port: 6379
+        providerConfigRef:
+          name: default
+        writeConnectionSecretToRef:
+          namespace: crossplane-system
+    patches:
+    - fromFieldPath: "metadata.uid"
+      toFieldPath: "spec.writeConnectionSecretToRef.name"
+      transforms:
+        - type: string
+          string:
+            fmt: "%s-redis"

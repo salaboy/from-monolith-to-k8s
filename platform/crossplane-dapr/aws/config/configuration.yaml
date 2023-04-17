@@ -1,0 +1,7 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Configuration
+metadata:
+  name: aws-redis-dapr
+spec:
+  packagePullPolicy: Always
+  package: xpkg.upbound.io/asarenkansah/aws-dapr:v3.0.2
