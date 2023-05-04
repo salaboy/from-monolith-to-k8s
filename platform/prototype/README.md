@@ -1,8 +1,6 @@
-# Cloud-Native Rejekts EU 2023 :: Step-by-step tutorial
+# Let's Build a Platform :: Platform Prototype
 
-[Lessons learnt from creating platforms on Kubernetes](https://cfp.cloud-native.rejekts.io/cloud-native-rejekts-eu-amsterdam-2023/talk/PTCMVR/)
 
-On this short tutorial we will be looking at three main aspects of creating platforms on top of Kubernetes. 
 
 To build successful Platforms on top of Kubernetes you need to: 
 
@@ -23,10 +21,7 @@ In this section will we look at creating our Platform using a set of tools that 
 For this we will install the following tools into our Kubernetes Cluster that we will call the Platform Cluster: 
 
 - [Crossplane](https://crossplane.io) + [vcluster](https://vcluster.com)
-- [ArgoCD](https://argo-cd.readthedocs.io/en/stable/)
 - [Knative Serving](https://knative.dev)
-- [Ray](https://www.ray.io/)
-- [Kserve](https://kserve.github.io/website)
 - [Dapr](https://dapr.io)
 
 These three very popular tools provide a set of key features that enable us to build more complex platforms on top of Kubernetes. 
@@ -151,41 +146,6 @@ helm upgrade --install dapr dapr/dapr \
 --wait
 ```
 
-Let's install ArgoCD into our platform cluster with: 
-
-```
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-```
-
-
-You can access the ArgoCD dashboard by using `kubectl port-forward` (in a separate terminal):
-
-```
-kubectl port-forward svc/argocd-server -n argocd 8080:443
-```
-
-Then you can point your browser to [http://localhost:8080](http://localhost:8080)
-
-And you can get the `admin` user's password by running the following command: 
-
-```
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-```
-
-You can create the production namespace by running: 
-
-```
-kubectl create ns production
-```
-
-In our production environment we will install a Redis instance using helm. 
-
-```
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install redis bitnami/redis --set architecture=standalone -n production
-```
-
 Let's also install a Redis Instance in our default namespace for our development teams to use: 
 
 ```
@@ -198,21 +158,6 @@ You can get the password by running the following command, you will need this in
 kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
 ```
 
-Finally, configure the production environment by running: 
-
-```
-kubectl apply -f argocd/production-env.yaml -n argocd
-```
-
-Now it is time to install all the ML tools: 
-
-```
-helm repo add kuberay https://ray-project.github.io/kuberay-helm/
-helm repo update
-helm install kuberay-operator kuberay/kuberay-operator --version 0.4.0
-```
-
-![Tools](imgs/rejekts-tools.png)
 
 ## Understand your teams
 
@@ -229,10 +174,9 @@ Let's install these resources:
 ```
 kubectl apply -f crossplane/env-resource-definition.yaml
 kubectl apply -f crossplane/composition-devenv.yaml
-kubectl apply -f crossplane/composition-mlenv.yaml
 ```
 
-Now we can request new ML and Dev Environments by just creating Environment Resources and using labels to define what kind of Environment we want: 
+Now we can request new Dev Environments by just creating Environment Resources and using labels to define what kind of Environment we want: 
 
 For Devs: 
 ```
@@ -257,31 +201,6 @@ Connect to their own private environment, look it has the app installed and all 
 vcluster connect team-a-dev-env --server https://localhost:8443 -- zsh
 ```
 
-For Data Scientist:
-
-```
-kubectl apply -f team-b-ml-env.yaml
-```
-
-Where the `team-b-ml-env.yaml` content looks like this:
-```
-apiVersion: salaboy.com/v1alpha1
-kind: Environment
-metadata:
-  name: team-b-ml-env
-spec:
-  compositionSelector:
-    matchLabels:
-      type: ml
-  parameters: 
-    database: true
-```
-
-Now you can connect to your environment using the `vcluster` CLI, check there is Ray installed and ready to be used: 
-
-```
-vcluster connect team-b-ml-env --server https://localhost:8443 -- zsh
-```
 
 ## A powerful end user experience
 
@@ -300,7 +219,7 @@ func writeHandler(w http.ResponseWriter, r *http.Request) {
 
 	value := r.URL.Query().Get("message")
 
-	values, _ := read("values")
+	values, _ := read(STATE_STORE_NAME, "values")
 
 	if values.Values == nil || len(values.Values) == 0 {
 		values.Values = []string{value}
@@ -310,7 +229,7 @@ func writeHandler(w http.ResponseWriter, r *http.Request) {
 
 	jsonData, err := json.Marshal(values)
 
-	err = save("values", jsonData)
+	err = save(STATE_STORE_NAME, "values", jsonData)
 	if err != nil {
 		panic(err)
 	}
@@ -319,7 +238,7 @@ func writeHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-In this code, the platform is providing the `read` and `save` functions in Go. Under the hood, the Platform can use Dapr to simplify the integration with infrastructure components:
+In this code, the platform is providing the `read()` and `save()` functions in Go. Under the hood, the Platform can use Dapr to simplify the integration with infrastructure components:
 
 The `read` function would look like: 
 ```
@@ -343,10 +262,11 @@ You can use your favouriate language and use the Dapr SDKs, or you can do plain 
 
 This gives you the ultimate freedom, as your apps doesn't need to know where the Redis Instance is, or even if it is a Redis instance.. as no Redis dependency is needed in your app. :metal: :tada:
 
-# Links
+Finally, you can change the application source code using tools like GitPod. Check the applicaiton repository [Prototype Apps](https://github.com/salaboy/prototype-apps). If you install the [GitPod Plugin on Chrome](https://chrome.google.com/webstore/detail/gitpod-always-ready-to-co/dodmmooeoklaejobgleioelladacbeki) you can open the repository on a remote environment that has all the tools ready to work with the application and deploy it to Kubernetes Clusters. 
 
-- Salman:
-  - [Subscribe on Youtube](https://www.youtube.com/c/soulmaniqbal)
-- Salaboy: 
-    - [salaboy.com](https://www.salaboy.com)
-    - [Drop me a comment on Twitter](https://twitter.com/salaboy)
+# Links
+  - [Platform Engineering on Kubernetes Book]()
+  - [Dapr & Crossplane]() 
+  - [vcluster and Dapr]()
+  - Check the members only content on [salaboy.com](https://www.salaboy.com)
+  - [Drop me a message on Twitter](https://twitter.com/salaboy)
