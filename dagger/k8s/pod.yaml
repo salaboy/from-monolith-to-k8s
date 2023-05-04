@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dagger
+spec:
+  containers:
+  - name: dagger
+    image: registry.dagger.io/engine:v0.3.13
+    securityContext:
+      privileged: true

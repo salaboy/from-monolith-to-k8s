@@ -1,0 +1,173 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: Composition
+metadata:
+  name: dev.env.salaboy.com
+  labels:
+    type: development
+spec:
+  writeConnectionSecretsToNamespace: crossplane-system
+  compositeTypeRef:
+    apiVersion: salaboy.com/v1alpha1
+    kind: Environment
+  resources:
+    - name: vcluster-helm-release
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations:
+            crossplane.io/external-name: # patched
+        spec:
+          rollbackLimit: 3
+          forProvider:
+            namespace: # patched
+            chart:
+              name: vcluster
+              repository: https://charts.loft.sh
+              version: "0.15.0-alpha.0"
+            values:
+              fallbackHostDns: true
+              multiNamespaceMode:
+                enabled: true
+              sync:
+                generic:
+                  role:
+                    extraRules:
+                      - apiGroups: ["serving.knative.dev"]
+                        resources: ["services", "configurations", "revisions", "routes"]
+                        verbs: ["create", "delete", "patch", "update", "get", "list", "watch"]
+                      - apiGroups: ["dapr.io"]
+                        resources: ["components", "subscriptions", "configurations"]
+                        verbs: ["create", "delete", "patch", "update", "get", "list", "watch"]  
+                  clusterRole:
+                    extraRules:
+                      - apiGroups: [ "apiextensions.k8s.io" ]
+                        resources: [ "customresourcedefinitions" ]
+                        verbs: [ "get", "list", "watch" ]
+                  config: |-
+                    version: v1beta1 
+                    export:
+                    - kind: Component
+                      apiVersion: dapr.io/v1alpha1
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Service
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Configuration
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Revision
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Route  
+                    import:
+                    - kind: Pod
+                      apiVersion: v1
+                      replaceOnConflict: true
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Service
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Configuration
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Revision
+                    - apiVersion: serving.knative.dev/v1
+                      kind: Route
+              syncer:
+                extraArgs: [] # patched
+              #     - --out-kube-config-server=https://cluster-1.cluster-1.svc
+          providerConfigRef:
+            name: default
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.forProvider.namespace
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.annotations[crossplane.io/external-name]
+          policy:
+            fromFieldPath: Required
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+            - type: string
+              string:
+                fmt: "%s-vcluster"
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-secret=%s-secret"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[0]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--out-kube-config-server=https://%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[1]
+        - type: CombineFromComposite
+          combine:
+            variables:
+            - fromFieldPath: metadata.name
+            - fromFieldPath: metadata.name
+            strategy: string
+            string:
+              fmt: "--tls-san=%s.%s.svc"
+          toFieldPath: spec.forProvider.values.syncer.extraArgs[2]    
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed
+    - name: helm-providerconfig
+      base:
+        apiVersion: helm.crossplane.io/v1alpha1
+        kind: ProviderConfig
+        spec:
+          credentials:
+            source: Secret
+            secretRef:
+              name: # patched
+              namespace: # patched
+              key: config
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.name
+          transforms:
+            - type: string
+              string:
+                fmt: vc-%s
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.credentials.secretRef.namespace
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+      readinessChecks:
+      - type: None 
+    - name: rejekts-app-chart-vcluster
+      base:
+        apiVersion: helm.crossplane.io/v1beta1
+        kind: Release
+        metadata:
+          annotations: 
+            crossplane.io/external-name: proto-app
+        spec:
+          forProvider:
+            chart:
+              name: proto-app
+              repository: https://salaboy.github.io/helm/
+              version: "v0.1.0"
+            values:
+              minScale: "1"
+              inVcluster: true
+              redisHost: redis-master.default.svc.cluster.local
+              redisPassword: q0i9fxOxn4 #get from Redis install: kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
+            namespace: default
+          providerConfigRef: 
+            name: #patched
+      patches:
+        - fromFieldPath: metadata.name
+          toFieldPath: spec.providerConfigRef.name
+      readinessChecks:
+      - type: MatchString
+        fieldPath: status.atProvider.state
+        matchString: deployed    

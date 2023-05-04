@@ -1,0 +1,38 @@
+apiVersion: apiextensions.crossplane.io/v1
+kind: CompositeResourceDefinition
+metadata:
+  name: environments.salaboy.com
+spec:
+  group: salaboy.com
+  names:
+    kind: Environment
+    plural: environments
+    shortNames:
+      - "env"
+      - "envs"
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .spec.parameters.database
+      name: DB
+      type: boolean
+    name: v1alpha1
+    served: true
+    referenceable: true
+    schema:
+      openAPIV3Schema:
+        type: object
+        properties:
+          spec:
+            type: object
+            properties: 
+              parameters: 
+                type: object
+                properties:
+                  database:
+                    type: boolean   
+                required:   
+            required: 
+            - parameters          
+
+     
+            
