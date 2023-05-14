@@ -49,6 +49,8 @@ spec:
                     export:
                     - kind: Component
                       apiVersion: dapr.io/v1alpha1
+                    - kind: Subscription
+                      apiVersion: dapr.io/v1alpha1  
                     - apiVersion: serving.knative.dev/v1
                       kind: Service
                     - apiVersion: serving.knative.dev/v1
@@ -149,18 +151,62 @@ spec:
         kind: Release
         metadata:
           annotations: 
-            crossplane.io/external-name: proto-app
+            crossplane.io/external-name: conference-app
         spec:
           forProvider:
             chart:
-              name: proto-app
+              name: complex-app
               repository: https://salaboy.github.io/helm/
               version: "v0.1.0"
+              # name: fmtok8s-conference-chart
+              # repository: https://salaboy.github.io/helm/
+              # version: "v0.1.3"
             values:
+              # fmtok8s-frontend:
+              #   env: 
+              #   - name: KNATIVE_ENABLED
+              #     value: "true"
+              #   - name: FRONTEND_AGENDA_SERVICE
+              #     value: http://fmtok8s-agenda.default.svc.cluster.local
+              #   - name: FRONTEND_C4P_SERVICE
+              #     value: http://fmtok8s-c4p.default.svc.cluster.local
+              #   - name: FRONTEND_EMAIL_SERVICE
+              #     value: http://fmtok8s-email.default.svc.cluster.local    
+              #   knative:
+              #     enabled: true
+              # fmtok8s-email-service: 
+              #   knative: 
+              #     enabled: true    
+              # fmtok8s-agenda-service:
+              #   env: 
+              #   - name: "SPRING_REDIS_HOST"
+              #     value: redis-master.default.svc.cluster.local
+              #   - name: "SPRING_REDIS_PASSWORD"  
+              #     value: POWPHvo0lf #get from Redis install: kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
+              #   knative: 
+              #     enabled: true 
+              #   redis: 
+              #     enabled: false
+              # fmtok8s-c4p-service:
+              #   env: 
+              #   - name: "DB_ENDPOINT"
+              #     value: postgresql.default.svc.cluster.local
+              #   - name: "SPRING_R2DBC_PASSWORD"
+              #     value: fjMVHM6Tuh
+              #   - name: "DB_PORT"  
+              #     value: "5432"
+              #   - name: FRONTEND_AGENDA_SERVICE
+              #     value: http://fmtok8s-agenda.default.svc.cluster.local
+              #   - name: FRONTEND_EMAIL_SERVICE
+              #     value: http://fmtok8s-email.default.svc.cluster.local        
+              #   knative: 
+              #     enabled: true  
+              #   postgresql:
+              #     enabled: false    
               minScale: "1"
               inVcluster: true
               redisHost: redis-master.default.svc.cluster.local
-              redisPassword: q0i9fxOxn4 #get from Redis install: kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
+              redisPassword: POWPHvo0lf #get from Redis install: kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
             namespace: default
           providerConfigRef: 
             name: #patched

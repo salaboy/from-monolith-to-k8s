@@ -146,7 +146,7 @@ helm upgrade --install dapr dapr/dapr \
 --wait
 ```
 
-Let's also install a Redis Instance in our default namespace for our development teams to use: 
+Let's also install a Redis Instance and a PostgreSQL instance in our default namespace for our development teams to use: 
 
 ```
 helm install redis bitnami/redis --set architecture=standalone 
@@ -158,6 +158,17 @@ You can get the password by running the following command, you will need this in
 kubectl get secret --namespace default redis -o jsonpath="{.data.redis-password}" | base64 -d
 ```
 
+And then PostgreSQL: 
+
+```
+helm install postgresql bitnami/postgresql --set auth.enablePostgresUser=true
+```
+
+Get the password by running: 
+
+```
+kubectl get secret --namespace default postgresql -o jsonpath="{.data.postgres-password}" | base64 -d
+```
 
 ## Understand your teams
 
