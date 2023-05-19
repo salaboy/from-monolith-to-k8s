@@ -309,7 +309,7 @@ kubectl patch deployment/dapr-dashboard \
   --patch '{"spec": {"template": {"metadata": {"labels": {"backstage.io/kubernetes-id": "sample-app"}}}}}'
 ```
 
-Look at your backstage components and be impressed!
+Congrats! You did it
 
 # Links
   - [Platform Engineering on Kubernetes Book]()
