@@ -268,15 +268,7 @@ Finally, you can change the application source code using tools like GitPod. Che
 
 In order to keep track of all of the new services, applications, documentation, resources, infrastructure, etc. that your teams will continue to create throughout the lifecycles of your intiatives - having an internal developer portal may be a very valuable addition to your platform.
 
-First we'll build the backstage image locally and make it available for the cluster
-
-```
-yarn --cwd backstage build:backend
-yarn --cwd backstage build-image --tag backstage:1.0.0
-kind load docker-image backstage:1.0.0 --name platform
-```
-
-Now let's deploy Backstage.io onto the kind cluster
+Now let's deploy Backstage onto the kind cluster
 
 ```
 kubectl create namespace backstage

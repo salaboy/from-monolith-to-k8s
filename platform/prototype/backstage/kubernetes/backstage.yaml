@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backstage
-          image: backstage:1.0.0
+          image: ghcr.io/salaboy/backstage-for-k8s:v0.0.1
           imagePullPolicy: IfNotPresent
           volumeMounts:
           - name: tmp
