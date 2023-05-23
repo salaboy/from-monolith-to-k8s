@@ -291,22 +291,20 @@ kubectl port-forward --namespace=backstage svc/backstage 5434:80
 
 Access http://localhost:5434/ on your browser and do some initial exploring.
 
-Next we're going to integrate Backstage with resources on our Kubernetes cluster:
+Next we're going to integrate Backstage with dapr resources on our Kubernetes cluster:
 
 ```
-kubectl label pods --all -n dapr backstage.io/kubernetes-id=sample-app
-kubectl label deployments --all -n dapr backstage.io/kubernetes-id=sample-app
+kubectl patch deployment/dapr-sidecar-injector -n dapr-system \
+-p '{"spec":{"template":{"metadata":{"labels":{"backstage.io/kubernetes-id":"sample-app"}}}}}'
 
-kubectl label pods --all -n knative-serving backstage.io/kubernetes-id=demo-service
-kubectl label deployments --all -n native-serving backstage.io/kubernetes-id=demo-service
+kubectl patch deployment/dapr-dashboard -n dapr-system \
+-p '{"spec":{"template":{"metadata":{"labels":{"backstage.io/kubernetes-id":"sample-app"}}}}}'
 
-kubectl label components --all --all-namespaces backstage.io/kubernetes-id=demo-service
-kubectl label pods --all -n team-a-dev-env backstage.io/kubernetes-id=sample-app
+kubectl patch deployment/dapr-sentry -n dapr-system \
+-p '{"spec":{"template":{"metadata":{"labels":{"backstage.io/kubernetes-id":"sample-app"}}}}}'
 
-kubectl patch deployment/dapr-dashboard \
-  --namespace dapr-system \
-  --type merge \
-  --patch '{"spec": {"template": {"metadata": {"labels": {"backstage.io/kubernetes-id": "sample-app"}}}}}'
+kubectl patch deployment/dapr-operator -n dapr-system \
+-p '{"spec":{"template":{"metadata":{"labels":{"backstage.io/kubernetes-id":"sample-app"}}}}}'
 ```
 
 Congrats! You did it
