@@ -1,0 +1,121 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flagd
+  labels:
+    app: flagd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flagd
+  template:
+    metadata:
+      labels:
+        app: flagd
+    spec:
+      containers:
+      - name: flagd
+        image: ghcr.io/open-feature/flagd:v0.5.3
+        args: ["start", "-f", "file:etc/config/flag-config.json"]
+        ports:
+        - containerPort: 8013
+        volumeMounts:
+        - name: flag-config-volume
+          mountPath: /etc/config
+      volumes:
+      - name: flag-config-volume
+        configMap:
+          name: flag-configuration
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flagd
+spec:
+  selector:
+    app: flagd
+  ports:
+  - protocol: TCP
+    port: 8013
+    targetPort: 8013
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flag-configuration
+  namespace: default
+data:
+  flag-config.json: |
+    {
+      "flags": {
+        "myBoolFlag": {
+          "state": "ENABLED",
+          "variants": {
+            "on": true,
+            "off": false
+          },
+          "defaultVariant": "on"
+        },
+        "myStringFlag": {
+          "state": "ENABLED",
+          "variants": {
+            "key1": "val1",
+            "key2": "val2"
+          },
+          "defaultVariant": "key1"
+        },
+        "myFloatFlag": {
+          "state": "ENABLED",
+          "variants": {
+            "one": 1.23,
+            "two": 2.34
+          },
+          "defaultVariant": "one"
+        },
+        "myIntFlag": {
+          "state": "ENABLED",
+          "variants": {
+            "one": 1,
+            "two": 2
+          },
+          "defaultVariant": "one"
+        },
+        "myObjectFlag": {
+          "state": "ENABLED",
+          "variants": {
+            "object1": {
+              "key": "val"
+            },
+            "object2": {
+              "key": true
+            }
+          },
+          "defaultVariant": "object1"
+        },
+        "isColorYellow": {
+          "state": "ENABLED",
+          "variants": {
+            "on": true,
+            "off": false
+          },
+          "defaultVariant": "off",
+          "targeting": {
+            "if": [
+              {
+                "==": [
+                  {
+                    "var": [
+                      "color"
+                    ]
+                  },
+                  "yellow"
+                ]
+              },
+              "on",
+              "off"
+            ]
+          }
+        }
+      }
+    }
