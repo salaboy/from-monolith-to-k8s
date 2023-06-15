@@ -9,7 +9,7 @@ This tutorial creates and interacts with Kubernetes clusters, as well as install
 For this demo, we will create a Kubernetes cluster to host the platform tools which  create development environments. These tools use VCluster to create development environments in separate namespaces. We will also create one namespace for our Production Environment. For simplicity, this tutorial uses [KinD](https://kind.sigs.k8s.io/), but we encourage you to try the tutorial on a real Kubernetes cluster. 
 
 - [Installing Command-Line Tools](installing-clis.md)
-- [Create a Platform Cluster & Install Tools](platform-cluster.md)
+
   
 
 ## Creating and Configuring Our Platform Cluster
