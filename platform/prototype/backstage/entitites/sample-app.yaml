@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sample-app
+  description: |
+    This application leverages various tools to create an internal platform. The following tools are currently being utilized:
+    - Crossplane
+    - Knative Serving
+    - Dapr
+
+  links:
+    - title: Dapr Website
+      url: https://dapr.io/
+    - title: Dapr Documentation
+      url: https://docs.dapr.io/
+  annotations:
+    github.com/project-slug: backstage/backstage
+    backstage.io/techdocs-ref: dir:.
+    lighthouse.com/website-url: https://backstage.io
+    backstage.io/kubernetes-id: sample-app
+spec:
+  type: service
+  owner: CNCF
+  lifecycle: experimental
